@@ -1,0 +1,15 @@
+- name: Install neovim
+  homebrew:
+    name: neovim
+    state: present
+
+- name: Create config dir
+  file:
+    path: "{{ ansible_env.HOME }}/.config/nvim" 
+    state: directory
+
+- name: Initialize configuration
+  copy:
+    src: nvim 
+    dest: "{{ ansible_env.HOME }}/.config/nvim" 
+    backup: yes

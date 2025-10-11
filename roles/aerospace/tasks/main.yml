@@ -1,5 +1,5 @@
 - name: Install aerospace
-  community.general.homebrew_cask:
+  homebrew_cask:
     name: aerospace
     state: present
 
@@ -11,12 +11,12 @@
 - name: Copy default aerospace default config 
   copy:
     src: aerospace
-    dest: "~/.config/aerospace/aerospace.toml"
+    dest: "{{ ansible_env.HOME }}/.config/aerospace/aerospace.toml"
     backup: yes
 
 - name: Remove the origin config
   file:
-    path: "~/.aerospace.toml"
+    path: "{{ ansible_env.HOME }}/.aerospace.toml"
     state: absent
   ignore_errors: yes
 

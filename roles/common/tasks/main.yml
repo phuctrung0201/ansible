@@ -1,0 +1,25 @@
+- name: Ensure Homebrew is installed
+  stat:
+    path: /opt/homebrew/bin/brew
+  register: brew_check
+
+- name: Install Homebrew if not present
+  shell: /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  when: not brew_check.stat.exists
+
+- name: Install ripgrep
+  homebrew:
+    name: ripgrep
+    state: present
+
+- name: install fzf
+  homebrew:
+    name: fzf
+    state: present
+
+- name: Add fzf initline to .zshrc (if not already there)
+  lineinfile:
+    path: "{{ ansible_env.HOME }}/.zshrc"
+    line: 'source <(fzf --zsh)'
+    insertafter: EOF
+    state: present

@@ -5,10 +5,10 @@
 
 - name: Ensure the ghost config directory exsits 
   file:
-    path: ~/.config/ghostty
+    path: "{{ ansible_env.HOME }}/.config/ghostty" 
     state: directory
 
 - name: Copy ghostty default config 
   copy:
     src: config
-    dest: ~/.config/ghostty/config
+    dest: "{{ ansible_env.HOME }}/.config/ghostty/config" 
