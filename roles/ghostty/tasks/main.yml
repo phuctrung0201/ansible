@@ -1,0 +1,14 @@
+- name: Install ghostty
+  homebrew:
+    name: ghostty
+    state: present
+
+- name: Ensure the ghost config directory exsits 
+  file:
+    path: ~/.config/ghostty
+    state: directory
+
+- name: Copy ghostty default config 
+  copy:
+    src: config
+    dest: ~/.config/ghostty/config
