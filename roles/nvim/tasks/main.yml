@@ -3,13 +3,13 @@
     name: neovim
     state: present
 
-- name: Create config dir
+- name: Ensure nvim config directory exists
   file:
     path: "{{ ansible_env.HOME }}/.config/nvim" 
     state: directory
 
-- name: Initialize configuration
+- name: Copy the nvim setup default 
   copy:
-    src: nvim 
-    dest: "{{ ansible_env.HOME }}/.config/nvim" 
+    src: nvim/ 
+    dest: "{{ ansible_env.HOME }}/.config/nvim/" 
     backup: yes
