@@ -1,0 +1,6 @@
+- name: Setup my local development environment
+  hosts: localhost
+  roles:
+    - homebrew
+    - mise
+    - ohmyzsh

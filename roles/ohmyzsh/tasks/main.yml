@@ -1,0 +1,28 @@
+- name: Check if Oh My Zsh is installed
+  stat:
+    path: "{{ ansible_env.HOME }}/.oh-my-zsh"
+  register: ohmyzsh_dir
+
+- name: Install Oh My Zsh (if not installed)
+  shell: |
+    RUNZSH=no CHSH=no KEEP_ZSHRC=yes \
+    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+  args:
+    executable: /bin/bash
+  when: not ohmyzsh_dir.stat.exists
+
+- name: Ensure zsh-autosuggestions plugin is installed
+  git:
+    repo: https://github.com/zsh-users/zsh-autosuggestions.git
+    dest: "{{ ansible_env.HOME }}/.oh-my-zsh/custom/plugins/zsh-autosuggestions"
+
+- name: Ensure zsh-syntax-highlighting plugin is installed
+  git:
+    repo: https://github.com/zsh-users/zsh-syntax-highlighting.git
+    dest: "{{ ansible_env.HOME }}/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting"
+
+- name: Copy .zshrc configuration
+  copy:
+    src: zshrc
+    dest: "{{ ansible_env.HOME }}/.zshrc"
+    backup: yes

@@ -1,0 +1,24 @@
+- name: Install mise
+  homebrew:
+    name: mise
+    state: present
+
+- name: Ensure mise config directory exists
+  file:
+    path: "{{ ansible_env.HOME }}/.config/mise"
+    state: directory
+
+- name: Copy the mise config file
+  copy:
+    src: "config"
+    dest: "{{ ansible_env.HOME }}/.config/mise/config.toml"
+
+- name: Ensure global tools installed 
+  shell: "mise install"
+
+- name: Add mise init line to .zshrc (if not already there)
+  lineinfile:
+    path: "{{ ansible_env.HOME }}/.zshrc"
+    line: 'eval "$(mise activate zsh)"'
+    insertafter: EOF
+    state: present

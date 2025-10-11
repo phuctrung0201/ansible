@@ -1,0 +1,8 @@
+- name: Ensure Homebrew is installed
+  stat:
+    path: /opt/homebrew/bin/brew
+  register: brew_check
+
+- name: Install Homebrew if not present
+  shell: /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  when: not brew_check.stat.exists
