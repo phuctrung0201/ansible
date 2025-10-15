@@ -13,4 +13,4 @@ To run the setup, the ansible need installing:
 
 The all setup can be run with `ansible-runbook`:
 
-> ansible-runbook main.yml
+> ansible-playbook main.yml
