@@ -12,7 +12,7 @@
     name: ripgrep
     state: present
 
-- name: install fzf
+- name: Install fzf
   homebrew:
     name: fzf
     state: present
