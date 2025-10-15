@@ -12,3 +12,4 @@
   copy:
     src: config
     dest: "{{ ansible_env.HOME }}/.config/ghostty/config" 
+    backup: yes

@@ -12,6 +12,7 @@
   copy:
     src: "config"
     dest: "{{ ansible_env.HOME }}/.config/mise/config.toml"
+    backup: yes
 
 - name: Ensure global tools installed 
   shell: "mise install"

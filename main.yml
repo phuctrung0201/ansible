@@ -1,9 +1,15 @@
 - name: Setup my local development environment
   hosts: localhost
   roles:
-    - ohmyzsh
-    - common
-    - mise 
-    - ghostty
-    - nvim
-    - aerospace
+    - role: ohmyzsh
+      tags: ['ohmyzsh']
+    - role: common
+      tags: ['common']
+    - role: mise
+      tages: ['mise']
+    - role: ghostty
+      tages: ['ghostty']
+    - role: nvim
+      tages: ['nvim']
+    - role: aerospace
+      tages: ['aerospace']
