@@ -108,8 +108,8 @@ shift-down = ['volume set 0', 'mode main']
 
 [[on-window-detected]]
 if.app-id = 'com.mitchellh.ghostty'
-run = 'move-node-to-workspace --focus-follows-window 1'
+run = 'move-node-to-workspace --focus-follows-window 4'
 
 [[on-window-detected]]
 check-further-callbacks = true
-run = 'move-node-to-workspace --focus-follows-window 2'
+run = 'move-node-to-workspace --focus-follows-window 3'
