@@ -18,8 +18,8 @@ default-root-container-layout = 'tiles'
 # 'auto' means: wide monitor (anything wider than high) gets horizontal orientation,
 #               tall monitor (anything higher than wide) gets vertical orientation
 default-root-container-orientation = 'auto'
-on-focused-monitor-changed = ['move-mouse monitor-lazy-center']
-on-focus-changed = ['move-mouse window-lazy-center']
+on-focused-monitor-changed = []
+on-focus-changed = []
 automatically-unhide-macos-hidden-apps = false
 [key-mapping]
 preset = 'qwerty'
@@ -111,5 +111,9 @@ if.app-id = 'com.mitchellh.ghostty'
 run = 'move-node-to-workspace --focus-follows-window 4'
 
 [[on-window-detected]]
-check-further-callbacks = true
+if.app-id = 'company.thebrowser.Browser'
 run = 'move-node-to-workspace --focus-follows-window 3'
+
+[[on-window-detected]]
+check-further-callbacks = true
+run = 'move-node-to-workspace --focus-follows-window 2'
