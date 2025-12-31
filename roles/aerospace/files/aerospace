@@ -95,10 +95,6 @@ backspace = ['close-all-windows-but-current', 'mode main']
 # sticky is not yet supported https://github.com/nikitabobko/AeroSpace/issues/2
 #s = ['layout sticky tiling', 'mode main']
 
-[workspace-to-monitor-force-assignment]
-3 = 'main'
-4 = 'secondary'
-
 [[on-window-detected]]
 if.app-id = 'com.mitchellh.ghostty'
 run = 'move-node-to-workspace --focus-follows-window 1'
@@ -108,5 +104,9 @@ if.app-id = 'company.thebrowser.Browser'
 run = 'move-node-to-workspace --focus-follows-window 2'
 
 [[on-window-detected]]
-check-further-callbacks = true
+if.app-id = 'md.obsidian'
 run = 'move-node-to-workspace --focus-follows-window 3'
+
+[[on-window-detected]]
+check-further-callbacks = true
+run = 'move-node-to-workspace --focus-follows-window 4'
