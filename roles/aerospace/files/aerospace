@@ -1,6 +1,8 @@
 after-login-command = []
 
-after-startup-command = []
+after-startup-command = [
+'exec-and-forget borders active_color=0xFFBD93F9 inactive_color=0xFF44475A width=5.0'
+]
 
 # Start AeroSpace at login
 start-at-login = true
@@ -24,12 +26,12 @@ automatically-unhide-macos-hidden-apps = false
 [key-mapping]
 preset = 'qwerty'
 [gaps]
-inner.horizontal = 16
-inner.vertical = 16
-outer.left = 8
-outer.bottom = 8
-outer.top = 8
-outer.right = 8
+inner.horizontal = 8
+inner.vertical = 8
+outer.left = 4
+outer.bottom = 4
+outer.top = 4
+outer.right = 4
 
 # 'main' binding mode declaration
 # See: https://nikitabobko.github.io/AeroSpace/guide#binding-modes
@@ -41,28 +43,28 @@ outer.right = 8
 cmd-esc = 'fullscreen'
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#focus
-cmd-left = 'focus left'
-cmd-down = 'focus down'
-cmd-up = 'focus up'
-cmd-right = 'focus right'
+cmd-h = 'focus left'
+cmd-j = 'focus down'
+cmd-k = 'focus up'
+cmd-l = 'focus right'
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#move
-cmd-shift-left = 'move left'
-cmd-shift-down = 'move down'
-cmd-shift-up = 'move up'
-cmd-shift-right = 'move right'
+cmd-shift-h = 'move left'
+cmd-shift-j = 'move down'
+cmd-shift-k = 'move up'
+cmd-shift-l = 'move right'
 
 cmd-f12 = 'focus-monitor main'
 cmd-f11 = 'focus-monitor secondary'
 
-cmd-shift-f12 = ['workspace 4', 'focus-monitor main'] 
-cmd-shift-f11 = ['workspace 3', 'focus-monitor secondary'] 
+cmd-shift-f12 = 'move-workspace-to-monitor main'
+cmd-shift-f11 = 'move-workspace-to-monitor secondary'
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#workspace
 cmd-f1 = 'summon-workspace 1'
 cmd-f2 = 'summon-workspace 2'
-cmd-f3 = 'workspace 3'
-cmd-f4 = 'workspace 4'
+cmd-f3 = 'summon-workspace 3'
+cmd-f4 = 'summon-workspace 4'
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#move-node-to-workspace
 cmd-shift-f1 = 'move-node-to-workspace --focus-follows-window 1'
