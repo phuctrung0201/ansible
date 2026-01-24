@@ -92,11 +92,10 @@ f = [
 ] # Toggle between floating and tiling layout
 backspace = ['close-all-windows-but-current', 'mode main']
 
-# sticky is not yet supported https://github.com/nikitabobko/AeroSpace/issues/2
-#s = ['layout sticky tiling', 'mode main']
-
+# List current opening apps
+# aerospace list-apps
 [[on-window-detected]]
-if.app-id = 'com.mitchellh.ghostty'
+if.app-id = 'com.github.wez.wezterm'
 run = 'move-node-to-workspace --focus-follows-window 1'
 
 [[on-window-detected]]
