@@ -1,0 +1,15 @@
+- name: Install wezterm
+  homebrew:
+    name: wezterm
+    state: present
+
+- name: Ensure the wezterm config directory exsits 
+  file:
+    path: "{{ ansible_env.HOME }}/.config/wezterm" 
+    state: directory
+
+- name: Copy wezterm default config 
+  copy:
+    src: wezterm.lua
+    dest: "{{ ansible_env.HOME }}/.config/wezterm/wezterm.lua" 
+    backup: yes

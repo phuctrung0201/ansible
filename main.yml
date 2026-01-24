@@ -6,10 +6,10 @@
     - role: common
       tags: ['common']
     - role: mise
-      tages: ['mise']
-    - role: ghostty
-      tages: ['ghostty']
+      tags: ['mise']
+    - role: wezterm
+      tags: ['wezterm']
     - role: nvim
-      tages: ['nvim']
+      tags: ['nvim']
     - role: aerospace
-      tages: ['aerospace']
+      tags: ['aerospace']
