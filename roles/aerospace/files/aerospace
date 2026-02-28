@@ -99,6 +99,10 @@ if.app-id = 'company.thebrowser.Browser'
 run = 'move-node-to-workspace --focus-follows-window 1'
 
 [[on-window-detected]]
+if.app-id = 'app.zen-browser.zen'
+run = 'move-node-to-workspace --focus-follows-window 1'
+
+[[on-window-detected]]
 if.app-id = 'com.github.wez.wezterm'
 run = 'move-node-to-workspace --focus-follows-window 2'
 
