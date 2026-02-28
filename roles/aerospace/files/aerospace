@@ -40,37 +40,37 @@ outer.right = 4
 [mode.main.binding]
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#layout
-cmd-esc = 'fullscreen'
+ctrl-esc = 'fullscreen'
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#focus
-cmd-h = 'focus left'
-cmd-j = 'focus down'
-cmd-k = 'focus up'
-cmd-l = 'focus right'
+ctrl-h = 'focus left'
+ctrl-j = 'focus down'
+ctrl-k = 'focus up'
+ctrl-l = 'focus right'
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#move
-cmd-shift-h = 'move left'
-cmd-shift-j = 'move down'
-cmd-shift-k = 'move up'
-cmd-shift-l = 'move right'
+ctrl-shift-h = 'move left'
+ctrl-shift-j = 'move down'
+ctrl-shift-k = 'move up'
+ctrl-shift-l = 'move right'
 
-cmd-f12 = 'focus-monitor main'
-cmd-f11 = 'focus-monitor secondary'
+ctrl-f12 = 'focus-monitor main'
+ctrl-f11 = 'focus-monitor secondary'
 
-cmd-shift-f12 = 'move-workspace-to-monitor main'
-cmd-shift-f11 = 'move-workspace-to-monitor secondary'
+ctrl-shift-f12 = 'move-workspace-to-monitor main'
+ctrl-shift-f11 = 'move-workspace-to-monitor secondary'
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#workspace
-cmd-f1 = 'workspace 1'
-cmd-f2 = 'workspace 2'
-cmd-f3 = 'workspace 3'
-cmd-f4 = 'workspace 4'
+ctrl-f1 = 'workspace 1'
+ctrl-f2 = 'workspace 2'
+ctrl-f3 = 'workspace 3'
+ctrl-f4 = 'workspace 4'
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#move-node-to-workspace
-cmd-shift-f1 = 'move-node-to-workspace --focus-follows-window 1'
-cmd-shift-f2 = 'move-node-to-workspace --focus-follows-window 2'
-cmd-shift-f3 = 'move-node-to-workspace --focus-follows-window 3'
-cmd-shift-f4 = 'move-node-to-workspace --focus-follows-window 4'
+ctrl-shift-f1 = 'move-node-to-workspace --focus-follows-window 1'
+ctrl-shift-f2 = 'move-node-to-workspace --focus-follows-window 2'
+ctrl-shift-f3 = 'move-node-to-workspace --focus-follows-window 3'
+ctrl-shift-f4 = 'move-node-to-workspace --focus-follows-window 4'
 
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#workspace-back-and-forth
