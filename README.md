@@ -1,21 +1,21 @@
-# Overview 
+# Overview
 This repository is to store personal setup for these tools:
  - [oh-my-zsh](https://ohmyz.sh/)
- - [fzf](https://github.com/junegunn/fzf)
- - [ghostty](https://ghostty.org/)
+ - [kitty](https://sw.kovidgoyal.net/kitty/)
  - [aerospace](https://github.com/nikitabobko/aerospace)
  - [LazyVim](https://www.lazyvim.org/)
+ - [mise](https://mise.jdx.dev/)
 
 # Runbook
 
-To run the setup, the ansible need installing:
+To run the setup, ansible needs installing:
 
 > brew install ansible
 
-The all setup can be run with `ansible-runbook`:
+The full setup can be run with:
 
 > ansible-playbook main.yml
 
-Each setup there is already a tag to run specific one:
+Each role has a tag to run a specific one:
 
-> ansible-playbook main.yml --tags "oh-my-zsh"
+> ansible-playbook main.yml --tags "ohmyzsh"

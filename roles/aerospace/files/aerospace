@@ -95,20 +95,16 @@ backspace = ['close-all-windows-but-current', 'mode main']
 # List current opening apps
 # aerospace list-apps
 [[on-window-detected]]
-if.app-id = 'company.thebrowser.Browser'
-run = 'move-node-to-workspace --focus-follows-window 1'
-
-[[on-window-detected]]
 if.app-id = 'app.zen-browser.zen'
 run = 'move-node-to-workspace --focus-follows-window 1'
 
 [[on-window-detected]]
-if.app-id = 'com.github.wez.wezterm'
+if.app-id = 'net.kovidgoyal.kitty'
 run = 'move-node-to-workspace --focus-follows-window 2'
 
 [[on-window-detected]]
 if.app-id = 'md.obsidian'
-run = 'move-node-to-workspace --focus-follows-window 3'
+run = 'move-node-to-workspace --focus-follows-window 2'
 
 [[on-window-detected]]
 check-further-callbacks = true

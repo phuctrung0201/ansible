@@ -7,8 +7,8 @@
       tags: ['common']
     - role: mise
       tags: ['mise']
-    - role: wezterm
-      tags: ['wezterm']
+    - role: kitty
+      tags: ['kitty']
     - role: nvim
       tags: ['nvim']
     - role: aerospace

@@ -3,22 +3,3 @@ ZSH_THEME="refined"
 plugins=(git z zsh-autosuggestions zsh-syntax-highlighting)
 source $ZSH/oh-my-zsh.sh
 
-# Start setup vim mode
-bindkey -v
-export KEYTIMEOUT=1
-
-function zle-keymap-select {
-  if [[ $KEYMAP == vicmd ]]; then
-    echo -ne '\e[1 q'  # block cursor = NORMAL
-  else
-    echo -ne '\e[5 q'  # beam cursor = INSERT
-  fi
-}
-
-function zle-line-init {
-  echo -ne '\e[5 q'    # start in INSERT
-}
-
-zle -N zle-keymap-select
-zle -N zle-line-init
-# End setup vim mode
