@@ -40,46 +40,48 @@ outer.right = 4
 [mode.main.binding]
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#layout
-cmd-esc = 'fullscreen'
+alt-esc = 'layout accordion tiles'
+
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#focus
-cmd-h = 'focus left'
-cmd-j = 'focus down'
-cmd-k = 'focus up'
-cmd-l = 'focus right'
+alt-h = 'focus left'
+alt-j = 'focus down'
+alt-k = 'focus up'
+alt-l = 'focus right'
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#move
-cmd-shift-h = 'move left'
-cmd-shift-j = 'move down'
-cmd-shift-k = 'move up'
-cmd-shift-l = 'move right'
+alt-shift-h = 'move left'
+alt-shift-j = 'move down'
+alt-shift-k = 'move up'
+alt-shift-l = 'move right'
 
-cmd-f12 = 'focus-monitor main'
-cmd-f11 = 'focus-monitor secondary'
+alt-f12 = 'focus-monitor main'
+alt-f11 = 'focus-monitor secondary'
 
-cmd-shift-f12 = 'move-workspace-to-monitor main'
-cmd-shift-f11 = 'move-workspace-to-monitor secondary'
+alt-shift-f12 = 'move-workspace-to-monitor main'
+alt-shift-f11 = 'move-workspace-to-monitor secondary'
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#workspace
-cmd-f1 = 'workspace 1'
-cmd-f2 = 'workspace 2'
-cmd-f3 = 'workspace 3'
-cmd-f4 = 'workspace 4'
+alt-f1 = 'workspace 1'
+alt-f2 = 'workspace 2'
+alt-f3 = 'workspace 3'
+alt-f4 = 'workspace 4'
+cmd-h = 'workspace 2'
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#move-node-to-workspace
-cmd-shift-f1 = 'move-node-to-workspace --focus-follows-window 1'
-cmd-shift-f2 = 'move-node-to-workspace --focus-follows-window 2'
-cmd-shift-f3 = 'move-node-to-workspace --focus-follows-window 3'
-cmd-shift-f4 = 'move-node-to-workspace --focus-follows-window 4'
+alt-shift-f1 = 'move-node-to-workspace --focus-follows-window 1'
+alt-shift-f2 = 'move-node-to-workspace --focus-follows-window 2'
+alt-shift-f3 = 'move-node-to-workspace --focus-follows-window 3'
+alt-shift-f4 = 'move-node-to-workspace --focus-follows-window 4'
 
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#workspace-back-and-forth
-cmd-ctrl-tab = 'workspace-back-and-forth'
+alt-ctrl-tab = 'workspace-back-and-forth'
 # See: https://nikitabobko.github.io/AeroSpace/commands#move-workspace-to-monitor
-cmd-ctrl-shift-tab = 'move-workspace-to-monitor --wrap-around next'
+alt-ctrl-shift-tab = 'move-workspace-to-monitor --wrap-around next'
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#mode
-alt-esc = 'mode service'
+ctrl-esc = 'mode service'
 
 # 'service' binding mode declaration.
 # See: https://nikitabobko.github.io/AeroSpace/guide#binding-modes
