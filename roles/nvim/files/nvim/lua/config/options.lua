@@ -38,3 +38,9 @@ opt.wrap = false
 opt.showmode = false
 opt.updatetime = 200
 opt.timeoutlen = 300
+
+opt.foldmethod = "expr"
+opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+opt.foldtext = ""
+opt.foldlevel = 99
+opt.foldlevelstart = 99

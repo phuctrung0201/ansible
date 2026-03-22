@@ -4,7 +4,7 @@ return {
     name = "gitlink",
     keys = {
       {
-        "<leader>gl",
+        "<leader>gy",
         function()
           require("gitlink").copy_url()
         end,
