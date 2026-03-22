@@ -1,7 +1,3 @@
--- Keymaps are automatically loaded on the VeryLazy event
--- Default keymaps that are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/keymaps.lua
--- Add any additional keymaps here
-
 local function copy_path(expr, label)
   local path = vim.fn.expand(expr)
   vim.fn.setreg("+", path)
@@ -17,3 +13,7 @@ end, { desc = "Copy absolute path" })
 vim.keymap.set("n", "<leader>byf", function()
   copy_path("%:t", "filename")
 end, { desc = "Copy filename" })
+
+vim.keymap.set("n", "<leader>q", "<cmd>qa!<cr>", { desc = "Force quit" })
+vim.keymap.set("n", "<leader>bb", "<cmd>e #<cr>", { desc = "Switch to alternate buffer" })
+vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<cr>", { desc = "Clear search highlights" })

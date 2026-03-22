@@ -3,7 +3,7 @@ This repository is to store personal setup for these tools:
  - [oh-my-zsh](https://ohmyz.sh/)
  - [kitty](https://sw.kovidgoyal.net/kitty/)
  - [aerospace](https://github.com/nikitabobko/aerospace)
- - [LazyVim](https://www.lazyvim.org/)
+ - [Neovim](https://neovim.io/)
  - [mise](https://mise.jdx.dev/)
 
 # Runbook

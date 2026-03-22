@@ -1,9 +1,15 @@
 return {
   {
     "nvim-treesitter/nvim-treesitter",
+    build = ":TSUpdate",
+    event = "BufReadPost",
+    main = "nvim-treesitter.configs",
     opts = {
       ensure_installed = {
         "bash",
+        "c_sharp",
+        "fsharp",
+        "go",
         "html",
         "javascript",
         "json",
@@ -12,13 +18,15 @@ return {
         "markdown_inline",
         "python",
         "regex",
+        "rust",
         "tsx",
         "typescript",
         "vim",
+        "vimdoc",
         "yaml",
-        "go",
-        "rust",
       },
+      highlight = { enable = true },
+      indent = { enable = true },
     },
   },
 }
