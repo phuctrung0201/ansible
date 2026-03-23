@@ -15,9 +15,9 @@ autocmd("LspAttach", {
     map("K", vim.lsp.buf.hover, "Hover")
     map("<leader>ca", vim.lsp.buf.code_action, "Code action")
     map("<leader>cr", vim.lsp.buf.rename, "Rename")
-    map("<leader>df", vim.diagnostic.open_float, "Float")
-    map("<leader>dl", function() Snacks.picker.diagnostics_buffer() end, "Buffer list")
-    map("<leader>dL", function() Snacks.picker.diagnostics() end, "Workspace list")
+    map("<leader>cf", vim.diagnostic.open_float, "Diagnostic float")
+    map("<leader>cl", function() Snacks.picker.diagnostics_buffer() end, "Diagnostic buffer list")
+    map("<leader>cL", function() Snacks.picker.diagnostics() end, "Diagnostic workspace list")
     map("[d", vim.diagnostic.goto_prev, "Prev diagnostic")
     map("]d", vim.diagnostic.goto_next, "Next diagnostic")
   end,
