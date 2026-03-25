@@ -5,7 +5,7 @@ local function copy_path(expr, label)
 end
 
 vim.keymap.set("n", "<leader>fr", function()
-  copy_path("%", "relative path")
+  copy_path("%:.", "relative path")
 end, { desc = "Copy relative path" })
 vim.keymap.set("n", "<leader>fa", function()
   copy_path("%:p", "absolute path")
