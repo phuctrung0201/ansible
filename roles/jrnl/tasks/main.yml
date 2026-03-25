@@ -1,0 +1,20 @@
+- name: Install jrnl via pipx
+  community.general.pipx:
+    name: jrnl
+    state: present
+
+- name: Ensure the jrnl config directory exists
+  file:
+    path: "{{ ansible_env.HOME }}/.config/jrnl"
+    state: directory
+
+- name: Ensure the jrnl data directory exists
+  file:
+    path: "{{ ansible_env.HOME }}/.jrnl"
+    state: directory
+
+- name: Copy jrnl config
+  copy:
+    src: jrnl.yaml
+    dest: "{{ ansible_env.HOME }}/.config/jrnl/jrnl.yaml"
+    backup: yes
