@@ -34,7 +34,7 @@ opt.backup = false
 
 opt.completeopt = "menu,menuone,noselect"
 
-opt.wrap = false
+opt.wrap = true
 opt.showmode = false
 opt.updatetime = 200
 opt.timeoutlen = 300
