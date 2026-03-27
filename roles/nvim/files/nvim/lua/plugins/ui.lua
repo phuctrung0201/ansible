@@ -34,10 +34,10 @@ return {
     event = "VeryLazy",
     opts = {
       spec = {
+        { "<leader>b", group = "Buffer" },
         { "<leader>c", group = "Code" },
-        { "<leader>f", group = "File" },
+        { "<leader>f", group = "Find" },
         { "<leader>g", group = "Git" },
-        { "<leader>s", group = "Search" },
       },
     },
   },
@@ -49,15 +49,15 @@ return {
     keys = {
       { "<leader>e", function() Snacks.explorer() end, desc = "Toggle file explorer" },
       { "<leader><leader>", function() Snacks.picker.files() end, desc = "Find files" },
-      { "<leader>sf", function() Snacks.picker.files() end, desc = "Find files" },
-      { "<leader>sg", function() Snacks.picker.grep() end, desc = "Live grep" },
-      { "<leader>sb", function() Snacks.picker.buffers() end, desc = "Buffers" },
+      { "<leader>ff", function() Snacks.picker.files() end, desc = "Find files" },
+      { "<leader>fg", function() Snacks.picker.grep() end, desc = "Live grep" },
+      { "<leader>fb", function() Snacks.picker.buffers() end, desc = "Buffers" },
       { "<leader>/", function() Snacks.picker.lines() end, desc = "Grep current buffer" },
-      { "<leader>s/", function() Snacks.picker.lines() end, desc = "Grep current buffer" },
-      { "<leader>sr", function() Snacks.picker.recent({ filter = { cwd = true } }) end, desc = "Recent files" },
-      { "<leader>sh", function() Snacks.picker.help() end, desc = "Help tags" },
-      { "<leader>sq", function() Snacks.picker.qflist() end, desc = "Quickfix" },
-      { "<leader>fR", function() Snacks.rename.rename_file() end, desc = "Rename file" },
+      { "<leader>f/", function() Snacks.picker.lines() end, desc = "Grep current buffer" },
+      { "<leader>fr", function() Snacks.picker.recent({ filter = { cwd = true } }) end, desc = "Recent files" },
+      { "<leader>fh", function() Snacks.picker.help() end, desc = "Help tags" },
+      { "<leader>fq", function() Snacks.picker.qflist() end, desc = "Quickfix" },
+      { "<leader>bR", function() Snacks.rename.rename_file() end, desc = "Rename file" },
     },
     opts = {
       dashboard = {
