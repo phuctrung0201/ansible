@@ -59,6 +59,7 @@ return {
       { "<leader>fh", function() Snacks.picker.help() end, desc = "Help tags" },
       { "<leader>fq", function() Snacks.picker.qflist() end, desc = "Quickfix" },
       { "<leader>bR", function() Snacks.rename.rename_file() end, desc = "Rename file" },
+      { "<leader>gz", function() Snacks.lazygit() end, desc = "Lazygit" },
     },
     opts = {
       dashboard = {
@@ -82,6 +83,7 @@ return {
         },
       },
       explorer = { enabled = true },
+      lazygit = { enabled = true },
       input = { enabled = true },
       notifier = { enabled = true },
       rename = { enabled = true },

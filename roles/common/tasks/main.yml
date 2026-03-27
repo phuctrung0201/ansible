@@ -17,6 +17,11 @@
     name: fzf
     state: present
 
+- name: Install lazygit
+  homebrew:
+    name: lazygit
+    state: present
+
 - name: Add fzf initline to .zshrc (if not already there)
   lineinfile:
     path: "{{ ansible_env.HOME }}/.zshrc"
