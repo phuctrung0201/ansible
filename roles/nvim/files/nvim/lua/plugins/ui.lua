@@ -38,6 +38,7 @@ return {
         { "<leader>c", group = "Code" },
         { "<leader>f", group = "Find" },
         { "<leader>g", group = "Git" },
+        { "<leader>q", group = "Quit" },
       },
     },
   },
@@ -105,6 +106,11 @@ return {
               ["<c-i>"] = { "toggle_ignored", mode = { "i", "n" } },
             },
           },
+        },
+      },
+      styles = {
+        notification_history = {
+          wo = { wrap = true },
         },
       },
       indent = { enabled = true },
