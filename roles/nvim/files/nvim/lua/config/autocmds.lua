@@ -4,9 +4,14 @@ local augroup = vim.api.nvim_create_augroup
 autocmd("LspAttach", {
   group = augroup("lsp_keymaps", { clear = true }),
   callback = function(ev)
+    local client = vim.lsp.get_client_by_id(ev.data.client_id)
     local map = function(keys, func, desc)
       vim.keymap.set("n", keys, func, { buffer = ev.buf, desc = desc })
     end
+    if client and client:supports_method("textDocument/inlayHint") then
+      vim.lsp.inlay_hint.enable(true, { bufnr = ev.buf })
+    end
+
     map("gd", function() Snacks.picker.lsp_definitions() end, "Go to definition")
     map("gr", function() Snacks.picker.lsp_references() end, "Go to references")
     map("gI", function() Snacks.picker.lsp_implementations() end, "Go to implementation")
@@ -15,6 +20,9 @@ autocmd("LspAttach", {
     map("K", vim.lsp.buf.hover, "Hover")
     map("<leader>ca", vim.lsp.buf.code_action, "Code action")
     map("<leader>cr", vim.lsp.buf.rename, "Rename")
+    map("<leader>ch", function()
+      vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = ev.buf }), { bufnr = ev.buf })
+    end, "Toggle inlay hints")
     map("<leader>cf", vim.diagnostic.open_float, "Diagnostic float")
     map("<leader>cl", function() Snacks.picker.diagnostics_buffer() end, "Diagnostic buffer list")
     map("<leader>cL", function() Snacks.picker.diagnostics() end, "Diagnostic workspace list")
