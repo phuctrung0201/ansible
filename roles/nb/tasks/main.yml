@@ -1,0 +1,10 @@
+- name: Install nb via Homebrew
+  community.general.homebrew:
+    name: nb
+    state: present
+
+- name: Copy nbrc config
+  copy:
+    src: nbrc
+    dest: "{{ ansible_env.HOME }}/.nbrc"
+    backup: yes

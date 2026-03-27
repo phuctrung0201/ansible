@@ -13,5 +13,5 @@
       tags: ['nvim']
     - role: aerospace
       tags: ['aerospace']
-    - role: jrnl
-      tags: ['jrnl']
+    - role: nb
+      tags: ['nb']
