@@ -39,6 +39,14 @@ autocmd("VimResized", {
   end,
 })
 
+autocmd("TermOpen", {
+  group = augroup("term_line_numbers", { clear = true }),
+  callback = function()
+    vim.opt_local.number = true
+    vim.opt_local.relativenumber = true
+  end,
+})
+
 autocmd("BufReadPost", {
   group = augroup("last_cursor_position", { clear = true }),
   callback = function()

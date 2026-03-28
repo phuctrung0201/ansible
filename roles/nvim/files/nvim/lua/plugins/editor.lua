@@ -126,6 +126,9 @@ return {
           },
         },
       })
+      vim.lsp.config("bashls", {
+        filetypes = { "sh", "zsh", "bash" },
+      })
       vim.lsp.config("lua_ls", {
         settings = {
           Lua = {
@@ -137,6 +140,7 @@ return {
 
       require("mason-lspconfig").setup({
         ensure_installed = {
+          "bashls",
           "gopls",
           "pyright",
           "vtsls",

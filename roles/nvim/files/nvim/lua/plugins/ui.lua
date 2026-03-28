@@ -121,10 +121,5 @@ return {
     },
   },
 
-  {
-    "mikesmithgh/kitty-scrollback.nvim",
-    cmd = { "KittyScrollbackGenerateKittens", "KittyScrollbackCheckHealth", "KittyScrollbackGenerateCommandLineEditing" },
-    event = { "User KittyScrollbackLaunch" },
-    opts = {},
-  },
+  { "tmccombs/ansify.nvim", cmd = { "Ansify", "AnsiPage" } },
 }

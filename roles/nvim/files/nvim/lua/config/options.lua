@@ -44,3 +44,8 @@ opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
 opt.foldtext = ""
 opt.foldlevel = 99
 opt.foldlevelstart = 99
+
+vim.filetype.add({
+  extension = { zsh = "sh" },
+  filename = { [".zshrc"] = "sh", [".zshenv"] = "sh", [".zprofile"] = "sh" },
+})
