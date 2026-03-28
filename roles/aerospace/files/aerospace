@@ -34,13 +34,68 @@ outer.top = 4
 outer.right = 4
 
 # Main mode is passive — all keys pass through to apps.
-# Only alt-space enters action mode (like vim Esc to normal mode).
+# alt-space enters leader mode (one-shot: action then back to main).
+# Press space in leader mode to switch to action mode (persistent).
 [mode.main.binding]
-alt-space = 'mode action'
+alt-space = 'mode leader'
 
-# Action mode — vim-like window management with bare keys.
-# Press esc to return to passive main mode.
+# Leader mode — one-shot window management. Every action returns to main.
+# Press space to switch to action mode for chaining commands.
+[mode.leader.binding]
+
+space = 'mode action'
+
+# Focus (hjkl)
+h = ['focus left', 'mode main']
+j = ['focus down', 'mode main']
+k = ['focus up', 'mode main']
+l = ['focus right', 'mode main']
+
+# Move windows (shift-hjkl)
+shift-h = ['move left', 'mode main']
+shift-j = ['move down', 'mode main']
+shift-k = ['move up', 'mode main']
+shift-l = ['move right', 'mode main']
+
+# Workspaces (number keys)
+1 = ['workspace 1', 'mode main']
+2 = ['workspace 2', 'mode main']
+3 = ['workspace 3', 'mode main']
+4 = ['workspace 4', 'mode main']
+shift-1 = ['move-node-to-workspace --focus-follows-window 1', 'mode main']
+shift-2 = ['move-node-to-workspace --focus-follows-window 2', 'mode main']
+shift-3 = ['move-node-to-workspace --focus-follows-window 3', 'mode main']
+shift-4 = ['move-node-to-workspace --focus-follows-window 4', 'mode main']
+backslash = ['workspace \', 'mode main']
+shift-backslash = ['move-node-to-workspace --focus-follows-window \', 'mode main']
+
+# Monitor (brackets)
+leftSquareBracket = ['focus-monitor prev', 'mode main']
+rightSquareBracket = ['focus-monitor next', 'mode main']
+shift-leftSquareBracket = ['move-workspace-to-monitor prev', 'mode main']
+shift-rightSquareBracket = ['move-workspace-to-monitor next', 'mode main']
+
+# Layout
+t = ['layout accordion tiles', 'mode main']
+f = ['layout floating tiling', 'mode main']
+tab = ['workspace-back-and-forth', 'mode main']
+e = ['flatten-workspace-tree', 'mode main']
+
+# Resize
+minus = ['resize smart -50', 'mode main']
+equal = ['resize smart +50', 'mode main']
+
+# Service
+r = ['reload-config', 'mode main']
+x = ['close-all-windows-but-current', 'mode main']
+
+esc = 'mode main'
+
+# Action mode — persistent window management for chaining commands.
+# Press space to toggle back to leader mode, esc to exit to main.
 [mode.action.binding]
+
+space = 'mode leader'
 
 # Focus (hjkl)
 h = 'focus left'
@@ -75,7 +130,7 @@ shift-rightSquareBracket = 'move-workspace-to-monitor next'
 # Layout
 t = 'layout accordion tiles'
 f = 'layout floating tiling'
-tab = ['workspace-back-and-forth', 'mode main']
+tab = 'workspace-back-and-forth'
 e = 'flatten-workspace-tree'
 
 # Resize
@@ -83,10 +138,9 @@ minus = 'resize smart -50'
 equal = 'resize smart +50'
 
 # Service
-r = ['reload-config', 'mode main']
-x = ['close-all-windows-but-current', 'mode main']
+r = 'reload-config'
+x = 'close-all-windows-but-current'
 
-# Exit back to passive
 esc = 'mode main'
 
 # List current opening apps
