@@ -33,66 +33,62 @@ outer.bottom = 4
 outer.top = 4
 outer.right = 4
 
-# 'main' binding mode declaration
-# See: https://nikitabobko.github.io/AeroSpace/guide#binding-modes
-# 'main' binding mode must be always presented
-# Fallback value (if you omit the key): mode.main.binding = {}
+# Main mode is passive — all keys pass through to apps.
+# Only alt-space enters action mode (like vim Esc to normal mode).
 [mode.main.binding]
+alt-space = 'mode action'
 
-# See: https://nikitabobko.github.io/AeroSpace/commands#layout
-alt-esc = 'layout accordion tiles'
+# Action mode — vim-like window management with bare keys.
+# Press esc to return to passive main mode.
+[mode.action.binding]
 
+# Focus (hjkl)
+h = 'focus left'
+j = 'focus down'
+k = 'focus up'
+l = 'focus right'
 
-# See: https://nikitabobko.github.io/AeroSpace/commands#focus
-alt-h = 'focus left'
-alt-j = 'focus down'
-alt-k = 'focus up'
-alt-l = 'focus right'
+# Move windows (shift-hjkl)
+shift-h = 'move left'
+shift-j = 'move down'
+shift-k = 'move up'
+shift-l = 'move right'
 
-# See: https://nikitabobko.github.io/AeroSpace/commands#move
-alt-shift-h = 'move left'
-alt-shift-j = 'move down'
-alt-shift-k = 'move up'
-alt-shift-l = 'move right'
+# Workspaces (number keys)
+1 = 'workspace 1'
+2 = 'workspace 2'
+3 = 'workspace 3'
+4 = 'workspace 4'
+shift-1 = 'move-node-to-workspace --focus-follows-window 1'
+shift-2 = 'move-node-to-workspace --focus-follows-window 2'
+shift-3 = 'move-node-to-workspace --focus-follows-window 3'
+shift-4 = 'move-node-to-workspace --focus-follows-window 4'
+backslash = 'workspace \'
+shift-backslash = 'move-node-to-workspace --focus-follows-window \'
 
-alt-f12 = 'focus-monitor main'
-alt-f11 = 'focus-monitor secondary'
+# Monitor (brackets)
+leftSquareBracket = 'focus-monitor prev'
+rightSquareBracket = 'focus-monitor next'
+shift-leftSquareBracket = 'move-workspace-to-monitor prev'
+shift-rightSquareBracket = 'move-workspace-to-monitor next'
 
-alt-shift-f12 = 'move-workspace-to-monitor main'
-alt-shift-f11 = 'move-workspace-to-monitor secondary'
+# Layout
+t = 'layout accordion tiles'
+f = 'layout floating tiling'
+tab = ['workspace-back-and-forth', 'mode main']
+e = 'flatten-workspace-tree'
 
-# See: https://nikitabobko.github.io/AeroSpace/commands#workspace
-alt-f1 = 'workspace 1'
-alt-f2 = 'workspace 2'
-alt-f3 = 'workspace 3'
-alt-f4 = 'workspace 4'
-cmd-h = 'workspace 2'
+# Resize
+minus = 'resize smart -50'
+equal = 'resize smart +50'
 
-# See: https://nikitabobko.github.io/AeroSpace/commands#move-node-to-workspace
-alt-shift-f1 = 'move-node-to-workspace --focus-follows-window 1'
-alt-shift-f2 = 'move-node-to-workspace --focus-follows-window 2'
-alt-shift-f3 = 'move-node-to-workspace --focus-follows-window 3'
-alt-shift-f4 = 'move-node-to-workspace --focus-follows-window 4'
+# Service
+r = ['reload-config', 'mode main']
+x = ['close-all-windows-but-current', 'mode main']
 
-
-# See: https://nikitabobko.github.io/AeroSpace/commands#workspace-back-and-forth
-alt-ctrl-tab = 'workspace-back-and-forth'
-# See: https://nikitabobko.github.io/AeroSpace/commands#move-workspace-to-monitor
-alt-ctrl-shift-tab = 'move-workspace-to-monitor --wrap-around next'
-
-# See: https://nikitabobko.github.io/AeroSpace/commands#mode
-ctrl-esc = 'mode service'
-
-# 'service' binding mode declaration.
-# See: https://nikitabobko.github.io/AeroSpace/guide#binding-modes
-[mode.service.binding]
-esc = ['reload-config', 'mode main']
-r = ['flatten-workspace-tree', 'mode main'] # reset layout
-f = [
-    'layout floating tiling',
-    'mode main',
-] # Toggle between floating and tiling layout
-backspace = ['close-all-windows-but-current', 'mode main']
+# Exit back to passive
+esc = 'mode main'
+space = 'mode main'
 
 # List current opening apps
 # aerospace list-apps
@@ -105,9 +101,13 @@ if.app-id = 'net.kovidgoyal.kitty'
 run = 'move-node-to-workspace --focus-follows-window 2'
 
 [[on-window-detected]]
-if.app-id = 'md.obsidian'
-run = 'move-node-to-workspace --focus-follows-window 2'
+if.app-id = 'com.tinyspeck.slackmacgap'
+run = 'move-node-to-workspace --focus-follows-window 3'
+
+[[on-window-detected]]
+if.app-id = 'us.zoom.xos'
+run = 'move-node-to-workspace --focus-follows-window 4'
 
 [[on-window-detected]]
 check-further-callbacks = true
-run = 'move-node-to-workspace --focus-follows-window 4'
+run = 'move-node-to-workspace --focus-follows-window \'
