@@ -88,7 +88,6 @@ x = ['close-all-windows-but-current', 'mode main']
 
 # Exit back to passive
 esc = 'mode main'
-space = 'mode main'
 
 # List current opening apps
 # aerospace list-apps
