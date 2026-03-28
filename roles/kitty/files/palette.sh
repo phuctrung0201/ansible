@@ -8,7 +8,6 @@ typeset -A actions cmds descriptions
 actions=(
   copy    action
   edit    send-text
-  fix       send-text
   history   send-text
   last      action
   scroll    action
@@ -18,7 +17,6 @@ actions=(
 cmds=(
   copy    'kitten hints --program @'
   edit    '\x18\x05'
-  fix       'fc\n'
   history   '\x12'
   last      show_last_command_output
   scroll    show_scrollback
@@ -28,7 +26,6 @@ cmds=(
 descriptions=(
   copy    "Copy URL"
   edit    "Edit command line"
-  fix       "Fix last command"
   history   "Search history"
   last      "Last output"
   scroll    "Scrollback"
