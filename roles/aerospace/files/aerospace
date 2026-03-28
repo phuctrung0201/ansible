@@ -37,7 +37,7 @@ outer.right = 4
 # alt-space enters leader mode (one-shot: action then back to main).
 # Press space in leader mode to switch to action mode (persistent).
 [mode.main.binding]
-alt-space = 'mode leader'
+alt-a = 'mode leader'
 
 # Leader mode — one-shot window management. Every action returns to main.
 # Press space to switch to action mode for chaining commands.

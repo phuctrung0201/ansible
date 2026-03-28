@@ -14,10 +14,10 @@
     dest: "{{ ansible_env.HOME }}/.config/kitty/kitty.conf"
     backup: yes
 
-- name: Copy palette script
+- name: Copy leader script
   copy:
-    src: palette.sh
-    dest: "{{ ansible_env.HOME }}/.config/kitty/palette.sh"
+    src: leader.sh
+    dest: "{{ ansible_env.HOME }}/.config/kitty/leader.sh"
     mode: "0755"
 
 - name: Copy kitty zsh integration
