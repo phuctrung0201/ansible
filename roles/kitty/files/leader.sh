@@ -10,17 +10,19 @@ cmds=(
   o 'open_url_with_hints'
   e '\x18\x05'
   r '\x12'
-  l 'show_last_command_output'
+  l 'copy_last_command_output'
   s 'show_scrollback'
+  w 'launch --type=os-window --cwd=current'
 )
 
 descriptions=(
-  c "Copy URL"
-  o "Open URL"
-  e "Edit command line"
-  r "Search history"
-  l "Last output"
-  s "Scrollback"
+  c "Copy URL to clipboard"
+  o "Open URL in browser"
+  e "Edit command in $EDITOR"
+  r "Reverse search history"
+  l "Copy last command output"
+  s "Browse scrollback buffer"
+  w "Open window in current dir"
 )
 
 selection=$(
