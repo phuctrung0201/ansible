@@ -6,21 +6,23 @@ export PATH="/opt/homebrew/bin:$PATH"
 typeset -A cmds descriptions
 
 cmds=(
-  c 'kitten hints --program @'
-  o 'open_url_with_hints'
-  e '\x18\x05'
-  r '\x12'
+  u  'open_url_with_hints'
+  uy 'kitten hints --program @'
+  p  'kitten hints --type=path --program=@'
+  e  '\x18\x05'
+  h '\x12'
   l 'copy_last_command_output'
   s 'show_scrollback'
   w 'launch --type=os-window --cwd=current'
 )
 
 descriptions=(
-  c "Copy URL to clipboard"
-  o "Open URL in browser"
-  e "Edit command in $EDITOR"
-  r "Reverse search history"
-  l "Copy last command output"
+  u  "Hint URL to open"
+  uy "Hint URL to yank"
+  p  "Hint path to yank"
+  e  "Edit command in $EDITOR"
+  h "Reverse search history"
+  l "Yank last command output"
   s "Browse scrollback buffer"
   w "Open window in current dir"
 )
@@ -32,7 +34,8 @@ selection=$(
              --layout=reverse \
              --height=100% \
              --no-info \
-             --ansi | awk '{print $1}'
+             --ansi \
+             --tiebreak=begin | awk '{print $1}'
 )
 
 [[ -z "$selection" ]] && exit 0
