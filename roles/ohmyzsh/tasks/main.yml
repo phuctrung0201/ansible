@@ -21,8 +21,16 @@
     repo: https://github.com/zsh-users/zsh-syntax-highlighting.git
     dest: "{{ ansible_env.HOME }}/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting"
 
-- name: Copy .zshrc configuration
-  copy:
-    src: zshrc
-    dest: "{{ ansible_env.HOME }}/.zshrc"
-    backup: yes
+- name: Configure .zshrc settings
+  lineinfile:
+    path: "{{ ansible_env.HOME }}/.zshrc"
+    line: "{{ item }}"
+    state: present
+    create: yes
+  loop:
+    - 'export EDITOR="nvim"'
+    - 'export ZSH="$HOME/.oh-my-zsh"'
+    - 'ZSH_THEME="refined"'
+    - 'plugins=(git z zsh-autosuggestions zsh-syntax-highlighting)'
+    - 'DISABLE_AUTO_UPDATE=true'
+    - 'source $ZSH/oh-my-zsh.sh'

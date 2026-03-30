@@ -87,7 +87,8 @@ equal = ['resize smart +50', 'mode main']
 
 # Service
 r = ['reload-config', 'mode main']
-x = ['close-all-windows-but-current', 'mode main']
+x = ['close', 'mode main']
+shift-x = ['close-all-windows-but-current', 'mode main']
 
 esc = 'mode main'
 
@@ -139,7 +140,8 @@ equal = 'resize smart +50'
 
 # Service
 r = 'reload-config'
-x = 'close-all-windows-but-current'
+x = 'close'
+shift-x = 'close-all-windows-but-current'
 
 esc = 'mode main'
 
