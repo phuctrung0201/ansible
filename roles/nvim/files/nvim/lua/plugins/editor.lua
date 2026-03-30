@@ -1,5 +1,10 @@
 return {
   {
+    "terrastruct/d2-vim",
+    ft = "d2",
+  },
+
+  {
     "echasnovski/mini.pairs",
     event = "InsertEnter",
     opts = {},
