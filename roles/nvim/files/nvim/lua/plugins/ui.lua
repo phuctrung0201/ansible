@@ -8,6 +8,10 @@ return {
       overrides = function(colors)
         return {
           NormalFloat = { fg = colors.fg, bg = nil },
+          Visual = { bg = "#6272a4" },
+          Search = { fg = "#282a36", bg = "#ffb86c" },
+          IncSearch = { fg = "#282a36", bg = "#ff79c6" },
+          CurSearch = { fg = "#282a36", bg = "#ff79c6" },
         }
       end,
     },
