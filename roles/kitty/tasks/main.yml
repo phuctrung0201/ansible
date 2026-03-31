@@ -9,8 +9,8 @@
     state: directory
 
 - name: Copy kitty config
-  copy:
-    src: kitty.conf
+  template:
+    src: kitty.conf.j2
     dest: "{{ ansible_env.HOME }}/.config/kitty/kitty.conf"
     backup: yes
 

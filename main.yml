@@ -1,5 +1,7 @@
 - name: Setup my local development environment
   hosts: localhost
+  vars_files:
+    - share.yml
   roles:
     - role: ohmyzsh
       tags: ['ohmyzsh']

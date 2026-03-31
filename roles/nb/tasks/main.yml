@@ -4,7 +4,7 @@
     state: present
 
 - name: Copy nbrc config
-  copy:
-    src: nbrc
+  template:
+    src: nbrc.j2
     dest: "{{ ansible_env.HOME }}/.nbrc"
     backup: yes

@@ -14,8 +14,8 @@
     state: directory
 
 - name: Copy fzf zsh config
-  copy:
-    src: fzf.zsh
+  template:
+    src: fzf.zsh.j2
     dest: "{{ ansible_env.HOME }}/.config/fzf/fzf.zsh"
 
 - name: Source fzf.zsh from zshrc

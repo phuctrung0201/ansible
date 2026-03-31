@@ -8,9 +8,9 @@
     path: "{{ ansible_env.HOME }}/.config/aerospace"
     state: directory
 
-- name: Copy default aerospace default config 
-  copy:
-    src: aerospace
+- name: Copy default aerospace default config
+  template:
+    src: aerospace.j2
     dest: "{{ ansible_env.HOME }}/.config/aerospace/aerospace.toml"
     backup: yes
 

@@ -8,8 +8,14 @@
     path: "{{ ansible_env.HOME }}/.config/nvim" 
     state: directory
 
-- name: Copy the nvim setup default 
+- name: Copy the nvim setup default
   copy:
-    src: nvim/ 
-    dest: "{{ ansible_env.HOME }}/.config/nvim/" 
+    src: nvim/
+    dest: "{{ ansible_env.HOME }}/.config/nvim/"
+    backup: yes
+
+- name: Template ui.lua with color variables
+  template:
+    src: ui.lua.j2
+    dest: "{{ ansible_env.HOME }}/.config/nvim/lua/plugins/ui.lua"
     backup: yes
