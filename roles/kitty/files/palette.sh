@@ -21,13 +21,13 @@ actions=(
   $'Tab: Move to Window\t__move_tab_to_window__'
 )
 
+# Shared fzf options
+fzf_common=(--layout=reverse --height=100% --no-info --delimiter=$'\t')
+
 selection=$(
   printf '%s\n' "${actions[@]}" \
   | fzf --prompt="⚡ palette > " \
-        --layout=reverse \
-        --height=100% \
-        --no-info \
-        --delimiter=$'\t' \
+        "${fzf_common[@]}" \
         --nth=1 \
         --with-nth=1 \
         --tiebreak=index
@@ -55,15 +55,13 @@ if [[ "$cmd" == '__tab_switch__' ]]; then
   tab_id=$(kitten @ ls | jq -r '
     [.[] | select(any(.tabs[].windows[]; .is_self))
       | .tabs[] | select(any(.windows[]; .is_self) | not)
+      | select(.active_window_history | length > 0)
       | {id: .id, title: .title, wid: .active_window_history[0]}]
     | sort_by(.id)
     | .[]
     | "\(.id)\t\(.wid)\t\(.title)"
   ' | fzf --prompt="📑 tab > " \
-        --layout=reverse \
-        --height=100% \
-        --no-info \
-        --delimiter=$'\t' \
+        "${fzf_common[@]}" \
         --with-nth=3 \
         --ansi \
         --preview 'kitten @ get-text --ansi --match id:{2}' \
@@ -81,15 +79,13 @@ if [[ "$cmd" == '__move_tab_to_window__' ]]; then
     | (($win.tabs[] | select(.is_focused)) // $win.tabs[0])
     | "\(.id)\t\(.active_window_history[0])\t\([$win.tabs[].title] | join(", "))"
   ' | fzf --prompt="🪟 window > " \
-        --layout=reverse \
-        --height=100% \
-        --no-info \
-        --delimiter=$'\t' \
+        "${fzf_common[@]}" \
         --with-nth=3 \
         --ansi \
         --preview 'kitten @ get-text --ansi --match id:{2}' \
   | cut -f1)
-  [[ -z "$target_tab" ]] && kitten @ close-window --self && exit 0
+  kitten @ close-window --self
+  [[ -z "$target_tab" ]] && exit 0
   kitten @ detach-tab --self --target-tab id:"$target_tab"
   exit 0
 fi
