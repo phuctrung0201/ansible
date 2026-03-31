@@ -1,29 +1,32 @@
-dracula:
+theme:
   # Base
-  bg: "#282a36"
-  fg: "#f8f8f2"
-  selection: "#44475a"
-  comment: "#6272a4"
-  dark: "#21222c"
-  white: "#ffffff"
+  bg: "#1e1e2e"
+  fg: "#cdd6f4"
+  selection: "#313244"
+  comment: "#6c7086"
+  comment_bright: "#9399b2"
+  dark: "#45475a"
+  white: "#bac2de"
 
   # Accent colors
-  red: "#ff5555"
-  orange: "#ffb86c"
-  yellow: "#f1fa8c"
-  green: "#50fa7b"
-  purple: "#bd93f9"
-  cyan: "#8be9fd"
-  pink: "#ff79c6"
+  red: "#f38ba8"
+  orange: "#fab387"
+  yellow: "#f9e2af"
+  green: "#a6e3a1"
+  blue: "#89b4fa"
+  purple: "#cba6f7"
+  cyan: "#94e2d5"
+  pink: "#f5c2e7"
+  rosewater: "#f5e0dc"
 
   # Bright variants
-  bright_red: "#ff6e6e"
-  bright_green: "#69ff94"
-  bright_yellow: "#ffffa5"
-  bright_purple: "#d6acff"
-  bright_pink: "#ff92df"
-  bright_cyan: "#a4ffff"
+  bright_red: "#f38ba8"
+  bright_green: "#a6e3a1"
+  bright_yellow: "#f9e2af"
+  bright_purple: "#cba6f7"
+  bright_pink: "#f5c2e7"
+  bright_cyan: "#94e2d5"
 
   # nb ANSI 256-color equivalents
-  nb_primary: 141
-  nb_secondary: 212
+  nb_primary: 183
+  nb_secondary: 218

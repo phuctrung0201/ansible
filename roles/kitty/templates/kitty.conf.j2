@@ -11,46 +11,46 @@ font_family FiraCode Nerd Font Mono
 font_size   16.0
 
 # =============================================================================
-# Color scheme (Dracula)
+# Color scheme (Catppuccin Mocha)
 # =============================================================================
-foreground            {{ dracula.fg }}
-background            {{ dracula.bg }}
-selection_foreground  {{ dracula.white }}
-selection_background  {{ dracula.comment }}
+foreground            {{ theme.fg }}
+background            {{ theme.bg }}
+selection_foreground  {{ theme.bg }}
+selection_background  {{ theme.rosewater }}
 
-url_color             {{ dracula.cyan }}
-cursor_text_color     {{ dracula.bg }}
+url_color             {{ theme.rosewater }}
+cursor_text_color     {{ theme.bg }}
 cursor_shape          beam
 
 # Normal colors
-color0  {{ dracula.bg }}
-color1  {{ dracula.red }}
-color2  {{ dracula.green }}
-color3  {{ dracula.yellow }}
-color4  {{ dracula.purple }}
-color5  {{ dracula.pink }}
-color6  {{ dracula.cyan }}
-color7  {{ dracula.fg }}
+color0  {{ theme.dark }}
+color1  {{ theme.red }}
+color2  {{ theme.green }}
+color3  {{ theme.yellow }}
+color4  {{ theme.blue }}
+color5  {{ theme.pink }}
+color6  {{ theme.cyan }}
+color7  {{ theme.white }}
 
 # Bright colors
-color8  {{ dracula.comment }}
-color9  {{ dracula.bright_red }}
-color10 {{ dracula.bright_green }}
-color11 {{ dracula.bright_yellow }}
-color12 {{ dracula.bright_purple }}
-color13 {{ dracula.bright_pink }}
-color14 {{ dracula.bright_cyan }}
-color15 {{ dracula.white }}
+color8  {{ theme.comment_bright }}
+color9  {{ theme.bright_red }}
+color10 {{ theme.bright_green }}
+color11 {{ theme.bright_yellow }}
+color12 {{ theme.blue }}
+color13 {{ theme.bright_pink }}
+color14 {{ theme.bright_cyan }}
+color15 {{ theme.fg }}
 
 # =============================================================================
 # Tab bar
 # =============================================================================
 tab_bar_style           hidden
-tab_bar_background      {{ dracula.bg }}
-active_tab_foreground   {{ dracula.bg }}
-active_tab_background   {{ dracula.purple }}
+tab_bar_background      {{ theme.bg }}
+active_tab_foreground   {{ theme.bg }}
+active_tab_background   {{ theme.purple }}
 active_tab_font_style   bold
-inactive_tab_foreground {{ dracula.comment }}
+inactive_tab_foreground {{ theme.comment }}
 
 # =============================================================================
 # Window
@@ -59,8 +59,8 @@ hide_window_decorations titlebar-only
 background_opacity      0.80
 background_blur         10
 enabled_layouts         tall
-active_border_color     {{ dracula.fg }}
-inactive_border_color   {{ dracula.comment }}
+active_border_color     {{ theme.purple }}
+inactive_border_color   {{ theme.comment }}
 
 # =============================================================================
 # Scrollback

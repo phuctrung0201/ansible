@@ -1,23 +1,28 @@
 return {
   {
-    "Mofiqul/dracula.nvim",
+    "catppuccin/nvim",
+    name = "catppuccin",
     lazy = false,
     priority = 1000,
     opts = {
-      transparent_bg = true,
-      overrides = function(colors)
+      flavour = "mocha",
+      transparent_background = true,
+      custom_highlights = function()
         return {
-          NormalFloat = { fg = colors.fg, bg = nil },
-          Visual = { bg = "{{ dracula.comment }}" },
-          Search = { fg = "{{ dracula.bg }}", bg = "{{ dracula.orange }}" },
-          IncSearch = { fg = "{{ dracula.bg }}", bg = "{{ dracula.pink }}" },
-          CurSearch = { fg = "{{ dracula.bg }}", bg = "{{ dracula.pink }}" },
+          NormalFloat = { bg = "NONE" },
+          FloatBorder = { bg = "NONE" },
+          FloatTitle = { bg = "NONE" },
         }
       end,
+      integrations = {
+        snacks = true,
+        which_key = true,
+        mini = { enabled = true },
+      },
     },
     config = function(_, opts)
-      require("dracula").setup(opts)
-      vim.cmd.colorscheme("dracula")
+      require("catppuccin").setup(opts)
+      vim.cmd.colorscheme("catppuccin")
     end,
   },
 
@@ -60,6 +65,7 @@ return {
       { "<leader>fr", function() Snacks.picker.recent({ filter = { cwd = true } }) end, desc = "Recent files" },
       { "<leader>fh", function() Snacks.picker.help() end, desc = "Help tags" },
       { "<leader>fq", function() Snacks.picker.qflist() end, desc = "Quickfix" },
+      { "<leader>f/", function() Snacks.picker.lines() end, desc = "Grep buffer" },
       { "<leader>bR", function() Snacks.rename.rename_file() end, desc = "Rename file" },
       { "<leader>gz", function() Snacks.lazygit() end, desc = "Lazygit" },
     },

@@ -169,10 +169,10 @@ fhelp() {
   echo "$(highlight fhelp)  — show this help"
 }
 
-# Dracula theme
+# Catppuccin Mocha theme
 export FZF_DEFAULT_OPTS='
-  --color=fg:{{ dracula.fg }},bg:{{ dracula.bg }},hl:{{ dracula.purple }}
-  --color=fg+:{{ dracula.fg }},bg+:{{ dracula.selection }},hl+:{{ dracula.purple }}
-  --color=info:{{ dracula.orange }},prompt:{{ dracula.green }},pointer:{{ dracula.pink }}
-  --color=marker:{{ dracula.pink }},spinner:{{ dracula.orange }},header:{{ dracula.comment }}
+  --color=fg:{{ theme.fg }},bg:{{ theme.bg }},hl:{{ theme.red }}
+  --color=fg+:{{ theme.fg }},bg+:{{ theme.selection }},hl+:{{ theme.red }}
+  --color=info:{{ theme.purple }},prompt:{{ theme.purple }},pointer:{{ theme.rosewater }}
+  --color=marker:{{ theme.cyan }},spinner:{{ theme.rosewater }},header:{{ theme.red }}
 '

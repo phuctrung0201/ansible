@@ -22,7 +22,7 @@ require("lazy").setup({
     lazy = true,
     version = false,
   },
-  install = { colorscheme = { "dracula", "habamax" } },
+  install = { colorscheme = { "catppuccin", "habamax" } },
   performance = {
     rtp = {
       disabled_plugins = {

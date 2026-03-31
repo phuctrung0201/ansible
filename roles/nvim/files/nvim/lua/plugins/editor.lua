@@ -5,12 +5,6 @@ return {
   },
 
   {
-    "echasnovski/mini.pairs",
-    event = "InsertEnter",
-    opts = {},
-  },
-
-  {
     "folke/flash.nvim",
     event = "VeryLazy",
     keys = {
@@ -20,9 +14,14 @@ return {
     opts = {
       modes = {
         char = { enabled = true },
-        search = { enabled = true },
       },
     },
+  },
+
+  {
+    "echasnovski/mini.pairs",
+    event = "InsertEnter",
+    opts = {},
   },
 
   {
