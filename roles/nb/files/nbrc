@@ -5,4 +5,4 @@ export NB_SYNTAX_THEME="Dracula"
 export NB_DEFAULT_EXTENSION="md"
 export NB_HEADER=0
 export NB_FOOTER=0
-export NB_MARKDOWN_TOOL="glow -p"
+export NB_MARKDOWN_TOOL="bat"

@@ -57,8 +57,6 @@ return {
       { "<leader>ff", function() Snacks.picker.files() end, desc = "Find files" },
       { "<leader>fg", function() Snacks.picker.grep() end, desc = "Live grep" },
       { "<leader>fb", function() Snacks.picker.buffers() end, desc = "Buffers" },
-      { "<leader>/", function() Snacks.picker.lines() end, desc = "Grep current buffer" },
-      { "<leader>f/", function() Snacks.picker.lines() end, desc = "Grep current buffer" },
       { "<leader>fr", function() Snacks.picker.recent({ filter = { cwd = true } }) end, desc = "Recent files" },
       { "<leader>fh", function() Snacks.picker.help() end, desc = "Help tags" },
       { "<leader>fq", function() Snacks.picker.qflist() end, desc = "Quickfix" },

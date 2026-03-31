@@ -125,11 +125,6 @@ pub fn open_scrollback() -> anyhow::Result<()> {
     kitty::send_action("show_scrollback").context("open scrollback")
 }
 
-pub fn new_tab() -> anyhow::Result<()> {
-    close_overlay()?;
-    kitty::send_action("launch --type=tab").context("new tab")
-}
-
 pub fn new_tab_here() -> anyhow::Result<()> {
     close_overlay()?;
     kitty::send_action("launch --type=tab --cwd=current").context("new tab here")
@@ -205,54 +200,6 @@ pub fn close_other_tabs() -> anyhow::Result<()> {
     close_overlay()?;
     for tab_id in other_tab_ids {
         kitty::close_tab(tab_id).ok();
-    }
-    Ok(())
-}
-
-fn kubectl_cmd() -> std::process::Command {
-    let path = format!(
-        "/opt/homebrew/bin:{}",
-        std::env::var("PATH").unwrap_or_default()
-    );
-    let mut cmd = std::process::Command::new("kubectl");
-    cmd.env("PATH", path);
-    cmd
-}
-
-pub fn kube_context_switch() -> anyhow::Result<()> {
-    let contexts_out = kubectl_cmd()
-        .args(["config", "get-contexts", "-o", "name"])
-        .output()
-        .context("kubectl config get-contexts")?;
-    let contexts: Vec<String> = String::from_utf8_lossy(&contexts_out.stdout)
-        .lines()
-        .filter(|l| !l.is_empty())
-        .map(|l| l.to_string())
-        .collect();
-
-    if contexts.is_empty() {
-        return leader::show_message("kube ctx", "no contexts found");
-    }
-
-    let current_out = kubectl_cmd()
-        .args(["config", "current-context"])
-        .output()
-        .context("kubectl config current-context")?;
-    let current = String::from_utf8_lossy(&current_out.stdout).trim().to_string();
-
-    let items: Vec<leader::PickItem> = contexts.iter()
-        .map(|c| leader::PickItem { label: c.clone(), focused: c == &current })
-        .collect();
-    let groups = vec![leader::PickGroup { label: String::new(), items }];
-
-    let result = leader::pick("󱃾 kube context", &groups)?;
-    close_overlay()?;
-    if let Some((_group_idx, item_idx)) = result {
-        let ctx = &contexts[item_idx];
-        kubectl_cmd()
-            .args(["config", "use-context", ctx])
-            .status()
-            .context("kubectl config use-context")?;
     }
     Ok(())
 }

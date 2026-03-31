@@ -5,10 +5,14 @@
       tags: ['ohmyzsh']
     - role: common
       tags: ['common']
+    - role: fzf
+      tags: ['fzf']
     - role: mise
       tags: ['mise']
     - role: kitty
       tags: ['kitty']
+    - role: lazygit
+      tags: ['lazygit']
     - role: nvim
       tags: ['nvim']
     - role: aerospace

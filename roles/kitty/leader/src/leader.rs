@@ -49,7 +49,7 @@ fn slot_spans(key: char, label: &str, icon: &str, lw: usize, is_last: bool, focu
     let trailing = if is_last { 0 } else { 2 };
     let icon_chars = icon.chars().count();
     let text = format!(
-        " {}{:<width$}{:>trail$}",
+        " → {}{:<width$}{:>trail$}",
         icon,
         label,
         "",

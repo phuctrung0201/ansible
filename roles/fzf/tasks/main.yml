@@ -1,0 +1,25 @@
+- name: Install bat
+  homebrew:
+    name: bat
+    state: present
+
+- name: Install fzf
+  homebrew:
+    name: fzf
+    state: present
+
+- name: Ensure fzf config directory exists
+  file:
+    path: "{{ ansible_env.HOME }}/.config/fzf"
+    state: directory
+
+- name: Copy fzf zsh config
+  copy:
+    src: fzf.zsh
+    dest: "{{ ansible_env.HOME }}/.config/fzf/fzf.zsh"
+
+- name: Source fzf.zsh from zshrc
+  lineinfile:
+    path: "{{ ansible_env.HOME }}/.zshrc"
+    line: "source ~/.config/fzf/fzf.zsh"
+    state: present

@@ -16,95 +16,87 @@ pub enum KeyNodeKind {
 }
 
 pub static KEYMAP: &[KeyNode] = &[
+    // actions
     KeyNode {
-        key: 'u',
-        label: "yank url",
-        kind: KeyNodeKind::Action(action::copy_url),
+        key: 'a',
+        label: "attach tab",
+        kind: KeyNodeKind::Action(action::move_tab_to_window),
     },
+    KeyNode {
+        key: 'b',
+        label: "browse history",
+        kind: KeyNodeKind::Action(action::search_history),
+    },
+    KeyNode {
+        key: 'd',
+        label: "detach tab",
+        kind: KeyNodeKind::Action(action::detach_tab),
+    },
+    KeyNode {
+        key: 'e',
+        label: "edit command",
+        kind: KeyNodeKind::Action(action::edit_command),
+    },
+    KeyNode {
+        key: 'l',
+        label: "list tabs",
+        kind: KeyNodeKind::Action(action::tab_list),
+    },
+    KeyNode {
+        key: 'n',
+        label: "new tab",
+        kind: KeyNodeKind::Action(action::new_tab_here),
+    },
+    KeyNode {
+        key: 'x',
+        label: "close tab",
+        kind: KeyNodeKind::Action(action::close_tab_self),
+    },
+    KeyNode {
+        key: 'X',
+        label: "close other tabs",
+        kind: KeyNodeKind::Action(action::close_other_tabs),
+    },
+    // groups
     KeyNode {
         key: 'o',
-        label: "open url",
-        kind: KeyNodeKind::Action(action::open_url),
-    },
-    KeyNode {
-        key: 'f',
-        label: "yank file path",
-        kind: KeyNodeKind::Action(action::copy_file_path),
-    },
-    KeyNode {
-        key: 'c',
-        label: "command",
+        label: "open",
         kind: KeyNodeKind::Group {
-            icon: "",
+            icon: "󰏌",
             nodes: &[
                 KeyNode {
-                    key: 'e',
-                    label: "edit",
-                    kind: KeyNodeKind::Action(action::edit_command),
+                    key: 'u',
+                    label: "url",
+                    kind: KeyNodeKind::Action(action::open_url),
                 },
                 KeyNode {
-                    key: 'h',
-                    label: "history",
-                    kind: KeyNodeKind::Action(action::search_history),
-                },
-                KeyNode {
-                    key: 'y',
-                    label: "yank last out",
-                    kind: KeyNodeKind::Action(action::copy_last_output),
+                    key: 's',
+                    label: "scrollback",
+                    kind: KeyNodeKind::Action(action::open_scrollback),
                 },
             ],
         },
     },
     KeyNode {
-        key: 's',
-        label: "scrollback",
-        kind: KeyNodeKind::Action(action::open_scrollback),
-    },
-    KeyNode {
-        key: 'k',
-        label: "kube ctx",
-        kind: KeyNodeKind::Action(action::kube_context_switch),
-    },
-    KeyNode {
-        key: 't',
-        label: "tabs",
+        key: 'y',
+        label: "yank",
         kind: KeyNodeKind::Group {
-            icon: "󰓩",
+            icon: "󰆒",
             nodes: &[
                 KeyNode {
-                    key: 'n',
-                    label: "new",
-                    kind: KeyNodeKind::Action(action::new_tab),
-                },
-                KeyNode {
-                    key: 'h',
-                    label: "new from here",
-                    kind: KeyNodeKind::Action(action::new_tab_here),
-                },
-                KeyNode {
                     key: 'l',
-                    label: "list",
-                    kind: KeyNodeKind::Action(action::tab_list),
+                    label: "last output",
+                    kind: KeyNodeKind::Action(action::copy_last_output),
                 },
                 KeyNode {
-                    key: 'x',
-                    label: "close",
-                    kind: KeyNodeKind::Action(action::close_tab_self),
+                    key: 'u',
+                    label: "url",
+                    kind: KeyNodeKind::Action(action::copy_url),
                 },
                 KeyNode {
-                    key: 'X',
-                    label: "close others",
-                    kind: KeyNodeKind::Action(action::close_other_tabs),
-                },
-                KeyNode {
-                    key: 'd',
-                    label: "detach",
-                    kind: KeyNodeKind::Action(action::detach_tab),
-                },
-                KeyNode {
-                    key: 'a',
-                    label: "attach",
-                    kind: KeyNodeKind::Action(action::move_tab_to_window),
+                    key: 'f',
+                    label: "file path",
+                    kind: KeyNodeKind::Action(action::copy_file_path),
                 },
             ],
         },
