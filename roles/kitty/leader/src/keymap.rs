@@ -52,6 +52,11 @@ pub static KEYMAP: &[KeyNode] = &[
         kind: KeyNodeKind::Action(action::open_scrollback),
     },
     KeyNode {
+        key: 'k',
+        label: "kube ctx",
+        kind: KeyNodeKind::Action(action::kube_context_switch),
+    },
+    KeyNode {
         key: 't',
         label: "tabs",
         kind: KeyNodeKind::Group {

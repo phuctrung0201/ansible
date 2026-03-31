@@ -13,7 +13,6 @@ fn kitten_cmd() -> Command {
 }
 
 /// Ignore SIGHUP so the process survives after the overlay window is closed.
-/// Mirrors `trap '' HUP` in palette.sh.
 fn ignore_hup() {
     unsafe { libc::signal(libc::SIGHUP, libc::SIG_IGN); }
 }
