@@ -66,7 +66,7 @@ shift-1 = ['move-node-to-workspace --focus-follows-window 1', 'mode main']
 shift-2 = ['move-node-to-workspace --focus-follows-window 2', 'mode main']
 shift-3 = ['move-node-to-workspace --focus-follows-window 3', 'mode main']
 shift-4 = ['move-node-to-workspace --focus-follows-window 4', 'mode main']
-backslash = ['workspace \', 'mode main']
+backslash = ['workspace --auto-back-and-forth \', 'mode main']
 shift-backslash = ['move-node-to-workspace --focus-follows-window \', 'mode main']
 
 # Monitor (brackets)
@@ -78,7 +78,7 @@ shift-rightSquareBracket = ['move-workspace-to-monitor --wrap-around next', 'mod
 # Layout
 t = ['layout accordion tiles', 'mode main']
 f = ['layout floating tiling', 'mode main']
-tab = ['workspace-back-and-forth', 'mode main']
+tab = ['focus-back-and-forth', 'mode main']
 e = ['flatten-workspace-tree', 'mode main']
 
 # Resize
@@ -119,7 +119,7 @@ shift-1 = 'move-node-to-workspace --focus-follows-window 1'
 shift-2 = 'move-node-to-workspace --focus-follows-window 2'
 shift-3 = 'move-node-to-workspace --focus-follows-window 3'
 shift-4 = 'move-node-to-workspace --focus-follows-window 4'
-backslash = 'workspace \'
+backslash = 'workspace --auto-back-and-forth \'
 shift-backslash = 'move-node-to-workspace --focus-follows-window \'
 
 # Monitor (brackets)
@@ -131,7 +131,7 @@ shift-rightSquareBracket = 'move-workspace-to-monitor --wrap-around next'
 # Layout
 t = 'layout accordion tiles'
 f = 'layout floating tiling'
-tab = 'workspace-back-and-forth'
+tab = 'focus-back-and-forth'
 e = 'flatten-workspace-tree'
 
 # Resize
@@ -153,16 +153,16 @@ run = 'move-node-to-workspace --focus-follows-window 1'
 
 [[on-window-detected]]
 if.app-id = 'net.kovidgoyal.kitty'
-run = 'move-node-to-workspace --focus-follows-window 2'
+run = 'move-node-to-workspace --focus-follows-window \'
 
 [[on-window-detected]]
 if.app-id = 'com.tinyspeck.slackmacgap'
-run = 'move-node-to-workspace --focus-follows-window 3'
+run = 'move-node-to-workspace --focus-follows-window 2'
 
 [[on-window-detected]]
 if.app-id = 'us.zoom.xos'
-run = 'move-node-to-workspace --focus-follows-window 4'
+run = 'move-node-to-workspace --focus-follows-window 3'
 
 [[on-window-detected]]
 check-further-callbacks = true
-run = 'move-node-to-workspace --focus-follows-window \'
+run = 'move-node-to-workspace --focus-follows-window 4'

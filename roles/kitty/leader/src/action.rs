@@ -148,10 +148,10 @@ pub fn close_tab_self() -> anyhow::Result<()> {
 // Custom actions using leader::pick
 // ---------------------------------------------------------------------------
 
-pub fn tab_switch() -> anyhow::Result<()> {
+pub fn tab_list() -> anyhow::Result<()> {
     let os_windows = parse_ls()?;
 
-    // Find the OS window and tab that contains this process (is_self window).
+    // Find the OS window that contains this process (is_self window).
     // Using is_self is more reliable than is_focused when running inside an overlay.
     let focused_win = os_windows.iter().find(|w| {
         w.tabs.iter().any(|t| t.windows.iter().any(|win| win.is_self))
@@ -160,29 +160,25 @@ pub fn tab_switch() -> anyhow::Result<()> {
         Some(w) => w,
         None => return Ok(()),
     };
-    let focused_tab_id = focused_win
-        .tabs
-        .iter()
-        .find(|t| t.windows.iter().any(|win| win.is_self))
-        .map(|t| t.id);
 
-    // List other tabs in the same window.
-    let other_tabs: Vec<(u64, &str)> = focused_win
+    // List all tabs in the same window.
+    let all_tabs: Vec<(u64, &str)> = focused_win
         .tabs
         .iter()
-        .filter(|t| Some(t.id) != focused_tab_id)
         .map(|t| (t.id, t.title.as_str()))
         .collect();
 
-    if other_tabs.is_empty() {
-        return leader::show_message("tabs", "no other tabs");
+    if all_tabs.is_empty() {
+        return leader::show_message("tabs", "no tabs");
     }
 
-    let items: Vec<String> = other_tabs.iter().map(|(_, title)| title.to_string()).collect();
-    let ids: Vec<u64> = other_tabs.iter().map(|(id, _)| *id).collect();
+    let items: Vec<leader::PickItem> = focused_win.tabs.iter()
+        .map(|t| leader::PickItem { label: t.title.clone(), focused: t.is_focused })
+        .collect();
+    let ids: Vec<u64> = all_tabs.iter().map(|(id, _)| *id).collect();
     let groups = vec![leader::PickGroup { label: String::new(), items }];
 
-    let result = leader::pick("󰓩 switch tab", &groups)?;
+    let result = leader::pick("󰓩 list tabs", &groups)?;
     close_overlay()?;
     if let Some((_group_idx, item_idx)) = result {
         kitty::focus_tab(ids[item_idx]).context("focus tab")?;
@@ -244,9 +240,8 @@ pub fn kube_context_switch() -> anyhow::Result<()> {
         .context("kubectl config current-context")?;
     let current = String::from_utf8_lossy(&current_out.stdout).trim().to_string();
 
-    let items: Vec<String> = contexts
-        .iter()
-        .map(|c| if c == &current { format!("{c} *") } else { c.clone() })
+    let items: Vec<leader::PickItem> = contexts.iter()
+        .map(|c| leader::PickItem { label: c.clone(), focused: c == &current })
         .collect();
     let groups = vec![leader::PickGroup { label: String::new(), items }];
 
@@ -289,6 +284,9 @@ pub fn move_tab_to_window() -> anyhow::Result<()> {
         return leader::show_message("attach", "no other windows");
     }
 
+    let items: Vec<leader::PickItem> = items.into_iter()
+        .map(|s| leader::PickItem { label: s, focused: false })
+        .collect();
     let groups = vec![leader::PickGroup { label: String::new(), items }];
     let result = leader::pick("󰓩 attach", &groups)?;
     close_overlay()?;

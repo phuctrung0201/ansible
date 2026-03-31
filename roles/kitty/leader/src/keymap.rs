@@ -33,18 +33,27 @@ pub static KEYMAP: &[KeyNode] = &[
     },
     KeyNode {
         key: 'c',
-        label: "edit command",
-        kind: KeyNodeKind::Action(action::edit_command),
-    },
-    KeyNode {
-        key: 'h',
-        label: "search history",
-        kind: KeyNodeKind::Action(action::search_history),
-    },
-    KeyNode {
-        key: 'l',
-        label: "yank last out",
-        kind: KeyNodeKind::Action(action::copy_last_output),
+        label: "command",
+        kind: KeyNodeKind::Group {
+            icon: "",
+            nodes: &[
+                KeyNode {
+                    key: 'e',
+                    label: "edit",
+                    kind: KeyNodeKind::Action(action::edit_command),
+                },
+                KeyNode {
+                    key: 'h',
+                    label: "history",
+                    kind: KeyNodeKind::Action(action::search_history),
+                },
+                KeyNode {
+                    key: 'y',
+                    label: "yank last out",
+                    kind: KeyNodeKind::Action(action::copy_last_output),
+                },
+            ],
+        },
     },
     KeyNode {
         key: 's',
@@ -73,9 +82,9 @@ pub static KEYMAP: &[KeyNode] = &[
                     kind: KeyNodeKind::Action(action::new_tab_here),
                 },
                 KeyNode {
-                    key: 's',
-                    label: "switch",
-                    kind: KeyNodeKind::Action(action::tab_switch),
+                    key: 'l',
+                    label: "list",
+                    kind: KeyNodeKind::Action(action::tab_list),
                 },
                 KeyNode {
                     key: 'x',

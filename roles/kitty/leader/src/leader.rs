@@ -24,9 +24,14 @@ const COLS: usize = 4;
 // PickGroup — secondary selection
 // ---------------------------------------------------------------------------
 
+pub struct PickItem {
+    pub label: String,
+    pub focused: bool,
+}
+
 pub struct PickGroup {
     pub label: String,
-    pub items: Vec<String>,
+    pub items: Vec<PickItem>,
 }
 
 // ---------------------------------------------------------------------------
@@ -40,7 +45,7 @@ fn label_width(inner_width: usize) -> usize {
 }
 
 /// Two spans for a single key-badge + label slot.
-fn slot_spans(key: char, label: &str, icon: &str, lw: usize, is_last: bool) -> [Span<'static>; 2] {
+fn slot_spans(key: char, label: &str, icon: &str, lw: usize, is_last: bool, focused: bool) -> [Span<'static>; 2] {
     let trailing = if is_last { 0 } else { 2 };
     let icon_chars = icon.chars().count();
     let text = format!(
@@ -51,9 +56,14 @@ fn slot_spans(key: char, label: &str, icon: &str, lw: usize, is_last: bool) -> [
         width = lw.saturating_sub(icon_chars),
         trail = trailing,
     );
+    let label_style = if focused {
+        Style::default().fg(PURPLE).add_modifier(Modifier::BOLD)
+    } else {
+        Style::default().fg(FG)
+    };
     [
         Span::styled(key.to_string(), Style::default().fg(CYAN_BG).add_modifier(Modifier::BOLD)),
-        Span::styled(text, Style::default().fg(FG)),
+        Span::styled(text, label_style),
     ]
 }
 
@@ -179,7 +189,7 @@ fn render(frame: &mut Frame, state: &LeaderState) {
             } else {
                 node.label.to_string()
             };
-            spans.extend(slot_spans(node.key, &label, &icon, lw, is_last));
+            spans.extend(slot_spans(node.key, &label, &icon, lw, is_last, false));
         }
         lines.push(Line::from(spans));
     }
@@ -290,7 +300,8 @@ fn render_pick(
             for (col, ii) in (chunk_start..chunk_end).enumerate() {
                 let key_char = key_chars.get(&(gi, ii)).copied().unwrap_or('?');
                 let is_last = col + 1 == chunk_len;
-                spans.extend(slot_spans(key_char, &group.items[ii], "", lw, is_last));
+                let item = &group.items[ii];
+                spans.extend(slot_spans(key_char, &item.label, "", lw, is_last, item.focused));
             }
             lines.push(Line::from(spans));
         }
