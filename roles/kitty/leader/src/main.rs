@@ -3,6 +3,8 @@ mod keymap;
 mod kitty;
 mod leader;
 
-fn main() -> anyhow::Result<()> {
-    leader::run()
+fn main() {
+    if let Err(e) = leader::run() {
+        let _ = leader::show_message("error", &e.to_string());
+    }
 }

@@ -70,10 +70,10 @@ backslash = ['workspace \', 'mode main']
 shift-backslash = ['move-node-to-workspace --focus-follows-window \', 'mode main']
 
 # Monitor (brackets)
-leftSquareBracket = ['focus-monitor prev', 'mode main']
-rightSquareBracket = ['focus-monitor next', 'mode main']
-shift-leftSquareBracket = ['move-workspace-to-monitor prev', 'mode main']
-shift-rightSquareBracket = ['move-workspace-to-monitor next', 'mode main']
+leftSquareBracket = ['focus-monitor --wrap-around prev', 'mode main']
+rightSquareBracket = ['focus-monitor --wrap-around next', 'mode main']
+shift-leftSquareBracket = ['move-workspace-to-monitor --wrap-around prev', 'mode main']
+shift-rightSquareBracket = ['move-workspace-to-monitor --wrap-around next', 'mode main']
 
 # Layout
 t = ['layout accordion tiles', 'mode main']
@@ -123,10 +123,10 @@ backslash = 'workspace \'
 shift-backslash = 'move-node-to-workspace --focus-follows-window \'
 
 # Monitor (brackets)
-leftSquareBracket = 'focus-monitor prev'
-rightSquareBracket = 'focus-monitor next'
-shift-leftSquareBracket = 'move-workspace-to-monitor prev'
-shift-rightSquareBracket = 'move-workspace-to-monitor next'
+leftSquareBracket = 'focus-monitor --wrap-around prev'
+rightSquareBracket = 'focus-monitor --wrap-around next'
+shift-leftSquareBracket = 'move-workspace-to-monitor --wrap-around prev'
+shift-rightSquareBracket = 'move-workspace-to-monitor --wrap-around next'
 
 # Layout
 t = 'layout accordion tiles'

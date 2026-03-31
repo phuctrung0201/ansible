@@ -18,6 +18,8 @@ const CYAN_BG: Color = Color::Rgb(139, 233, 253);
 const FG: Color = Color::Rgb(248, 248, 242);
 const COMMENT: Color = Color::Rgb(98, 114, 164);
 
+const COLS: usize = 4;
+
 // ---------------------------------------------------------------------------
 // PickGroup — secondary selection
 // ---------------------------------------------------------------------------
@@ -28,8 +30,82 @@ pub struct PickGroup {
 }
 
 // ---------------------------------------------------------------------------
+// Shared slot rendering helpers
+// ---------------------------------------------------------------------------
+
+/// Returns the label column width given a popup's inner width.
+fn label_width(inner_width: usize) -> usize {
+    let slot_width = inner_width / COLS;
+    slot_width.saturating_sub(3) // badge(1) + leading-space(1) + inter-slot gap(1)
+}
+
+/// Two spans for a single key-badge + label slot.
+fn slot_spans(key: char, label: &str, icon: &str, lw: usize, is_last: bool) -> [Span<'static>; 2] {
+    let trailing = if is_last { 0 } else { 2 };
+    let icon_chars = icon.chars().count();
+    let text = format!(
+        " {}{:<width$}{:>trail$}",
+        icon,
+        label,
+        "",
+        width = lw.saturating_sub(icon_chars),
+        trail = trailing,
+    );
+    [
+        Span::styled(key.to_string(), Style::default().fg(CYAN_BG).add_modifier(Modifier::BOLD)),
+        Span::styled(text, Style::default().fg(FG)),
+    ]
+}
+
+fn popup_block(title: String) -> Block<'static> {
+    Block::bordered()
+        .border_type(BorderType::Rounded)
+        .border_style(Style::default().fg(PURPLE))
+        .title_top(
+            Line::from(Span::styled(title, Style::default().fg(COMMENT))).centered(),
+        )
+}
+
+// ---------------------------------------------------------------------------
 // Public entry point
 // ---------------------------------------------------------------------------
+
+pub fn show_message(title: &str, body: &str) -> anyhow::Result<()> {
+    let mut terminal = ratatui::init();
+    let result = message_loop(&mut terminal, title, body);
+    ratatui::restore();
+    result
+}
+
+fn message_loop(
+    terminal: &mut Terminal<impl Backend>,
+    title: &str,
+    body: &str,
+) -> anyhow::Result<()> {
+    loop {
+        terminal.draw(|frame| render_message(frame, title, body))?;
+        if let Event::Key(KeyEvent { kind: KeyEventKind::Press, .. }) = event::read()? {
+            return Ok(());
+        }
+    }
+}
+
+fn render_message(frame: &mut Frame, title: &str, body: &str) {
+    let area = frame.area();
+    let [_, popup_area] = Layout::vertical([
+        Constraint::Fill(1),
+        Constraint::Length(3),
+    ])
+    .areas(area);
+
+    let block = popup_block(format!(" {} ", title));
+    frame.render_widget(
+        Paragraph::new(body.to_owned())
+            .centered()
+            .block(block),
+        popup_area,
+    );
+}
 
 pub fn run() -> anyhow::Result<()> {
     let mut terminal = ratatui::init();
@@ -75,74 +151,40 @@ fn render(frame: &mut Frame, state: &LeaderState) {
     let nodes = state.nodes;
     let area = frame.area();
 
-    // Full width, anchored to bottom
-    let popup_height = (nodes.len() as u16).div_ceil(4) + 2;
+    let popup_height = (nodes.len() as u16).div_ceil(COLS as u16) + 2;
     let [_, popup_area] = Layout::vertical([
         Constraint::Fill(1),
         Constraint::Length(popup_height),
     ])
     .areas(area);
 
-    // Build title
-    let title = format!(" {} {} ", state.icon, state.label);
+    let block = popup_block(format!(" {} {} ", state.icon, state.label));
 
-    let block = Block::bordered()
-        .border_type(BorderType::Rounded)
-        .border_style(Style::default().fg(PURPLE))
-        .title_top(
-            Line::from(Span::styled(title, Style::default().fg(COMMENT)))
-                .centered(),
-        );
-
-    // Each slot gets an equal share of the inner width; items per row scales
-    // with terminal width so there's always breathing room between entries.
     let inner_width = popup_area.width.saturating_sub(2) as usize;
-    let cols: usize = 4;
-    let slot_width = inner_width / cols;
-    // Gap between key badge and label, plus between slots
-    let badge_width = 1; // single char key
-    let label_width = slot_width.saturating_sub(badge_width + 2); // 2 = leading space + trailing gap
+    let lw = label_width(inner_width);
 
     let mut lines: Vec<Line> = Vec::new();
-    for chunk in nodes.chunks(cols) {
+    for chunk in nodes.chunks(COLS) {
         let mut spans: Vec<Span> = Vec::new();
         for (i, node) in chunk.iter().enumerate() {
-            let key_badge = Span::styled(
-                node.key.to_string(),
-                Style::default()
-                    .fg(CYAN_BG)
-                    .add_modifier(Modifier::BOLD),
-            );
-            let is_group = matches!(&node.kind, keymap::KeyNodeKind::Group { .. });
+            let is_last = i + 1 == chunk.len();
             let icon = match &node.kind {
                 keymap::KeyNodeKind::Group { icon, .. } if !icon.is_empty() => {
                     format!("{} ", icon)
                 }
                 _ => String::new(),
             };
-            let label = if is_group {
+            let label = if matches!(&node.kind, keymap::KeyNodeKind::Group { .. }) {
                 format!("{}+", node.label)
             } else {
                 node.label.to_string()
             };
-            let trailing = if i + 1 < chunk.len() { 2 } else { 0 };
-            let label_text = format!(
-                " {}{:<width$}{:>trail$}",
-                icon,
-                label,
-                "",
-                width = label_width.saturating_sub(icon.chars().count()),
-                trail = trailing,
-            );
-            let label_span = Span::styled(label_text, Style::default().fg(FG));
-            spans.push(key_badge);
-            spans.push(label_span);
+            spans.extend(slot_spans(node.key, &label, &icon, lw, is_last));
         }
         lines.push(Line::from(spans));
     }
 
-    let paragraph = Paragraph::new(lines).block(block);
-    frame.render_widget(paragraph, popup_area);
+    frame.render_widget(Paragraph::new(lines).block(block), popup_area);
 }
 
 // ---------------------------------------------------------------------------
@@ -153,18 +195,19 @@ pub fn pick(
     prompt: &str,
     groups: &[PickGroup],
 ) -> anyhow::Result<Option<(usize, usize)>> {
-    // Build flat key assignment: a-z across all groups' items
-    let mut key_map: Vec<(usize, usize)> = Vec::new(); // (group_idx, item_idx)
+    let mut key_map: Vec<(usize, usize)> = Vec::new();
     for (gi, group) in groups.iter().enumerate() {
         for ii in 0..group.items.len() {
             key_map.push((gi, ii));
         }
     }
 
-    // Compute popup height: per group = 1 (header) + ceil(items/4) rows + 2 border rows total
     let content_rows: u16 = groups
         .iter()
-        .map(|g| 1 + (g.items.len() as u16).div_ceil(4))
+        .map(|g| {
+            let header = if g.label.is_empty() { 0 } else { 1 };
+            header + (g.items.len() as u16).div_ceil(COLS as u16)
+        })
         .sum();
     let popup_height = content_rows + 2;
 
@@ -217,66 +260,41 @@ fn render_pick(
     ])
     .areas(area);
 
-    let title = format!(" {} ", prompt);
-    let block = Block::bordered()
-        .border_type(BorderType::Rounded)
-        .border_style(Style::default().fg(PURPLE))
-        .title_top(
-            Line::from(Span::styled(title, Style::default().fg(COMMENT)))
-                .centered(),
-        );
+    let block = popup_block(format!(" {} ", prompt));
 
     let inner_width = popup_area.width.saturating_sub(2) as usize;
-    let cols: usize = 4;
-    let slot_width = inner_width / cols;
-    let badge_width = 1;
-    let label_width = slot_width.saturating_sub(badge_width + 2);
+    let lw = label_width(inner_width);
 
-    // Build key_char lookup: (group_idx, item_idx) -> char
     let key_chars: std::collections::HashMap<(usize, usize), char> = key_map
         .iter()
         .enumerate()
         .filter_map(|(i, &(gi, ii))| {
-            let c = (b'a' + i as u8) as char;
-            if i < 26 { Some(((gi, ii), c)) } else { None }
+            if i < 26 { Some(((gi, ii), (b'a' + i as u8) as char)) } else { None }
         })
         .collect();
 
     let mut lines: Vec<Line> = Vec::new();
 
     for (gi, group) in groups.iter().enumerate() {
-        lines.push(Line::from(vec![Span::styled(
-            group.label.clone(),
-            Style::default().fg(COMMENT),
-        )]));
+        if !group.label.is_empty() {
+            lines.push(Line::from(vec![Span::styled(
+                group.label.clone(),
+                Style::default().fg(COMMENT),
+            )]));
+        }
 
-        for chunk_start in (0..group.items.len()).step_by(cols) {
-            let chunk_end = (chunk_start + cols).min(group.items.len());
+        for chunk_start in (0..group.items.len()).step_by(COLS) {
+            let chunk_end = (chunk_start + COLS).min(group.items.len());
+            let chunk_len = chunk_end - chunk_start;
             let mut spans: Vec<Span> = Vec::new();
             for (col, ii) in (chunk_start..chunk_end).enumerate() {
                 let key_char = key_chars.get(&(gi, ii)).copied().unwrap_or('?');
-                let key_badge = Span::styled(
-                    key_char.to_string(),
-                    Style::default()
-                        .fg(CYAN_BG)
-                        .add_modifier(Modifier::BOLD),
-                );
-                let trailing = if col + 1 < chunk_end - chunk_start { 2 } else { 0 };
-                let label_text = format!(
-                    " {:<width$}{:>trail$}",
-                    group.items[ii],
-                    "",
-                    width = label_width,
-                    trail = trailing,
-                );
-                let label_span = Span::styled(label_text, Style::default().fg(FG));
-                spans.push(key_badge);
-                spans.push(label_span);
+                let is_last = col + 1 == chunk_len;
+                spans.extend(slot_spans(key_char, &group.items[ii], "", lw, is_last));
             }
             lines.push(Line::from(spans));
         }
     }
 
-    let paragraph = Paragraph::new(lines).block(block);
-    frame.render_widget(paragraph, popup_area);
+    frame.render_widget(Paragraph::new(lines).block(block), popup_area);
 }

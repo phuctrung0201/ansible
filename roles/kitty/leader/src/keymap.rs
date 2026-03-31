@@ -78,12 +78,12 @@ pub static KEYMAP: &[KeyNode] = &[
                     kind: KeyNodeKind::Action(action::tab_switch),
                 },
                 KeyNode {
-                    key: 'c',
+                    key: 'x',
                     label: "close",
                     kind: KeyNodeKind::Action(action::close_tab_self),
                 },
                 KeyNode {
-                    key: 'C',
+                    key: 'X',
                     label: "close others",
                     kind: KeyNodeKind::Action(action::close_other_tabs),
                 },

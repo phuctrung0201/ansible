@@ -175,7 +175,7 @@ pub fn tab_switch() -> anyhow::Result<()> {
         .collect();
 
     if other_tabs.is_empty() {
-        return Ok(());
+        return leader::show_message("tabs", "no other tabs");
     }
 
     let items: Vec<String> = other_tabs.iter().map(|(_, title)| title.to_string()).collect();
@@ -235,7 +235,7 @@ pub fn kube_context_switch() -> anyhow::Result<()> {
         .collect();
 
     if contexts.is_empty() {
-        return Ok(());
+        return leader::show_message("kube ctx", "no contexts found");
     }
 
     let current_out = kubectl_cmd()
@@ -286,7 +286,7 @@ pub fn move_tab_to_window() -> anyhow::Result<()> {
     }
 
     if items.is_empty() {
-        return Ok(());
+        return leader::show_message("attach", "no other windows");
     }
 
     let groups = vec![leader::PickGroup { label: String::new(), items }];
