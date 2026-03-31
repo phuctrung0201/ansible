@@ -17,7 +17,7 @@ fgit() {
         fzf --prompt="Commit > " \
             --layout=reverse \
             --height=60% \
-            --preview='git show --stat {1}'
+            --preview='git show --stat --color=always {1}'
       ;;
     stash)
       local stash
@@ -29,7 +29,7 @@ fgit() {
         fzf --prompt="Diff > " \
             --layout=reverse \
             --height=60% \
-            --preview='git diff {}'
+            --preview='git diff --color=always {}'
       ;;
     fetch)
       local remote branch
@@ -97,7 +97,7 @@ fkube() {
             --layout=reverse \
             --height=60% \
             --header-lines=1 \
-            --preview='kubectl get configmap {2} -n {1} -o yaml' \
+            --preview='kubectl get configmap {2} -n {1} -o yaml | bat --color=always --style=plain --language=yaml' \
             --preview-window=right:60%) || return
       ns=$(echo "$selected" | awk '{print $1}')
       cm=$(echo "$selected" | awk '{print $2}')
@@ -123,7 +123,7 @@ fkube() {
             --layout=reverse \
             --height=60% \
             --header-lines=1 \
-            --preview='kubectl get secret {2} -n {1} -o yaml' \
+            --preview='kubectl get secret {2} -n {1} -o yaml | bat --color=always --style=plain --language=yaml' \
             --preview-window=right:60%) || return
       ns=$(echo "$selected" | awk '{print $1}')
       secret=$(echo "$selected" | awk '{print $2}')
@@ -142,10 +142,22 @@ fnb() {
     fzf --prompt="  Note > " \
         --layout=reverse \
         --height=60% \
-        --preview='nb show --print $(echo {} | awk "{print \$1}" | tr -d "[]")' \
+        --preview='nb show --print $(echo {} | awk "{print \$1}" | tr -d "[]") | bat --color=always --style=plain' \
         --preview-window=right:60%) || return
   id=$(echo "$selected" | awk '{print $1}' | tr -d '[]')
   nb edit "$id"
+}
+
+# Fuzzy batch print
+fbat() {
+  local file
+  file=$(find . -type f | \
+    fzf --prompt="󰐄 print > " \
+        --layout=reverse \
+        --height=60% \
+        --preview='file {} | grep -q text && bat --color=always --style=plain {} || echo "[binary file]"' \
+        --preview-window=right:60%) || return
+  bat --paging=never --style=plain "$file"
 }
 
 # Hint
@@ -153,6 +165,7 @@ fhelp() {
   echo "$(highlight fgit)   — fuzzy git (branch/log/stash/diff/fetch)"
   echo "$(highlight fkube)  — fuzzy kube (context/namespace/pods/logs/configmap/deployment/secret)"
   echo "$(highlight fnb)    — fuzzy nb note open"
+  echo "$(highlight fbat)   — fuzzy select file and print content"
   echo "$(highlight fhelp)  — show this help"
 }
 

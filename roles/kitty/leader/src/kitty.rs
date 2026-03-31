@@ -75,6 +75,7 @@ pub fn close_tab(id: u64) -> anyhow::Result<()> {
     Ok(())
 }
 
+
 pub fn detach_tab_self(target_tab_id: u64) -> anyhow::Result<()> {
     kitten_cmd()
         .args([

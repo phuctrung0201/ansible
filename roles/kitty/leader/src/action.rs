@@ -105,6 +105,21 @@ pub fn copy_file_path() -> anyhow::Result<()> {
     kitty::send_action("kitten hints --type=path --program=@").context("copy file path")
 }
 
+pub fn copy_word() -> anyhow::Result<()> {
+    close_overlay()?;
+    kitty::send_action("kitten hints --type=word --program=@").context("copy word")
+}
+
+pub fn copy_line() -> anyhow::Result<()> {
+    close_overlay()?;
+    kitty::send_action("kitten hints --type=line --program=@").context("copy line")
+}
+
+pub fn copy_hash() -> anyhow::Result<()> {
+    close_overlay()?;
+    kitty::send_action("kitten hints --type=hash --program=@").context("copy hash")
+}
+
 pub fn edit_command() -> anyhow::Result<()> {
     close_overlay()?;
     kitty::send_text("\\x18\\x05").context("edit command")
@@ -115,10 +130,6 @@ pub fn search_history() -> anyhow::Result<()> {
     kitty::send_text("\\x12").context("search history (ctrl-r)")
 }
 
-pub fn copy_last_output() -> anyhow::Result<()> {
-    close_overlay()?;
-    kitty::send_action("copy_last_command_output").context("copy last output")
-}
 
 pub fn open_scrollback() -> anyhow::Result<()> {
     close_overlay()?;

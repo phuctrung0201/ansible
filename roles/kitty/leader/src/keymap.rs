@@ -84,11 +84,6 @@ pub static KEYMAP: &[KeyNode] = &[
             icon: "󰆒",
             nodes: &[
                 KeyNode {
-                    key: 'l',
-                    label: "last output",
-                    kind: KeyNodeKind::Action(action::copy_last_output),
-                },
-                KeyNode {
                     key: 'u',
                     label: "url",
                     kind: KeyNodeKind::Action(action::copy_url),
@@ -97,6 +92,21 @@ pub static KEYMAP: &[KeyNode] = &[
                     key: 'f',
                     label: "file path",
                     kind: KeyNodeKind::Action(action::copy_file_path),
+                },
+                KeyNode {
+                    key: 'w',
+                    label: "word",
+                    kind: KeyNodeKind::Action(action::copy_word),
+                },
+                KeyNode {
+                    key: 'l',
+                    label: "line",
+                    kind: KeyNodeKind::Action(action::copy_line),
+                },
+                KeyNode {
+                    key: 'h',
+                    label: "hash",
+                    kind: KeyNodeKind::Action(action::copy_hash),
                 },
             ],
         },
