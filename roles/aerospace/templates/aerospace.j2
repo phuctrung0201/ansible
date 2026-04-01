@@ -41,7 +41,7 @@ alt-backtick = 'mode action'
 
 # Action mode — one-shot window management. Every action returns to main.
 # Press backtick to switch to lock mode for chaining commands.
-# Workspaces: 1=terminal 2=browser 3=slack 4=outlook 5=zoom 6=fallback 7=empty
+# Workspaces: 1=terminal 2=browser 3=fallback 4=empty F1=slack F2=outlook F3=zoom
 [mode.action.binding]
 
 space = 'mode lock'
@@ -54,7 +54,7 @@ tab = ['workspace-back-and-forth', 'mode main']
 h = ['focus left', 'mode main']
 j = ['focus down', 'mode main']
 k = ['focus up', 'mode main']
-l = 'mode lock'
+l = ['focus right', 'mode main']
 
 # Move windows (shift-hjkl)
 shift-h = ['move left', 'mode main']
@@ -101,7 +101,7 @@ esc = 'mode main'
 
 # Lock mode — persistent window management for chaining commands.
 # Press space/backtick to toggle back to action mode, esc to exit to main.
-# Workspaces: 1=terminal 2=browser 3=slack 4=outlook 5=zoom 6=fallback 7=empty
+# Workspaces: 1=terminal 2=browser 3=fallback 4=empty F1=slack F2=outlook F3=zoom
 [mode.lock.binding]
 
 space = 'mode action'
@@ -171,11 +171,11 @@ run = 'move-node-to-workspace --focus-follows-window 2'
 
 [[on-window-detected]]
 if.app-id = 'com.tinyspeck.slackmacgap'
-run = 'move-node-to-workspace --focus-follows-window 3'
+run = 'move-node-to-workspace --focus-follows-window F1'
 
 [[on-window-detected]]
 if.app-id = 'com.microsoft.Outlook'
-run = 'move-node-to-workspace --focus-follows-window 4'
+run = 'move-node-to-workspace --focus-follows-window F2'
 
 [[on-window-detected]]
 if.app-id = 'us.zoom.xos'
@@ -183,4 +183,4 @@ run = 'move-node-to-workspace --focus-follows-window F3'
 
 [[on-window-detected]]
 check-further-callbacks = true
-run = 'move-node-to-workspace --focus-follows-window F2'
+run = 'move-node-to-workspace --focus-follows-window 3'
