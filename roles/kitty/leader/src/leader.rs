@@ -1,10 +1,9 @@
 use ratatui::{
     backend::Backend,
     crossterm::event::{self, Event, KeyCode, KeyEvent, KeyEventKind},
-    layout::{Constraint, Layout},
     style::{Color, Modifier, Style},
     text::{Line, Span},
-    widgets::{Block, BorderType, Paragraph},
+    widgets::{Block, Paragraph},
     Frame, Terminal,
 };
 
@@ -68,9 +67,8 @@ fn slot_spans(key: char, label: &str, icon: &str, lw: usize, is_last: bool, focu
 }
 
 fn popup_block(title: String) -> Block<'static> {
-    Block::bordered()
-        .border_type(BorderType::Rounded)
-        .border_style(Style::default().fg(MAUVE))
+    Block::new()
+        .padding(ratatui::widgets::Padding::new(2, 2, 1, 0))
         .title_top(
             Line::from(Span::styled(title, Style::default().fg(MAUVE).add_modifier(Modifier::BOLD))).centered(),
         )
@@ -102,22 +100,17 @@ fn message_loop(
 
 fn render_message(frame: &mut Frame, title: &str, body: &str) {
     let area = frame.area();
-    let [_, popup_area] = Layout::vertical([
-        Constraint::Fill(1),
-        Constraint::Length(3),
-    ])
-    .areas(area);
-
     let block = popup_block(format!(" {} ", title));
     frame.render_widget(
         Paragraph::new(body.to_owned())
             .centered()
             .block(block),
-        popup_area,
+        area,
     );
 }
 
 pub fn run() -> anyhow::Result<()> {
+    crate::kitty::resize_self_to_height(8)?;
     let mut terminal = ratatui::init();
     let mut state = LeaderState::new();
     let result = event_loop(&mut terminal, &mut state);
@@ -161,14 +154,8 @@ fn render(frame: &mut Frame, state: &LeaderState) {
     let nodes = state.nodes;
     let area = frame.area();
 
-    let popup_height = (nodes.len() as u16).div_ceil(COLS as u16) + 2;
-    let [_, popup_area] = Layout::vertical([
-        Constraint::Fill(1),
-        Constraint::Length(popup_height),
-    ])
-    .areas(area);
-
     let block = popup_block(format!(" {} {} ", state.icon, state.label));
+    let popup_area = area;
 
     let inner_width = popup_area.width.saturating_sub(2) as usize;
     let lw = label_width(inner_width);
@@ -243,8 +230,8 @@ fn pick_loop(
                 kind: KeyEventKind::Press,
                 ..
             }) => {
-                if c.is_ascii_lowercase() {
-                    let idx = (c as u8 - b'a') as usize;
+                if c.is_ascii_digit() && c != '0' {
+                    let idx = (c as u8 - b'1') as usize;
                     if let Some(&(gi, ii)) = key_map.get(idx) {
                         return Ok(Some((gi, ii)));
                     }
@@ -260,16 +247,11 @@ fn render_pick(
     prompt: &str,
     groups: &[PickGroup],
     key_map: &[(usize, usize)],
-    popup_height: u16,
+    _popup_height: u16,
 ) {
     let area = frame.area();
 
-    let [_, popup_area] = Layout::vertical([
-        Constraint::Fill(1),
-        Constraint::Length(popup_height),
-    ])
-    .areas(area);
-
+    let popup_area = area;
     let block = popup_block(format!(" {} ", prompt));
 
     let inner_width = popup_area.width.saturating_sub(2) as usize;
@@ -279,7 +261,7 @@ fn render_pick(
         .iter()
         .enumerate()
         .filter_map(|(i, &(gi, ii))| {
-            if i < 26 { Some(((gi, ii), (b'a' + i as u8) as char)) } else { None }
+            if i < 9 { Some(((gi, ii), (b'1' + i as u8) as char)) } else { None }
         })
         .collect();
 

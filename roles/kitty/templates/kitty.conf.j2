@@ -58,7 +58,7 @@ inactive_tab_foreground {{ theme.comment }}
 hide_window_decorations titlebar-only
 background_opacity      0.80
 background_blur         10
-enabled_layouts         tall
+enabled_layouts         tall,splits
 active_border_color     {{ theme.purple }}
 inactive_border_color   {{ theme.comment }}
 
@@ -70,4 +70,4 @@ scrollback_pager nvim -c 'lua require("ansify").pager({on_finish=function() vim.
 # =============================================================================
 # Key mappings
 # =============================================================================
-map opt+l launch --cwd=current --type=overlay ~/.config/kitty/leader
+map opt+space combine : goto_layout splits : launch --cwd=current --type=window --location=hsplit --bias=0 ~/.config/kitty/leader
