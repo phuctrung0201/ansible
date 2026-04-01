@@ -1,23 +1,25 @@
 return {
   {
-    "Mofiqul/dracula.nvim",
+    "catppuccin/nvim",
+    name = "catppuccin",
     lazy = false,
     priority = 1000,
     opts = {
-      transparent_bg = true,
-      overrides = function(colors)
+      flavour = "macchiato",
+      transparent_background = true,
+      custom_highlights = function(colors)
         return {
-          NormalFloat = { fg = colors.fg, bg = nil },
-          Visual = { bg = "#6272a4" },
-          Search = { fg = "#282a36", bg = "#ffb86c" },
-          IncSearch = { fg = "#282a36", bg = "#ff79c6" },
-          CurSearch = { fg = "#282a36", bg = "#ff79c6" },
+          NormalFloat = { fg = colors.text, bg = vim.NIL },
+          Visual = { bg = colors.surface2 },
+          Search = { fg = colors.base, bg = colors.peach },
+          IncSearch = { fg = colors.base, bg = colors.pink },
+          CurSearch = { fg = colors.base, bg = colors.pink },
         }
       end,
     },
     config = function(_, opts)
-      require("dracula").setup(opts)
-      vim.cmd.colorscheme("dracula")
+      require("catppuccin").setup(opts)
+      vim.cmd.colorscheme("catppuccin")
     end,
   },
 

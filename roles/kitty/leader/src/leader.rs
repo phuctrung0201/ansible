@@ -11,12 +11,12 @@ use ratatui::{
 use crate::{action::{LeaderState, KeyPress}, keymap};
 
 // ---------------------------------------------------------------------------
-// Dracula palette
+// Catppuccin Macchiato palette
 // ---------------------------------------------------------------------------
-const PURPLE: Color = Color::Rgb(189, 147, 249);
-const CYAN_BG: Color = Color::Rgb(139, 233, 253);
-const FG: Color = Color::Rgb(248, 248, 242);
-const COMMENT: Color = Color::Rgb(98, 114, 164);
+const MAUVE: Color = Color::Rgb(198, 160, 246);   // mauve
+const TEAL: Color = Color::Rgb(139, 213, 202);    // teal
+const FG: Color = Color::Rgb(202, 211, 245);      // text
+const COMMENT: Color = Color::Rgb(110, 115, 141); // overlay0
 
 const COLS: usize = 4;
 
@@ -41,7 +41,7 @@ pub struct PickGroup {
 /// Returns the label column width given a popup's inner width.
 fn label_width(inner_width: usize) -> usize {
     let slot_width = inner_width / COLS;
-    slot_width.saturating_sub(3) // badge(1) + leading-space(1) + inter-slot gap(1)
+    slot_width.saturating_sub(4) // badge(1) + arrow+spaces(3)
 }
 
 /// Two spans for a single key-badge + label slot.
@@ -57,12 +57,12 @@ fn slot_spans(key: char, label: &str, icon: &str, lw: usize, is_last: bool, focu
         trail = trailing,
     );
     let label_style = if focused {
-        Style::default().fg(PURPLE).add_modifier(Modifier::BOLD)
+        Style::default().fg(MAUVE).add_modifier(Modifier::BOLD)
     } else {
         Style::default().fg(FG)
     };
     [
-        Span::styled(key.to_string(), Style::default().fg(CYAN_BG).add_modifier(Modifier::BOLD)),
+        Span::styled(key.to_string(), Style::default().fg(TEAL).add_modifier(Modifier::BOLD)),
         Span::styled(text, label_style),
     ]
 }
@@ -70,9 +70,9 @@ fn slot_spans(key: char, label: &str, icon: &str, lw: usize, is_last: bool, focu
 fn popup_block(title: String) -> Block<'static> {
     Block::bordered()
         .border_type(BorderType::Rounded)
-        .border_style(Style::default().fg(PURPLE))
+        .border_style(Style::default().fg(MAUVE))
         .title_top(
-            Line::from(Span::styled(title, Style::default().fg(COMMENT))).centered(),
+            Line::from(Span::styled(title, Style::default().fg(MAUVE).add_modifier(Modifier::BOLD))).centered(),
         )
 }
 
