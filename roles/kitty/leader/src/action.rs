@@ -150,6 +150,11 @@ pub fn close_tab_self() -> anyhow::Result<()> {
     kitty::close_tab_self().context("close tab")
 }
 
+pub fn previous_tab() -> anyhow::Result<()> {
+    close_overlay()?;
+    kitty::send_action("previous_tab").context("previous tab")
+}
+
 // ---------------------------------------------------------------------------
 // Custom actions using leader::pick
 // ---------------------------------------------------------------------------

@@ -3,6 +3,11 @@
     name: bat
     state: present
 
+- name: Install entr
+  homebrew:
+    name: entr
+    state: present
+
 - name: Install fzf
   homebrew:
     name: fzf

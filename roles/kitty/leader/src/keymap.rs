@@ -43,6 +43,11 @@ pub static KEYMAP: &[KeyNode] = &[
         kind: KeyNodeKind::Action(action::tab_list),
     },
     KeyNode {
+        key: 'p',
+        label: "previous tab",
+        kind: KeyNodeKind::Action(action::previous_tab),
+    },
+    KeyNode {
         key: 'n',
         label: "new tab",
         kind: KeyNodeKind::Action(action::new_tab_here),

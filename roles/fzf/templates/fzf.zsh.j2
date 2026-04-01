@@ -148,16 +148,16 @@ fnb() {
   nb edit "$id"
 }
 
-# Fuzzy batch print
+# Fuzzy batch open with entr
 fbat() {
   local file
   file=$(find . -type f | \
-    fzf --prompt="󰐄 print > " \
+    fzf --prompt="󰐄 open > " \
         --layout=reverse \
         --height=60% \
         --preview='file {} | grep -q text && bat --color=always --style=plain {} || echo "[binary file]"' \
         --preview-window=right:60%) || return
-  bat --paging=never --style=plain "$file"
+  echo "$file" | entr -c bat --style=plain "$file"
 }
 
 # Hint
@@ -165,7 +165,7 @@ fhelp() {
   echo "$(highlight fgit)   — fuzzy git (branch/log/stash/diff/fetch)"
   echo "$(highlight fkube)  — fuzzy kube (context/namespace/pods/logs/configmap/deployment/secret)"
   echo "$(highlight fnb)    — fuzzy nb note open"
-  echo "$(highlight fbat)   — fuzzy select file and print content"
+  echo "$(highlight fbat)   — fuzzy select file and watch with entr"
   echo "$(highlight fhelp)  — show this help"
 }
 
