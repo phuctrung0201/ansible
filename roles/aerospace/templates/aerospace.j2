@@ -34,27 +34,27 @@ outer.top = 4
 outer.right = 4
 
 # Main mode is passive — all keys pass through to apps.
-# alt-backtick enters leader mode (one-shot: action then back to main).
-# Press backtick in leader mode to switch to action mode (persistent).
+# alt-backtick enters action mode (one-shot: action then back to main).
+# Press backtick in action mode to switch to lock mode (persistent).
 [mode.main.binding]
-alt-backtick = 'mode leader'
+alt-backtick = 'mode action'
 
-# Leader mode — one-shot window management. Every action returns to main.
-# Press backtick to switch to action mode for chaining commands.
+# Action mode — one-shot window management. Every action returns to main.
+# Press backtick to switch to lock mode for chaining commands.
 # Workspaces: 1=terminal 2=browser 3=slack 4=outlook 5=zoom 6=fallback 7=empty
-[mode.leader.binding]
+[mode.action.binding]
 
-space = 'mode action'
-shift-backtick = 'mode action'
+space = 'mode lock'
+shift-backtick = 'mode lock'
 
 backtick = ['focus --boundaries workspace --boundaries-action wrap-around-the-workspace dfs-next', 'mode main']
-tab = ['workspace --wrap-around next', 'mode main']
+tab = ['workspace-back-and-forth', 'mode main']
 
 # Focus (hjkl)
 h = ['focus left', 'mode main']
 j = ['focus down', 'mode main']
 k = ['focus up', 'mode main']
-l = ['focus right', 'mode main']
+l = 'mode lock'
 
 # Move windows (shift-hjkl)
 shift-h = ['move left', 'mode main']
@@ -99,16 +99,16 @@ shift-x = ['close-all-windows-but-current', 'mode main']
 
 esc = 'mode main'
 
-# Action mode — persistent window management for chaining commands.
-# Press space/backtick to toggle back to leader mode, esc to exit to main.
+# Lock mode — persistent window management for chaining commands.
+# Press space/backtick to toggle back to action mode, esc to exit to main.
 # Workspaces: 1=terminal 2=browser 3=slack 4=outlook 5=zoom 6=fallback 7=empty
-[mode.action.binding]
+[mode.lock.binding]
 
-space = 'mode leader'
-shift-backtick = 'mode leader'
+space = 'mode action'
+shift-backtick = 'mode action'
 
 backtick = 'focus --boundaries workspace --boundaries-action wrap-around-the-workspace dfs-next'
-tab = 'workspace --wrap-around next'
+tab = 'workspace-back-and-forth'
 
 # Focus (hjkl)
 h = 'focus left'
