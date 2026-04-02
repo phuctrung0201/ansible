@@ -34,21 +34,22 @@ outer.top = 4
 outer.right = 4
 
 # Main mode is passive — all keys pass through to apps.
-# alt-backtick enters action mode (one-shot: action then back to main).
-# Press backtick in action mode to switch to lock mode (persistent).
+# alt-\ enters action mode (one-shot: action then back to main).
+# Press \ in action mode to switch to lock mode (persistent).
 [mode.main.binding]
-alt-backtick = 'mode action'
+alt-backslash = 'mode action'
 
 # Action mode — one-shot window management. Every action returns to main.
-# Press backtick to switch to lock mode for chaining commands.
-# Workspaces: 1=terminal 2=browser 3=fallback 4=empty F1=slack F2=outlook F3=zoom
+# Press \ to switch to lock mode for chaining commands.
+# Workspaces: `=terminal 1=browser 2=fallback 3=empty F1=slack F2=outlook F3=zoom
 [mode.action.binding]
 
-space = 'mode lock'
-shift-backtick = 'mode lock'
+shift-backslash = 'mode lock'
 
-backtick = ['focus --boundaries workspace --boundaries-action wrap-around-the-workspace dfs-next', 'mode main']
-tab = ['workspace-back-and-forth', 'mode main']
+tab = ['focus --boundaries workspace --boundaries-action wrap-around-the-workspace dfs-next', 'mode main']
+backtick = ['workspace --auto-back-and-forth `', 'mode main']
+shift-backtick = ['move-node-to-workspace --focus-follows-window `', 'mode main']
+backslash = ['workspace-back-and-forth', 'mode main']
 
 # Focus (hjkl)
 h = ['focus left', 'mode main']
@@ -63,17 +64,15 @@ shift-k = ['move up', 'mode main']
 shift-l = ['move right', 'mode main']
 
 # Workspaces
-1 = ['workspace --auto-back-and-forth 1', 'mode main']
-2 = ['workspace --auto-back-and-forth 2', 'mode main']
-3 = ['workspace --auto-back-and-forth 3', 'mode main']
-4 = ['workspace --auto-back-and-forth 4', 'mode main']
-f3 = ['workspace --auto-back-and-forth F3', 'mode main']
-f2 = ['workspace --auto-back-and-forth F2', 'mode main']
-f1 = ['workspace --auto-back-and-forth F1', 'mode main']
+1 = ['workspace 1', 'mode main']
+2 = ['workspace 2', 'mode main']
+3 = ['workspace 3', 'mode main']
+f3 = ['workspace F3', 'mode main']
+f2 = ['workspace F2', 'mode main']
+f1 = ['workspace F1', 'mode main']
 shift-1 = ['move-node-to-workspace --focus-follows-window 1', 'mode main']
 shift-2 = ['move-node-to-workspace --focus-follows-window 2', 'mode main']
 shift-3 = ['move-node-to-workspace --focus-follows-window 3', 'mode main']
-shift-4 = ['move-node-to-workspace --focus-follows-window 4', 'mode main']
 shift-f3 = ['move-node-to-workspace --focus-follows-window F3', 'mode main']
 shift-f2 = ['move-node-to-workspace --focus-follows-window F2', 'mode main']
 shift-f1 = ['move-node-to-workspace --focus-follows-window F1', 'mode main']
@@ -100,15 +99,16 @@ shift-x = ['close-all-windows-but-current', 'mode main']
 esc = 'mode main'
 
 # Lock mode — persistent window management for chaining commands.
-# Press space/backtick to toggle back to action mode, esc to exit to main.
-# Workspaces: 1=terminal 2=browser 3=fallback 4=empty F1=slack F2=outlook F3=zoom
+# Press space/\ to toggle back to action mode, esc to exit to main.
+# Workspaces: `=terminal 1=browser 2=fallback 3=empty F1=slack F2=outlook F3=zoom
 [mode.lock.binding]
 
-space = 'mode action'
-shift-backtick = 'mode action'
+shift-backslash = 'mode action'
 
-backtick = 'focus --boundaries workspace --boundaries-action wrap-around-the-workspace dfs-next'
-tab = 'workspace-back-and-forth'
+tab = 'focus --boundaries workspace --boundaries-action wrap-around-the-workspace dfs-next'
+backtick = 'workspace --auto-back-and-forth `'
+shift-backtick = 'move-node-to-workspace --focus-follows-window `'
+backslash = 'workspace-back-and-forth'
 
 # Focus (hjkl)
 h = 'focus left'
@@ -123,17 +123,15 @@ shift-k = 'move up'
 shift-l = 'move right'
 
 # Workspaces
-1 = 'workspace --auto-back-and-forth 1'
-2 = 'workspace --auto-back-and-forth 2'
-3 = 'workspace --auto-back-and-forth 3'
-4 = 'workspace --auto-back-and-forth 4'
-f3 = 'workspace --auto-back-and-forth F3'
-f2 = 'workspace --auto-back-and-forth F2'
-f1 = 'workspace --auto-back-and-forth F1'
+1 = 'workspace 1'
+2 = 'workspace 2'
+3 = 'workspace 3'
+f3 = 'workspace F3'
+f2 = 'workspace F2'
+f1 = 'workspace F1'
 shift-1 = 'move-node-to-workspace --focus-follows-window 1'
 shift-2 = 'move-node-to-workspace --focus-follows-window 2'
 shift-3 = 'move-node-to-workspace --focus-follows-window 3'
-shift-4 = 'move-node-to-workspace --focus-follows-window 4'
 shift-f3 = 'move-node-to-workspace --focus-follows-window F3'
 shift-f2 = 'move-node-to-workspace --focus-follows-window F2'
 shift-f1 = 'move-node-to-workspace --focus-follows-window F1'
@@ -163,11 +161,11 @@ esc = 'mode main'
 # aerospace list-apps
 [[on-window-detected]]
 if.app-id = 'net.kovidgoyal.kitty'
-run = 'move-node-to-workspace --focus-follows-window 1'
+run = 'move-node-to-workspace --focus-follows-window `'
 
 [[on-window-detected]]
 if.app-id = 'app.zen-browser.zen'
-run = 'move-node-to-workspace --focus-follows-window 2'
+run = 'move-node-to-workspace --focus-follows-window 1'
 
 [[on-window-detected]]
 if.app-id = 'com.tinyspeck.slackmacgap'
@@ -183,4 +181,4 @@ run = 'move-node-to-workspace --focus-follows-window F3'
 
 [[on-window-detected]]
 check-further-callbacks = true
-run = 'move-node-to-workspace --focus-follows-window 3'
+run = 'move-node-to-workspace --focus-follows-window 2'
