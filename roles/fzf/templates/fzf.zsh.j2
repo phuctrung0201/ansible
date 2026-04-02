@@ -1,8 +1,8 @@
 # fzf shell integration
 source <(fzf --zsh)
 
-# Fuzzy git
-fgit() {
+
+_uf_git() {
   local cmd
   cmd=$(printf "add\nunstage\nrestore\nbranch\nlog\ndiff\nfetch" | \
     fzf --prompt=" git > " --layout=reverse --height=40%) || return
@@ -69,8 +69,7 @@ fgit() {
   esac
 }
 
-# Fuzzy kube
-fkube() {
+_uf_kube() {
   local cmd
   cmd=$(printf "context\nnamespace\npods\nlogs\nconfigmap\ndeployment\nsecret" | \
     fzf --prompt="󱃾 kube > " --layout=reverse --height=40%) || return
@@ -160,11 +159,7 @@ fkube() {
   esac
 }
 
-# Highlight text in bold green
-highlight() { printf '\033[1;32m%s\033[0m' "$*"; }
-
-# Fuzzy nb note open
-fnb() {
+_uf_nb() {
   local selected id
   selected=$(nb list --no-color --limit 0 | \
     fzf --prompt="  Note > " \
@@ -176,8 +171,7 @@ fnb() {
   nb edit "$id"
 }
 
-# Fuzzy remove files
-frm() {
+_uf_rm() {
   local files
   files=$(find . -type f | \
     fzf --prompt=" rm > " \
@@ -189,20 +183,19 @@ frm() {
   echo "$files" | xargs rm
 }
 
-# Fuzzy file actions
-ffile() {
+_uf_file() {
   local file action
-  file=$(find . -type f | \
-    fzf --prompt="󰐄 open > " \
-        --layout=reverse \
-        --height=60% \
-        --preview='file {} | grep -q text && bat --color=always --style=plain {} || echo "[binary file]"' \
-        --preview-window=right:60%) || return
-
   action=$(printf "bat\nyank content\nyank filename\nyank relative path\nyank absolute path\nyank git remote link" | \
     fzf --prompt=" action > " \
         --layout=reverse \
         --height=30%) || return
+
+  file=$(find . -type f | \
+    fzf --prompt="󰐄 file > " \
+        --layout=reverse \
+        --height=60% \
+        --preview='file {} | grep -q text && bat --color=always --style=plain {} || echo "[binary file]"' \
+        --preview-window=right:60%) || return
 
   case "$action" in
     "bat")
@@ -237,14 +230,19 @@ ffile() {
   esac
 }
 
-# Hint
-fhelp() {
-  echo "$(highlight fgit)   — fuzzy git (add/unstage/restore/branch/log/diff/fetch)"
-  echo "$(highlight fkube)  — fuzzy kube (context/namespace/pods/logs/configmap/deployment/secret)"
-  echo "$(highlight fnb)    — fuzzy nb note open"
-  echo "$(highlight frm)    — fuzzy select files to remove"
-  echo "$(highlight ffile)  — fuzzy select file: bat, yank content/name/path/git link"
-  echo "$(highlight fhelp)  — show this help"
+uf() {
+  local cmd="${1:-}"
+  if [[ -z "$cmd" ]]; then
+    cmd=$(printf "git\nkube\nnb\nrm\nfile" | \
+      fzf --prompt=" uf > " --layout=reverse --height=40%) || return
+  fi
+  case "$cmd" in
+    git)  _uf_git  ;;
+    kube) _uf_kube ;;
+    nb)   _uf_nb   ;;
+    rm)   _uf_rm   ;;
+    file) _uf_file ;;
+  esac
 }
 
 # Catppuccin Mocha theme
