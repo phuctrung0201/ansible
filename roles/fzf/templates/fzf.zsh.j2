@@ -189,16 +189,52 @@ frm() {
   echo "$files" | xargs rm
 }
 
-# Fuzzy batch open
-fbat() {
-  local file
+# Fuzzy file actions
+ffile() {
+  local file action
   file=$(find . -type f | \
     fzf --prompt="󰐄 open > " \
         --layout=reverse \
         --height=60% \
         --preview='file {} | grep -q text && bat --color=always --style=plain {} || echo "[binary file]"' \
         --preview-window=right:60%) || return
-  bat --style=plain --paging=never "$file"
+
+  action=$(printf "bat\nyank content\nyank filename\nyank relative path\nyank absolute path\nyank git remote link" | \
+    fzf --prompt=" action > " \
+        --layout=reverse \
+        --height=30%) || return
+
+  case "$action" in
+    "bat")
+      bat --style=header "$file"
+      ;;
+    "yank content")
+      cat "$file" | pbcopy
+      echo "Copied content of $file"
+      ;;
+    "yank filename")
+      basename "$file" | tr -d '\n' | pbcopy
+      echo "Copied filename: $(basename "$file")"
+      ;;
+    "yank relative path")
+      echo -n "$file" | pbcopy
+      echo "Copied relative path: $file"
+      ;;
+    "yank absolute path")
+      realpath "$file" | tr -d '\n' | pbcopy
+      echo "Copied absolute path: $(realpath "$file")"
+      ;;
+    "yank git remote link")
+      local remote branch rel_path remote_url
+      remote=$(git remote get-url origin 2>/dev/null) || { echo "No git remote found"; return 1; }
+      branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null || echo "main")
+      rel_path=$(git ls-files --full-name "$file" 2>/dev/null || echo "$file")
+      remote_url=$(echo "$remote" | sed 's|git@github.com:|https://github.com/|; s|\.git$||')
+      local link="${remote_url}/blob/${branch}/${rel_path}"
+      echo -n "$link" | pbcopy
+      echo "Copied git link: $link"
+      ;;
+  esac
 }
 
 # Hint
@@ -207,7 +243,7 @@ fhelp() {
   echo "$(highlight fkube)  — fuzzy kube (context/namespace/pods/logs/configmap/deployment/secret)"
   echo "$(highlight fnb)    — fuzzy nb note open"
   echo "$(highlight frm)    — fuzzy select files to remove"
-  echo "$(highlight fbat)   — fuzzy select file and print with bat"
+  echo "$(highlight ffile)  — fuzzy select file: bat, yank content/name/path/git link"
   echo "$(highlight fhelp)  — show this help"
 }
 
