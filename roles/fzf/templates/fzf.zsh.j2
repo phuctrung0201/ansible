@@ -176,6 +176,19 @@ fnb() {
   nb edit "$id"
 }
 
+# Fuzzy remove files
+frm() {
+  local files
+  files=$(find . -type f | \
+    fzf --prompt=" rm > " \
+        --layout=reverse \
+        --height=60% \
+        --multi \
+        --preview='file {} | grep -q text && bat --color=always --style=plain {} || echo "[binary file]"' \
+        --preview-window=right:60%) || return
+  echo "$files" | xargs rm
+}
+
 # Fuzzy batch open
 fbat() {
   local file
@@ -193,6 +206,7 @@ fhelp() {
   echo "$(highlight fgit)   — fuzzy git (add/unstage/restore/branch/log/diff/fetch)"
   echo "$(highlight fkube)  — fuzzy kube (context/namespace/pods/logs/configmap/deployment/secret)"
   echo "$(highlight fnb)    — fuzzy nb note open"
+  echo "$(highlight frm)    — fuzzy select files to remove"
   echo "$(highlight fbat)   — fuzzy select file and print with bat"
   echo "$(highlight fhelp)  — show this help"
 }
