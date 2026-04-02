@@ -9,14 +9,14 @@ fgit() {
   case "$cmd" in
     add)
       local files
-      files=$(git -C "$(git rev-parse --show-toplevel)" status --short | \
+      files=$(git diff --name-only | \
         fzf --prompt="Add > " \
             --layout=reverse \
             --height=60% \
             --multi \
-            --preview='git diff --color=always -- $(echo {} | awk "{print \$2}")' \
+            --preview='git diff --color=always -- {}' \
             --preview-window=right:60%) || return
-      echo "$files" | awk '{print $2}' | xargs git add
+      echo "$files" | xargs git add
       ;;
     unstage)
       local files
