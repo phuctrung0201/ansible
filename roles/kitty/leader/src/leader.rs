@@ -18,6 +18,7 @@ const FG: Color = Color::Rgb(202, 211, 245);      // text
 const COMMENT: Color = Color::Rgb(110, 115, 141); // overlay0
 
 const COLS: usize = 4;
+const KEY_WIDTH: usize = 5; // widest key label is "space" (5 chars)
 
 // ---------------------------------------------------------------------------
 // PickGroup — secondary selection
@@ -37,10 +38,19 @@ pub struct PickGroup {
 // Shared slot rendering helpers
 // ---------------------------------------------------------------------------
 
+fn key_display(key: char) -> String {
+    let s = match key {
+        ' ' => "space".to_string(),
+        '\t' => "tab".to_string(),
+        _ => key.to_string(),
+    };
+    format!("{:>KEY_WIDTH$}", s)
+}
+
 /// Returns the label column width given a popup's inner width.
 fn label_width(inner_width: usize) -> usize {
     let slot_width = inner_width / COLS;
-    slot_width.saturating_sub(4) // badge(1) + arrow+spaces(3)
+    slot_width.saturating_sub(KEY_WIDTH + 3) // badge(KEY_WIDTH) + " → "(3)
 }
 
 /// Two spans for a single key-badge + label slot.
@@ -61,7 +71,7 @@ fn slot_spans(key: char, label: &str, icon: &str, lw: usize, is_last: bool, focu
         Style::default().fg(FG)
     };
     [
-        Span::styled(key.to_string(), Style::default().fg(TEAL).add_modifier(Modifier::BOLD)),
+        Span::styled(key_display(key), Style::default().fg(TEAL).add_modifier(Modifier::BOLD)),
         Span::styled(text, label_style),
     ]
 }
@@ -135,6 +145,17 @@ fn event_loop(
                 kind: KeyEventKind::Press,
                 ..
             }) => match crate::action::press_key(state, c) {
+                KeyPress::Execute(f) => {
+                    ratatui::restore();
+                    return f();
+                }
+                KeyPress::Redraw | KeyPress::Unrecognised => {}
+            },
+            Event::Key(KeyEvent {
+                code: KeyCode::Tab,
+                kind: KeyEventKind::Press,
+                ..
+            }) => match crate::action::press_key(state, '\t') {
                 KeyPress::Execute(f) => {
                     ratatui::restore();
                     return f();
