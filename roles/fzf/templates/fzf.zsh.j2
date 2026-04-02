@@ -4,9 +4,42 @@ source <(fzf --zsh)
 # Fuzzy git
 fgit() {
   local cmd
-  cmd=$(printf "branch\nlog\nstash\ndiff\nfetch" | \
+  cmd=$(printf "add\nunstage\nrestore\nbranch\nlog\ndiff\nfetch" | \
     fzf --prompt=" git > " --layout=reverse --height=40%) || return
   case "$cmd" in
+    add)
+      local files
+      files=$(git -C "$(git rev-parse --show-toplevel)" status --short | \
+        fzf --prompt="Add > " \
+            --layout=reverse \
+            --height=60% \
+            --multi \
+            --preview='git diff --color=always -- $(echo {} | awk "{print \$2}")' \
+            --preview-window=right:60%) || return
+      echo "$files" | awk '{print $2}' | xargs git add
+      ;;
+    unstage)
+      local files
+      files=$(git diff --name-only --cached | \
+        fzf --prompt="Unstage > " \
+            --layout=reverse \
+            --height=60% \
+            --multi \
+            --preview='git diff --cached --color=always -- {}' \
+            --preview-window=right:60%) || return
+      echo "$files" | xargs git restore --staged
+      ;;
+    restore)
+      local files
+      files=$(git diff --name-only | \
+        fzf --prompt="Restore > " \
+            --layout=reverse \
+            --height=60% \
+            --multi \
+            --preview='git diff --color=always -- {}' \
+            --preview-window=right:60%) || return
+      echo "$files" | xargs git restore
+      ;;
     branch)
       local branch
       branch=$(git branch | fzf --prompt="Branch > " --layout=reverse --height=40%) || return
@@ -18,11 +51,6 @@ fgit() {
             --layout=reverse \
             --height=60% \
             --preview='git show --stat --color=always {1}'
-      ;;
-    stash)
-      local stash
-      stash=$(git stash list | fzf --prompt="Stash > " --layout=reverse --height=40%) || return
-      git stash apply "${stash%%:*}"
       ;;
     diff)
       git diff --name-only | \
@@ -162,7 +190,7 @@ fbat() {
 
 # Hint
 fhelp() {
-  echo "$(highlight fgit)   — fuzzy git (branch/log/stash/diff/fetch)"
+  echo "$(highlight fgit)   — fuzzy git (add/unstage/restore/branch/log/diff/fetch)"
   echo "$(highlight fkube)  — fuzzy kube (context/namespace/pods/logs/configmap/deployment/secret)"
   echo "$(highlight fnb)    — fuzzy nb note open"
   echo "$(highlight fbat)   — fuzzy select file and print with bat"
