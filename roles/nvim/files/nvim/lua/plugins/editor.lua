@@ -34,7 +34,6 @@ return {
         ensure_installed = {
           "bash",
           "c_sharp",
-          "fsharp",
           "go",
           "html",
           "javascript",
@@ -151,7 +150,6 @@ return {
           "rust_analyzer",
           "jsonls",
           "lua_ls",
-          "fsautocomplete",
         },
         automatic_enable = true,
       })
