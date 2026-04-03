@@ -38,13 +38,13 @@ pub static KEYMAP: &[KeyNode] = &[
         kind: KeyNodeKind::Action(action::edit_command),
     },
     KeyNode {
-        key: ' ',
+        key: '\t',
         label: "list tabs",
         kind: KeyNodeKind::Action(action::tab_list),
     },
     KeyNode {
-        key: '\t',
-        label: "previous tab",
+        key: ' ',
+        label: "switch tab",
         kind: KeyNodeKind::Action(action::previous_tab),
     },
     KeyNode {
