@@ -34,32 +34,31 @@ outer.top = 4
 outer.right = 4
 
 # Main mode is passive — all keys pass through to apps.
-# alt-\ enters action mode.
+# alt-tab enters action mode.
 [mode.main.binding]
-alt-backslash = 'mode action'
+alt-tab = 'mode action'
 
 # Action mode — persistent window management.
 # Workspaces: `=terminal 1=browser 2=fallback 3=empty F1=slack F2=outlook F3=zoom
 [mode.action.binding]
 
-shift-tab = 'workspace --wrap-around prev'
 tab = ['focus --boundaries workspace --boundaries-action wrap-around-the-workspace dfs-prev', 'mode main']
 backtick = ['workspace --auto-back-and-forth `', 'mode main']
 shift-backtick = ['move-node-to-workspace --focus-follows-window `', 'mode main']
-backslash = ['focus-back-and-forth', 'mode main']
 space = ['workspace-back-and-forth', 'mode main']
+shift-space = 'workspace --wrap-around next'
 
 # Focus (hjkl)
-h = ['focus left', 'mode main']
-j = ['focus down', 'mode main']
-k = ['focus up', 'mode main']
-l = ['focus right', 'mode main']
+h = 'focus left'
+j = 'focus down'
+k = 'focus up'
+l = 'focus right'
 
 # Move windows (shift-hjkl)
-shift-h = ['move left', 'mode main']
-shift-j = ['move down', 'mode main']
-shift-k = ['move up', 'mode main']
-shift-l = ['move right', 'mode main']
+shift-h = 'move left'
+shift-j = 'move down'
+shift-k = 'move up'
+shift-l = 'move right'
 
 # Workspaces
 1 = ['workspace 1', 'mode main']
@@ -68,16 +67,16 @@ shift-l = ['move right', 'mode main']
 f3 = ['workspace F3', 'mode main']
 f2 = ['workspace F2', 'mode main']
 f1 = ['workspace F1', 'mode main']
-shift-1 = ['move-node-to-workspace --focus-follows-window 1', 'mode main']
-shift-2 = ['move-node-to-workspace --focus-follows-window 2', 'mode main']
-shift-3 = ['move-node-to-workspace --focus-follows-window 3', 'mode main']
-shift-f3 = ['move-node-to-workspace --focus-follows-window F3', 'mode main']
-shift-f2 = ['move-node-to-workspace --focus-follows-window F2', 'mode main']
-shift-f1 = ['move-node-to-workspace --focus-follows-window F1', 'mode main']
+shift-1 = 'move-node-to-workspace --focus-follows-window 1'
+shift-2 = 'move-node-to-workspace --focus-follows-window 2'
+shift-3 = 'move-node-to-workspace --focus-follows-window 3'
+shift-f3 = 'move-node-to-workspace --focus-follows-window F3'
+shift-f2 = 'move-node-to-workspace --focus-follows-window F2'
+shift-f1 = 'move-node-to-workspace --focus-follows-window F1'
 
 # Monitor (brackets)
-leftSquareBracket = 'focus-monitor --wrap-around prev'
-rightSquareBracket = 'focus-monitor --wrap-around next'
+leftSquareBracket = ['focus-monitor --wrap-around prev', 'mode main']
+rightSquareBracket = ['focus-monitor --wrap-around next', 'mode main']
 shift-leftSquareBracket = 'move-workspace-to-monitor --wrap-around prev'
 shift-rightSquareBracket = 'move-workspace-to-monitor --wrap-around next'
 
