@@ -179,7 +179,11 @@ pub fn tab_list() -> anyhow::Result<()> {
     }
 
     let items: Vec<leader::PickItem> = focused_win.tabs.iter()
-        .map(|t| leader::PickItem { label: t.title.clone(), focused: t.is_focused })
+        .map(|t| leader::PickItem {
+            label: t.title.clone(),
+            focused: t.is_focused,
+            current: t.windows.iter().any(|w| w.is_self),
+        })
         .collect();
     let ids: Vec<u64> = all_tabs.iter().map(|(id, _)| *id).collect();
     let groups = vec![leader::PickGroup { label: String::new(), items }];
@@ -243,7 +247,7 @@ pub fn move_tab_to_window() -> anyhow::Result<()> {
     }
 
     let items: Vec<leader::PickItem> = items.into_iter()
-        .map(|s| leader::PickItem { label: s, focused: false })
+        .map(|s| leader::PickItem { label: s, focused: false, current: false })
         .collect();
     let groups = vec![leader::PickGroup { label: String::new(), items }];
     let result = leader::pick("󰓩 attach", &groups)?;

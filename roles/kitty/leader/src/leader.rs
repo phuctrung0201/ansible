@@ -27,6 +27,7 @@ const KEY_WIDTH: usize = 5; // widest key label is "space" (5 chars)
 pub struct PickItem {
     pub label: String,
     pub focused: bool,
+    pub current: bool,
 }
 
 pub struct PickGroup {
@@ -53,8 +54,7 @@ fn label_width(inner_width: usize) -> usize {
     slot_width.saturating_sub(KEY_WIDTH + 3) // badge(KEY_WIDTH) + " → "(3)
 }
 
-/// Two spans for a single key-badge + label slot.
-fn slot_spans(key: char, label: &str, icon: &str, lw: usize, is_last: bool, focused: bool) -> [Span<'static>; 2] {
+fn slot_spans_str(key: &str, label: &str, icon: &str, lw: usize, is_last: bool, focused: bool) -> [Span<'static>; 2] {
     let trailing = if is_last { 0 } else { 2 };
     let icon_chars = icon.chars().count();
     let text = format!(
@@ -71,9 +71,14 @@ fn slot_spans(key: char, label: &str, icon: &str, lw: usize, is_last: bool, focu
         Style::default().fg(FG)
     };
     [
-        Span::styled(key_display(key), Style::default().fg(TEAL).add_modifier(Modifier::BOLD)),
+        Span::styled(format!("{:>KEY_WIDTH$}", key), Style::default().fg(TEAL).add_modifier(Modifier::BOLD)),
         Span::styled(text, label_style),
     ]
+}
+
+/// Two spans for a single key-badge + label slot.
+fn slot_spans(key: char, label: &str, icon: &str, lw: usize, is_last: bool, focused: bool) -> [Span<'static>; 2] {
+    slot_spans_str(&key_display(key), label, icon, lw, is_last, focused)
 }
 
 fn popup_block(title: String) -> Block<'static> {
@@ -322,7 +327,12 @@ fn render_pick(
                 let is_last = col + 1 == chunk_len;
                 let item = &group.items[ii];
                 let focused = cursor_pos == Some((gi, ii));
-                spans.extend(slot_spans(key_char, &item.label, "", lw, is_last, focused));
+                let key_str = if item.current {
+                    format!("›{}", key_char)
+                } else {
+                    key_char.to_string()
+                };
+                spans.extend(slot_spans_str(&key_str, &item.label, "", lw, is_last, focused));
             }
             lines.push(Line::from(spans));
         }
