@@ -241,10 +241,25 @@ fn pick_loop(
     key_map: &[(usize, usize)],
     popup_height: u16,
 ) -> anyhow::Result<Option<(usize, usize)>> {
+    let initial_cursor = key_map
+        .iter()
+        .position(|&(gi, ii)| groups[gi].items[ii].focused)
+        .unwrap_or(0);
+    let mut cursor = initial_cursor;
     loop {
-        terminal.draw(|frame| render_pick(frame, prompt, groups, key_map, popup_height))?;
+        terminal.draw(|frame| render_pick(frame, prompt, groups, key_map, popup_height, cursor))?;
         match event::read()? {
             Event::Key(KeyEvent { code: KeyCode::Esc, .. }) => return Ok(None),
+            Event::Key(KeyEvent { code: KeyCode::Enter, kind: KeyEventKind::Press, .. }) => {
+                if let Some(&pos) = key_map.get(cursor) {
+                    return Ok(Some(pos));
+                }
+            }
+            Event::Key(KeyEvent { code: KeyCode::Tab, kind: KeyEventKind::Press, .. }) => {
+                if !key_map.is_empty() {
+                    cursor = (cursor + 1) % key_map.len();
+                }
+            }
             Event::Key(KeyEvent {
                 code: KeyCode::Char(c),
                 kind: KeyEventKind::Press,
@@ -268,6 +283,7 @@ fn render_pick(
     groups: &[PickGroup],
     key_map: &[(usize, usize)],
     _popup_height: u16,
+    cursor: usize,
 ) {
     let area = frame.area();
 
@@ -284,6 +300,8 @@ fn render_pick(
             if i < 9 { Some(((gi, ii), (b'1' + i as u8) as char)) } else { None }
         })
         .collect();
+
+    let cursor_pos = key_map.get(cursor).copied();
 
     let mut lines: Vec<Line> = Vec::new();
 
@@ -303,7 +321,8 @@ fn render_pick(
                 let key_char = key_chars.get(&(gi, ii)).copied().unwrap_or('?');
                 let is_last = col + 1 == chunk_len;
                 let item = &group.items[ii];
-                spans.extend(slot_spans(key_char, &item.label, "", lw, is_last, item.focused));
+                let focused = cursor_pos == Some((gi, ii));
+                spans.extend(slot_spans(key_char, &item.label, "", lw, is_last, focused));
             }
             lines.push(Line::from(spans));
         }

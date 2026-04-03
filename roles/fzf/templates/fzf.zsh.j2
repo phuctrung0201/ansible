@@ -2,9 +2,9 @@
 source <(fzf --zsh)
 
 
-_uf_git() {
+_fe_git() {
   local cmd
-  cmd=$(printf "add\nunstage\nrestore\nbranch\nlog\ndiff\nfetch" | \
+  cmd=$(printf "add\nunstage\nrestore\ncheckout\nlog\ndiff\nfetch" | \
     fzf --prompt=" git > " --layout=reverse --height=40%) || return
   case "$cmd" in
     add)
@@ -40,10 +40,11 @@ _uf_git() {
             --preview-window=right:60%) || return
       echo "$files" | xargs git restore
       ;;
-    branch)
+    checkout)
       local branch
-      branch=$(git branch | fzf --prompt="Branch > " --layout=reverse --height=40%) || return
-      git checkout "${branch//\*/}"
+      branch=$(git branch | sed 's/^\* //; s/^  //' | \
+        fzf --prompt="Checkout > " --layout=reverse --height=40%) || return
+      git checkout "$branch"
       ;;
     log)
       git log --oneline | \
@@ -65,11 +66,14 @@ _uf_git() {
       branch=$(git ls-remote --heads "$remote" | awk '{print $2}' | sed 's|refs/heads/||' | \
         fzf --prompt="Branch > " --layout=reverse --height=40%) || return
       git fetch "$remote" "$branch"
+      if ! git branch | grep -q "^\s*$branch$"; then
+        git checkout -b "$branch" --track "$remote/$branch"
+      fi
       ;;
   esac
 }
 
-_uf_kube() {
+_fe_kube() {
   local cmd
   cmd=$(printf "context\nnamespace\npods\nlogs\nconfigmap\ndeployment\nsecret" | \
     fzf --prompt="󱃾 kube > " --layout=reverse --height=40%) || return
@@ -96,94 +100,77 @@ _uf_kube() {
       ;;
     pods)
       local pod
-      pod=$(kubectl get pods --all-namespaces | \
+      pod=$(kubectl get pods | \
         fzf --prompt="Pod > " \
             --layout=reverse \
             --height=60% \
-            --header-lines=1 \
-            --preview='kubectl describe pod {2} -n {1}' \
-            --preview-window=right:60%) || return
+            --header-lines=1) || return
+      kubectl get pod "$(echo "$pod" | awk '{print $1}')" -o yaml | bat --color=always --style=plain --paging=never --language=yaml
       ;;
     logs)
-      local pod ns
-      selected=$(kubectl get pods --all-namespaces | \
+      local pod
+      pod=$(kubectl get pods | \
         fzf --prompt="Pod > " \
             --layout=reverse \
             --height=60% \
-            --header-lines=1 \
-            --preview='kubectl logs {2} -n {1} --tail=20' \
-            --preview-window=right:60%) || return
-      ns=$(echo "$selected" | awk '{print $1}')
-      pod=$(echo "$selected" | awk '{print $2}')
-      kubectl logs -f "$pod" -n "$ns"
+            --header-lines=1) || return
+      kubectl logs -f "$(echo "$pod" | awk '{print $1}')"
       ;;
     configmap)
-      local selected ns cm
-      selected=$(kubectl get configmaps --all-namespaces | \
+      local cm
+      cm=$(kubectl get configmaps | \
         fzf --prompt="ConfigMap > " \
             --layout=reverse \
             --height=60% \
-            --header-lines=1 \
-            --preview='kubectl get configmap {2} -n {1} -o yaml | bat --color=always --style=plain --language=yaml' \
-            --preview-window=right:60%) || return
-      ns=$(echo "$selected" | awk '{print $1}')
-      cm=$(echo "$selected" | awk '{print $2}')
-      kubectl get configmap "$cm" -n "$ns" -o yaml
+            --header-lines=1) || return
+      kubectl get configmap "$(echo "$cm" | awk '{print $1}')" -o yaml | bat --color=always --style=plain --paging=never --language=yaml
       ;;
     deployment)
-      local selected ns deploy
-      selected=$(kubectl get deployments --all-namespaces | \
+      local deploy
+      deploy=$(kubectl get deployments | \
         fzf --prompt="Deployment > " \
             --layout=reverse \
             --height=60% \
-            --header-lines=1 \
-            --preview='kubectl describe deployment {2} -n {1}' \
-            --preview-window=right:60%) || return
-      ns=$(echo "$selected" | awk '{print $1}')
-      deploy=$(echo "$selected" | awk '{print $2}')
-      kubectl describe deployment "$deploy" -n "$ns"
+            --header-lines=1) || return
+      kubectl get deployment "$(echo "$deploy" | awk '{print $1}')" -o yaml | bat --color=always --style=plain --paging=never --language=yaml
       ;;
     secret)
-      local selected ns secret
-      selected=$(kubectl get secrets --all-namespaces | \
+      local secret
+      secret=$(kubectl get secrets | \
         fzf --prompt="Secret > " \
             --layout=reverse \
             --height=60% \
-            --header-lines=1 \
-            --preview='kubectl get secret {2} -n {1} -o yaml | bat --color=always --style=plain --language=yaml' \
-            --preview-window=right:60%) || return
-      ns=$(echo "$selected" | awk '{print $1}')
-      secret=$(echo "$selected" | awk '{print $2}')
-      kubectl get secret "$secret" -n "$ns" -o yaml
+            --header-lines=1) || return
+      kubectl get secret "$(echo "$secret" | awk '{print $1}')" -o yaml | bat --color=always --style=plain --paging=never --language=yaml
       ;;
   esac
 }
 
-_uf_nb() {
+_fe_nb() {
   local selected id
-  selected=$(nb list --no-color --limit 0 | \
+  selected=$(nb ls -a --no-color | \
     fzf --prompt="  Note > " \
         --layout=reverse \
         --height=60% \
-        --preview='nb show --print $(echo {} | awk "{print \$1}" | tr -d "[]") | bat --color=always --style=plain' \
+        --preview='nb show --print $(echo {} | awk "{print \$1}" | tr -d "[]") | bat --color=always --style=plain --paging=never --language=markdown' \
         --preview-window=right:60%) || return
   id=$(echo "$selected" | awk '{print $1}' | tr -d '[]')
   nb edit "$id"
 }
 
-_uf_rm() {
+_fe_rm() {
   local files
   files=$(find . -type f | \
     fzf --prompt=" rm > " \
         --layout=reverse \
         --height=60% \
         --multi \
-        --preview='file {} | grep -q text && bat --color=always --style=plain {} || echo "[binary file]"' \
+        --preview='file {} | grep -q text && bat --color=always --style=plain --paging=never {} || echo "[binary file]"' \
         --preview-window=right:60%) || return
   echo "$files" | xargs rm
 }
 
-_uf_file() {
+_fe_file() {
   local file action
   action=$(printf "bat\nyank content\nyank filename\nyank relative path\nyank absolute path\nyank git remote link" | \
     fzf --prompt=" action > " \
@@ -194,12 +181,12 @@ _uf_file() {
     fzf --prompt="󰐄 file > " \
         --layout=reverse \
         --height=60% \
-        --preview='file {} | grep -q text && bat --color=always --style=plain {} || echo "[binary file]"' \
+        --preview='file {} | grep -q text && bat --color=always --style=plain --paging=never {} || echo "[binary file]"' \
         --preview-window=right:60%) || return
 
   case "$action" in
     "bat")
-      bat --style=header "$file"
+      bat --style=header --paging=never "$file"
       ;;
     "yank content")
       cat "$file" | pbcopy
@@ -230,19 +217,29 @@ _uf_file() {
   esac
 }
 
-uf() {
+fe() {
   local cmd="${1:-}"
   if [[ -z "$cmd" ]]; then
-    cmd=$(printf "git\nkube\nnb\nrm\nfile" | \
-      fzf --prompt=" uf > " --layout=reverse --height=40%) || return
+    cmd=$(printf "git\nkube\nnote\nrm\nfile\ndir" | \
+      fzf --prompt=" fe > " --layout=reverse --height=40%) || return
   fi
   case "$cmd" in
-    git)  _uf_git  ;;
-    kube) _uf_kube ;;
-    nb)   _uf_nb   ;;
-    rm)   _uf_rm   ;;
-    file) _uf_file ;;
+    git)  _fe_git  ;;
+    kube) _fe_kube ;;
+    note) _fe_nb   ;;
+    rm)   _fe_rm   ;;
+    file) _fe_file ;;
+    dir)  _fe_dir  ;;
   esac
+}
+
+_fe_dir() {
+  local dir
+  dir=$(z -l | awk '{print $2}' | \
+    fzf --prompt=" dir > " \
+        --layout=reverse \
+        --height=40%) || return
+  cd "$dir"
 }
 
 # Catppuccin Mocha theme
