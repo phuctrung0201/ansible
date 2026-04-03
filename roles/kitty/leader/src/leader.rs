@@ -120,7 +120,6 @@ fn render_message(frame: &mut Frame, title: &str, body: &str) {
 }
 
 pub fn run() -> anyhow::Result<()> {
-    crate::kitty::resize_self_to_height(8)?;
     let mut terminal = ratatui::init();
     let mut state = LeaderState::new();
     let result = event_loop(&mut terminal, &mut state);

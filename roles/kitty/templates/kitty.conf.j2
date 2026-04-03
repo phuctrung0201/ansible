@@ -70,4 +70,4 @@ scrollback_pager nvim -c 'lua require("ansify").pager({on_finish=function() vim.
 # =============================================================================
 # Key mappings
 # =============================================================================
-map opt+space combine : goto_layout splits : launch --cwd=current --type=window --location=hsplit --bias=0 ~/.config/kitty/leader
+map opt+space launch --type=overlay --cwd=current ~/.config/kitty/leader
