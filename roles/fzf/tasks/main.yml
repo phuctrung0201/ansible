@@ -3,11 +3,6 @@
     name: bat
     state: present
 
-- name: Install entr
-  homebrew:
-    name: entr
-    state: present
-
 - name: Install fzf
   homebrew:
     name: fzf
@@ -28,3 +23,14 @@
     path: "{{ ansible_env.HOME }}/.zshrc"
     line: "source ~/.config/fzf/fzf.zsh"
     state: present
+
+- name: Install nb via Homebrew
+  community.general.homebrew:
+    name: nb
+    state: present
+
+- name: Copy nbrc config
+  template:
+    src: nbrc.j2
+    dest: "{{ ansible_env.HOME }}/.nbrc"
+    backup: yes
