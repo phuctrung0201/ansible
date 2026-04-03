@@ -90,14 +90,14 @@ fn close_overlay() -> anyhow::Result<()> {
     kitty::close_window_self().context("close overlay")
 }
 
-pub fn open_url() -> anyhow::Result<()> {
+pub fn browse_link() -> anyhow::Result<()> {
     close_overlay()?;
-    kitty::send_action("open_url_with_hints").context("open url")
+    kitty::send_action("open_url_with_hints").context("browse link")
 }
 
-pub fn copy_url() -> anyhow::Result<()> {
+pub fn copy_link() -> anyhow::Result<()> {
     close_overlay()?;
-    kitty::send_action("kitten hints --program @").context("copy url")
+    kitty::send_action("kitten hints --program @").context("copy link")
 }
 
 pub fn copy_file_path() -> anyhow::Result<()> {
@@ -110,30 +110,25 @@ pub fn copy_word() -> anyhow::Result<()> {
     kitty::send_action("kitten hints --type=word --program=@").context("copy word")
 }
 
-pub fn copy_line() -> anyhow::Result<()> {
-    close_overlay()?;
-    kitty::send_action("kitten hints --type=line --program=@").context("copy line")
-}
-
-pub fn copy_hash() -> anyhow::Result<()> {
-    close_overlay()?;
-    kitty::send_action("kitten hints --type=hash --program=@").context("copy hash")
-}
 
 pub fn edit_command() -> anyhow::Result<()> {
     close_overlay()?;
     kitty::send_text("\\x18\\x05").context("edit command")
 }
 
-pub fn search_history() -> anyhow::Result<()> {
+pub fn find_history() -> anyhow::Result<()> {
     close_overlay()?;
-    kitty::send_text("\\x12").context("search history (ctrl-r)")
+    kitty::send_text("\\x12").context("find history (ctrl-r)")
 }
 
-
-pub fn open_scrollback() -> anyhow::Result<()> {
+pub fn find_buffer() -> anyhow::Result<()> {
     close_overlay()?;
-    kitty::send_action("show_scrollback").context("open scrollback")
+    kitty::send_action("show_scrollback").context("find buffer")
+}
+
+pub fn find_command() -> anyhow::Result<()> {
+    close_overlay()?;
+    kitty::send_text("\\x18\\x06").context("find command (ctrl-x ctrl-f)")
 }
 
 pub fn new_tab_here() -> anyhow::Result<()> {

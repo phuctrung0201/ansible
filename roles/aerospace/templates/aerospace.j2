@@ -43,7 +43,7 @@ alt-backslash = 'mode action'
 [mode.action.binding]
 
 shift-tab = 'workspace --wrap-around prev'
-tab = 'focus --boundaries workspace --boundaries-action wrap-around-the-workspace dfs-prev'
+tab = ['focus --boundaries workspace --boundaries-action wrap-around-the-workspace dfs-prev', 'mode main']
 backtick = ['workspace --auto-back-and-forth `', 'mode main']
 shift-backtick = ['move-node-to-workspace --focus-follows-window `', 'mode main']
 backslash = ['focus-back-and-forth', 'mode main']

@@ -76,27 +76,6 @@ pub fn close_tab(id: u64) -> anyhow::Result<()> {
 }
 
 
-pub fn resize_self_to_height(rows: u16) -> anyhow::Result<()> {
-    let (_, current_rows) = ratatui::crossterm::terminal::size()
-        .context("get terminal size")?;
-    let delta = rows as i32 - current_rows as i32;
-    if delta != 0 {
-        kitten_cmd()
-            .args([
-                "@",
-                "resize-window",
-                "--self",
-                "--axis",
-                "vertical",
-                "--increment",
-                &delta.to_string(),
-            ])
-            .status()
-            .context("kitten @ resize-window")?;
-    }
-    Ok(())
-}
-
 pub fn detach_tab_self(target_tab_id: u64) -> anyhow::Result<()> {
     kitten_cmd()
         .args([

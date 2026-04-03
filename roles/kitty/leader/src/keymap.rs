@@ -22,11 +22,7 @@ pub static KEYMAP: &[KeyNode] = &[
         label: "attach tab",
         kind: KeyNodeKind::Action(action::move_tab_to_window),
     },
-    KeyNode {
-        key: 'b',
-        label: "browse history",
-        kind: KeyNodeKind::Action(action::search_history),
-    },
+
     KeyNode {
         key: 'd',
         label: "detach tab",
@@ -62,36 +58,22 @@ pub static KEYMAP: &[KeyNode] = &[
         label: "close other tabs",
         kind: KeyNodeKind::Action(action::close_other_tabs),
     },
+    KeyNode {
+        key: 'b',
+        label: "browse link",
+        kind: KeyNodeKind::Action(action::browse_link),
+    },
     // groups
     KeyNode {
-        key: 'o',
-        label: "open",
+        key: 'f',
+        label: "find",
         kind: KeyNodeKind::Group {
-            icon: "󰏌",
+            icon: "󰍉",
             nodes: &[
                 KeyNode {
-                    key: 'u',
-                    label: "url",
-                    kind: KeyNodeKind::Action(action::open_url),
-                },
-                KeyNode {
-                    key: 's',
-                    label: "scrollback",
-                    kind: KeyNodeKind::Action(action::open_scrollback),
-                },
-            ],
-        },
-    },
-    KeyNode {
-        key: 'y',
-        label: "yank",
-        kind: KeyNodeKind::Group {
-            icon: "󰆒",
-            nodes: &[
-                KeyNode {
-                    key: 'u',
-                    label: "url",
-                    kind: KeyNodeKind::Action(action::copy_url),
+                    key: 'l',
+                    label: "link",
+                    kind: KeyNodeKind::Action(action::copy_link),
                 },
                 KeyNode {
                     key: 'f',
@@ -103,15 +85,21 @@ pub static KEYMAP: &[KeyNode] = &[
                     label: "word",
                     kind: KeyNodeKind::Action(action::copy_word),
                 },
+
                 KeyNode {
-                    key: 'l',
-                    label: "line",
-                    kind: KeyNodeKind::Action(action::copy_line),
+                    key: 'b',
+                    label: "buffer",
+                    kind: KeyNodeKind::Action(action::find_buffer),
                 },
                 KeyNode {
                     key: 'h',
-                    label: "hash",
-                    kind: KeyNodeKind::Action(action::copy_hash),
+                    label: "history",
+                    kind: KeyNodeKind::Action(action::find_history),
+                },
+                KeyNode {
+                    key: 'c',
+                    label: "command",
+                    kind: KeyNodeKind::Action(action::find_command),
                 },
             ],
         },
