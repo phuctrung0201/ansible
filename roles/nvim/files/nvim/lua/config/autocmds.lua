@@ -47,6 +47,14 @@ autocmd("TermOpen", {
   end,
 })
 
+autocmd("BufWritePre", {
+  group = augroup("format_on_save", { clear = true }),
+  pattern = "*",
+  callback = function()
+    vim.lsp.buf.format({ async = false })
+  end,
+})
+
 autocmd("BufReadPost", {
   group = augroup("last_cursor_position", { clear = true }),
   callback = function()
