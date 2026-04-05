@@ -15,6 +15,7 @@ use crate::{action::{LeaderState, KeyPress}, keymap};
 // ---------------------------------------------------------------------------
 const MAUVE: Color = Color::Rgb(198, 160, 246);   // mauve
 const TEAL: Color = Color::Rgb(139, 213, 202);    // teal
+const YELLOW: Color = Color::Rgb(238, 212, 159);  // yellow
 const FG: Color = Color::Rgb(202, 211, 245);      // text
 const COMMENT: Color = Color::Rgb(110, 115, 141); // overlay0
 
@@ -55,7 +56,7 @@ fn label_width(inner_width: usize) -> usize {
     slot_width.saturating_sub(KEY_WIDTH + 3 + 6) // badge(KEY_WIDTH) + " → "(3) + trailing(6)
 }
 
-fn slot_spans_str(key: &str, label: &str, icon: &str, lw: usize, is_last: bool, focused: bool) -> [Span<'static>; 2] {
+fn slot_spans_str(key: &str, label: &str, icon: &str, lw: usize, is_last: bool, focused: bool, current: bool) -> [Span<'static>; 2] {
     let trailing = if is_last { 0 } else { 6 };
     let icon_chars = icon.chars().count();
     let max_label = lw.saturating_sub(icon_chars);
@@ -77,21 +78,29 @@ fn slot_spans_str(key: &str, label: &str, icon: &str, lw: usize, is_last: bool, 
     } else {
         Style::default().fg(FG)
     };
+    let key_str = if current {
+        format!("{:>width$}", format!("[{}]", key.trim()), width = KEY_WIDTH)
+    } else {
+        format!("{:>KEY_WIDTH$}", key)
+    };
+    let key_style = if current {
+        Style::default().fg(YELLOW).add_modifier(Modifier::BOLD)
+    } else {
+        Style::default().fg(TEAL).add_modifier(Modifier::BOLD)
+    };
     [
-        Span::styled(format!("{:>KEY_WIDTH$}", key), Style::default().fg(TEAL).add_modifier(Modifier::BOLD)),
+        Span::styled(key_str, key_style),
         Span::styled(text, label_style),
     ]
 }
 
 /// Two spans for a single key-badge + label slot.
 fn slot_spans(key: char, label: &str, icon: &str, lw: usize, is_last: bool, focused: bool) -> [Span<'static>; 2] {
-    slot_spans_str(&key_display(key), label, icon, lw, is_last, focused)
+    slot_spans_str(&key_display(key), label, icon, lw, is_last, focused, false)
 }
 
-fn centered_rect(width: u16, height: u16, area: Rect) -> Rect {
-    let x = area.x + area.width.saturating_sub(width) / 2;
-    let y = area.y + area.height.saturating_sub(height) / 2;
-    Rect { x, y, width: width.min(area.width), height: height.min(area.height) }
+fn top_rect(width: u16, height: u16, area: Rect) -> Rect {
+    Rect { x: area.x, y: area.y, width: width.min(area.width), height: height.min(area.height) }
 }
 
 fn popup_block(title: String) -> Block<'static> {
@@ -196,7 +205,7 @@ fn render(frame: &mut Frame, state: &LeaderState) {
 
     let n_rows = (nodes.len() as u16).div_ceil(COLS as u16);
     let popup_height = n_rows + 2; // title row + top padding
-    let popup_area = centered_rect(area.width, popup_height, area);
+    let popup_area = top_rect(area.width, popup_height, area);
 
     let inner_width = popup_area.width.saturating_sub(2) as usize;
     let lw = label_width(inner_width);
@@ -314,7 +323,7 @@ fn render_pick(
         header + (g.items.len() as u16).div_ceil(COLS as u16)
     }).sum();
     let popup_height = total_items + 2;
-    let list_area = centered_rect(area.width, popup_height, area);
+    let list_area = top_rect(area.width, popup_height, area);
     let block = popup_block(format!(" {} ", prompt));
 
     let inner_width = list_area.width.saturating_sub(2) as usize;
@@ -349,12 +358,8 @@ fn render_pick(
                 let is_last = col + 1 == chunk_len;
                 let item = &group.items[ii];
                 let focused = cursor_pos == Some((gi, ii));
-                let key_str = if item.current {
-                    format!("›{}", key_char)
-                } else {
-                    key_char.to_string()
-                };
-                spans.extend(slot_spans_str(&key_str, &item.label, "", lw, is_last, focused));
+                let key_str = key_char.to_string();
+                spans.extend(slot_spans_str(&key_str, &item.label, "", lw, is_last, focused, item.current));
             }
             lines.push(Line::from(spans));
         }

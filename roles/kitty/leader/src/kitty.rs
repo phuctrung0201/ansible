@@ -59,6 +59,14 @@ pub fn close_tab_self() -> anyhow::Result<()> {
     Ok(())
 }
 
+pub fn focus_tab_recent() -> anyhow::Result<()> {
+    kitten_cmd()
+        .args(["@", "focus-tab", "--match", "recent:1"])
+        .status()
+        .context("focus recent tab")?;
+    Ok(())
+}
+
 pub fn focus_tab(id: u64) -> anyhow::Result<()> {
     kitten_cmd()
         .args(["@", "focus-tab", "--match", &format!("id:{id}")])

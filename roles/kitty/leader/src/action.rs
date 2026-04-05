@@ -129,6 +129,11 @@ pub fn close_tab() -> anyhow::Result<()> {
     kitty::close_tab_self().context("close tab")
 }
 
+pub fn last_tab() -> anyhow::Result<()> {
+    close_overlay()?;
+    kitty::focus_tab_recent()
+}
+
 pub fn switch_tab() -> anyhow::Result<()> {
     close_overlay()?;
     kitty::send_action("previous_tab").context("switch tab")
