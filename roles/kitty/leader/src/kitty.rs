@@ -76,6 +76,16 @@ pub fn close_tab(id: u64) -> anyhow::Result<()> {
 }
 
 
+pub fn launch_overlay(args: &[&str]) -> anyhow::Result<()> {
+    let shell = std::env::var("SHELL").unwrap_or_else(|_| "zsh".into());
+    let cmd = args.join(" ");
+    kitten_cmd()
+        .args(["@", "launch", "--type=overlay", "--cwd=current", "--", &shell, "-i", "-c", &cmd])
+        .status()
+        .context("kitten @ launch overlay")?;
+    Ok(())
+}
+
 pub fn detach_tab_self(target_tab_id: u64) -> anyhow::Result<()> {
     kitten_cmd()
         .args([

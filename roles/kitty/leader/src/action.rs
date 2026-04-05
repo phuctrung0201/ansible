@@ -90,9 +90,9 @@ fn close_overlay() -> anyhow::Result<()> {
     kitty::close_window_self().context("close overlay")
 }
 
-pub fn browse_link() -> anyhow::Result<()> {
+pub fn open_link() -> anyhow::Result<()> {
     close_overlay()?;
-    kitty::send_action("open_url_with_hints").context("browse link")
+    kitty::send_action("open_url_with_hints").context("open link")
 }
 
 pub fn copy_link() -> anyhow::Result<()> {
@@ -100,40 +100,24 @@ pub fn copy_link() -> anyhow::Result<()> {
     kitty::send_action("kitten hints --program @").context("copy link")
 }
 
-pub fn copy_file_path() -> anyhow::Result<()> {
-    close_overlay()?;
-    kitty::send_action("kitten hints --type=path --program=@").context("copy file path")
-}
-
-pub fn copy_word() -> anyhow::Result<()> {
-    close_overlay()?;
-    kitty::send_action("kitten hints --type=word --program=@").context("copy word")
-}
-
-
 pub fn edit_command() -> anyhow::Result<()> {
     close_overlay()?;
     kitty::send_text("\\x18\\x05").context("edit command")
 }
 
-pub fn find_history() -> anyhow::Result<()> {
+pub fn open_buffer() -> anyhow::Result<()> {
     close_overlay()?;
-    kitty::send_text("\\x12").context("find history (ctrl-r)")
+    kitty::send_action("show_scrollback").context("open buffer")
 }
 
-pub fn find_buffer() -> anyhow::Result<()> {
+pub fn clone_tab() -> anyhow::Result<()> {
     close_overlay()?;
-    kitty::send_action("show_scrollback").context("find buffer")
+    kitty::send_action("launch --type=tab --cwd=current").context("clone tab")
 }
 
-pub fn find_command() -> anyhow::Result<()> {
+pub fn new_tab() -> anyhow::Result<()> {
     close_overlay()?;
-    kitty::send_text("\\x18\\x06").context("find command (ctrl-x ctrl-f)")
-}
-
-pub fn new_tab_here() -> anyhow::Result<()> {
-    close_overlay()?;
-    kitty::send_action("launch --type=tab --cwd=current").context("new tab here")
+    kitty::send_action("launch --type=tab").context("new tab")
 }
 
 pub fn detach_tab() -> anyhow::Result<()> {
@@ -141,13 +125,13 @@ pub fn detach_tab() -> anyhow::Result<()> {
     kitty::send_action("detach_tab").context("detach tab")
 }
 
-pub fn close_tab_self() -> anyhow::Result<()> {
+pub fn close_tab() -> anyhow::Result<()> {
     kitty::close_tab_self().context("close tab")
 }
 
-pub fn previous_tab() -> anyhow::Result<()> {
+pub fn switch_tab() -> anyhow::Result<()> {
     close_overlay()?;
-    kitty::send_action("previous_tab").context("previous tab")
+    kitty::send_action("previous_tab").context("switch tab")
 }
 
 // ---------------------------------------------------------------------------
@@ -219,7 +203,27 @@ pub fn close_other_tabs() -> anyhow::Result<()> {
     Ok(())
 }
 
-pub fn move_tab_to_window() -> anyhow::Result<()> {
+pub fn launch_lazygit() -> anyhow::Result<()> {
+    close_overlay()?;
+    kitty::launch_overlay(&["lazygit"])
+}
+
+pub fn launch_k9s() -> anyhow::Result<()> {
+    close_overlay()?;
+    kitty::launch_overlay(&["k9s"])
+}
+
+pub fn launch_lazysql() -> anyhow::Result<()> {
+    close_overlay()?;
+    kitty::launch_overlay(&["lazysql"])
+}
+
+pub fn launch_nb() -> anyhow::Result<()> {
+    close_overlay()?;
+    kitty::launch_overlay(&["nb", "-i"])
+}
+
+pub fn attach_tab() -> anyhow::Result<()> {
     let os_windows = parse_ls()?;
 
     let focused_os_win_idx: Option<usize> = os_windows
@@ -253,7 +257,7 @@ pub fn move_tab_to_window() -> anyhow::Result<()> {
     let result = leader::pick("󰓩 attach", &groups)?;
     close_overlay()?;
     if let Some((_group_idx, item_idx)) = result {
-        kitty::detach_tab_self(target_tab_ids[item_idx]).context("detach tab to window")?;
+        kitty::detach_tab_self(target_tab_ids[item_idx]).context("attach tab")?;
     }
     Ok(())
 }

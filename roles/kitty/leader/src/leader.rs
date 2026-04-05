@@ -1,6 +1,7 @@
 use ratatui::{
     backend::Backend,
     crossterm::event::{self, Event, KeyCode, KeyEvent, KeyEventKind},
+    layout::Rect,
     style::{Color, Modifier, Style},
     text::{Line, Span},
     widgets::{Block, Paragraph},
@@ -51,18 +52,24 @@ fn key_display(key: char) -> String {
 /// Returns the label column width given a popup's inner width.
 fn label_width(inner_width: usize) -> usize {
     let slot_width = inner_width / COLS;
-    slot_width.saturating_sub(KEY_WIDTH + 3) // badge(KEY_WIDTH) + " → "(3)
+    slot_width.saturating_sub(KEY_WIDTH + 3 + 6) // badge(KEY_WIDTH) + " → "(3) + trailing(6)
 }
 
 fn slot_spans_str(key: &str, label: &str, icon: &str, lw: usize, is_last: bool, focused: bool) -> [Span<'static>; 2] {
-    let trailing = if is_last { 0 } else { 2 };
+    let trailing = if is_last { 0 } else { 6 };
     let icon_chars = icon.chars().count();
+    let max_label = lw.saturating_sub(icon_chars);
+    let label: std::borrow::Cow<str> = if label.chars().count() > max_label {
+        label.chars().take(max_label.saturating_sub(1)).chain(std::iter::once('…')).collect::<String>().into()
+    } else {
+        label.into()
+    };
     let text = format!(
         " → {}{:<width$}{:>trail$}",
         icon,
         label,
         "",
-        width = lw.saturating_sub(icon_chars),
+        width = max_label,
         trail = trailing,
     );
     let label_style = if focused {
@@ -79,6 +86,12 @@ fn slot_spans_str(key: &str, label: &str, icon: &str, lw: usize, is_last: bool, 
 /// Two spans for a single key-badge + label slot.
 fn slot_spans(key: char, label: &str, icon: &str, lw: usize, is_last: bool, focused: bool) -> [Span<'static>; 2] {
     slot_spans_str(&key_display(key), label, icon, lw, is_last, focused)
+}
+
+fn centered_rect(width: u16, height: u16, area: Rect) -> Rect {
+    let x = area.x + area.width.saturating_sub(width) / 2;
+    let y = area.y + area.height.saturating_sub(height) / 2;
+    Rect { x, y, width: width.min(area.width), height: height.min(area.height) }
 }
 
 fn popup_block(title: String) -> Block<'static> {
@@ -180,7 +193,10 @@ fn render(frame: &mut Frame, state: &LeaderState) {
     let area = frame.area();
 
     let block = popup_block(format!(" {} {} ", state.icon, state.label));
-    let popup_area = area;
+
+    let n_rows = (nodes.len() as u16).div_ceil(COLS as u16);
+    let popup_height = n_rows + 2; // title row + top padding
+    let popup_area = centered_rect(area.width, popup_height, area);
 
     let inner_width = popup_area.width.saturating_sub(2) as usize;
     let lw = label_width(inner_width);
@@ -251,6 +267,7 @@ fn pick_loop(
         .position(|&(gi, ii)| groups[gi].items[ii].focused)
         .unwrap_or(0);
     let mut cursor = initial_cursor;
+
     loop {
         terminal.draw(|frame| render_pick(frame, prompt, groups, key_map, popup_height, cursor))?;
         match event::read()? {
@@ -292,10 +309,15 @@ fn render_pick(
 ) {
     let area = frame.area();
 
-    let popup_area = area;
+    let total_items: u16 = groups.iter().map(|g| {
+        let header = if g.label.is_empty() { 0 } else { 1 };
+        header + (g.items.len() as u16).div_ceil(COLS as u16)
+    }).sum();
+    let popup_height = total_items + 2;
+    let list_area = centered_rect(area.width, popup_height, area);
     let block = popup_block(format!(" {} ", prompt));
 
-    let inner_width = popup_area.width.saturating_sub(2) as usize;
+    let inner_width = list_area.width.saturating_sub(2) as usize;
     let lw = label_width(inner_width);
 
     let key_chars: std::collections::HashMap<(usize, usize), char> = key_map
@@ -338,5 +360,5 @@ fn render_pick(
         }
     }
 
-    frame.render_widget(Paragraph::new(lines).block(block), popup_area);
+    frame.render_widget(Paragraph::new(lines).block(block), list_area);
 }
