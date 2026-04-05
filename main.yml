@@ -21,3 +21,5 @@
       tags: ['nvim']
     - role: aerospace
       tags: ['aerospace']
+    - role: lpass
+      tags: ['lpass']

@@ -1,0 +1,4 @@
+- name: Install lastpass-cli
+  homebrew:
+    name: lastpass-cli
+    state: present

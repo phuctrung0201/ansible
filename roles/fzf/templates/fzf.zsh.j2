@@ -48,7 +48,7 @@ _find_cmd_rm() {
 _find_cmd() {
   local cmd="${1:-}"
   if [[ -z "$cmd" ]]; then
-    cmd=$(printf "nb\nrm\nz\nbat\npbcopy" | \
+    cmd=$(printf "nb\nrm\nz\nbat\npbcopy\nlpass" | \
       fzf --prompt=" cli > " --layout=reverse --height=40%) || return
   fi
   case "$cmd" in
@@ -57,6 +57,7 @@ _find_cmd() {
     z)      _find_cmd_z      ;;
     bat)    _find_cmd_bat    ;;
     pbcopy) _find_cmd_pbcopy ;;
+    lpass)  _find_cmd_lpass  ;;
   esac
 }
 
@@ -78,6 +79,23 @@ _find_cmd_bat() {
         --preview='file {} | grep -q text && bat --color=always --style=plain --paging=never {} || echo "[binary file]"' \
         --preview-window=right:60%) || return
   echo "bat --style=header --paging=never $file"
+}
+
+_find_cmd_lpass() {
+  local action entry id
+  action=$(printf "copy username\ncopy password\nedit\ngenerate" | \
+    fzf --prompt=" lpass > " --layout=reverse --height=20%) || return
+  entry=$(lpass ls | \
+    fzf --prompt=" entry > " \
+        --layout=reverse \
+        --height=60%) || return
+  id=$(echo "$entry" | grep -o 'id: [0-9]*' | awk '{print $2}')
+  case "$action" in
+    "copy username") echo "lpass show --username --clip $id" ;;
+    "copy password") echo "lpass show --password --clip $id" ;;
+    "edit")          echo "lpass edit $id" ;;
+    "generate") echo "lpass generate --clip $id 32" ;;
+  esac
 }
 
 _find_cmd_pbcopy() {
