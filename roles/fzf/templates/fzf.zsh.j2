@@ -2,85 +2,6 @@
 source <(fzf --zsh)
 
 
-_find_cmd_git() {
-  local cmd
-  cmd=$(printf "add\nrestore\ncheckout\nshow\ndiff\nfetch" | \
-    fzf --prompt=" git > " --layout=reverse --height=40%) || return
-  case "$cmd" in
-    add)
-      local files
-      files=$(git diff --name-only | \
-        fzf --prompt=" git add > " \
-            --layout=reverse \
-            --height=60% \
-            --multi \
-            --preview='git diff --color=always -- {}' \
-            --preview-window=right:60%) || return
-      echo "git add $(echo "$files" | tr '\n' ' ' | sed 's/[[:space:]]*$//')"
-      ;;
-    restore)
-      local subcmd
-      subcmd=$(printf "restore\nrestore --staged" | \
-        fzf --prompt=" git restore > " --layout=reverse --height=40%) || return
-      case "$subcmd" in
-        restore)
-          local files
-          files=$(git diff --name-only | \
-            fzf --prompt=" git restore > " \
-                --layout=reverse \
-                --height=60% \
-                --multi \
-                --preview='git diff --color=always -- {}' \
-                --preview-window=right:60%) || return
-          echo "git restore $(echo "$files" | tr '\n' ' ' | sed 's/[[:space:]]*$//')"
-          ;;
-        "restore --staged")
-          local files
-          files=$(git diff --name-only --cached | \
-            fzf --prompt=" git restore --staged > " \
-                --layout=reverse \
-                --height=60% \
-                --multi \
-                --preview='git diff --cached --color=always -- {}' \
-                --preview-window=right:60%) || return
-          echo "git restore --staged $(echo "$files" | tr '\n' ' ' | sed 's/[[:space:]]*$//')"
-          ;;
-      esac
-      ;;
-    checkout)
-      local branch
-      branch=$(git branch | sed 's/^\* //; s/^  //' | \
-        fzf --prompt=" git checkout > " --layout=reverse --height=40%) || return
-      echo "git checkout $branch"
-      ;;
-    show)
-      local commit
-      commit=$(git log --oneline | \
-        fzf --prompt=" git show > " \
-            --layout=reverse \
-            --height=60% \
-            --preview='git show --stat --color=always {1}') || return
-      echo "git show $(echo "$commit" | awk '{print $1}')"
-      ;;
-    diff)
-      local file
-      file=$(git diff --name-only | \
-        fzf --prompt=" git diff > " \
-            --layout=reverse \
-            --height=60% \
-            --preview='git diff --color=always {}') || return
-      echo "git diff $file"
-      ;;
-    fetch)
-      local remote branch
-      remote=$(git remote | fzf --prompt=" git fetch > " --layout=reverse --height=40%) || return
-      branch=$(git ls-remote --heads "$remote" | awk '{print $2}' | sed 's|refs/heads/||' | \
-        fzf --prompt=" git fetch $remote > " --layout=reverse --height=40%) || return
-      echo "git fetch $remote $branch"
-      ;;
-  esac
-}
-
 _find_cmd_kube() {
   local cmd
   cmd=$(printf "context\nnamespace\nget\ndescribe\nlogs" | \
@@ -108,10 +29,10 @@ _find_cmd_kube() {
       ;;
     get)
       local resource
-      resource=$(printf "pods\nconfigmap\ndeployment\nsecret" | \
+      resource=$(printf "pod\nconfigmap\ndeployment\nsecret\nservice" | \
         fzf --prompt="󱃾 kubectl get > " --layout=reverse --height=40%) || return
       case "$resource" in
-        pods)
+        pod)
           local pod
           pod=$(kubectl get pods | \
             fzf --prompt="󱃾 kubectl get pod > " \
@@ -146,6 +67,15 @@ _find_cmd_kube() {
                 --height=60% \
                 --header-lines=1) || return
           echo "kubectl get secret $(echo "$secret" | awk '{print $1}') -o yaml | bat --color=always --style=plain --paging=never --language=yaml"
+          ;;
+        service)
+          local svc
+          svc=$(kubectl get services | \
+            fzf --prompt="󱃾 kubectl get service > " \
+                --layout=reverse \
+                --height=60% \
+                --header-lines=1) || return
+          echo "kubectl get service $(echo "$svc" | awk '{print $1}') -o yaml | bat --color=always --style=plain --paging=never --language=yaml"
           ;;
       esac
       ;;
@@ -250,11 +180,10 @@ _find_cmd_rm() {
 _find_cmd() {
   local cmd="${1:-}"
   if [[ -z "$cmd" ]]; then
-    cmd=$(printf "git\nkubectl\nnb\nrm\nz\nbat\npbcopy" | \
+    cmd=$(printf "kubectl\nnb\nrm\nz\nbat\npbcopy" | \
       fzf --prompt=" cli > " --layout=reverse --height=40%) || return
   fi
   case "$cmd" in
-    git)  _find_cmd_git  ;;
     kubectl) _find_cmd_kube ;;
     nb)   _find_cmd_nb   ;;
     rm)   _find_cmd_rm   ;;

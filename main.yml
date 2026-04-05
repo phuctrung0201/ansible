@@ -15,6 +15,8 @@
       tags: ['kitty']
     - role: lazygit
       tags: ['lazygit']
+    - role: lazysql
+      tags: ['lazysql']
     - role: nvim
       tags: ['nvim']
     - role: aerospace
