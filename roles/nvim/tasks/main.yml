@@ -19,3 +19,10 @@
     src: ui.lua.j2
     dest: "{{ ansible_env.HOME }}/.config/nvim/lua/plugins/ui.lua"
     backup: yes
+
+- name: Set EDITOR environment variable
+  lineinfile:
+    path: "{{ ansible_env.HOME }}/.zshrc"
+    line: 'export EDITOR="nvim"'
+    state: present
+    create: yes

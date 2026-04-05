@@ -24,6 +24,12 @@
     line: "source ~/.config/fzf/fzf.zsh"
     state: present
 
+- name: Set PAGER environment variable
+  lineinfile:
+    path: "{{ ansible_env.HOME }}/.zshrc"
+    line: 'export PAGER=bat'
+    state: present
+
 - name: Install nb via Homebrew
   community.general.homebrew:
     name: nb
