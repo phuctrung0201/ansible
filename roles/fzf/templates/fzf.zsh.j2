@@ -2,138 +2,6 @@
 source <(fzf --zsh)
 
 
-_find_cmd_kube() {
-  local cmd
-  cmd=$(printf "context\nnamespace\nget\ndescribe\nlogs" | \
-    fzf --prompt="󱃾 kubectl > " --layout=reverse --height=40%) || return
-  case "$cmd" in
-    context)
-      local current selected
-      current=$(kubectl config current-context 2>/dev/null)
-      selected=$(kubectl config get-contexts -o name | \
-        fzf --prompt="󱃾 kubectl config use-context > " \
-            --layout=reverse \
-            --height=40% \
-            --header="current: ${current}") || return
-      echo "kubectl config use-context $selected"
-      ;;
-    namespace)
-      local current selected
-      current=$(kubectl config view --minify --output 'jsonpath={..namespace}' 2>/dev/null)
-      selected=$(kubectl get namespaces -o jsonpath='{.items[*].metadata.name}' | tr ' ' '\n' | \
-        fzf --prompt="󱃾 kubectl config set-context --current --namespace > " \
-            --layout=reverse \
-            --height=40% \
-            --header="current: ${current:-default}") || return
-      echo "kubectl config set-context --current --namespace=$selected"
-      ;;
-    get)
-      local resource
-      resource=$(printf "pod\nconfigmap\ndeployment\nsecret\nservice" | \
-        fzf --prompt="󱃾 kubectl get > " --layout=reverse --height=40%) || return
-      case "$resource" in
-        pod)
-          local pod
-          pod=$(kubectl get pods | \
-            fzf --prompt="󱃾 kubectl get pod > " \
-                --layout=reverse \
-                --height=60% \
-                --header-lines=1) || return
-          echo "kubectl get pod $(echo "$pod" | awk '{print $1}') -o yaml | bat --color=always --style=plain --paging=never --language=yaml"
-          ;;
-        configmap)
-          local cm
-          cm=$(kubectl get configmaps | \
-            fzf --prompt="󱃾 kubectl get configmap > " \
-                --layout=reverse \
-                --height=60% \
-                --header-lines=1) || return
-          echo "kubectl get configmap $(echo "$cm" | awk '{print $1}') -o yaml | bat --color=always --style=plain --paging=never --language=yaml"
-          ;;
-        deployment)
-          local deploy
-          deploy=$(kubectl get deployments | \
-            fzf --prompt="󱃾 kubectl get deployment > " \
-                --layout=reverse \
-                --height=60% \
-                --header-lines=1) || return
-          echo "kubectl get deployment $(echo "$deploy" | awk '{print $1}') -o yaml | bat --color=always --style=plain --paging=never --language=yaml"
-          ;;
-        secret)
-          local secret
-          secret=$(kubectl get secrets | \
-            fzf --prompt="󱃾 kubectl get secret > " \
-                --layout=reverse \
-                --height=60% \
-                --header-lines=1) || return
-          echo "kubectl get secret $(echo "$secret" | awk '{print $1}') -o yaml | bat --color=always --style=plain --paging=never --language=yaml"
-          ;;
-        service)
-          local svc
-          svc=$(kubectl get services | \
-            fzf --prompt="󱃾 kubectl get service > " \
-                --layout=reverse \
-                --height=60% \
-                --header-lines=1) || return
-          echo "kubectl get service $(echo "$svc" | awk '{print $1}') -o yaml | bat --color=always --style=plain --paging=never --language=yaml"
-          ;;
-      esac
-      ;;
-    describe)
-      local resource
-      resource=$(printf "pod\nconfigmap\ndeployment\nsecret" | \
-        fzf --prompt="󱃾 kubectl describe > " --layout=reverse --height=40%) || return
-      case "$resource" in
-        pod)
-          local pod
-          pod=$(kubectl get pods | \
-            fzf --prompt="󱃾 kubectl describe pod > " \
-                --layout=reverse \
-                --height=60% \
-                --header-lines=1) || return
-          echo "kubectl describe pod $(echo "$pod" | awk '{print $1}')"
-          ;;
-        configmap)
-          local cm
-          cm=$(kubectl get configmaps | \
-            fzf --prompt="󱃾 kubectl describe configmap > " \
-                --layout=reverse \
-                --height=60% \
-                --header-lines=1) || return
-          echo "kubectl describe configmap $(echo "$cm" | awk '{print $1}')"
-          ;;
-        deployment)
-          local deploy
-          deploy=$(kubectl get deployments | \
-            fzf --prompt="󱃾 kubectl describe deployment > " \
-                --layout=reverse \
-                --height=60% \
-                --header-lines=1) || return
-          echo "kubectl describe deployment $(echo "$deploy" | awk '{print $1}')"
-          ;;
-        secret)
-          local secret
-          secret=$(kubectl get secrets | \
-            fzf --prompt="󱃾 kubectl describe secret > " \
-                --layout=reverse \
-                --height=60% \
-                --header-lines=1) || return
-          echo "kubectl describe secret $(echo "$secret" | awk '{print $1}')"
-          ;;
-      esac
-      ;;
-    logs)
-      local pod
-      pod=$(kubectl get pods | \
-        fzf --prompt="󱃾 kubectl logs > " \
-            --layout=reverse \
-            --height=60% \
-            --header-lines=1) || return
-      echo "kubectl logs -f $(echo "$pod" | awk '{print $1}')"
-      ;;
-  esac
-}
-
 _find_cmd_nb() {
   local cmd
   cmd=$(printf "show\nopen\ntodo\ndo\nundo" | \
@@ -180,11 +48,10 @@ _find_cmd_rm() {
 _find_cmd() {
   local cmd="${1:-}"
   if [[ -z "$cmd" ]]; then
-    cmd=$(printf "kubectl\nnb\nrm\nz\nbat\npbcopy" | \
+    cmd=$(printf "nb\nrm\nz\nbat\npbcopy" | \
       fzf --prompt=" cli > " --layout=reverse --height=40%) || return
   fi
   case "$cmd" in
-    kubectl) _find_cmd_kube ;;
     nb)   _find_cmd_nb   ;;
     rm)   _find_cmd_rm   ;;
     z)      _find_cmd_z      ;;
