@@ -24,10 +24,9 @@ pub static KEYMAP: &[KeyNode] = &[
     KeyNode { key: ' ',  label: "last window",   kind: KeyNodeKind::Action(action::last_window)   },
     KeyNode { key: 'w',  label: "new window",    kind: KeyNodeKind::Action(action::new_window)    },
     KeyNode { key: 'x',  label: "close window",  kind: KeyNodeKind::Action(action::close_window)  },
-    KeyNode { key: 'z',  label: "zoom pane",     kind: KeyNodeKind::Action(action::zoom_pane)     },
     KeyNode { key: 'm',  label: "move to session", kind: KeyNodeKind::Action(action::move_window_to_session) },
     // Misc
-    KeyNode { key: 'e',  label: "edit",          kind: KeyNodeKind::Action(action::launch_edit)  },
+    KeyNode { key: 'e',  label: "edit command",   kind: KeyNodeKind::Action(action::launch_edit)  },
     KeyNode { key: 'o',  label: "open buffer",   kind: KeyNodeKind::Action(action::open_buffer)  },
     // Groups
     KeyNode {

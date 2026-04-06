@@ -36,6 +36,14 @@
       zle -N _tmux_edit_command_line
       bindkey '^X^E' _tmux_edit_command_line
 
+- name: Set zsh theme
+  lineinfile:
+    path: "{{ ansible_env.HOME }}/.zshrc"
+    regexp: '^ZSH_THEME='
+    line: 'ZSH_THEME="refined"'
+    insertbefore: '^source \$ZSH/oh-my-zsh\.sh'
+    create: yes
+
 - name: Configure .zshrc settings
   lineinfile:
     path: "{{ ansible_env.HOME }}/.zshrc"
@@ -45,7 +53,6 @@
   loop:
     - 'export XDG_CONFIG_HOME="$HOME/.config"'
     - 'export ZSH="$HOME/.oh-my-zsh"'
-    - 'ZSH_THEME="refined"'
     - 'plugins=(git z zsh-autosuggestions zsh-syntax-highlighting)'
     - 'DISABLE_AUTO_UPDATE=true'
     - 'source $ZSH/oh-my-zsh.sh'

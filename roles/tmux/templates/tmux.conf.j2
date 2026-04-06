@@ -9,17 +9,22 @@ set -g renumber-windows on
 set -sg escape-time 0
 set -g focus-events on
 
+# ─── Reload ───────────────────────────────────────────────────────────────────
+bind r source-file ~/.config/tmux/tmux.conf \; display "Config reloaded"
+
 # ─── Leader ───────────────────────────────────────────────────────────────────
 unbind Space
-bind Space run-shell 'rm -f /tmp/tmux-leader-action; tmux display-popup -t "#{pane_id}" -E -b none -d "#{pane_current_path}" -w 120 -h 7 "LEADER_PARENT_PANE=#{pane_id} ~/.config/tmux/leader"; [ -f /tmp/tmux-leader-action ] && { sh /tmp/tmux-leader-action; rm -f /tmp/tmux-leader-action; }; true'
+bind Space run-shell 'rm -f /tmp/tmux-leader-action; tmux display-popup -E -b none -d "#{pane_current_path}" -w 100% -h 100% "LEADER_PARENT_PANE=#{pane_id} ~/.config/tmux/leader"; [ -f /tmp/tmux-leader-action ] && sh /tmp/tmux-leader-action; rm -f /tmp/tmux-leader-action'
 
 # ─── Style ────────────────────────────────────────────────────────────────────
+set -g status-position top
 set -g status-interval 5
 set -g status-style "bg=default,fg={{ theme.fg }}"
 
 set -g status-left "#[fg={{ theme.purple }},bg=default]#[bg={{ theme.purple }},fg={{ theme.bg }},bold] #S #[fg={{ theme.purple }},bg=default] "
 set -g status-left-length 30
-set -g status-right ""
+set -g status-right "#[fg={{ theme.blue }},bg=default]#[bg={{ theme.blue }},fg={{ theme.bg }},bold] ⎈ #(kubectl config current-context 2>/dev/null) #[fg={{ theme.blue }},bg=default] "
+set -g status-right-length 100
 
 setw -g window-status-format "#[fg={{ theme.comment }},bg=default] #I #W "
 setw -g window-status-current-format "#[fg={{ theme.blue }},bg=default]#[fg={{ theme.bg }},bg={{ theme.blue }},bold] #I #W #[fg={{ theme.blue }},bg=default]"

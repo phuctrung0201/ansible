@@ -1,7 +1,6 @@
 use ratatui::{
     backend::Backend,
     crossterm::event::{self, Event, KeyCode, KeyEvent, KeyEventKind},
-    layout::Rect,
     style::{Color, Modifier, Style},
     text::{Line, Span},
     widgets::{Block, BorderType, Paragraph},
@@ -69,8 +68,8 @@ fn theme() -> &'static Theme {
     THEME.get_or_init(load_theme)
 }
 
-fn mauve()     -> Color { theme().purple }
-fn teal()      -> Color { theme().cyan }
+fn purple()    -> Color { theme().purple }
+fn cyan()      -> Color { theme().cyan }
 fn yellow()    -> Color { theme().yellow }
 fn fg()        -> Color { theme().fg }
 fn comment()   -> Color { theme().comment }
@@ -139,7 +138,7 @@ fn slot_spans_str(
         trail = trailing,
     );
     let label_style = if focused {
-        Style::default().fg(mauve()).add_modifier(Modifier::BOLD)
+        Style::default().fg(purple()).add_modifier(Modifier::BOLD)
     } else if current {
         Style::default().fg(yellow())
     } else {
@@ -149,7 +148,7 @@ fn slot_spans_str(
     let key_style = if current {
         Style::default().fg(yellow()).add_modifier(Modifier::BOLD)
     } else {
-        Style::default().fg(teal()).add_modifier(Modifier::BOLD)
+        Style::default().fg(cyan()).add_modifier(Modifier::BOLD)
     };
     [
         Span::styled(key_str, key_style),
@@ -161,22 +160,14 @@ fn slot_spans(key: char, label: &str, icon: &str, lw: usize, is_last: bool, focu
     slot_spans_str(&key_display(key), label, icon, lw, is_last, focused, false)
 }
 
-fn top_rect(width: u16, height: u16, area: Rect) -> Rect {
-    Rect {
-        x: area.x,
-        y: area.y,
-        width: width.min(area.width),
-        height: height.min(area.height),
-    }
-}
 
 fn popup_block(title: String) -> Block<'static> {
     Block::bordered()
         .border_type(BorderType::Rounded)
-        .border_style(Style::default().fg(mauve()))
+        .border_style(Style::default().fg(purple()))
         .padding(ratatui::widgets::Padding::new(2, 2, 1, 0))
         .title_top(
-            Line::from(Span::styled(title, Style::default().fg(mauve()).add_modifier(Modifier::BOLD))).centered(),
+            Line::from(Span::styled(title, Style::default().fg(purple()).add_modifier(Modifier::BOLD))).centered(),
         )
 }
 
@@ -224,33 +215,21 @@ pub fn run() -> anyhow::Result<()> {
 fn event_loop(terminal: &mut Terminal<impl Backend>, state: &mut LeaderState) -> anyhow::Result<()> {
     loop {
         terminal.draw(|frame| render(frame, state))?;
-        match event::read()? {
+        let key = match event::read()? {
             Event::Key(KeyEvent { code: KeyCode::Esc, .. }) => return Ok(()),
-            Event::Key(KeyEvent { code: KeyCode::Char(c), kind: KeyEventKind::Press, .. }) => {
-                match crate::action::press_key(state, c) {
-                    KeyPress::Execute(f) => {
-                        ratatui::restore();
-                        return f();
-                    }
-                    KeyPress::Input { prompt, prefill, action } => {
-                        return input_loop(terminal, state, prompt, prefill, action);
-                    }
-                    KeyPress::Redraw | KeyPress::Unrecognised => {}
-                }
+            Event::Key(KeyEvent { code: KeyCode::Char(c), kind: KeyEventKind::Press, .. }) => c,
+            Event::Key(KeyEvent { code: KeyCode::Tab,    kind: KeyEventKind::Press, .. }) => '\t',
+            _ => continue,
+        };
+        match crate::action::press_key(state, key) {
+            KeyPress::Execute(f) => {
+                ratatui::restore();
+                return f();
             }
-            Event::Key(KeyEvent { code: KeyCode::Tab, kind: KeyEventKind::Press, .. }) => {
-                match crate::action::press_key(state, '\t') {
-                    KeyPress::Execute(f) => {
-                        ratatui::restore();
-                        return f();
-                    }
-                    KeyPress::Input { prompt, prefill, action } => {
-                        return input_loop(terminal, state, prompt, prefill, action);
-                    }
-                    KeyPress::Redraw | KeyPress::Unrecognised => {}
-                }
+            KeyPress::Input { prompt, prefill, action } => {
+                return input_loop(terminal, state, prompt, prefill, action);
             }
-            _ => {}
+            KeyPress::Redraw | KeyPress::Unrecognised => {}
         }
     }
 }
@@ -282,14 +261,8 @@ fn input_loop(
     }
 }
 
-fn render_input(frame: &mut Frame, state: &LeaderState, prompt: &str, value: &str) {
-    let area = frame.area();
-    let block = popup_block(format!(" {} {} ", state.icon, state.label));
-    let inner_width = area.width.saturating_sub(2) as usize;
-    let lw = label_width(inner_width);
-
-    let mut lines: Vec<Line> = Vec::new();
-    for chunk in state.nodes.chunks(COLS) {
+fn keymap_lines(nodes: &[keymap::KeyNode], lw: usize) -> Vec<Line<'static>> {
+    nodes.chunks(COLS).map(|chunk| {
         let mut spans: Vec<Span> = Vec::new();
         for (i, node) in chunk.iter().enumerate() {
             let is_last = i + 1 == chunk.len();
@@ -304,8 +277,17 @@ fn render_input(frame: &mut Frame, state: &LeaderState, prompt: &str, value: &st
             };
             spans.extend(slot_spans(node.key, &label, &icon, lw, is_last, false));
         }
-        lines.push(Line::from(spans));
-    }
+        Line::from(spans)
+    }).collect()
+}
+
+fn render_input(frame: &mut Frame, state: &LeaderState, prompt: &str, value: &str) {
+    let area = frame.area();
+    let block = popup_block(format!(" {} {} ", state.icon, state.label));
+    let inner_width = area.width.saturating_sub(2) as usize;
+    let lw = label_width(inner_width);
+
+    let mut lines = keymap_lines(state.nodes, lw);
     lines.push(Line::from(Span::styled(
         "─".repeat(inner_width.saturating_sub(4)),
         Style::default().fg(comment()),
@@ -313,39 +295,18 @@ fn render_input(frame: &mut Frame, state: &LeaderState, prompt: &str, value: &st
     lines.push(Line::from(vec![
         Span::styled(format!(" {}: ", prompt), Style::default().fg(comment())),
         Span::styled(value.to_owned(), Style::default().fg(fg())),
-        Span::styled("█", Style::default().fg(mauve())),
+        Span::styled("█", Style::default().fg(purple())),
     ]));
 
     frame.render_widget(Paragraph::new(lines).block(block), area);
 }
 
 fn render(frame: &mut Frame, state: &LeaderState) {
-    let nodes = state.nodes;
     let area = frame.area();
-
     let block = popup_block(format!(" {} {} ", state.icon, state.label));
     let inner_width = area.width.saturating_sub(2) as usize;
     let lw = label_width(inner_width);
-
-    let mut lines: Vec<Line> = Vec::new();
-    for chunk in nodes.chunks(COLS) {
-        let mut spans: Vec<Span> = Vec::new();
-        for (i, node) in chunk.iter().enumerate() {
-            let is_last = i + 1 == chunk.len();
-            let icon = match &node.kind {
-                keymap::KeyNodeKind::Group { icon, .. } if !icon.is_empty() => format!("{} ", icon),
-                _ => String::new(),
-            };
-            let label = if matches!(&node.kind, keymap::KeyNodeKind::Group { .. }) {
-                format!("{}+", node.label)
-            } else {
-                node.label.to_string()
-            };
-            spans.extend(slot_spans(node.key, &label, &icon, lw, is_last, false));
-        }
-        lines.push(Line::from(spans));
-    }
-
+    let lines = keymap_lines(state.nodes, lw);
     frame.render_widget(Paragraph::new(lines).block(block), area);
 }
 

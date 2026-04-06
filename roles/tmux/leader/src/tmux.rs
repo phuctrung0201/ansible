@@ -138,10 +138,6 @@ pub fn last_pane() -> anyhow::Result<()> {
     run(&["last-pane"])
 }
 
-pub fn zoom_pane() -> anyhow::Result<()> {
-    run(&["resize-pane", "-Z"])
-}
-
 pub fn edit_command() -> anyhow::Result<()> {
     let pane = parent_pane()?;
     // Trigger zle _tmux_edit_command_line in the parent pane after the leader popup closes
@@ -157,7 +153,7 @@ pub fn open_buffer() -> anyhow::Result<()> {
         format!(
             "tmux capture-pane -t {pane} -p -S -10000 \
              | perl -0 -pe 's/\\s+$/\\n/' > /tmp/tmux-scrollback.txt; \
-             tmux display-popup -t {pane} -E -b none -w 90% -h 90% \
+             tmux display-popup -t {pane} -E -b none -w 100% -h 100% \
              'nvim -R -c \"normal G\" /tmp/tmux-scrollback.txt'\n"
         ),
     )?;
@@ -240,7 +236,7 @@ pub fn exec_in_popup(program: &str, args: &[&str]) -> anyhow::Result<()> {
     // display-popup (leader) returns, i.e. after the leader popup has closed.
     std::fs::write(
         "/tmp/tmux-leader-action",
-        format!("tmux display-popup -t {pane} -d '{cwd}' -E -b none -w 90% -h 90% '{cmd}'\n"),
+        format!("tmux display-popup -t {pane} -d '{cwd}' -E -b none -w 100% -h 100% '{cmd}'\n"),
     )?;
     Ok(())
 }

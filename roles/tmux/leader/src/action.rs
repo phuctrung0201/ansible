@@ -93,10 +93,6 @@ pub fn close_window() -> anyhow::Result<()> {
     tmux::close_window()
 }
 
-pub fn zoom_pane() -> anyhow::Result<()> {
-    tmux::zoom_pane()
-}
-
 pub fn open_buffer() -> anyhow::Result<()> {
     tmux::open_buffer()
 }
