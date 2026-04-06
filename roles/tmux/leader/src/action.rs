@@ -213,6 +213,10 @@ pub fn delete_session() -> anyhow::Result<()> {
     tmux::kill_session(&current)
 }
 
+pub fn detach_session() -> anyhow::Result<()> {
+    tmux::detach_session()
+}
+
 pub fn session_cleanup() -> anyhow::Result<()> {
     let names = tmux::session_names()?;
     if names.is_empty() {

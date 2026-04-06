@@ -217,6 +217,10 @@ pub fn kill_session(name: &str) -> anyhow::Result<()> {
     run(&["kill-session", "-t", name])
 }
 
+pub fn detach_session() -> anyhow::Result<()> {
+    run(&["detach-client"])
+}
+
 pub fn session_names() -> anyhow::Result<Vec<String>> {
     Ok(list_sessions()?.into_iter().map(|s| s.name).collect())
 }
