@@ -1,31 +1,31 @@
 theme:
   # Base
-  bg: "#24273a"
-  fg: "#cad3f5"
-  selection: "#494d64"
-  comment: "#6e738d"
-  comment_bright: "#939ab7"
-  dark: "#5b6078"
-  white: "#a5adcb"
+  bg: "#282a36"
+  fg: "#f8f8f2"
+  selection: "#44475a"
+  comment: "#6272a4"
+  comment_bright: "#6272a4"
+  dark: "#21222c"
+  white: "#f8f8f2"
 
   # Accent colors
-  red: "#ed8796"
-  orange: "#f5a97f"
-  yellow: "#eed49f"
-  green: "#a6da95"
-  blue: "#8aadf4"
-  purple: "#c6a0f6"
-  cyan: "#8bd5ca"
-  pink: "#f5bde6"
-  rosewater: "#f4dbd6"
+  red: "#ff5555"
+  orange: "#ffb86c"
+  yellow: "#f1fa8c"
+  green: "#50fa7b"
+  blue: "#6272a4"
+  purple: "#bd93f9"
+  cyan: "#8be9fd"
+  pink: "#ff79c6"
+  rosewater: "#ff79c6"
 
   # Bright variants
-  bright_red: "#ed8796"
-  bright_green: "#a6da95"
-  bright_yellow: "#eed49f"
-  bright_purple: "#c6a0f6"
-  bright_pink: "#f5bde6"
-  bright_cyan: "#8bd5ca"
+  bright_red: "#ff6e6e"
+  bright_green: "#69ff94"
+  bright_yellow: "#ffffa5"
+  bright_purple: "#d6acff"
+  bright_pink: "#ff92df"
+  bright_cyan: "#a4ffff"
 
   # nb ANSI 256-color equivalents
   nb_primary: 183
