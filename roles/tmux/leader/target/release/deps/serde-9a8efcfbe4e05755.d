@@ -1,0 +1,14 @@
+/Users/trubui/Documents/ansible/roles/tmux/leader/target/release/deps/serde-9a8efcfbe4e05755.d: /Users/trubui/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/lib.rs /Users/trubui/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/integer128.rs /Users/trubui/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/mod.rs /Users/trubui/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/de.rs /Users/trubui/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/ser.rs /Users/trubui/Documents/ansible/roles/tmux/leader/target/release/build/serde-3f5fc17af035a31b/out/private.rs
+
+/Users/trubui/Documents/ansible/roles/tmux/leader/target/release/deps/libserde-9a8efcfbe4e05755.rlib: /Users/trubui/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/lib.rs /Users/trubui/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/integer128.rs /Users/trubui/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/mod.rs /Users/trubui/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/de.rs /Users/trubui/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/ser.rs /Users/trubui/Documents/ansible/roles/tmux/leader/target/release/build/serde-3f5fc17af035a31b/out/private.rs
+
+/Users/trubui/Documents/ansible/roles/tmux/leader/target/release/deps/libserde-9a8efcfbe4e05755.rmeta: /Users/trubui/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/lib.rs /Users/trubui/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/integer128.rs /Users/trubui/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/mod.rs /Users/trubui/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/de.rs /Users/trubui/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/ser.rs /Users/trubui/Documents/ansible/roles/tmux/leader/target/release/build/serde-3f5fc17af035a31b/out/private.rs
+
+/Users/trubui/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/lib.rs:
+/Users/trubui/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/integer128.rs:
+/Users/trubui/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/mod.rs:
+/Users/trubui/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/de.rs:
+/Users/trubui/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/ser.rs:
+/Users/trubui/Documents/ansible/roles/tmux/leader/target/release/build/serde-3f5fc17af035a31b/out/private.rs:
+
+# env-dep:OUT_DIR=/Users/trubui/Documents/ansible/roles/tmux/leader/target/release/build/serde-3f5fc17af035a31b/out

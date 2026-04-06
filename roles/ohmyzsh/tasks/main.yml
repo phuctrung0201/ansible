@@ -21,6 +21,21 @@
     repo: https://github.com/zsh-users/zsh-syntax-highlighting.git
     dest: "{{ ansible_env.HOME }}/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting"
 
+- name: Add tmux edit-command-line widget to .zshrc
+  blockinfile:
+    path: "{{ ansible_env.HOME }}/.zshrc"
+    marker: "# {mark} TMUX EDIT COMMAND LINE"
+    block: |
+      _tmux_edit_command_line() {
+        print -rn -- "$BUFFER" > /tmp/tmux-edit-cmd.txt
+        tmux display-popup -E -w 90% -h 90% "nvim /tmp/tmux-edit-cmd.txt"
+        BUFFER=$(< /tmp/tmux-edit-cmd.txt)
+        CURSOR=$#BUFFER
+        zle reset-prompt
+      }
+      zle -N _tmux_edit_command_line
+      bindkey '^X^E' _tmux_edit_command_line
+
 - name: Configure .zshrc settings
   lineinfile:
     path: "{{ ansible_env.HOME }}/.zshrc"

@@ -1,0 +1,32 @@
+- name: Install tmux
+  homebrew:
+    name: tmux
+    state: present
+
+- name: Ensure tmux config directory exists
+  file:
+    path: "{{ ansible_env.HOME }}/.config/tmux"
+    state: directory
+
+- name: Copy tmux config
+  template:
+    src: tmux.conf.j2
+    dest: "{{ ansible_env.HOME }}/.config/tmux/tmux.conf"
+    backup: yes
+
+- name: Copy tmux leader theme
+  template:
+    src: leader-theme.j2
+    dest: "{{ ansible_env.HOME }}/.config/tmux/leader-theme"
+
+- name: Build tmux leader binary
+  command:
+    cmd: cargo build --release --manifest-path roles/tmux/leader/Cargo.toml
+    chdir: "{{ playbook_dir }}"
+  changed_when: true
+
+- name: Copy tmux leader binary
+  copy:
+    src: "{{ playbook_dir }}/roles/tmux/leader/target/release/tmux-leader"
+    dest: "{{ ansible_env.HOME }}/.config/tmux/leader"
+    mode: "0755"
