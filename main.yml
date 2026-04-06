@@ -5,8 +5,6 @@
   roles:
     - role: ohmyzsh
       tags: ['ohmyzsh']
-    - role: starship
-      tags: ['starship']
     - role: common
       tags: ['common']
     - role: fzf

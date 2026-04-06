@@ -1,9 +1,0 @@
-eval "$(starship init zsh)"
-
-# Transient prompt: collapse 2-line prompt to ❯ <command> after running
-_transient_accept_line() {
-  # Only clear the dir/git line above — leave ❯ + highlighted command intact
-  print -n "\e[1A\e[2K\e[1B"
-  zle .accept-line
-}
-zle -N accept-line _transient_accept_line

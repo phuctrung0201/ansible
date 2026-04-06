@@ -30,6 +30,25 @@
   loop:
     - 'export XDG_CONFIG_HOME="$HOME/.config"'
     - 'export ZSH="$HOME/.oh-my-zsh"'
+    - 'ZSH_THEME="nicoulaj"'
     - 'plugins=(git z zsh-autosuggestions fast-syntax-highlighting)'
     - 'DISABLE_AUTO_UPDATE=true'
     - 'source $ZSH/oh-my-zsh.sh'
+
+- name: Deploy Dracula fast-syntax-highlighting theme
+  template:
+    src: dracula_fsh.zsh.j2
+    dest: "{{ ansible_env.HOME }}/.config/fsh/dracula.zsh"
+    mode: '0644'
+
+- name: Source Dracula fsh theme in .zshrc
+  lineinfile:
+    path: "{{ ansible_env.HOME }}/.zshrc"
+    line: "source ~/.config/fsh/dracula.zsh"
+    state: present
+
+- name: Remove starship source line from .zshrc
+  lineinfile:
+    path: "{{ ansible_env.HOME }}/.zshrc"
+    line: "source ~/.config/starship/starship.zsh"
+    state: absent
