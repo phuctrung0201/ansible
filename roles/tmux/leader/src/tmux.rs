@@ -72,6 +72,10 @@ pub fn close_window() -> anyhow::Result<()> {
     run(&["kill-window"])
 }
 
+pub fn kill_other_windows() -> anyhow::Result<()> {
+    run(&["kill-window", "-a"])
+}
+
 pub fn last_window() -> anyhow::Result<()> {
     run(&["last-window"])
 }
@@ -104,6 +108,10 @@ pub fn close_pane() -> anyhow::Result<()> {
         return Ok(());
     }
     run(&["kill-pane"])
+}
+
+pub fn kill_other_panes() -> anyhow::Result<()> {
+    run(&["kill-pane", "-a"])
 }
 
 pub struct Pane {

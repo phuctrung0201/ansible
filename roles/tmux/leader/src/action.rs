@@ -93,6 +93,10 @@ pub fn close_window() -> anyhow::Result<()> {
     tmux::close_window()
 }
 
+pub fn kill_other_windows() -> anyhow::Result<()> {
+    tmux::kill_other_windows()
+}
+
 pub fn open_buffer() -> anyhow::Result<()> {
     tmux::open_buffer()
 }
@@ -129,6 +133,10 @@ pub fn split_v() -> anyhow::Result<()> {
 
 pub fn close_pane() -> anyhow::Result<()> {
     tmux::close_pane()
+}
+
+pub fn kill_other_panes() -> anyhow::Result<()> {
+    tmux::kill_other_panes()
 }
 
 pub fn pane_list() -> anyhow::Result<()> {
@@ -217,18 +225,11 @@ pub fn detach_session() -> anyhow::Result<()> {
     tmux::detach_session()
 }
 
-pub fn session_cleanup() -> anyhow::Result<()> {
+pub fn kill_other_sessions() -> anyhow::Result<()> {
+    let current = tmux::current_session()?;
     let names = tmux::session_names()?;
-    if names.is_empty() {
-        return Ok(());
-    }
-    let main = names.iter().find(|n| n.as_str() == "main")
-        .or_else(|| names.first())
-        .cloned()
-        .unwrap();
-    tmux::switch_session(&main)?;
     for name in &names {
-        if name != &main {
+        if name != &current {
             let _ = tmux::kill_session(name);
         }
     }
