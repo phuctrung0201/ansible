@@ -30,3 +30,27 @@
     src: "{{ playbook_dir }}/roles/tmux/leader/target/release/tmux-leader"
     dest: "{{ ansible_env.HOME }}/.config/tmux/leader"
     mode: "0755"
+
+- name: Copy tmux attach script
+  template:
+    src: tmux-attach.zsh.j2
+    dest: "{{ ansible_env.HOME }}/.config/tmux/tmux-attach.zsh"
+
+- name: Source tmux-attach.zsh before p10k instant prompt
+  blockinfile:
+    path: "{{ ansible_env.HOME }}/.zshrc"
+    marker: "# {mark} TMUX ATTACH"
+    insertbefore: "# BEGIN P10K INSTANT PROMPT"
+    block: |
+      source ~/.config/tmux/tmux-attach.zsh
+
+- name: Copy tmux zsh integration
+  template:
+    src: tmux.zsh.j2
+    dest: "{{ ansible_env.HOME }}/.config/tmux/tmux.zsh"
+
+- name: Source tmux.zsh from .zshrc
+  lineinfile:
+    path: "{{ ansible_env.HOME }}/.zshrc"
+    line: "source ~/.config/tmux/tmux.zsh"
+    state: present

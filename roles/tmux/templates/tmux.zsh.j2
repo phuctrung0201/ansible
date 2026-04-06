@@ -1,0 +1,10 @@
+# Edit command line in nvim
+_tmux_edit_command_line() {
+  print -rn -- "$BUFFER" > /tmp/tmux-edit-cmd.txt
+  tmux display-popup -E -w 90% -h 90% "nvim /tmp/tmux-edit-cmd.txt"
+  BUFFER=$(< /tmp/tmux-edit-cmd.txt)
+  CURSOR=$#BUFFER
+  zle reset-prompt
+}
+zle -N _tmux_edit_command_line
+bindkey '^X^E' _tmux_edit_command_line

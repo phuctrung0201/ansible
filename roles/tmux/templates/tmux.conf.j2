@@ -1,6 +1,6 @@
 # ─── General ──────────────────────────────────────────────────────────────────
 set -g default-terminal "tmux-256color"
-set -ag terminal-overrides ",xterm-256color:RGB"
+set -ag terminal-overrides ",*:RGB"
 set -g history-limit 50000
 set -g mouse on
 set -g base-index 1
@@ -17,13 +17,13 @@ unbind Space
 bind Space run-shell 'rm -f /tmp/tmux-leader-action; tmux display-popup -E -b none -d "#{pane_current_path}" -w 100% -h 100% "LEADER_PARENT_PANE=#{pane_id} ~/.config/tmux/leader"; [ -f /tmp/tmux-leader-action ] && sh /tmp/tmux-leader-action; rm -f /tmp/tmux-leader-action'
 
 # ─── Style ────────────────────────────────────────────────────────────────────
-set -g status-position top
+set -g status-position bottom
 set -g status-interval 5
 set -g status-style "bg=default,fg={{ theme.fg }}"
 
 set -g status-left "#[fg={{ theme.purple }},bg=default]#[bg={{ theme.purple }},fg={{ theme.bg }},bold] #S #[fg={{ theme.purple }},bg=default] "
 set -g status-left-length 30
-set -g status-right "#[fg={{ theme.blue }},bg=default]#[bg={{ theme.blue }},fg={{ theme.bg }},bold] ⎈ #(kubectl config current-context 2>/dev/null) #[fg={{ theme.blue }},bg=default] "
+set -g status-right "#[fg={{ theme.cyan }},bg=default]#[bg={{ theme.cyan }},fg={{ theme.bg }},bold] ⎈ #(kubectl config current-context 2>/dev/null) #[fg={{ theme.cyan }},bg=default] "
 set -g status-right-length 100
 
 setw -g window-status-format "#[fg={{ theme.comment }},bg=default] #I #W "

@@ -27,6 +27,16 @@ theme:
   bright_pink: "#ff92df"
   bright_cyan: "#a4ffff"
 
-  # nb ANSI 256-color equivalents
+  # ANSI 256-color equivalents
+  nb_fg: 255
+  nb_red: 203
+  nb_orange: 215
+  nb_yellow: 228
+  nb_green: 84
+  nb_blue: 61
+  nb_purple: 183
+  nb_cyan: 117
+  nb_pink: 212
+  nb_comment: 61
   nb_primary: 183
   nb_secondary: 218

@@ -1,0 +1,39 @@
+format = """
+$directory$fill$git_branch$git_status\
+$line_break\
+$character"""
+
+add_newline = false
+
+[fill]
+symbol = " "
+
+[directory]
+format = "[](fg:{{ theme.purple }})[ 󰉋 $path ](bold fg:{{ theme.bg }} bg:{{ theme.purple }})[](fg:{{ theme.purple }})"
+truncation_length = 3
+truncate_to_repo = false
+
+[git_branch]
+format = "[](fg:{{ theme.orange }})[ 󰊢 $branch ](bold fg:{{ theme.bg }} bg:{{ theme.orange }})"
+symbol = ""
+
+[git_status]
+format = "[$all_status$ahead_behind](bold fg:{{ theme.bg }} bg:{{ theme.orange }})[](fg:{{ theme.orange }})"
+conflicted = " ="
+ahead = " ⇡"
+behind = " ⇣"
+diverged = " ⇕"
+untracked = " ?"
+stashed = " $"
+modified = " ✗"
+staged = " ✔"
+renamed = " »"
+deleted = " ✘"
+
+[cmd_duration]
+format = " [](fg:{{ theme.yellow }})[ 󱑂 $duration ](fg:{{ theme.bg }} bg:{{ theme.yellow }})[](fg:{{ theme.yellow }})"
+min_time = 2000
+
+[character]
+success_symbol = "[❯](bold {{ theme.pink }})"
+error_symbol = "[❯](bold {{ theme.red }})"

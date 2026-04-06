@@ -14,13 +14,3 @@
     dest: "{{ ansible_env.HOME }}/.config/ghostty/config"
     backup: yes
 
-- name: Copy ghostty zsh integration
-  template:
-    src: ghostty.zsh.j2
-    dest: "{{ ansible_env.HOME }}/.config/ghostty/ghostty.zsh"
-
-- name: Source ghostty.zsh from zshrc
-  lineinfile:
-    path: "{{ ansible_env.HOME }}/.zshrc"
-    line: "source ~/.config/ghostty/ghostty.zsh"
-    state: present
