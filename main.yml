@@ -11,6 +11,8 @@
       tags: ['fzf']
     - role: mise
       tags: ['mise']
+    - role: kitty
+      tags: ['kitty']
     - role: lazygit
       tags: ['lazygit']
     - role: lazysql
@@ -21,7 +23,3 @@
       tags: ['aerospace']
     - role: lpass
       tags: ['lpass']
-    - role: tmux
-      tags: ['tmux']
-    - role: ghostty
-      tags: ['ghostty']
