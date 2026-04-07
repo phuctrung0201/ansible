@@ -35,21 +35,13 @@
     - 'DISABLE_AUTO_UPDATE=true'
     - 'source $ZSH/oh-my-zsh.sh'
 
-- name: Ensure fast-syntax-highlighting theme directory exists
-  file:
-    path: "{{ ansible_env.HOME }}/.config/fsh"
-    state: directory
-    mode: '0755'
-
-- name: Deploy Dracula fast-syntax-highlighting theme
-  template:
-    src: dracula_fsh.zsh.j2
-    dest: "{{ ansible_env.HOME }}/.config/fsh/dracula.zsh"
-    mode: '0644'
-
-- name: Source Dracula fsh theme in .zshrc
+- name: Remove legacy Dracula FSH line from .zshrc
   lineinfile:
     path: "{{ ansible_env.HOME }}/.zshrc"
     line: "source ~/.config/fsh/dracula.zsh"
-    state: present
+    state: absent
 
+- name: Remove legacy Dracula FSH theme file
+  file:
+    path: "{{ ansible_env.HOME }}/.config/fsh/dracula.zsh"
+    state: absent
