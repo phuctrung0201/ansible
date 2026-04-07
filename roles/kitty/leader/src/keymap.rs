@@ -1,3 +1,5 @@
+//! Leader keyboard layers: root [`KEYMAP`], tab group [`TAB_GROUP_NODES`], launcher [`LAUNCH_GROUP_NODES`].
+
 use crate::action;
 
 pub struct KeyNode {

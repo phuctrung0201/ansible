@@ -1,0 +1,120 @@
+use ratatui::{
+    style::Style,
+    text::{Line, Span},
+    widgets::Paragraph,
+    Frame,
+};
+
+use crate::{action::LeaderState, keymap};
+
+use super::{
+    context,
+    dividers::divider_with_vertical_margin,
+    layout::{label_width, slot_spans, top_rect},
+    pills::{banner_pills_line, window_pill_lines},
+    theme::{ACTIONS_TITLE_ICON, COLS, LAUNCHER_SECTION_ICON, TABS_SECTION_ICON, WINDOWS_SECTION_ICON, DRACULA_BG},
+};
+
+pub(crate) fn render(frame: &mut Frame, state: &LeaderState) {
+    let nodes = state.nodes;
+    let area = frame.area();
+
+    let block = super::layout::popup_block();
+    let div_w = (area.width as usize).saturating_sub(8).max(8);
+    let header = format!("{} actions", ACTIONS_TITLE_ICON);
+
+    let n_rows = if context::is_launch_group(state) {
+        0
+    } else {
+        (nodes.len() as u16).div_ceil(COLS as u16)
+    };
+
+    let pill_max_w = (area.width as usize).saturating_sub(4).max(20);
+    let has_any_banner = state.cwd_pill.is_some()
+        || state.kube_pill.is_some()
+        || state.git_pill.is_some();
+
+    let mut top_strip: Vec<Line<'static>> = Vec::new();
+    if context::is_root(state) && !state.window_rows.is_empty() {
+        top_strip.extend(divider_with_vertical_margin(
+            &format!("{} windows", WINDOWS_SECTION_ICON),
+            div_w,
+        ));
+        top_strip.extend(window_pill_lines(
+            &state.window_rows,
+            state.window_cursor,
+            pill_max_w,
+        ));
+    } else if context::is_tab_group(state) && !state.tab_rows.is_empty() {
+        top_strip.extend(divider_with_vertical_margin(
+            &format!("{} tabs", TABS_SECTION_ICON),
+            div_w,
+        ));
+        top_strip.extend(window_pill_lines(
+            &state.tab_rows,
+            state.tab_cursor,
+            pill_max_w,
+        ));
+    } else if context::is_launch_group(state) && !state.launch_rows.is_empty() {
+        top_strip.extend(divider_with_vertical_margin(
+            &format!("{} launcher", LAUNCHER_SECTION_ICON),
+            div_w,
+        ));
+        top_strip.extend(window_pill_lines(
+            &state.launch_rows,
+            state.launch_cursor,
+            pill_max_w,
+        ));
+    }
+    let banner_lines = u16::from(has_any_banner);
+    let strip_extra = banner_lines + top_strip.len() as u16;
+
+    // Launcher: only the pill strip (no second titled rule, no key grid).
+    // Actions divider: spacer + rule + spacer (see `divider_with_vertical_margin`).
+    let header_rule_lines: u16 = if context::is_launch_group(state) { 0 } else { 3 };
+    let popup_height = n_rows + strip_extra + header_rule_lines + 1;
+    let popup_area = top_rect(area.width, popup_height, area);
+
+    let inner_width = popup_area.width.saturating_sub(2) as usize;
+    let lw = label_width(inner_width);
+
+    let mut lines: Vec<Line> = Vec::new();
+    if let Some(line) = banner_pills_line(
+        state.cwd_pill.as_deref(),
+        state.kube_pill.as_deref(),
+        state.git_pill.as_deref(),
+        pill_max_w,
+    ) {
+        lines.push(line);
+    }
+    lines.extend(top_strip);
+    if !context::is_launch_group(state) {
+        lines.extend(divider_with_vertical_margin(&header, div_w));
+        for chunk in nodes.chunks(COLS) {
+            let mut spans: Vec<Span> = Vec::new();
+            for (i, node) in chunk.iter().enumerate() {
+                let is_last = i + 1 == chunk.len();
+                let icon = match &node.kind {
+                    keymap::KeyNodeKind::Group { icon, .. } if !icon.is_empty() => {
+                        format!("{} ", icon)
+                    }
+                    _ => String::new(),
+                };
+                let label = if matches!(&node.kind, keymap::KeyNodeKind::Group { .. }) {
+                    format!("{}+", node.label)
+                } else {
+                    node.label.to_string()
+                };
+                spans.extend(slot_spans(node.key, &label, &icon, lw, is_last, false));
+            }
+            lines.push(Line::from(spans));
+        }
+    }
+
+    frame.render_widget(
+        Paragraph::new(lines)
+            .style(Style::default().bg(DRACULA_BG))
+            .block(block),
+        popup_area,
+    );
+}
