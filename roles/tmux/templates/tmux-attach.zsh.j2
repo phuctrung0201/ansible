@@ -1,4 +1,0 @@
-# Auto-attach to or create the main tmux session (must run before p10k instant prompt)
-if command -v tmux &>/dev/null && [[ -z "$TMUX" ]] && [[ $- == *i* ]]; then
-  exec tmux new-session -A -s main
-fi

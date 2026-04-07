@@ -47,8 +47,3 @@
     line: "source ~/.config/fsh/dracula.zsh"
     state: present
 
-- name: Remove starship source line from .zshrc
-  lineinfile:
-    path: "{{ ansible_env.HOME }}/.zshrc"
-    line: "source ~/.config/starship/starship.zsh"
-    state: absent

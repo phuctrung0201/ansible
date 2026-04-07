@@ -148,7 +148,7 @@ pub fn last_pane() -> anyhow::Result<()> {
 
 pub fn edit_command() -> anyhow::Result<()> {
     let pane = parent_pane()?;
-    // Trigger zle _tmux_edit_command_line in the parent pane after the leader popup closes
+    // Trigger zle edit-command-line in the parent pane after the leader popup closes
     run(&["run-shell", "-b", &format!("tmux send-keys -t {pane} C-x C-e")])
 }
 
