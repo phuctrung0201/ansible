@@ -1,0 +1,20 @@
+[package]
+name = "tmux-leader"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "tmux-leader"
+path = "src/main.rs"
+
+[dependencies]
+serde       = { version = "1", features = ["derive"] }
+serde_json  = "1"
+anyhow      = "1"
+ratatui     = "0.29"
+
+[profile.release]
+strip         = true
+opt-level     = "z"
+lto           = true
+codegen-units = 1
