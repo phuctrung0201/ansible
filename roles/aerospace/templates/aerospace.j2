@@ -42,10 +42,11 @@ alt-tab = 'mode action'
 # Workspaces: `=terminal 1=browser 2=fallback 3=empty F1=slack F2=outlook F3=zoom
 [mode.action.binding]
 
-tab = ['focus-back-and-forth', 'mode main']
+# space: previous ↔ current window; tab: next window in workspace (DFS order, wraps)
+tab = ['focus --boundaries-action wrap-around-the-workspace dfs-next', 'mode main']
 backtick = ['workspace --auto-back-and-forth `', 'mode main']
 shift-backtick = ['move-node-to-workspace --focus-follows-window `', 'mode main']
-space = ['workspace-back-and-forth', 'mode main']
+space = ['focus-back-and-forth', 'mode main']
 shift-space = 'workspace --wrap-around next'
 
 # Focus (hjkl)

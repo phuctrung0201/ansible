@@ -14,6 +14,11 @@
     dest: "{{ ansible_env.HOME }}/.config/kitty/kitty.conf"
     backup: yes
 
+- name: Remove custom tab_bar.py
+  file:
+    path: "{{ ansible_env.HOME }}/.config/kitty/tab_bar.py"
+    state: absent
+
 - name: Copy kitty zsh integration
   copy:
     src: kitty.zsh
