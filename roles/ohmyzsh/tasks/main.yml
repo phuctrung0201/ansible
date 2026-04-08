@@ -43,13 +43,3 @@
     state: present
     create: yes
 
-- name: Remove legacy Dracula FSH line from .zshrc
-  lineinfile:
-    path: "{{ ansible_env.HOME }}/.zshrc"
-    line: "source ~/.config/fsh/dracula.zsh"
-    state: absent
-
-- name: Remove legacy Dracula FSH theme file
-  file:
-    path: "{{ ansible_env.HOME }}/.config/fsh/dracula.zsh"
-    state: absent
