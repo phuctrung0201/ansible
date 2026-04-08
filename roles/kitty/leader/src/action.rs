@@ -140,6 +140,17 @@ fn effective_current_window_id(tab: &KittyTab) -> Option<u64> {
 }
 
 /// Tab that contains the leader overlay (`is_self`), if any.
+/// Title for the tab that hosts the leader overlay (for the top tab pill).
+fn overlay_tab_title_for_pill(os: &[KittyOs]) -> Option<String> {
+    let tab = leader_overlay_tab(os)?;
+    let trimmed = tab.title.trim();
+    Some(if trimmed.is_empty() {
+        format!("tab {}", tab.id)
+    } else {
+        trimmed.to_string()
+    })
+}
+
 fn leader_overlay_tab<'a>(os: &'a [KittyOs]) -> Option<&'a KittyTab> {
     let focused_win = os.iter().find(|w| {
         w.tabs
@@ -308,9 +319,9 @@ fn overlay_tab_rows_with_os(os_windows: &[KittyOs]) -> anyhow::Result<Vec<Leader
     Ok(rows)
 }
 
-/// Rows for launcher pills (`id` = index into `LAUNCH_GROUP_NODES`).
+/// Rows for launcher pills (`id` = index into [`crate::launcher::NODES`]).
 pub fn leader_launch_rows() -> Vec<LeaderWindowRow> {
-    keymap::LAUNCH_GROUP_NODES
+    crate::launcher::NODES
         .iter()
         .enumerate()
         .map(|(i, n)| LeaderWindowRow {
@@ -322,14 +333,14 @@ pub fn leader_launch_rows() -> Vec<LeaderWindowRow> {
         .collect()
 }
 
-/// Run launch action by index in `LAUNCH_GROUP_NODES` (after closing overlay if the action does).
+/// Run launch action by index in [`crate::launcher::NODES`] (after closing overlay if the action does).
 pub fn execute_launch_at(index: usize) -> anyhow::Result<()> {
-    let node = keymap::LAUNCH_GROUP_NODES
+    let node = crate::launcher::NODES
         .get(index)
         .with_context(|| format!("launch index {index} out of range"))?;
     match &node.kind {
-        keymap::KeyNodeKind::Action(f) => f(),
-        keymap::KeyNodeKind::Group { .. } => anyhow::bail!("launch node must be an action"),
+        crate::keynode::KeyNodeKind::Action(f) => f(),
+        crate::keynode::KeyNodeKind::Group { .. } => anyhow::bail!("launch node must be an action"),
     }
 }
 
@@ -470,7 +481,7 @@ pub fn leader_kube_context_display() -> Option<String> {
 const LEADER_HEADER_ICON: &str = "\u{f0e7}";
 
 pub struct LeaderState {
-    pub nodes: &'static [keymap::KeyNode],
+    pub nodes: &'static [crate::keynode::KeyNode],
     pub icon: &'static str,
     pub label: &'static str,
     /// Current tab’s windows (no overlay), snapshot when the leader opens.
@@ -481,7 +492,7 @@ pub struct LeaderState {
     pub tab_rows: Vec<LeaderWindowRow>,
     /// Keyboard selection in `tab_rows` (tab group only).
     pub tab_cursor: usize,
-    /// Launcher tools (pill list; indices match `LAUNCH_GROUP_NODES`).
+    /// Launcher tools (pill list; indices match [`crate::launcher::NODES`]).
     pub launch_rows: Vec<LeaderWindowRow>,
     pub launch_cursor: usize,
     /// Effective shell cwd (tilde‑shortened) for the top pill; snapshot at open.
@@ -490,6 +501,8 @@ pub struct LeaderState {
     pub kube_pill: Option<String>,
     /// Git branch (or detached short SHA) when effective cwd is in a git work tree; snapshot at open.
     pub git_pill: Option<String>,
+    /// Tab title for the overlay’s tab (read‑only header pill).
+    pub tab_pill: Option<String>,
 }
 
 impl LeaderState {
@@ -526,6 +539,7 @@ impl LeaderState {
             .as_deref()
             .and_then(|p| git_branch_in_repo(Path::new(p)));
         let kube_pill = leader_kube_context_display();
+        let tab_pill = overlay_tab_title_for_pill(os_ref);
         LeaderState {
             nodes: keymap::KEYMAP,
             icon: LEADER_HEADER_ICON,
@@ -539,6 +553,7 @@ impl LeaderState {
             cwd_pill,
             kube_pill,
             git_pill,
+            tab_pill,
         }
     }
 }
@@ -555,8 +570,8 @@ pub fn press_key(state: &mut LeaderState, key: char) -> KeyPress {
     for node in state.nodes {
         if node.key == key {
             match &node.kind {
-                keymap::KeyNodeKind::Action(f) => return KeyPress::Execute(*f),
-                keymap::KeyNodeKind::Group { icon, nodes } => {
+                crate::keynode::KeyNodeKind::Action(f) => return KeyPress::Execute(*f),
+                crate::keynode::KeyNodeKind::Group { icon, nodes } => {
                     state.nodes = nodes;
                     state.icon = icon;
                     state.label = node.label;
@@ -609,7 +624,7 @@ pub fn rename_window() -> anyhow::Result<()> {
 
 pub fn new_window() -> anyhow::Result<()> {
     close_overlay()?;
-    kitty::send_action("new_window").context("new window")
+    kitty::send_action("launch --type=window --cwd=current").context("new window with current cwd")
 }
 
 pub fn close_window_action() -> anyhow::Result<()> {
@@ -620,11 +635,6 @@ pub fn close_window_action() -> anyhow::Result<()> {
 pub fn close_other_windows() -> anyhow::Result<()> {
     close_overlay()?;
     kitty::send_action("close_other_windows_in_tab").context("close other windows in tab")
-}
-
-pub fn clone_tab() -> anyhow::Result<()> {
-    close_overlay()?;
-    kitty::send_action("launch --type=tab --cwd=current").context("clone tab")
 }
 
 pub fn new_tab() -> anyhow::Result<()> {

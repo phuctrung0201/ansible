@@ -5,7 +5,7 @@ use ratatui::{
     Frame,
 };
 
-use crate::{action::LeaderState, keymap};
+use crate::{action::LeaderState, keynode};
 
 use super::{
     context,
@@ -30,7 +30,8 @@ pub(crate) fn render(frame: &mut Frame, state: &LeaderState) {
     };
 
     let pill_max_w = (area.width as usize).saturating_sub(4).max(20);
-    let has_any_banner = state.cwd_pill.is_some()
+    let has_any_banner = state.tab_pill.is_some()
+        || state.cwd_pill.is_some()
         || state.kube_pill.is_some()
         || state.git_pill.is_some();
 
@@ -80,6 +81,7 @@ pub(crate) fn render(frame: &mut Frame, state: &LeaderState) {
 
     let mut lines: Vec<Line> = Vec::new();
     if let Some(line) = banner_pills_line(
+        state.tab_pill.as_deref(),
         state.cwd_pill.as_deref(),
         state.kube_pill.as_deref(),
         state.git_pill.as_deref(),
@@ -95,12 +97,12 @@ pub(crate) fn render(frame: &mut Frame, state: &LeaderState) {
             for (i, node) in chunk.iter().enumerate() {
                 let is_last = i + 1 == chunk.len();
                 let icon = match &node.kind {
-                    keymap::KeyNodeKind::Group { icon, .. } if !icon.is_empty() => {
+                    keynode::KeyNodeKind::Group { icon, .. } if !icon.is_empty() => {
                         format!("{} ", icon)
                     }
                     _ => String::new(),
                 };
-                let label = if matches!(&node.kind, keymap::KeyNodeKind::Group { .. }) {
+                let label = if matches!(&node.kind, keynode::KeyNodeKind::Group { .. }) {
                     format!("{}+", node.label)
                 } else {
                     node.label.to_string()

@@ -4,6 +4,8 @@ use ratatui::style::Color;
 // Dracula palette (https://spec.draculatheme.com/)
 // ---------------------------------------------------------------------------
 pub(crate) const MAUVE: Color = Color::Rgb(189, 147, 249); // purple
+/// Dracula Pink (`#ff79c6`) — current tab title pill.
+pub(crate) const PINK: Color = Color::Rgb(255, 121, 198);
 pub(crate) const ORANGE: Color = Color::Rgb(255, 184, 108); // #ffb86c — git branch pill
 pub(crate) const TEAL: Color = Color::Rgb(139, 233, 253); // cyan
 pub(crate) const GREEN: Color = Color::Rgb(80, 250, 123); // #50fa7b — cwd pill

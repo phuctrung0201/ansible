@@ -1,6 +1,8 @@
 mod action;
 mod keymap;
+mod keynode;
 mod kitty;
+mod launcher;
 mod leader;
 
 fn main() {

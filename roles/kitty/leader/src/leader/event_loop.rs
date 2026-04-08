@@ -56,6 +56,9 @@ pub(crate) fn run(
                     state.launch_cursor = (state.launch_cursor + 1) % state.launch_rows.len();
                     continue;
                 }
+                if context::is_launch_group(state) {
+                    continue;
+                }
                 match crate::action::press_key(state, '\t') {
                     KeyPress::Execute(f) => {
                         ratatui::restore();
@@ -82,6 +85,9 @@ pub(crate) fn run(
                 if context::is_launch_group(state) && !state.launch_rows.is_empty() {
                     let len = state.launch_rows.len();
                     state.launch_cursor = (state.launch_cursor + len - 1) % len;
+                    continue;
+                }
+                if context::is_launch_group(state) {
                     continue;
                 }
             }
@@ -116,18 +122,21 @@ pub(crate) fn run(
                         }
                     }
                 }
-                if context::is_launch_group(state) && !state.launch_rows.is_empty() {
-                    if let Some(d) = c.to_digit(10) {
-                        let idx = d as usize;
-                        if (1..=9).contains(&idx) {
-                            let j = idx - 1;
-                            if j < state.launch_rows.len() {
-                                let li = state.launch_rows[j].id as usize;
-                                ratatui::restore();
-                                return crate::action::execute_launch_at(li);
+                if context::is_launch_group(state) {
+                    if !state.launch_rows.is_empty() {
+                        if let Some(d) = c.to_digit(10) {
+                            let idx = d as usize;
+                            if (1..=9).contains(&idx) {
+                                let j = idx - 1;
+                                if j < state.launch_rows.len() {
+                                    let li = state.launch_rows[j].id as usize;
+                                    ratatui::restore();
+                                    return crate::action::execute_launch_at(li);
+                                }
                             }
                         }
                     }
+                    continue;
                 }
                 match crate::action::press_key(state, c) {
                     KeyPress::Execute(f) => {
