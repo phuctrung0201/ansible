@@ -35,6 +35,14 @@
     - 'DISABLE_AUTO_UPDATE=true'
     - 'source $ZSH/oh-my-zsh.sh'
 
+- name: Disable right prompt (override theme RPROMPT)
+  lineinfile:
+    path: "{{ ansible_env.HOME }}/.zshrc"
+    regexp: '^RPROMPT='
+    line: "RPROMPT=''"
+    state: present
+    create: yes
+
 - name: Remove legacy Dracula FSH line from .zshrc
   lineinfile:
     path: "{{ ansible_env.HOME }}/.zshrc"
