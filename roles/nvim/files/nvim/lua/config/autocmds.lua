@@ -42,6 +42,25 @@ autocmd("VimResized", {
 autocmd("TermOpen", {
   group = augroup("term_line_numbers", { clear = true }),
   callback = function()
+    -- Kitty scrollback → ansify (terminal buffer). Match raw terminal layout;
+    -- global signcolumn/numbers would add gutters and shift text.
+    if vim.g.ansify_pager then
+      vim.o.laststatus = 0
+      vim.o.ruler = false
+      vim.opt_local.number = false
+      vim.opt_local.relativenumber = false
+      vim.opt_local.signcolumn = "no"
+      vim.opt_local.wrap = false
+      vim.bo.swapfile = false
+      vim.bo.readonly = true
+      -- In Terminal mode, `i` sends keys into the PTY; Esc often never reaches Neovim.
+      -- Map Esc (and visual Bell / C-[) back to Terminal-Normal so keyboard works without the mouse.
+      local buf = vim.api.nvim_get_current_buf()
+      local to_normal = "<C-\\><C-n>"
+      vim.keymap.set("t", "<Esc>", to_normal, { buffer = buf, silent = true })
+      vim.keymap.set("t", "<C-[>", to_normal, { buffer = buf, silent = true })
+      return
+    end
     vim.opt_local.number = true
     vim.opt_local.relativenumber = true
   end,
@@ -55,8 +74,14 @@ autocmd("BufWritePre", {
     if not bo.modifiable or bo.readonly then
       return
     end
-    -- pcall: no echo/notify when no formatter, timeout, or server errors
-    pcall(vim.lsp.buf.format, { async = false, bufnr = args.buf })
+    local bufnr = args.buf
+    local notify = vim.notify
+    vim.notify = function(...) end
+    pcall(function()
+      -- silent!: no command-line messages; notify stub: no Snacks/LSP toast during format
+      vim.cmd(string.format("silent! lua vim.lsp.buf.format({ async = false, bufnr = %d })", bufnr))
+    end)
+    vim.notify = notify
   end,
 })
 
