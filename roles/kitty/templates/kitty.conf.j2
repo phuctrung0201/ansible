@@ -40,7 +40,7 @@ color11 {{ theme.bright_yellow }}
 color12 {{ theme.bright_purple }}
 color13 {{ theme.bright_pink }}
 color14 {{ theme.bright_cyan }}
-color15 {{ theme.fg }}
+color15 {{ theme.bright_white }}
 
 # =============================================================================
 # Tab bar
@@ -50,7 +50,7 @@ tab_bar_background      {{ theme.bg }}
 active_tab_foreground   {{ theme.bg }}
 active_tab_background   {{ theme.purple }}
 active_tab_font_style   bold
-inactive_tab_foreground {{ theme.comment }}
+inactive_tab_foreground {{ theme.comment_bright }}
 
 # =============================================================================
 # Window
@@ -59,8 +59,8 @@ hide_window_decorations titlebar-only
 background_opacity      0.80
 background_blur         10
 enabled_layouts         stack
-active_border_color     {{ theme.purple }}
-inactive_border_color   {{ theme.comment }}
+active_border_color     {{ theme.cyan }}
+inactive_border_color   {{ theme.comment_bright }}
 
 # =============================================================================
 # Scrollback (nvim + ansify — ansify.pager sets laststatus=1; turn ruler off in on_finish)

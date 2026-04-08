@@ -10,7 +10,7 @@ use ratatui::{
 use super::{
     dividers::divider_with_vertical_margin,
     layout::popup_block,
-    theme::{DRACULA_BG, FG},
+    theme::{DRACULA_BG, FG, ORANGE},
 };
 
 pub fn show_message(title: &str, body: &str) -> anyhow::Result<()> {
@@ -41,7 +41,7 @@ fn render_message(frame: &mut Frame, title: &str, body: &str) {
     let area = frame.area();
     let div_w = (area.width as usize).saturating_sub(8).max(8);
     let block = popup_block();
-    let mut lines = divider_with_vertical_margin(title, div_w);
+    let mut lines = divider_with_vertical_margin(title, div_w, ORANGE);
     lines.push(Line::from(body.to_owned()));
     frame.render_widget(
         Paragraph::new(lines)

@@ -9,8 +9,8 @@ use crate::action::LeaderWindowRow;
 use super::{
     layout::popup_gap,
     theme::{
-        CWD_PILL_BG, CWD_PILL_ICON, DRACULA_BG, GIT_PILL_ICON, GREEN, KUBE_PILL_ICON, MAUVE,
-        ORANGE, PILL_BG, ROUND_CAP_L, ROUND_CAP_R, YELLOW, FG,
+        CWD_PILL_ICON, DRACULA_BG, GIT_PILL_ICON, GREEN, KUBE_PILL_BG, KUBE_PILL_ICON, MAUVE,
+        ORANGE, PILL_BG, ROUND_CAP_L, ROUND_CAP_R, TEAL, YELLOW, FG,
     },
 };
 
@@ -33,7 +33,7 @@ pub(crate) fn pill_style(selected: bool, kitty_focused: bool, recent: bool) -> S
             .add_modifier(Modifier::BOLD)
     } else if kitty_focused {
         Style::default()
-            .fg(MAUVE)
+            .fg(TEAL)
             .bg(PILL_BG)
             .add_modifier(Modifier::BOLD)
     } else if recent {
@@ -83,9 +83,9 @@ fn kube_pill_spans(ctx: &str, max_line_width: usize) -> Vec<Span<'static>> {
     let inner = format!(" {} {} ", KUBE_PILL_ICON, inner_text);
     let mid = Style::default()
         .fg(DRACULA_BG)
-        .bg(CWD_PILL_BG)
+        .bg(KUBE_PILL_BG)
         .add_modifier(Modifier::BOLD);
-    let cap = Style::default().fg(CWD_PILL_BG).bg(DRACULA_BG);
+    let cap = Style::default().fg(KUBE_PILL_BG).bg(DRACULA_BG);
     vec![
         Span::styled(ROUND_CAP_L, cap),
         Span::styled(inner, mid),
@@ -217,7 +217,7 @@ pub(crate) fn window_pill_lines(
     if rows.len() > MAX_WINDOWS {
         out.push(Line::from(vec![Span::styled(
             format!("… +{} more", rows.len() - MAX_WINDOWS),
-            Style::default().fg(super::theme::COMMENT).bg(DRACULA_BG),
+            Style::default().fg(super::theme::COMMENT_BRIGHT).bg(DRACULA_BG),
         )]));
     }
     out

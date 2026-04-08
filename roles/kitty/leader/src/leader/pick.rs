@@ -12,7 +12,7 @@ use ratatui::{
 use super::{
     dividers::divider_with_vertical_margin,
     layout::{label_width, popup_block, slot_spans_str, top_rect},
-    theme::{COLS, DRACULA_BG},
+    theme::{COLS, COMMENT, DRACULA_BG, MAUVE},
 };
 
 pub struct PickItem {
@@ -131,13 +131,13 @@ fn render_pick(
 
     let cursor_pos = key_map.get(cursor).copied();
 
-    let mut lines = divider_with_vertical_margin(prompt, div_w);
+    let mut lines = divider_with_vertical_margin(prompt, div_w, MAUVE);
 
     for (gi, group) in groups.iter().enumerate() {
         if !group.label.is_empty() {
             lines.push(Line::from(vec![Span::styled(
                 group.label.clone(),
-                Style::default().fg(super::theme::COMMENT).bg(DRACULA_BG),
+                Style::default().fg(COMMENT).bg(DRACULA_BG),
             )]));
         }
 

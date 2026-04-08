@@ -1,10 +1,10 @@
 use ratatui::{
     layout::Alignment,
-    style::{Modifier, Style},
+    style::{Color, Modifier, Style},
     text::{Line, Span},
 };
 
-use super::{layout::rule_span, theme::{DRACULA_BG, MAUVE}};
+use super::{layout::rule_span, theme::DRACULA_BG};
 
 /// Blank row used as vertical margin around section dividers.
 pub(crate) fn section_spacer_line() -> Line<'static> {
@@ -12,14 +12,14 @@ pub(crate) fn section_spacer_line() -> Line<'static> {
 }
 
 /// Horizontal rule with centered label, e.g. `───  windows  ───` (width = display columns).
-pub(crate) fn titled_rule_line(title: &str, width: usize) -> Line<'static> {
+pub(crate) fn titled_rule_line(title: &str, width: usize, title_accent: Color) -> Line<'static> {
     let label = format!("  {}  ", title);
     let lw = label.chars().count();
     if width <= lw.saturating_add(2) {
         return Line::from(vec![Span::styled(
             label,
             Style::default()
-                .fg(MAUVE)
+                .fg(title_accent)
                 .bg(DRACULA_BG)
                 .add_modifier(Modifier::BOLD),
         )])
@@ -33,7 +33,7 @@ pub(crate) fn titled_rule_line(title: &str, width: usize) -> Line<'static> {
         Span::styled(
             label,
             Style::default()
-                .fg(MAUVE)
+                .fg(title_accent)
                 .bg(DRACULA_BG)
                 .add_modifier(Modifier::BOLD),
         ),
@@ -43,10 +43,14 @@ pub(crate) fn titled_rule_line(title: &str, width: usize) -> Line<'static> {
 }
 
 /// Top spacer, horizontal rule, bottom spacer.
-pub(crate) fn divider_with_vertical_margin(title: &str, width: usize) -> Vec<Line<'static>> {
+pub(crate) fn divider_with_vertical_margin(
+    title: &str,
+    width: usize,
+    title_accent: Color,
+) -> Vec<Line<'static>> {
     vec![
         section_spacer_line(),
-        titled_rule_line(title, width),
+        titled_rule_line(title, width, title_accent),
         section_spacer_line(),
     ]
 }

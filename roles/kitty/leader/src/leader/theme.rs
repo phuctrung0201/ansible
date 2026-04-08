@@ -1,19 +1,9 @@
-use ratatui::style::Color;
+//! Kitty leader UI; terminal RGB values come from [`super::theme_colors`] (generated from `share.yml`).
 
-// ---------------------------------------------------------------------------
-// Dracula palette (https://spec.draculatheme.com/)
-// ---------------------------------------------------------------------------
-pub(crate) const MAUVE: Color = Color::Rgb(189, 147, 249); // purple
-pub(crate) const ORANGE: Color = Color::Rgb(255, 184, 108); // #ffb86c — git branch pill
-pub(crate) const TEAL: Color = Color::Rgb(139, 233, 253); // cyan
-pub(crate) const GREEN: Color = Color::Rgb(80, 250, 123); // #50fa7b — cwd pill
-pub(crate) const YELLOW: Color = Color::Rgb(241, 250, 140); // yellow
-pub(crate) const FG: Color = Color::Rgb(248, 248, 242); // foreground
-pub(crate) const COMMENT: Color = Color::Rgb(98, 114, 164); // comment
-pub(crate) const DRACULA_BG: Color = Color::Rgb(40, 42, 54); // #282a36
-pub(crate) const PILL_BG: Color = Color::Rgb(68, 71, 90); // #44475a (selection / inactive window pills)
-/// Dracula Cyan (`#8BE9FD`) — kube context pill fill; cwd pill uses `GREEN` in `cwd_pill_spans`.
-pub(crate) const CWD_PILL_BG: Color = TEAL;
+pub(crate) use super::theme_colors::{
+    COMMENT, COMMENT_BRIGHT, DRACULA_BG, FG, GREEN, KUBE_PILL_BG, MAUVE, ORANGE, PILL_BG, PINK, TEAL,
+    YELLOW,
+};
 
 pub(crate) const COLS: usize = 4;
 pub(crate) const KEY_WIDTH: usize = 5; // widest key label is "space" (5 chars)
@@ -23,7 +13,7 @@ pub(crate) const KEY_WIDTH: usize = 5; // widest key label is "space" (5 chars)
 pub(crate) const ROUND_CAP_L: &str = "\u{e0b6}";
 pub(crate) const ROUND_CAP_R: &str = "\u{e0b4}";
 
-/// Font Awesome `bolt` — `─── actions ───` title (same glyph as `LEADER_HEADER_ICON` in `action.rs`).
+/// Font Awesome `bolt` — `─── actions` title (same glyph as `LEADER_HEADER_ICON` in `action.rs`).
 pub(crate) const ACTIONS_TITLE_ICON: &str = "\u{f0e7}";
 
 /// Font Awesome `window-maximize` (same PUA style as `LEADER_HEADER_ICON` in `action.rs`).

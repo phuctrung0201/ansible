@@ -12,7 +12,10 @@ use super::{
     dividers::divider_with_vertical_margin,
     layout::{label_width, slot_spans, top_rect},
     pills::{banner_pills_line, window_pill_lines},
-    theme::{ACTIONS_TITLE_ICON, COLS, LAUNCHER_SECTION_ICON, TABS_SECTION_ICON, WINDOWS_SECTION_ICON, DRACULA_BG},
+    theme::{
+        ACTIONS_TITLE_ICON, COLS, DRACULA_BG, LAUNCHER_SECTION_ICON, MAUVE, PINK, TABS_SECTION_ICON,
+        TEAL, WINDOWS_SECTION_ICON, YELLOW,
+    },
 };
 
 pub(crate) fn render(frame: &mut Frame, state: &LeaderState) {
@@ -39,6 +42,7 @@ pub(crate) fn render(frame: &mut Frame, state: &LeaderState) {
         top_strip.extend(divider_with_vertical_margin(
             &format!("{} tabs", TABS_SECTION_ICON),
             div_w,
+            TEAL,
         ));
         top_strip.extend(window_pill_lines(
             &state.tab_rows,
@@ -49,6 +53,7 @@ pub(crate) fn render(frame: &mut Frame, state: &LeaderState) {
         top_strip.extend(divider_with_vertical_margin(
             &format!("{} windows", WINDOWS_SECTION_ICON),
             div_w,
+            MAUVE,
         ));
         top_strip.extend(window_pill_lines(
             &state.window_rows,
@@ -59,6 +64,7 @@ pub(crate) fn render(frame: &mut Frame, state: &LeaderState) {
         top_strip.extend(divider_with_vertical_margin(
             &format!("{} launcher", LAUNCHER_SECTION_ICON),
             div_w,
+            PINK,
         ));
         top_strip.extend(window_pill_lines(
             &state.launch_rows,
@@ -89,7 +95,7 @@ pub(crate) fn render(frame: &mut Frame, state: &LeaderState) {
     }
     lines.extend(top_strip);
     if !context::is_launch_group(state) {
-        lines.extend(divider_with_vertical_margin(&header, div_w));
+        lines.extend(divider_with_vertical_margin(&header, div_w, YELLOW));
         for chunk in nodes.chunks(COLS) {
             let mut spans: Vec<Span> = Vec::new();
             for (i, node) in chunk.iter().enumerate() {

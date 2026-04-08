@@ -6,7 +6,7 @@ use ratatui::{
 };
 
 use super::theme::{
-    DRACULA_BG, FG, KEY_WIDTH, MAUVE, TEAL, YELLOW, COLS,
+    COMMENT_BRIGHT, DRACULA_BG, FG, KEY_WIDTH, PINK, TEAL, YELLOW, COLS,
 };
 
 pub(crate) fn key_display(key: char) -> String {
@@ -55,7 +55,7 @@ pub(crate) fn slot_spans_str(
         trail = trailing,
     );
     let label_style = if focused {
-        Style::default().fg(MAUVE).add_modifier(Modifier::BOLD)
+        Style::default().fg(PINK).add_modifier(Modifier::BOLD)
     } else if current {
         Style::default().fg(YELLOW).add_modifier(Modifier::BOLD)
     } else {
@@ -105,5 +105,5 @@ pub(crate) fn popup_gap() -> Span<'static> {
 }
 
 pub(crate) fn rule_span(s: String) -> Span<'static> {
-    Span::styled(s, Style::default().fg(super::theme::COMMENT).bg(DRACULA_BG))
+    Span::styled(s, Style::default().fg(COMMENT_BRIGHT).bg(DRACULA_BG))
 }
