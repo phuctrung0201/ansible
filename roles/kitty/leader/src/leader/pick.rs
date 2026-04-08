@@ -12,7 +12,7 @@ use ratatui::{
 use super::{
     dividers::divider_with_vertical_margin,
     layout::{label_width, popup_block, slot_spans_str, top_rect},
-    theme::{COLS, COMMENT, DRACULA_BG, MAUVE},
+    theme::{palette, COLS},
 };
 
 pub struct PickItem {
@@ -110,6 +110,7 @@ fn render_pick(
     key_map: &[(usize, usize)],
     cursor: usize,
 ) {
+    let t = palette();
     let area = frame.area();
     let block = popup_block();
     let div_w = (area.width as usize).saturating_sub(8).max(8);
@@ -131,13 +132,13 @@ fn render_pick(
 
     let cursor_pos = key_map.get(cursor).copied();
 
-    let mut lines = divider_with_vertical_margin(prompt, div_w, MAUVE);
+    let mut lines = divider_with_vertical_margin(prompt, div_w, t.mauve);
 
     for (gi, group) in groups.iter().enumerate() {
         if !group.label.is_empty() {
             lines.push(Line::from(vec![Span::styled(
                 group.label.clone(),
-                Style::default().fg(COMMENT).bg(DRACULA_BG),
+                Style::default().fg(t.comment).bg(t.dracula_bg),
             )]));
         }
 
@@ -163,7 +164,7 @@ fn render_pick(
 
     frame.render_widget(
         Paragraph::new(lines)
-            .style(Style::default().bg(DRACULA_BG))
+            .style(Style::default().bg(t.dracula_bg))
             .block(block),
         list_area,
     );

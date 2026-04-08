@@ -30,10 +30,10 @@
     line: "source ~/.config/kitty/kitty.zsh"
     state: present
 
-- name: Generate kitty leader palette from share.yml
+- name: Install kitty leader theme from share.yml
   template:
-    src: leader_theme_colors.rs.j2
-    dest: "{{ playbook_dir }}/roles/kitty/leader/src/leader/theme_colors.rs"
+    src: leader_theme.yml.j2
+    dest: "{{ ansible_env.HOME }}/.config/kitty/leader_theme.yml"
 
 - name: Build leader binary
   command:

@@ -1,14 +1,11 @@
-//! Kitty leader UI; terminal RGB values come from [`super::theme_colors`] (generated from `share.yml`).
+//! Kitty leader UI; terminal RGB values come from [`super::palette`] (`leader_theme.yml`).
 
-pub(crate) use super::theme_colors::{
-    COMMENT, COMMENT_BRIGHT, DRACULA_BG, FG, GREEN, KUBE_PILL_BG, MAUVE, ORANGE, PILL_BG, PINK, TEAL,
-    YELLOW,
-};
+pub(crate) use super::palette::palette;
 
 pub(crate) const COLS: usize = 4;
 pub(crate) const KEY_WIDTH: usize = 5; // widest key label is "space" (5 chars)
 
-/// Nerd Fonts / Powerline Extra. Both caps use `bg(DRACULA_BG)` / `fg` = pill fill.
+/// Nerd Fonts / Powerline Extra. Both caps use `bg(dracula_bg)` / `fg` = pill fill.
 /// Left/right glyphs swapped vs airline defaults so curves match this layout.
 pub(crate) const ROUND_CAP_L: &str = "\u{e0b6}";
 pub(crate) const ROUND_CAP_R: &str = "\u{e0b4}";

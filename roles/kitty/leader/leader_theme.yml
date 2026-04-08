@@ -1,0 +1,14 @@
+# Default leader UI palette — edit locally or override with ~/.config/kitty/leader_theme.yml
+# Keys mirror share.yml `theme` (Ansible templates this file from share.yml on deploy).
+purple: "#bd93f9"
+orange: "#ffb86c"
+cyan: "#8be9fd"
+green: "#50fa7b"
+yellow: "#f1fa8c"
+pink: "#ff79c6"
+bright_cyan: "#a4ffff"
+fg: "#f8f8f2"
+comment: "#6272a4"
+comment_bright: "#6272a4"
+bg: "#282a36"
+selection: "#44475a"

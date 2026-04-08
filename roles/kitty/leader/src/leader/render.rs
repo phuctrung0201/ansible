@@ -13,12 +13,13 @@ use super::{
     layout::{label_width, slot_spans, top_rect},
     pills::{banner_pills_line, window_pill_lines},
     theme::{
-        ACTIONS_TITLE_ICON, COLS, DRACULA_BG, LAUNCHER_SECTION_ICON, MAUVE, PINK, TABS_SECTION_ICON,
-        TEAL, WINDOWS_SECTION_ICON, YELLOW,
+        palette, ACTIONS_TITLE_ICON, COLS, LAUNCHER_SECTION_ICON, TABS_SECTION_ICON,
+        WINDOWS_SECTION_ICON,
     },
 };
 
 pub(crate) fn render(frame: &mut Frame, state: &LeaderState) {
+    let t = palette();
     let nodes = state.nodes;
     let area = frame.area();
 
@@ -42,7 +43,7 @@ pub(crate) fn render(frame: &mut Frame, state: &LeaderState) {
         top_strip.extend(divider_with_vertical_margin(
             &format!("{} tabs", TABS_SECTION_ICON),
             div_w,
-            TEAL,
+            t.mauve,
         ));
         top_strip.extend(window_pill_lines(
             &state.tab_rows,
@@ -53,7 +54,7 @@ pub(crate) fn render(frame: &mut Frame, state: &LeaderState) {
         top_strip.extend(divider_with_vertical_margin(
             &format!("{} windows", WINDOWS_SECTION_ICON),
             div_w,
-            MAUVE,
+            t.mauve,
         ));
         top_strip.extend(window_pill_lines(
             &state.window_rows,
@@ -64,7 +65,7 @@ pub(crate) fn render(frame: &mut Frame, state: &LeaderState) {
         top_strip.extend(divider_with_vertical_margin(
             &format!("{} launcher", LAUNCHER_SECTION_ICON),
             div_w,
-            PINK,
+            t.mauve,
         ));
         top_strip.extend(window_pill_lines(
             &state.launch_rows,
@@ -95,7 +96,7 @@ pub(crate) fn render(frame: &mut Frame, state: &LeaderState) {
     }
     lines.extend(top_strip);
     if !context::is_launch_group(state) {
-        lines.extend(divider_with_vertical_margin(&header, div_w, YELLOW));
+        lines.extend(divider_with_vertical_margin(&header, div_w, t.mauve));
         for chunk in nodes.chunks(COLS) {
             let mut spans: Vec<Span> = Vec::new();
             for (i, node) in chunk.iter().enumerate() {
@@ -119,7 +120,7 @@ pub(crate) fn render(frame: &mut Frame, state: &LeaderState) {
 
     frame.render_widget(
         Paragraph::new(lines)
-            .style(Style::default().bg(DRACULA_BG))
+            .style(Style::default().bg(t.dracula_bg))
             .block(block),
         popup_area,
     );

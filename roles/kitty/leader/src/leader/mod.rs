@@ -8,7 +8,7 @@ mod message;
 mod pick;
 mod pills;
 mod render;
-mod theme_colors;
+mod palette;
 mod theme;
 
 pub use message::show_message;

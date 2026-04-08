@@ -4,7 +4,7 @@ use ratatui::{
     text::{Line, Span},
 };
 
-use super::{layout::rule_span, theme::DRACULA_BG};
+use super::{layout::rule_span, theme::palette};
 
 /// Blank row used as vertical margin around section dividers.
 pub(crate) fn section_spacer_line() -> Line<'static> {
@@ -13,6 +13,7 @@ pub(crate) fn section_spacer_line() -> Line<'static> {
 
 /// Horizontal rule with centered label, e.g. `───  windows  ───` (width = display columns).
 pub(crate) fn titled_rule_line(title: &str, width: usize, title_accent: Color) -> Line<'static> {
+    let bg = palette().dracula_bg;
     let label = format!("  {}  ", title);
     let lw = label.chars().count();
     if width <= lw.saturating_add(2) {
@@ -20,7 +21,7 @@ pub(crate) fn titled_rule_line(title: &str, width: usize, title_accent: Color) -
             label,
             Style::default()
                 .fg(title_accent)
-                .bg(DRACULA_BG)
+                .bg(bg)
                 .add_modifier(Modifier::BOLD),
         )])
         .alignment(Alignment::Center);
@@ -34,7 +35,7 @@ pub(crate) fn titled_rule_line(title: &str, width: usize, title_accent: Color) -
             label,
             Style::default()
                 .fg(title_accent)
-                .bg(DRACULA_BG)
+                .bg(bg)
                 .add_modifier(Modifier::BOLD),
         ),
         rule_span("─".repeat(right_len)),

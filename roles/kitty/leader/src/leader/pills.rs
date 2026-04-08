@@ -9,8 +9,7 @@ use crate::action::LeaderWindowRow;
 use super::{
     layout::popup_gap,
     theme::{
-        CWD_PILL_ICON, DRACULA_BG, GIT_PILL_ICON, GREEN, KUBE_PILL_BG, KUBE_PILL_ICON, MAUVE,
-        ORANGE, PILL_BG, ROUND_CAP_L, ROUND_CAP_R, TEAL, YELLOW, FG,
+        palette, CWD_PILL_ICON, GIT_PILL_ICON, KUBE_PILL_ICON, ROUND_CAP_L, ROUND_CAP_R,
     },
 };
 
@@ -26,48 +25,51 @@ pub(crate) fn truncate_pill_label(s: &str, max_chars: usize) -> String {
 }
 
 pub(crate) fn pill_style(selected: bool, kitty_focused: bool, recent: bool) -> Style {
+    let t = palette();
     if selected {
         Style::default()
-            .fg(DRACULA_BG)
-            .bg(MAUVE)
+            .fg(t.dracula_bg)
+            .bg(t.mauve)
             .add_modifier(Modifier::BOLD)
     } else if kitty_focused {
         Style::default()
-            .fg(TEAL)
-            .bg(PILL_BG)
+            .fg(t.teal)
+            .bg(t.pill_bg)
             .add_modifier(Modifier::BOLD)
     } else if recent {
         Style::default()
-            .fg(DRACULA_BG)
-            .bg(YELLOW)
+            .fg(t.dracula_bg)
+            .bg(t.yellow)
             .add_modifier(Modifier::BOLD)
     } else {
-        Style::default().fg(FG).bg(PILL_BG)
+        Style::default().fg(t.fg).bg(t.pill_bg)
     }
 }
 
 /// Pill fill color for caps (must match middle `bg` for non-selected states).
 pub(crate) fn pill_cap_fill_color(selected: bool, current: bool) -> ratatui::style::Color {
+    let t = palette();
     if selected {
-        MAUVE
+        t.mauve
     } else if current {
-        YELLOW
+        t.yellow
     } else {
-        PILL_BG
+        t.pill_bg
     }
 }
 
 fn cwd_pill_spans(cwd: &str, max_line_width: usize) -> Vec<Span<'static>> {
+    let t = palette();
     let max_inner = max_line_width.saturating_sub(4).clamp(8, 120);
     let icon_reserve = CWD_PILL_ICON.chars().count().saturating_add(1);
     let max_text = max_inner.saturating_sub(icon_reserve).max(4);
     let inner_text = truncate_pill_label(cwd, max_text);
     let inner = format!(" {} {} ", CWD_PILL_ICON, inner_text);
     let mid = Style::default()
-        .fg(DRACULA_BG)
-        .bg(GREEN)
+        .fg(t.dracula_bg)
+        .bg(t.green)
         .add_modifier(Modifier::BOLD);
-    let cap = Style::default().fg(GREEN).bg(DRACULA_BG);
+    let cap = Style::default().fg(t.green).bg(t.dracula_bg);
     vec![
         Span::styled(ROUND_CAP_L, cap),
         Span::styled(inner, mid),
@@ -76,16 +78,17 @@ fn cwd_pill_spans(cwd: &str, max_line_width: usize) -> Vec<Span<'static>> {
 }
 
 fn kube_pill_spans(ctx: &str, max_line_width: usize) -> Vec<Span<'static>> {
+    let t = palette();
     let max_inner = max_line_width.saturating_sub(4).clamp(8, 120);
     let icon_reserve = KUBE_PILL_ICON.chars().count().saturating_add(1);
     let max_text = max_inner.saturating_sub(icon_reserve).max(4);
     let inner_text = truncate_pill_label(ctx, max_text);
     let inner = format!(" {} {} ", KUBE_PILL_ICON, inner_text);
     let mid = Style::default()
-        .fg(DRACULA_BG)
-        .bg(KUBE_PILL_BG)
+        .fg(t.dracula_bg)
+        .bg(t.kube_pill_bg)
         .add_modifier(Modifier::BOLD);
-    let cap = Style::default().fg(KUBE_PILL_BG).bg(DRACULA_BG);
+    let cap = Style::default().fg(t.kube_pill_bg).bg(t.dracula_bg);
     vec![
         Span::styled(ROUND_CAP_L, cap),
         Span::styled(inner, mid),
@@ -94,16 +97,17 @@ fn kube_pill_spans(ctx: &str, max_line_width: usize) -> Vec<Span<'static>> {
 }
 
 fn git_pill_spans(branch: &str, max_line_width: usize) -> Vec<Span<'static>> {
+    let t = palette();
     let max_inner = max_line_width.saturating_sub(4).clamp(8, 120);
     let icon_reserve = GIT_PILL_ICON.chars().count().saturating_add(1);
     let max_text = max_inner.saturating_sub(icon_reserve).max(4);
     let inner_text = truncate_pill_label(branch, max_text);
     let inner = format!(" {} {} ", GIT_PILL_ICON, inner_text);
     let mid = Style::default()
-        .fg(DRACULA_BG)
-        .bg(ORANGE)
+        .fg(t.dracula_bg)
+        .bg(t.orange)
         .add_modifier(Modifier::BOLD);
-    let cap = Style::default().fg(ORANGE).bg(DRACULA_BG);
+    let cap = Style::default().fg(t.orange).bg(t.dracula_bg);
     vec![
         Span::styled(ROUND_CAP_L, cap),
         Span::styled(inner, mid),
@@ -176,6 +180,7 @@ pub(crate) fn window_pill_lines(
 ) -> Vec<Line<'static>> {
     const MAX_WINDOWS: usize = 24;
     const MIN_CHARS: usize = 6;
+    let t = palette();
     let max_chars = (max_line_width / 5).clamp(MIN_CHARS, 22);
 
     let mut out: Vec<Line<'static>> = Vec::new();
@@ -204,7 +209,7 @@ pub(crate) fn window_pill_lines(
             used += 1;
         }
         let mid = pill_style(sel, row.focused, row.current);
-        let cap_style = Style::default().fg(bg).bg(DRACULA_BG);
+        let cap_style = Style::default().fg(bg).bg(t.dracula_bg);
         line_spans.push(Span::styled(ROUND_CAP_L, cap_style));
         line_spans.push(Span::styled(inner, mid));
         line_spans.push(Span::styled(ROUND_CAP_R, cap_style));
@@ -217,7 +222,7 @@ pub(crate) fn window_pill_lines(
     if rows.len() > MAX_WINDOWS {
         out.push(Line::from(vec![Span::styled(
             format!("… +{} more", rows.len() - MAX_WINDOWS),
-            Style::default().fg(super::theme::COMMENT_BRIGHT).bg(DRACULA_BG),
+            Style::default().fg(t.comment_bright).bg(t.dracula_bg),
         )]));
     }
     out

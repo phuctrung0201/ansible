@@ -5,9 +5,7 @@ use ratatui::{
     widgets::Block,
 };
 
-use super::theme::{
-    COMMENT_BRIGHT, DRACULA_BG, FG, KEY_WIDTH, PINK, TEAL, YELLOW, COLS,
-};
+use super::theme::{palette, COLS, KEY_WIDTH};
 
 pub(crate) fn key_display(key: char) -> String {
     let s = match key {
@@ -54,18 +52,19 @@ pub(crate) fn slot_spans_str(
         width = max_label,
         trail = trailing,
     );
+    let t = palette();
     let label_style = if focused {
-        Style::default().fg(PINK).add_modifier(Modifier::BOLD)
+        Style::default().fg(t.pink).add_modifier(Modifier::BOLD)
     } else if current {
-        Style::default().fg(YELLOW).add_modifier(Modifier::BOLD)
+        Style::default().fg(t.yellow).add_modifier(Modifier::BOLD)
     } else {
-        Style::default().fg(FG)
+        Style::default().fg(t.fg)
     };
     let key_str = format!("{:>KEY_WIDTH$}", key);
     let key_style = if current {
-        Style::default().fg(YELLOW).add_modifier(Modifier::BOLD)
+        Style::default().fg(t.yellow).add_modifier(Modifier::BOLD)
     } else {
-        Style::default().fg(TEAL).add_modifier(Modifier::BOLD)
+        Style::default().fg(t.teal).add_modifier(Modifier::BOLD)
     };
     [
         Span::styled(key_str, key_style),
@@ -95,15 +94,17 @@ pub(crate) fn top_rect(width: u16, height: u16, area: Rect) -> Rect {
 }
 
 pub(crate) fn popup_block() -> Block<'static> {
+    let t = palette();
     Block::new()
-        .style(Style::default().bg(DRACULA_BG))
+        .style(Style::default().bg(t.dracula_bg))
         .padding(ratatui::widgets::Padding::new(2, 2, 1, 0))
 }
 
 pub(crate) fn popup_gap() -> Span<'static> {
-    Span::styled(" ", Style::default().bg(DRACULA_BG))
+    Span::styled(" ", Style::default().bg(palette().dracula_bg))
 }
 
 pub(crate) fn rule_span(s: String) -> Span<'static> {
-    Span::styled(s, Style::default().fg(COMMENT_BRIGHT).bg(DRACULA_BG))
+    let t = palette();
+    Span::styled(s, Style::default().fg(t.comment_bright).bg(t.dracula_bg))
 }

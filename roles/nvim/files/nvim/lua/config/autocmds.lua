@@ -50,8 +50,13 @@ autocmd("TermOpen", {
 autocmd("BufWritePre", {
   group = augroup("format_on_save", { clear = true }),
   pattern = "*",
-  callback = function()
-    vim.lsp.buf.format({ async = false })
+  callback = function(args)
+    local bo = vim.bo[args.buf]
+    if not bo.modifiable or bo.readonly then
+      return
+    end
+    -- pcall: no echo/notify when no formatter, timeout, or server errors
+    pcall(vim.lsp.buf.format, { async = false, bufnr = args.buf })
   end,
 })
 
