@@ -23,15 +23,15 @@ pub(crate) fn run(
                 kind: KeyEventKind::Press,
                 ..
             }) => {
-                if context::is_root(state) && !state.window_rows.is_empty() {
-                    let id = state.window_rows[state.window_cursor].id;
-                    ratatui::restore();
-                    return crate::action::focus_window_from_leader(id);
-                }
-                if context::is_tab_group(state) && !state.tab_rows.is_empty() {
+                if context::is_root(state) && !state.tab_rows.is_empty() {
                     let id = state.tab_rows[state.tab_cursor].id;
                     ratatui::restore();
                     return crate::action::focus_tab_from_leader(id);
+                }
+                if context::is_window_group(state) && !state.window_rows.is_empty() {
+                    let id = state.window_rows[state.window_cursor].id;
+                    ratatui::restore();
+                    return crate::action::focus_window_from_leader(id);
                 }
                 if context::is_launch_group(state) && !state.launch_rows.is_empty() {
                     let idx = state.launch_rows[state.launch_cursor].id as usize;
@@ -44,12 +44,13 @@ pub(crate) fn run(
                 kind: KeyEventKind::Press,
                 ..
             }) => {
-                if context::is_root(state) && !state.window_rows.is_empty() {
-                    state.window_cursor = (state.window_cursor + 1) % state.window_rows.len();
+                if context::is_root(state) && !state.tab_rows.is_empty() {
+                    state.tab_cursor = (state.tab_cursor + 1) % state.tab_rows.len();
                     continue;
                 }
-                if context::is_tab_group(state) && !state.tab_rows.is_empty() {
-                    state.tab_cursor = (state.tab_cursor + 1) % state.tab_rows.len();
+                if context::is_window_group(state) && !state.window_rows.is_empty() {
+                    state.window_cursor =
+                        (state.window_cursor + 1) % state.window_rows.len();
                     continue;
                 }
                 if context::is_launch_group(state) && !state.launch_rows.is_empty() {
@@ -72,14 +73,14 @@ pub(crate) fn run(
                 kind: KeyEventKind::Press,
                 ..
             }) => {
-                if context::is_root(state) && !state.window_rows.is_empty() {
-                    let len = state.window_rows.len();
-                    state.window_cursor = (state.window_cursor + len - 1) % len;
-                    continue;
-                }
-                if context::is_tab_group(state) && !state.tab_rows.is_empty() {
+                if context::is_root(state) && !state.tab_rows.is_empty() {
                     let len = state.tab_rows.len();
                     state.tab_cursor = (state.tab_cursor + len - 1) % len;
+                    continue;
+                }
+                if context::is_window_group(state) && !state.window_rows.is_empty() {
+                    let len = state.window_rows.len();
+                    state.window_cursor = (state.window_cursor + len - 1) % len;
                     continue;
                 }
                 if context::is_launch_group(state) && !state.launch_rows.is_empty() {
@@ -96,20 +97,7 @@ pub(crate) fn run(
                 kind: KeyEventKind::Press,
                 ..
             }) => {
-                if context::is_root(state) && !state.window_rows.is_empty() {
-                    if let Some(d) = c.to_digit(10) {
-                        let idx = d as usize;
-                        if (1..=9).contains(&idx) {
-                            let j = idx - 1;
-                            if j < state.window_rows.len() {
-                                let id = state.window_rows[j].id;
-                                ratatui::restore();
-                                return crate::action::focus_window_from_leader(id);
-                            }
-                        }
-                    }
-                }
-                if context::is_tab_group(state) && !state.tab_rows.is_empty() {
+                if context::is_root(state) && !state.tab_rows.is_empty() {
                     if let Some(d) = c.to_digit(10) {
                         let idx = d as usize;
                         if (1..=9).contains(&idx) {
@@ -118,6 +106,19 @@ pub(crate) fn run(
                                 let id = state.tab_rows[j].id;
                                 ratatui::restore();
                                 return crate::action::focus_tab_from_leader(id);
+                            }
+                        }
+                    }
+                }
+                if context::is_window_group(state) && !state.window_rows.is_empty() {
+                    if let Some(d) = c.to_digit(10) {
+                        let idx = d as usize;
+                        if (1..=9).contains(&idx) {
+                            let j = idx - 1;
+                            if j < state.window_rows.len() {
+                                let id = state.window_rows[j].id;
+                                ratatui::restore();
+                                return crate::action::focus_window_from_leader(id);
                             }
                         }
                     }

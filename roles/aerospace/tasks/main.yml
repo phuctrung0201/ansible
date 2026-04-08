@@ -1,3 +1,8 @@
+- name: Install im-select (tap is added automatically by Homebrew)
+  homebrew:
+    name: daipeihust/tap/im-select
+    state: present
+
 - name: Install aerospace
   homebrew_cask:
     name: aerospace

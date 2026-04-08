@@ -10,7 +10,7 @@ use super::{
     layout::popup_gap,
     theme::{
         CWD_PILL_BG, CWD_PILL_ICON, DRACULA_BG, GIT_PILL_ICON, GREEN, KUBE_PILL_ICON, MAUVE,
-        ORANGE, PILL_BG, PINK, ROUND_CAP_L, ROUND_CAP_R, TABS_SECTION_ICON, YELLOW, FG,
+        ORANGE, PILL_BG, ROUND_CAP_L, ROUND_CAP_R, YELLOW, FG,
     },
 };
 
@@ -111,27 +111,24 @@ fn git_pill_spans(branch: &str, max_line_width: usize) -> Vec<Span<'static>> {
     ]
 }
 
-/// Tab / cwd / git / kube spans for the top row (no alignment). Used standalone (centered) or prefixed to window/tab/launcher pills.
+/// Cwd / git / kube spans for the top row (no alignment). Used standalone (centered) or prefixed to window/tab/launcher pills.
 pub(crate) fn banner_pills_prefix_spans(
-    tab: Option<&str>,
     cwd: Option<&str>,
     kube: Option<&str>,
     git: Option<&str>,
     max_line_width: usize,
 ) -> Option<Vec<Span<'static>>> {
-    let n = usize::from(tab.is_some())
-        + usize::from(cwd.is_some())
+    let n = usize::from(cwd.is_some())
         + usize::from(kube.is_some())
         + usize::from(git.is_some());
     if n == 0 {
         return None;
     }
     if n == 1 {
-        let spans = match (tab, cwd, kube, git) {
-            (Some(t), None, None, None) => tab_pill_spans(t, max_line_width),
-            (None, Some(c), None, None) => cwd_pill_spans(c, max_line_width),
-            (None, None, Some(k), None) => kube_pill_spans(k, max_line_width),
-            (None, None, None, Some(g)) => git_pill_spans(g, max_line_width),
+        let spans = match (cwd, kube, git) {
+            (Some(c), None, None) => cwd_pill_spans(c, max_line_width),
+            (None, Some(k), None) => kube_pill_spans(k, max_line_width),
+            (None, None, Some(g)) => git_pill_spans(g, max_line_width),
             _ => return None,
         };
         return Some(spans);
@@ -139,12 +136,6 @@ pub(crate) fn banner_pills_prefix_spans(
     let gaps = n - 1;
     let w = (max_line_width.saturating_sub(gaps) / n).max(18);
     let mut spans: Vec<Span<'static>> = Vec::new();
-    if let Some(t) = tab {
-        if !spans.is_empty() {
-            spans.push(popup_gap());
-        }
-        spans.extend(tab_pill_spans(t, w));
-    }
     if let Some(c) = cwd {
         if !spans.is_empty() {
             spans.push(popup_gap());
@@ -166,33 +157,14 @@ pub(crate) fn banner_pills_prefix_spans(
     Some(spans)
 }
 
-fn tab_pill_spans(title: &str, max_line_width: usize) -> Vec<Span<'static>> {
-    let max_inner = max_line_width.saturating_sub(4).clamp(8, 120);
-    let icon_reserve = TABS_SECTION_ICON.chars().count().saturating_add(1);
-    let max_text = max_inner.saturating_sub(icon_reserve).max(4);
-    let inner_text = truncate_pill_label(title, max_text);
-    let inner = format!(" {} {} ", TABS_SECTION_ICON, inner_text);
-    let mid = Style::default()
-        .fg(DRACULA_BG)
-        .bg(PINK)
-        .add_modifier(Modifier::BOLD);
-    let cap = Style::default().fg(PINK).bg(DRACULA_BG);
-    vec![
-        Span::styled(ROUND_CAP_L, cap),
-        Span::styled(inner, mid),
-        Span::styled(ROUND_CAP_R, cap),
-    ]
-}
-
-/// Centered top row: tab title plus cwd / git / kube pills (read‑only), above windows/tabs/launcher lists.
+/// Centered top row: cwd / git / kube pills (read‑only), above windows/tabs/launcher lists.
 pub(crate) fn banner_pills_line(
-    tab: Option<&str>,
     cwd: Option<&str>,
     kube: Option<&str>,
     git: Option<&str>,
     max_line_width: usize,
 ) -> Option<Line<'static>> {
-    let spans = banner_pills_prefix_spans(tab, cwd, kube, git, max_line_width)?;
+    let spans = banner_pills_prefix_spans(cwd, kube, git, max_line_width)?;
     Some(Line::from(spans).alignment(Alignment::Center))
 }
 

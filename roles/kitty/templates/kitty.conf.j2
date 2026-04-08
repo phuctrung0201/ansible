@@ -63,11 +63,12 @@ active_border_color     {{ theme.purple }}
 inactive_border_color   {{ theme.comment }}
 
 # =============================================================================
-# Scrollback
+# Scrollback (nvim + ansify — ansify.pager sets laststatus=1; turn ruler off in on_finish)
 # =============================================================================
-scrollback_pager nvim -c 'lua require("ansify").pager({on_finish=function() vim.cmd("normal G") end})' -
+scrollback_pager nvim -c 'lua require("ansify").pager({on_finish=function() vim.o.laststatus=0 vim.o.ruler=false vim.cmd("setlocal noswapfile") vim.cmd("setlocal nowrap") vim.cmd("normal G") end})' -
 
 # =============================================================================
 # Key mappings
 # =============================================================================
+map cmd+w   close_window
 map opt+space launch --type=overlay --cwd=current ~/.config/kitty/leader

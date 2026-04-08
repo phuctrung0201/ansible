@@ -58,7 +58,7 @@ pub struct KittyWindow {
     pub foreground_processes: Vec<KittyForegroundProcess>,
 }
 
-/// One row in the tab’s window list (overlay excluded). Shown at the top of the root leader.
+/// One row in the tab’s window list (overlay excluded). Shown at the top in the window group.
 pub struct LeaderWindowRow {
     pub id: u64,
     pub label: String,
@@ -137,18 +137,6 @@ fn effective_current_window_id(tab: &KittyTab) -> Option<u64> {
         return Some(w.id);
     }
     real.first().copied()
-}
-
-/// Tab that contains the leader overlay (`is_self`), if any.
-/// Title for the tab that hosts the leader overlay (for the top tab pill).
-fn overlay_tab_title_for_pill(os: &[KittyOs]) -> Option<String> {
-    let tab = leader_overlay_tab(os)?;
-    let trimmed = tab.title.trim();
-    Some(if trimmed.is_empty() {
-        format!("tab {}", tab.id)
-    } else {
-        trimmed.to_string()
-    })
 }
 
 fn leader_overlay_tab<'a>(os: &'a [KittyOs]) -> Option<&'a KittyTab> {
@@ -486,11 +474,11 @@ pub struct LeaderState {
     pub label: &'static str,
     /// Current tab’s windows (no overlay), snapshot when the leader opens.
     pub window_rows: Vec<LeaderWindowRow>,
-    /// Keyboard selection in `window_rows` (root only).
+    /// Keyboard selection in `window_rows` (window group only).
     pub window_cursor: usize,
     /// OS-window tabs, snapshot when the leader opens.
     pub tab_rows: Vec<LeaderWindowRow>,
-    /// Keyboard selection in `tab_rows` (tab group only).
+    /// Keyboard selection in `tab_rows` (root).
     pub tab_cursor: usize,
     /// Launcher tools (pill list; indices match [`crate::launcher::NODES`]).
     pub launch_rows: Vec<LeaderWindowRow>,
@@ -501,8 +489,6 @@ pub struct LeaderState {
     pub kube_pill: Option<String>,
     /// Git branch (or detached short SHA) when effective cwd is in a git work tree; snapshot at open.
     pub git_pill: Option<String>,
-    /// Tab title for the overlay’s tab (read‑only header pill).
-    pub tab_pill: Option<String>,
 }
 
 impl LeaderState {
@@ -539,7 +525,6 @@ impl LeaderState {
             .as_deref()
             .and_then(|p| git_branch_in_repo(Path::new(p)));
         let kube_pill = leader_kube_context_display();
-        let tab_pill = overlay_tab_title_for_pill(os_ref);
         LeaderState {
             nodes: keymap::KEYMAP,
             icon: LEADER_HEADER_ICON,
@@ -553,7 +538,6 @@ impl LeaderState {
             cwd_pill,
             kube_pill,
             git_pill,
-            tab_pill,
         }
     }
 }
@@ -701,22 +685,22 @@ pub fn close_other_tabs() -> anyhow::Result<()> {
 
 pub fn launch_lazygit() -> anyhow::Result<()> {
     close_overlay()?;
-    kitty::launch_overlay(&["lazygit"])
+    kitty::send_action("launch --type=overlay --cwd=current lazygit").context("launch lazygit")
 }
 
 pub fn launch_k9s() -> anyhow::Result<()> {
     close_overlay()?;
-    kitty::launch_overlay(&["k9s"])
+    kitty::send_action("launch --type=overlay --cwd=current k9s").context("launch k9s")
 }
 
 pub fn launch_lazysql() -> anyhow::Result<()> {
     close_overlay()?;
-    kitty::launch_overlay(&["lazysql"])
+    kitty::send_action("launch --type=overlay --cwd=current lazysql").context("launch lazysql")
 }
 
 pub fn launch_nb() -> anyhow::Result<()> {
     close_overlay()?;
-    kitty::launch_overlay(&["nb", "-i"])
+    kitty::send_action("launch --type=overlay --cwd=current nb -i").context("launch nb")
 }
 
 pub fn attach_tab() -> anyhow::Result<()> {

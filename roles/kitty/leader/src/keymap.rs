@@ -1,25 +1,43 @@
-//! Leader keyboard layers: root [`KEYMAP`], tab group [`TAB_GROUP_NODES`]. Apps live in [`crate::launcher`].
+//! Leader keyboard layers: root [`KEYMAP`], window group [`WINDOW_GROUP_NODES`]. Apps live in [`crate::launcher`].
 
 use crate::action;
 use crate::keynode::{KeyNode, KeyNodeKind};
 use crate::launcher;
 
-/// Tab actions subgroup (`t` → tab). Used to detect tab group for the tab strip TUI.
-pub static TAB_GROUP_NODES: &[KeyNode] = &[
+/// Window actions subgroup (`w` → window). Used to detect window group for the window strip TUI.
+pub static WINDOW_GROUP_NODES: &[KeyNode] = &[
+    KeyNode {
+        key: ' ',
+        label: "last window",
+        kind: KeyNodeKind::Action(action::last_window),
+    },
+    KeyNode {
+        key: 'r',
+        label: "rename window",
+        kind: KeyNodeKind::Action(action::rename_window),
+    },
+    KeyNode {
+        key: 'w',
+        label: "new window",
+        kind: KeyNodeKind::Action(action::new_window),
+    },
+    KeyNode {
+        key: 'x',
+        label: "close window",
+        kind: KeyNodeKind::Action(action::close_window_action),
+    },
+    KeyNode {
+        key: 'X',
+        label: "close other windows",
+        kind: KeyNodeKind::Action(action::close_other_windows),
+    },
+];
+
+pub static KEYMAP: &[KeyNode] = &[
     KeyNode {
         key: ' ',
         label: "last tab",
         kind: KeyNodeKind::Action(action::last_tab),
-    },
-    KeyNode {
-        key: 't',
-        label: "new tab",
-        kind: KeyNodeKind::Action(action::new_tab),
-    },
-    KeyNode {
-        key: 'r',
-        label: "rename tab",
-        kind: KeyNodeKind::Action(action::rename_tab),
     },
     KeyNode {
         key: 'a',
@@ -27,32 +45,14 @@ pub static TAB_GROUP_NODES: &[KeyNode] = &[
         kind: KeyNodeKind::Action(action::attach_tab),
     },
     KeyNode {
-        key: 'd',
-        label: "detach tab",
-        kind: KeyNodeKind::Action(action::detach_tab),
-    },
-    KeyNode {
-        key: 'x',
-        label: "close tab",
-        kind: KeyNodeKind::Action(action::close_tab),
-    },
-    KeyNode {
-        key: 'X',
-        label: "close other tabs",
-        kind: KeyNodeKind::Action(action::close_other_tabs),
-    },
-];
-
-pub static KEYMAP: &[KeyNode] = &[
-    KeyNode {
-        key: ' ',
-        label: "last window",
-        kind: KeyNodeKind::Action(action::last_window),
-    },
-    KeyNode {
         key: 'c',
         label: "copy link",
         kind: KeyNodeKind::Action(action::copy_link),
+    },
+    KeyNode {
+        key: 'd',
+        label: "detach tab",
+        kind: KeyNodeKind::Action(action::detach_tab),
     },
     KeyNode {
         key: 'e',
@@ -74,26 +74,26 @@ pub static KEYMAP: &[KeyNode] = &[
     },
     KeyNode {
         key: 'r',
-        label: "rename window",
-        kind: KeyNodeKind::Action(action::rename_window),
+        label: "rename tab",
+        kind: KeyNodeKind::Action(action::rename_tab),
     },
     KeyNode {
         key: 't',
-        label: "tab",
-        kind: KeyNodeKind::Group {
-            icon: "󰓩",
-            nodes: TAB_GROUP_NODES,
-        },
+        label: "new tab",
+        kind: KeyNodeKind::Action(action::new_tab),
     },
     KeyNode {
         key: 'w',
-        label: "new window",
-        kind: KeyNodeKind::Action(action::new_window),
+        label: "window",
+        kind: KeyNodeKind::Group {
+            icon: "\u{f2d0}",
+            nodes: WINDOW_GROUP_NODES,
+        },
     },
     KeyNode {
         key: 'x',
-        label: "close window",
-        kind: KeyNodeKind::Action(action::close_window_action),
+        label: "close tab",
+        kind: KeyNodeKind::Action(action::close_tab),
     },
     KeyNode {
         key: 'O',
@@ -102,7 +102,7 @@ pub static KEYMAP: &[KeyNode] = &[
     },
     KeyNode {
         key: 'X',
-        label: "close other windows",
-        kind: KeyNodeKind::Action(action::close_other_windows),
+        label: "close other tabs",
+        kind: KeyNodeKind::Action(action::close_other_tabs),
     },
 ];

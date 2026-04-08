@@ -30,23 +30,12 @@ pub(crate) fn render(frame: &mut Frame, state: &LeaderState) {
     };
 
     let pill_max_w = (area.width as usize).saturating_sub(4).max(20);
-    let has_any_banner = state.tab_pill.is_some()
-        || state.cwd_pill.is_some()
+    let has_any_banner = state.cwd_pill.is_some()
         || state.kube_pill.is_some()
         || state.git_pill.is_some();
 
     let mut top_strip: Vec<Line<'static>> = Vec::new();
-    if context::is_root(state) && !state.window_rows.is_empty() {
-        top_strip.extend(divider_with_vertical_margin(
-            &format!("{} windows", WINDOWS_SECTION_ICON),
-            div_w,
-        ));
-        top_strip.extend(window_pill_lines(
-            &state.window_rows,
-            state.window_cursor,
-            pill_max_w,
-        ));
-    } else if context::is_tab_group(state) && !state.tab_rows.is_empty() {
+    if context::is_root(state) && !state.tab_rows.is_empty() {
         top_strip.extend(divider_with_vertical_margin(
             &format!("{} tabs", TABS_SECTION_ICON),
             div_w,
@@ -54,6 +43,16 @@ pub(crate) fn render(frame: &mut Frame, state: &LeaderState) {
         top_strip.extend(window_pill_lines(
             &state.tab_rows,
             state.tab_cursor,
+            pill_max_w,
+        ));
+    } else if context::is_window_group(state) && !state.window_rows.is_empty() {
+        top_strip.extend(divider_with_vertical_margin(
+            &format!("{} windows", WINDOWS_SECTION_ICON),
+            div_w,
+        ));
+        top_strip.extend(window_pill_lines(
+            &state.window_rows,
+            state.window_cursor,
             pill_max_w,
         ));
     } else if context::is_launch_group(state) && !state.launch_rows.is_empty() {
@@ -81,7 +80,6 @@ pub(crate) fn render(frame: &mut Frame, state: &LeaderState) {
 
     let mut lines: Vec<Line> = Vec::new();
     if let Some(line) = banner_pills_line(
-        state.tab_pill.as_deref(),
         state.cwd_pill.as_deref(),
         state.kube_pill.as_deref(),
         state.git_pill.as_deref(),
