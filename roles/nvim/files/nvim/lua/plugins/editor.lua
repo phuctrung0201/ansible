@@ -113,10 +113,12 @@ return {
       vim.lsp.config("vtsls", {
         settings = {
           typescript = {
+            tsserver = { maxTsServerMemory = 4096 },
             suggest = { autoImports = true },
             preferences = { includePackageJsonAutoImports = "auto" },
           },
           javascript = {
+            tsserver = { maxTsServerMemory = 4096 },
             suggest = { autoImports = true },
             preferences = { includePackageJsonAutoImports = "auto" },
           },
