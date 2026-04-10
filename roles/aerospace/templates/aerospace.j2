@@ -24,12 +24,16 @@ default-root-container-layout = 'tiles'
 #               tall monitor (anything higher than wide) gets vertical orientation
 default-root-container-orientation = 'auto'
 on-focused-monitor-changed = []
+# See https://nikitabobko.github.io/AeroSpace/guide#on-focus-changed-callbacks — omit or [] unless you need move-mouse / other commands.
 on-focus-changed = []
-# Switch to ABC layout when changing workspace (im-select from aerospace role).
-# Call `im-select` directly — avoids spawning `/bin/bash -c` on every workspace change (noticeable lag).
-# AeroSpace defaults prepend Homebrew to PATH for exec callbacks; see guide §2.7 exec-* env vars.
-exec-on-workspace-change = ['im-select', 'com.apple.keylayout.ABC']
 automatically-unhide-macos-hidden-apps = false
+
+# Run when the focused workspace changes. Doc pattern: https://nikitabobko.github.io/AeroSpace/guide#exec-on-workspace-change-callback
+# Same shape as the SketchyBar example: /bin/bash -c "<script>" (argv0 is not resolved via PATH; the shell finds im-select).
+# Env: AEROSPACE_FOCUSED_WORKSPACE, AEROSPACE_PREV_WORKSPACE. English layout id: run `im-select` with no args to print current.
+# No [exec] block: AeroSpace defaults already prepend /opt/homebrew to PATH for exec-* (guide §2.7). Add [exec.env-vars] only for Intel Homebrew (/usr/local), ~/bin, etc.
+exec-on-workspace-change = ['/bin/bash', '-c', 'im-select com.apple.keylayout.ABC']
+
 [key-mapping]
 preset = 'qwerty'
 [gaps]
