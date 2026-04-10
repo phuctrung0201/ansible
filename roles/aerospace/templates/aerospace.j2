@@ -41,13 +41,14 @@ outer.top = 4
 outer.right = 4
 
 # Main mode is passive — all keys pass through to apps.
-# alt-tab enters action mode.
+# f11 toggles action mode (see f11 in [mode.action.binding]).
 [mode.main.binding]
-alt-tab = 'mode action'
+f11 = 'mode action'
 
 # Action mode — persistent window management.
 # Workspaces: `=terminal 1=browser 2=fallback 3=empty F1=slack F2=outlook F3=zoom
 [mode.action.binding]
+f11 = 'mode main'
 
 # space: previous ↔ current window; tab: next window in workspace (DFS order, wraps)
 tab = ['focus --boundaries-action wrap-around-the-workspace dfs-next', 'mode main']
