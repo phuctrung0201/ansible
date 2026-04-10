@@ -1,44 +1,31 @@
-//! Leader keyboard layers: root [`KEYMAP`], window group [`WINDOW_GROUP_NODES`]. Apps live in [`crate::launcher`].
+//! Leader keyboard layers: root [`KEYMAP`]. Apps live in [`crate::launcher`].
+//!
+//! Root actions are ordered for the grid: **non-letters first** (e.g. space, tab), then **a–z
+//! case-insensitively** (for the same letter, lowercase before uppercase).
 
 use crate::action;
 use crate::keynode::{KeyNode, KeyNodeKind};
 use crate::launcher;
 
-/// Window actions subgroup (`w` → window). Used to detect window group for the window strip TUI.
-pub static WINDOW_GROUP_NODES: &[KeyNode] = &[
-    KeyNode {
-        key: ' ',
-        label: "last window",
-        kind: KeyNodeKind::Action(action::last_window),
-    },
-    KeyNode {
-        key: 'r',
-        label: "rename window",
-        kind: KeyNodeKind::Action(action::rename_window),
-    },
-    KeyNode {
-        key: 'w',
-        label: "new window",
-        kind: KeyNodeKind::Action(action::new_window),
-    },
-    KeyNode {
-        key: 'x',
-        label: "close window",
-        kind: KeyNodeKind::Action(action::close_window_action),
-    },
-    KeyNode {
-        key: 'X',
-        label: "close other windows",
-        kind: KeyNodeKind::Action(action::close_other_windows),
-    },
-];
+/// Tab picker layer (empty key grid; list UI handled in [`crate::leader::render`]).
+pub static TAB_LIST_NODES: &[KeyNode] = &[];
 
 pub static KEYMAP: &[KeyNode] = &[
+    // --- special (not a–z / A–Z) ---
     KeyNode {
         key: ' ',
         label: "last tab",
         kind: KeyNodeKind::Action(action::last_tab),
     },
+    KeyNode {
+        key: '\t',
+        label: "tab list",
+        kind: KeyNodeKind::Group {
+            icon: "\u{f04e9}",
+            nodes: TAB_LIST_NODES,
+        },
+    },
+    // --- a–z (case-insensitive; lower then upper per letter) ---
     KeyNode {
         key: 'a',
         label: "attach tab",
@@ -63,9 +50,14 @@ pub static KEYMAP: &[KeyNode] = &[
         key: 'l',
         label: "launcher",
         kind: KeyNodeKind::Group {
-            icon: "󱓞",
+            icon: "\u{f14de}",
             nodes: launcher::NODES,
         },
+    },
+    KeyNode {
+        key: 'n',
+        label: "new tab",
+        kind: KeyNodeKind::Action(action::new_tab),
     },
     KeyNode {
         key: 'o',
@@ -73,32 +65,19 @@ pub static KEYMAP: &[KeyNode] = &[
         kind: KeyNodeKind::Action(action::open_buffer),
     },
     KeyNode {
+        key: 'O',
+        label: "open link",
+        kind: KeyNodeKind::Action(action::open_link),
+    },
+    KeyNode {
         key: 'r',
         label: "rename tab",
         kind: KeyNodeKind::Action(action::rename_tab),
     },
     KeyNode {
-        key: 't',
-        label: "new tab",
-        kind: KeyNodeKind::Action(action::new_tab),
-    },
-    KeyNode {
-        key: 'w',
-        label: "window",
-        kind: KeyNodeKind::Group {
-            icon: "\u{f2d0}",
-            nodes: WINDOW_GROUP_NODES,
-        },
-    },
-    KeyNode {
         key: 'x',
         label: "close tab",
         kind: KeyNodeKind::Action(action::close_tab),
-    },
-    KeyNode {
-        key: 'O',
-        label: "open link",
-        kind: KeyNodeKind::Action(action::open_link),
     },
     KeyNode {
         key: 'X',

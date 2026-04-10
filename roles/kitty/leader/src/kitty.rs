@@ -75,14 +75,6 @@ pub fn focus_tab(id: u64) -> anyhow::Result<()> {
     Ok(())
 }
 
-pub fn focus_window(id: u64) -> anyhow::Result<()> {
-    kitten_cmd()
-        .args(["@", "focus-window", "--match", &format!("id:{id}")])
-        .status()
-        .context("kitten @ focus-window")?;
-    Ok(())
-}
-
 pub fn close_tab(id: u64) -> anyhow::Result<()> {
     kitten_cmd()
         .args(["@", "close-tab", "--match", &format!("id:{id}")])

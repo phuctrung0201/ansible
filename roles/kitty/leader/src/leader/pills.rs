@@ -10,6 +10,7 @@ use super::{
     layout::popup_gap,
     theme::{
         palette, CWD_PILL_ICON, GIT_PILL_ICON, KUBE_PILL_ICON, ROUND_CAP_L, ROUND_CAP_R,
+        TAB_TITLE_PILL_ICON,
     },
 };
 
@@ -96,6 +97,25 @@ fn kube_pill_spans(ctx: &str, max_line_width: usize) -> Vec<Span<'static>> {
     ]
 }
 
+fn tab_title_pill_spans(title: &str, max_line_width: usize) -> Vec<Span<'static>> {
+    let t = palette();
+    let max_inner = max_line_width.saturating_sub(4).clamp(8, 120);
+    let icon_reserve = TAB_TITLE_PILL_ICON.chars().count().saturating_add(1);
+    let max_text = max_inner.saturating_sub(icon_reserve).max(4);
+    let inner_text = truncate_pill_label(title, max_text);
+    let inner = format!(" {} {} ", TAB_TITLE_PILL_ICON, inner_text);
+    let mid = Style::default()
+        .fg(t.dracula_bg)
+        .bg(t.mauve)
+        .add_modifier(Modifier::BOLD);
+    let cap = Style::default().fg(t.mauve).bg(t.dracula_bg);
+    vec![
+        Span::styled(ROUND_CAP_L, cap),
+        Span::styled(inner, mid),
+        Span::styled(ROUND_CAP_R, cap),
+    ]
+}
+
 fn git_pill_spans(branch: &str, max_line_width: usize) -> Vec<Span<'static>> {
     let t = palette();
     let max_inner = max_line_width.saturating_sub(4).clamp(8, 120);
@@ -115,61 +135,176 @@ fn git_pill_spans(branch: &str, max_line_width: usize) -> Vec<Span<'static>> {
     ]
 }
 
-/// Cwd / git / kube spans for the top row (no alignment). Used standalone (centered) or prefixed to window/tab/launcher pills.
+fn spans_total_width(spans: &[Span]) -> usize {
+    spans.iter().map(|s| s.width()).sum()
+}
+
+/// Top banner: current tab and cwd on the left; git and kube on the right (flex gap between).
 pub(crate) fn banner_pills_prefix_spans(
     cwd: Option<&str>,
     kube: Option<&str>,
     git: Option<&str>,
+    current_tab_title: Option<&str>,
     max_line_width: usize,
 ) -> Option<Vec<Span<'static>>> {
-    let n = usize::from(cwd.is_some())
-        + usize::from(kube.is_some())
-        + usize::from(git.is_some());
-    if n == 0 {
+    let n_left =
+        usize::from(current_tab_title.is_some()) + usize::from(cwd.is_some());
+    let n_right = usize::from(git.is_some()) + usize::from(kube.is_some());
+    if n_left + n_right == 0 {
         return None;
     }
-    if n == 1 {
-        let spans = match (cwd, kube, git) {
-            (Some(c), None, None) => cwd_pill_spans(c, max_line_width),
-            (None, Some(k), None) => kube_pill_spans(k, max_line_width),
-            (None, None, Some(g)) => git_pill_spans(g, max_line_width),
-            _ => return None,
-        };
-        return Some(spans);
+
+    let t = palette();
+    let fill = Style::default().bg(t.dracula_bg);
+
+    let (w_left, w_right) = match (n_left, n_right) {
+        (0, nr) => {
+            let w = (max_line_width.saturating_sub(nr.saturating_sub(1)) / nr).max(18);
+            (0usize, w)
+        }
+        (nl, 0) => {
+            let w = (max_line_width.saturating_sub(nl.saturating_sub(1)) / nl).max(18);
+            (w, 0usize)
+        }
+        (nl, nr) => {
+            let half = max_line_width / 2;
+            let wl = (half.saturating_sub(nl.saturating_sub(1)) / nl).max(18);
+            let right_budget = max_line_width.saturating_sub(half).saturating_sub(1);
+            let wr = (right_budget.saturating_sub(nr.saturating_sub(1)) / nr).max(18);
+            (wl, wr)
+        }
+    };
+
+    let mut left: Vec<Span<'static>> = Vec::new();
+    if let Some(tab) = current_tab_title {
+        if !left.is_empty() {
+            left.push(popup_gap());
+        }
+        left.extend(tab_title_pill_spans(tab, w_left));
     }
-    let gaps = n - 1;
-    let w = (max_line_width.saturating_sub(gaps) / n).max(18);
-    let mut spans: Vec<Span<'static>> = Vec::new();
     if let Some(c) = cwd {
-        if !spans.is_empty() {
-            spans.push(popup_gap());
+        if !left.is_empty() {
+            left.push(popup_gap());
         }
-        spans.extend(cwd_pill_spans(c, w));
+        left.extend(cwd_pill_spans(c, w_left));
     }
+
+    let mut right: Vec<Span<'static>> = Vec::new();
     if let Some(g) = git {
-        if !spans.is_empty() {
-            spans.push(popup_gap());
+        if !right.is_empty() {
+            right.push(popup_gap());
         }
-        spans.extend(git_pill_spans(g, w));
+        right.extend(git_pill_spans(g, w_right));
     }
     if let Some(k) = kube {
-        if !spans.is_empty() {
-            spans.push(popup_gap());
+        if !right.is_empty() {
+            right.push(popup_gap());
         }
-        spans.extend(kube_pill_spans(k, w));
+        right.extend(kube_pill_spans(k, w_right));
     }
-    Some(spans)
+
+    if n_left > 0 && n_right == 0 {
+        return Some(left);
+    }
+    if n_left == 0 && n_right > 0 {
+        let rw = spans_total_width(&right);
+        let pad = max_line_width.saturating_sub(rw);
+        let mut out = Vec::new();
+        if pad > 0 {
+            out.push(Span::styled(" ".repeat(pad), fill));
+        }
+        out.extend(right);
+        return Some(out);
+    }
+
+    let lw = spans_total_width(&left);
+    let rw = spans_total_width(&right);
+    let gap = max_line_width.saturating_sub(lw + rw).max(1);
+    let mut out = left;
+    out.push(Span::styled(" ".repeat(gap), fill));
+    out.extend(right);
+    Some(out)
 }
 
-/// Centered top row: cwd / git / kube pills (read‑only), above windows/tabs/launcher lists.
+/// Top row banner pills (read‑only): tab · cwd — git · kube.
 pub(crate) fn banner_pills_line(
     cwd: Option<&str>,
     kube: Option<&str>,
     git: Option<&str>,
+    current_tab_title: Option<&str>,
     max_line_width: usize,
 ) -> Option<Line<'static>> {
-    let spans = banner_pills_prefix_spans(cwd, kube, git, max_line_width)?;
-    Some(Line::from(spans).alignment(Alignment::Center))
+    let spans = banner_pills_prefix_spans(cwd, kube, git, current_tab_title, max_line_width)?;
+    Some(Line::from(spans))
+}
+
+/// Scrollable plain-text tab list (no pills); `cursor` indexes into `filtered`.
+pub(crate) fn tab_list_lines(
+    tab_rows: &[LeaderWindowRow],
+    filtered: &[usize],
+    cursor: usize,
+    max_visible: usize,
+    max_label_width: usize,
+) -> Vec<Line<'static>> {
+    let t = palette();
+    let n = filtered.len();
+    if n == 0 {
+        return vec![Line::from(vec![Span::styled(
+            "  (no matching tabs)",
+            Style::default().fg(t.comment_bright).bg(t.dracula_bg),
+        )])];
+    }
+    let max_vis = max_visible.max(1);
+    let skip = if n <= max_vis {
+        0
+    } else {
+        cursor
+            .saturating_sub(max_vis / 2)
+            .min(n.saturating_sub(max_vis))
+    };
+    let mut lines: Vec<Line<'static>> = Vec::new();
+    if skip > 0 {
+        lines.push(Line::from(vec![Span::styled(
+            format!("  ··· {} above", skip),
+            Style::default().fg(t.comment_bright).bg(t.dracula_bg),
+        )]));
+    }
+    let take = (n - skip).min(max_vis);
+    for j in skip..skip + take {
+        let row_i = filtered[j];
+        let row = &tab_rows[row_i];
+        let is_sel = j == cursor;
+        let bullet = if is_sel { "› " } else { "  " };
+        let label = truncate_pill_label(&row.label, max_label_width);
+        let mut style = Style::default().bg(t.dracula_bg);
+        if is_sel {
+            style = style.fg(t.pink).add_modifier(Modifier::BOLD);
+        } else if row.current {
+            style = style.fg(t.teal).add_modifier(Modifier::BOLD);
+        } else {
+            style = style.fg(t.fg);
+        }
+        lines.push(Line::from(vec![
+            Span::styled(bullet, style),
+            Span::styled(label, style),
+        ]));
+    }
+    if skip + take < n {
+        let rem = n - (skip + take);
+        lines.push(Line::from(vec![Span::styled(
+            format!("  ··· {} below", rem),
+            Style::default().fg(t.comment_bright).bg(t.dracula_bg),
+        )]));
+    }
+    lines
+}
+
+fn window_pill_line(line: Line<'static>, center: bool) -> Line<'static> {
+    if center {
+        line.alignment(Alignment::Center)
+    } else {
+        line
+    }
 }
 
 /// Wrapped horizontal lines of window “pills” for the root header.
@@ -177,6 +312,7 @@ pub(crate) fn window_pill_lines(
     rows: &[LeaderWindowRow],
     cursor: usize,
     max_line_width: usize,
+    center: bool,
 ) -> Vec<Line<'static>> {
     const MAX_WINDOWS: usize = 24;
     const MIN_CHARS: usize = 6;
@@ -200,7 +336,7 @@ pub(crate) fn window_pill_lines(
         let gap = if line_spans.is_empty() { 0 } else { 1 };
 
         if used + gap + w > max_line_width && !line_spans.is_empty() {
-            out.push(Line::from(line_spans));
+            out.push(window_pill_line(Line::from(line_spans), center));
             line_spans = Vec::new();
             used = 0;
         }
@@ -217,13 +353,16 @@ pub(crate) fn window_pill_lines(
     }
 
     if !line_spans.is_empty() {
-        out.push(Line::from(line_spans));
+        out.push(window_pill_line(Line::from(line_spans), center));
     }
     if rows.len() > MAX_WINDOWS {
-        out.push(Line::from(vec![Span::styled(
-            format!("… +{} more", rows.len() - MAX_WINDOWS),
-            Style::default().fg(t.comment_bright).bg(t.dracula_bg),
-        )]));
+        out.push(window_pill_line(
+            Line::from(vec![Span::styled(
+                format!("… +{} more", rows.len() - MAX_WINDOWS),
+                Style::default().fg(t.comment_bright).bg(t.dracula_bg),
+            )]),
+            center,
+        ));
     }
     out
 }

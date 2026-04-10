@@ -9,6 +9,7 @@ mod pick;
 mod pills;
 mod render;
 mod palette;
+pub(crate) mod tab_filter;
 mod theme;
 
 pub use message::show_message;

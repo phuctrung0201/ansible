@@ -13,11 +13,11 @@ pub(crate) const ROUND_CAP_R: &str = "\u{e0b4}";
 /// Font Awesome `bolt` — `─── actions` title (same glyph as `LEADER_HEADER_ICON` in `action.rs`).
 pub(crate) const ACTIONS_TITLE_ICON: &str = "\u{f0e7}";
 
-/// Font Awesome `window-maximize` (same PUA style as `LEADER_HEADER_ICON` in `action.rs`).
-pub(crate) const WINDOWS_SECTION_ICON: &str = "\u{f2d0}";
-
 /// Tab strip section (nerdfont tab icon).
 pub(crate) const TABS_SECTION_ICON: &str = "󰓩";
+
+/// Current tab title pill (same glyph as [`TABS_SECTION_ICON`]).
+pub(crate) const TAB_TITLE_PILL_ICON: &str = TABS_SECTION_ICON;
 
 /// Matches launcher group icon in `keymap` (`󱓞`).
 pub(crate) const LAUNCHER_SECTION_ICON: &str = "󱓞";

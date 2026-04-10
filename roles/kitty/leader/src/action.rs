@@ -47,6 +47,7 @@ pub struct KittyWindow {
     #[serde(default)]
     pub is_active: bool,
     #[serde(default)]
+    #[allow(dead_code)]
     pub title: String,
     #[serde(default)]
     pub cwd: String,
@@ -58,26 +59,12 @@ pub struct KittyWindow {
     pub foreground_processes: Vec<KittyForegroundProcess>,
 }
 
-/// One row in the tab’s window list (overlay excluded). Shown at the top in the window group.
+/// Tab or launcher row in the leader UI.
 pub struct LeaderWindowRow {
     pub id: u64,
     pub label: String,
     pub focused: bool,
     pub current: bool,
-}
-
-fn window_label(w: &KittyWindow) -> String {
-    if !w.title.is_empty() {
-        w.title.clone()
-    } else if !w.cwd.is_empty() {
-        Path::new(&w.cwd)
-            .file_name()
-            .and_then(|s| s.to_str())
-            .unwrap_or("window")
-            .to_string()
-    } else {
-        format!("window {}", w.id)
-    }
 }
 
 /// Window under an overlay in the same kitty layout group (`Tab.overlay_parent` in kitty).
@@ -151,29 +138,12 @@ fn leader_overlay_tab<'a>(os: &'a [KittyOs]) -> Option<&'a KittyTab> {
         .find(|t| t.windows.iter().any(|w| w.is_self))
 }
 
-fn overlay_tab_window_rows_with_os(os_windows: &[KittyOs]) -> anyhow::Result<Vec<LeaderWindowRow>> {
-    let tab = match leader_overlay_tab(os_windows) {
-        Some(t) => t,
-        None => return Ok(Vec::new()),
-    };
-    let current_id = effective_current_window_id(tab);
-    let mut rows = Vec::new();
-    for w in tab.windows.iter().filter(|w| !w.is_self) {
-        rows.push(LeaderWindowRow {
-            id: w.id,
-            label: window_label(w),
-            // Avoid double-styles: “current” is derived once via `effective_current_window_id`.
-            focused: false,
-            current: current_id == Some(w.id),
-        });
-    }
-    Ok(rows)
-}
-
 fn foreground_exe_basename(arg: &str) -> Option<&str> {
-    Path::new(arg.trim())
+    let name = Path::new(arg.trim())
         .file_name()
-        .and_then(|s| s.to_str())
+        .and_then(|s| s.to_str())?;
+    // Login shells use argv0 like `-zsh`.
+    Some(name.strip_prefix('-').unwrap_or(name))
 }
 
 fn foreground_looks_like_shell(cmdline: &[String]) -> bool {
@@ -230,7 +200,13 @@ fn overlay_effective_cwd_raw_with_os(os_windows: &[KittyOs]) -> anyhow::Result<O
         None => return Ok(None),
     };
     let Some(current_id) = effective_current_window_id(tab) else {
-        return Ok(None);
+        let c = tab
+            .windows
+            .iter()
+            .find(|win| win.is_self)
+            .map(|w| w.cwd.trim())
+            .filter(|s| !s.is_empty());
+        return Ok(c.map(|s| s.to_string()));
     };
     let w = match tab
         .windows
@@ -238,29 +214,160 @@ fn overlay_effective_cwd_raw_with_os(os_windows: &[KittyOs]) -> anyhow::Result<O
         .find(|win| win.id == current_id && !win.is_self)
     {
         Some(w) => w,
-        None => return Ok(None),
+        None => {
+            // `current_id` can be the overlay in some layouts; the overlay still has `cwd` from
+            // `launch --cwd=current` in kitty.conf.
+            let Some(overlay) = tab.windows.iter().find(|win| win.is_self) else {
+                return Ok(None);
+            };
+            let c = overlay.cwd.trim();
+            return Ok((!c.is_empty()).then(|| c.to_string()));
+        }
     };
     let Some(cwd) = best_cwd_from_kitty_window(w) else {
-        return Ok(None);
+        let c = tab
+            .windows
+            .iter()
+            .find(|win| win.is_self)
+            .map(|ow| ow.cwd.trim())
+            .filter(|c| !c.is_empty());
+        return Ok(c.map(|s| s.to_string()));
     };
     Ok(Some(cwd.to_string()))
 }
 
-fn git_branch_in_repo(workdir: &Path) -> Option<String> {
-    let inside = Command::new("git")
-        .args(["rev-parse", "--is-inside-work-tree"])
-        .current_dir(workdir)
-        .output()
-        .ok()?;
-    if !inside.status.success() {
+/// Shell cwd strings from kitty may use `~`; [`Path::new`] alone does not expand that.
+fn leader_path_for_shell(s: &str) -> PathBuf {
+    if s == "~" {
+        return std::env::var("HOME")
+            .map(PathBuf::from)
+            .unwrap_or_else(|_| PathBuf::from(s));
+    }
+    if let Some(rest) = s.strip_prefix("~/") {
+        if let Ok(h) = std::env::var("HOME") {
+            return Path::new(&h).join(rest);
+        }
+    }
+    PathBuf::from(s)
+}
+
+/// `.git` as a directory, or a **file** (`gitdir:`) for linked worktrees / submodules.
+fn resolve_git_dir(worktree: &Path) -> Option<PathBuf> {
+    let marker = worktree.join(".git");
+    if marker.is_dir() {
+        return Some(marker);
+    }
+    if !marker.is_file() {
         return None;
     }
-    if String::from_utf8_lossy(&inside.stdout).trim() != "true" {
+    let text = std::fs::read_to_string(&marker).ok()?;
+    for raw in text.lines() {
+        let line = raw.trim();
+        let rest = line.strip_prefix("gitdir:")?.trim();
+        let p = Path::new(rest);
+        let resolved = if p.is_absolute() {
+            p.to_path_buf()
+        } else {
+            worktree.join(p)
+        };
+        return Some(std::fs::canonicalize(&resolved).unwrap_or(resolved));
+    }
+    None
+}
+
+/// Read `HEAD`: branch name, short SHA if detached, or last segment for other refs.
+fn parse_git_head(contents: &str) -> Option<String> {
+    let line = contents.lines().find(|l| !l.trim().is_empty())?;
+    let line = line.trim();
+    if let Some(rest) = line.strip_prefix("ref: refs/heads/") {
+        let name = rest.trim();
+        return (!name.is_empty()).then(|| name.to_string());
+    }
+    if let Some(rest) = line.strip_prefix("ref: ") {
+        let name = rest.split('/').last()?.trim();
+        return (!name.is_empty()).then(|| name.to_string());
+    }
+    if line.len() >= 7 && line.chars().all(|c| c.is_ascii_hexdigit()) {
+        return Some(line.chars().take(7).collect());
+    }
+    None
+}
+
+/// Same search order as before PATH issues were debugged: bare `git`, Homebrew, mise, `PATH` dirs.
+fn git_executable_candidates() -> Vec<PathBuf> {
+    let mut out: Vec<PathBuf> = Vec::new();
+    out.push(PathBuf::from("git"));
+    #[cfg(target_os = "macos")]
+    {
+        for p in [
+            "/opt/homebrew/bin/git",
+            "/usr/local/bin/git",
+            "/usr/bin/git",
+        ] {
+            out.push(PathBuf::from(p));
+        }
+    }
+    #[cfg(not(target_os = "macos"))]
+    {
+        out.push(PathBuf::from("/usr/bin/git"));
+        out.push(PathBuf::from("/usr/local/bin/git"));
+    }
+    if let Ok(home) = std::env::var("HOME") {
+        for rel in [
+            ".local/share/mise/shims/git",
+            ".local/bin/git",
+            ".nix-profile/bin/git",
+        ] {
+            out.push(Path::new(&home).join(rel));
+        }
+    }
+    if let Ok(path_var) = std::env::var("PATH") {
+        for dir in std::env::split_paths(&path_var) {
+            let g = dir.join("git");
+            if g.is_file() {
+                out.push(g);
+            }
+        }
+    }
+    let mut deduped: Vec<PathBuf> = Vec::new();
+    for p in out {
+        if !deduped.iter().any(|q| q == &p) {
+            deduped.push(p);
+        }
+    }
+    deduped
+}
+
+/// Pre–filesystem-rewrite behavior: ask `git` (this matched your setup). Tries several `git` paths.
+fn git_branch_via_cli(workdir: &Path) -> Option<String> {
+    if !workdir.is_dir() {
         return None;
     }
-    let sym = Command::new("git")
+    let mut git_exe: Option<PathBuf> = None;
+    for candidate in git_executable_candidates() {
+        let Some(inside) = Command::new(&candidate)
+            .arg("-C")
+            .arg(workdir)
+            .args(["rev-parse", "--is-inside-work-tree"])
+            .output()
+            .ok()
+        else {
+            continue;
+        };
+        if !inside.status.success() {
+            continue;
+        }
+        if String::from_utf8_lossy(&inside.stdout).trim() != "true" {
+            continue;
+        }
+        git_exe = Some(candidate);
+        break;
+    }
+    let exe = git_exe?;
+    let sym = Command::new(&exe)
+        .arg("-C")
+        .arg(workdir)
         .args(["symbolic-ref", "-q", "--short", "HEAD"])
-        .current_dir(workdir)
         .output()
         .ok()?;
     if sym.status.success() {
@@ -269,9 +376,10 @@ fn git_branch_in_repo(workdir: &Path) -> Option<String> {
             return Some(b);
         }
     }
-    let short = Command::new("git")
+    let short = Command::new(&exe)
+        .arg("-C")
+        .arg(workdir)
         .args(["rev-parse", "--short", "HEAD"])
-        .current_dir(workdir)
         .output()
         .ok()?;
     if !short.status.success() {
@@ -279,6 +387,64 @@ fn git_branch_in_repo(workdir: &Path) -> Option<String> {
     }
     let h = String::from_utf8_lossy(&short.stdout).trim().to_string();
     if h.is_empty() { None } else { Some(h) }
+}
+
+fn branch_label_at_worktree(worktree: &Path) -> Option<String> {
+    let git_dir = resolve_git_dir(worktree)?;
+    let head = std::fs::read_to_string(git_dir.join("HEAD")).ok()?;
+    parse_git_head(&head)
+}
+
+/// Walk `start` and parents until a `.git` is found; no `git` binary or `PATH` required.
+fn git_branch_from_ancestors(mut start: PathBuf) -> Option<String> {
+    loop {
+        if let Some(label) = branch_label_at_worktree(&start) {
+            return Some(label);
+        }
+        if !start.pop() {
+            break;
+        }
+    }
+    None
+}
+
+fn git_branch_pill_for_leader(raw_cwd: Option<&str>) -> Option<String> {
+    let mut bases: Vec<PathBuf> = Vec::new();
+    if let Some(s) = raw_cwd {
+        if !s.is_empty() {
+            bases.push(leader_path_for_shell(s));
+        }
+    }
+    if let Ok(pwd) = std::env::var("PWD") {
+        if !pwd.is_empty() {
+            bases.push(PathBuf::from(pwd));
+        }
+    }
+    if let Ok(c) = std::env::current_dir() {
+        bases.push(c);
+    }
+    let mut seen: Vec<PathBuf> = Vec::new();
+    for p in bases {
+        if seen.iter().any(|q| q == &p) {
+            continue;
+        }
+        seen.push(p.clone());
+        let start = if p.is_dir() {
+            p
+        } else if let Some(pa) = p.parent() {
+            pa.to_path_buf()
+        } else {
+            continue;
+        };
+        // Prefer `git` CLI (restores pre–rewrite behavior); fall back to reading `.git/HEAD`.
+        if let Some(b) = git_branch_via_cli(&start) {
+            return Some(b);
+        }
+        if let Some(b) = git_branch_from_ancestors(start) {
+            return Some(b);
+        }
+    }
+    None
 }
 
 fn overlay_tab_rows_with_os(os_windows: &[KittyOs]) -> anyhow::Result<Vec<LeaderWindowRow>> {
@@ -472,14 +638,14 @@ pub struct LeaderState {
     pub nodes: &'static [crate::keynode::KeyNode],
     pub icon: &'static str,
     pub label: &'static str,
-    /// Current tab’s windows (no overlay), snapshot when the leader opens.
-    pub window_rows: Vec<LeaderWindowRow>,
-    /// Keyboard selection in `window_rows` (window group only).
-    pub window_cursor: usize,
     /// OS-window tabs, snapshot when the leader opens.
     pub tab_rows: Vec<LeaderWindowRow>,
-    /// Keyboard selection in `tab_rows` (root).
+    /// Indices into `tab_rows` after fuzzy filter (keyboard order).
+    pub tab_filtered_indices: Vec<usize>,
+    /// Keyboard selection in `tab_filtered_indices` (root).
     pub tab_cursor: usize,
+    /// Fuzzy filter for tab names (subsequence match, case-insensitive; type in tab list).
+    pub tab_filter: String,
     /// Launcher tools (pill list; indices match [`crate::launcher::NODES`]).
     pub launch_rows: Vec<LeaderWindowRow>,
     pub launch_cursor: usize,
@@ -487,7 +653,7 @@ pub struct LeaderState {
     pub cwd_pill: Option<String>,
     /// Current Kubernetes context when kubeconfig is present; snapshot at open.
     pub kube_pill: Option<String>,
-    /// Git branch (or detached short SHA) when effective cwd is in a git work tree; snapshot at open.
+    /// Git branch (or detached short SHA) via `git` CLI first, then `.git/HEAD`; snapshot at open.
     pub git_pill: Option<String>,
 }
 
@@ -495,50 +661,117 @@ impl LeaderState {
     /// Prefer this after a single [`parse_ls`] so startup does not run `kitten @ ls` multiple times.
     pub fn from_kitty_ls(os: Vec<KittyOs>) -> Self {
         let os_ref: &[KittyOs] = os.as_slice();
-        let window_rows = overlay_tab_window_rows_with_os(os_ref).unwrap_or_default();
-        let window_cursor = if window_rows.is_empty() {
-            0
-        } else {
-            window_rows
-                .iter()
-                .position(|r| r.current)
-                .unwrap_or(0)
-                .min(window_rows.len() - 1)
-        };
         let tab_rows = overlay_tab_rows_with_os(os_ref).unwrap_or_default();
-        let tab_cursor = if tab_rows.is_empty() {
-            0
-        } else {
-            tab_rows
-                .iter()
-                .position(|r| r.current)
-                .unwrap_or(0)
-                .min(tab_rows.len() - 1)
-        };
         let launch_rows = leader_launch_rows();
         let launch_cursor = 0;
-        let raw_cwd = overlay_effective_cwd_raw_with_os(os_ref).ok().flatten();
+        // Prefer cwd from the shell under the overlay; fall back to this process cwd (kitty sets
+        // it with `launch --cwd=current`) so git/cwd pills still work when @ ls omits usable cwd.
+        let raw_cwd = overlay_effective_cwd_raw_with_os(os_ref)
+            .ok()
+            .flatten()
+            .or_else(|| std::env::var("PWD").ok().filter(|s| !s.is_empty()))
+            .or_else(|| {
+                std::env::current_dir()
+                    .ok()
+                    .map(|p| p.to_string_lossy().into_owned())
+            });
         let cwd_pill = raw_cwd
             .as_deref()
             .map(|s| format_cwd_for_display(s));
-        let git_pill = raw_cwd
-            .as_deref()
-            .and_then(|p| git_branch_in_repo(Path::new(p)));
+        // Branch pill: read `.git/HEAD` by walking from kitty cwd and from this process cwd (no
+        // `git` binary; works when GUI apps have a minimal PATH).
+        let git_pill = git_branch_pill_for_leader(raw_cwd.as_deref());
         let kube_pill = leader_kube_context_display();
-        LeaderState {
+        let mut state = LeaderState {
             nodes: keymap::KEYMAP,
             icon: LEADER_HEADER_ICON,
             label: "leader",
-            window_rows,
-            window_cursor,
             tab_rows,
-            tab_cursor,
+            tab_filtered_indices: Vec::new(),
+            tab_cursor: 0,
+            tab_filter: String::new(),
             launch_rows,
             launch_cursor,
             cwd_pill,
             kube_pill,
             git_pill,
+        };
+        state.recompute_tab_filter();
+        state.tab_cursor_follow_kitty_focus();
+        state
+    }
+
+    /// Rebuild [`Self::tab_filtered_indices`] from [`Self::tab_rows`] and [`Self::tab_filter`].
+    pub fn recompute_tab_filter(&mut self) {
+        let mut scored: Vec<(usize, u32)> = Vec::new();
+        for (i, r) in self.tab_rows.iter().enumerate() {
+            if let Some(s) =
+                crate::leader::tab_filter::fuzzy_match_score(&self.tab_filter, &r.label)
+            {
+                scored.push((i, s));
+            }
         }
+        scored.sort_by(|a, b| a.1.cmp(&b.1).then_with(|| a.0.cmp(&b.0)));
+        self.tab_filtered_indices = scored.into_iter().map(|(i, _)| i).collect();
+        if self.tab_filtered_indices.is_empty() {
+            self.tab_cursor = 0;
+            return;
+        }
+        self.tab_cursor = self
+            .tab_cursor
+            .min(self.tab_filtered_indices.len().saturating_sub(1));
+    }
+
+    /// Move tab cursor so the focused kitty tab stays selected after the filter changes.
+    pub fn tab_cursor_follow_kitty_focus(&mut self) {
+        if self.tab_filtered_indices.is_empty() {
+            return;
+        }
+        if let Some(pos) = self.tab_filtered_indices.iter().position(|&i| self.tab_rows[i].current) {
+            self.tab_cursor = pos;
+        }
+    }
+
+    #[inline]
+    pub fn selected_tab_id(&self) -> Option<u64> {
+        self.tab_filtered_indices
+            .get(self.tab_cursor)
+            .map(|&i| self.tab_rows[i].id)
+    }
+
+    /// After changing `tab_filter`, keep the same tab selected when it still matches.
+    pub fn recompute_tab_filter_keep(&mut self, keep_id: Option<u64>) {
+        self.recompute_tab_filter();
+        if let Some(id) = keep_id {
+            if let Some(p) = self
+                .tab_filtered_indices
+                .iter()
+                .position(|&i| self.tab_rows[i].id == id)
+            {
+                self.tab_cursor = p;
+                return;
+            }
+        }
+        self.tab_cursor_follow_kitty_focus();
+    }
+
+    pub fn return_to_root(&mut self) {
+        self.nodes = keymap::KEYMAP;
+        self.icon = LEADER_HEADER_ICON;
+        self.label = "leader";
+        self.tab_filter.clear();
+        self.recompute_tab_filter_keep(None);
+        self.tab_cursor_follow_kitty_focus();
+    }
+
+    /// Tab picker layer (same as Tab → tab list in [`keymap::KEYMAP`]; icon must stay in sync).
+    pub fn enter_tab_list_picker(&mut self) {
+        self.nodes = keymap::TAB_LIST_NODES;
+        self.icon = "\u{f04e9}";
+        self.label = "tab list";
+        self.tab_filter.clear();
+        self.recompute_tab_filter_keep(None);
+        self.tab_cursor_follow_kitty_focus();
     }
 }
 
@@ -556,9 +789,13 @@ pub fn press_key(state: &mut LeaderState, key: char) -> KeyPress {
             match &node.kind {
                 crate::keynode::KeyNodeKind::Action(f) => return KeyPress::Execute(*f),
                 crate::keynode::KeyNodeKind::Group { icon, nodes } => {
-                    state.nodes = nodes;
-                    state.icon = icon;
-                    state.label = node.label;
+                    if std::ptr::eq(nodes.as_ptr(), keymap::TAB_LIST_NODES.as_ptr()) {
+                        state.enter_tab_list_picker();
+                    } else {
+                        state.nodes = nodes;
+                        state.icon = icon;
+                        state.label = node.label;
+                    }
                     return KeyPress::Redraw;
                 }
             }
@@ -601,26 +838,6 @@ pub fn rename_tab() -> anyhow::Result<()> {
     kitty::send_action("set_tab_title").context("rename tab")
 }
 
-pub fn rename_window() -> anyhow::Result<()> {
-    close_overlay()?;
-    kitty::send_action("set_window_title").context("rename window")
-}
-
-pub fn new_window() -> anyhow::Result<()> {
-    close_overlay()?;
-    kitty::send_action("launch --type=window --cwd=current").context("new window with current cwd")
-}
-
-pub fn close_window_action() -> anyhow::Result<()> {
-    close_overlay()?;
-    kitty::send_action("close_window").context("close window")
-}
-
-pub fn close_other_windows() -> anyhow::Result<()> {
-    close_overlay()?;
-    kitty::send_action("close_other_windows_in_tab").context("close other windows in tab")
-}
-
 pub fn new_tab() -> anyhow::Result<()> {
     close_overlay()?;
     kitty::send_action("launch --type=tab").context("new tab")
@@ -638,17 +855,6 @@ pub fn close_tab() -> anyhow::Result<()> {
 pub fn last_tab() -> anyhow::Result<()> {
     close_overlay()?;
     kitty::focus_tab_recent()
-}
-
-pub fn last_window() -> anyhow::Result<()> {
-    close_overlay()?;
-    kitty::send_action("nth_window -1").context("last window")
-}
-
-/// Focus a tab window after closing the leader overlay.
-pub fn focus_window_from_leader(id: u64) -> anyhow::Result<()> {
-    close_overlay()?;
-    kitty::focus_window(id).context("focus window")
 }
 
 pub fn focus_tab_from_leader(id: u64) -> anyhow::Result<()> {

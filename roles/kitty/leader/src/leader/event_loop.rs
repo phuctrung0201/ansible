@@ -16,22 +16,31 @@ pub(crate) fn run(
         terminal.draw(|frame| render(frame, state))?;
         match event::read()? {
             Event::Key(KeyEvent {
-                code: KeyCode::Esc, ..
-            }) => return Ok(()),
+                code: KeyCode::Esc,
+                kind: KeyEventKind::Press,
+                ..
+            }) => {
+                if context::is_tab_list_group(state) && !state.tab_filter.is_empty() {
+                    state.tab_filter.clear();
+                    state.recompute_tab_filter_keep(None);
+                    continue;
+                }
+                if context::is_tab_list_group(state) {
+                    state.return_to_root();
+                    continue;
+                }
+                return Ok(());
+            }
             Event::Key(KeyEvent {
                 code: KeyCode::Enter,
                 kind: KeyEventKind::Press,
                 ..
             }) => {
-                if context::is_root(state) && !state.tab_rows.is_empty() {
-                    let id = state.tab_rows[state.tab_cursor].id;
+                if context::is_tab_list_group(state) && !state.tab_filtered_indices.is_empty() {
+                    let row_i = state.tab_filtered_indices[state.tab_cursor];
+                    let id = state.tab_rows[row_i].id;
                     ratatui::restore();
                     return crate::action::focus_tab_from_leader(id);
-                }
-                if context::is_window_group(state) && !state.window_rows.is_empty() {
-                    let id = state.window_rows[state.window_cursor].id;
-                    ratatui::restore();
-                    return crate::action::focus_window_from_leader(id);
                 }
                 if context::is_launch_group(state) && !state.launch_rows.is_empty() {
                     let idx = state.launch_rows[state.launch_cursor].id as usize;
@@ -44,13 +53,9 @@ pub(crate) fn run(
                 kind: KeyEventKind::Press,
                 ..
             }) => {
-                if context::is_root(state) && !state.tab_rows.is_empty() {
-                    state.tab_cursor = (state.tab_cursor + 1) % state.tab_rows.len();
-                    continue;
-                }
-                if context::is_window_group(state) && !state.window_rows.is_empty() {
-                    state.window_cursor =
-                        (state.window_cursor + 1) % state.window_rows.len();
+                if context::is_tab_list_group(state) && !state.tab_filtered_indices.is_empty() {
+                    let len = state.tab_filtered_indices.len();
+                    state.tab_cursor = (state.tab_cursor + 1) % len;
                     continue;
                 }
                 if context::is_launch_group(state) && !state.launch_rows.is_empty() {
@@ -60,12 +65,15 @@ pub(crate) fn run(
                 if context::is_launch_group(state) {
                     continue;
                 }
-                match crate::action::press_key(state, '\t') {
-                    KeyPress::Execute(f) => {
-                        ratatui::restore();
-                        return f();
+                if context::is_root(state) {
+                    match crate::action::press_key(state, '\t') {
+                        KeyPress::Redraw => continue,
+                        KeyPress::Execute(f) => {
+                            ratatui::restore();
+                            return f();
+                        }
+                        KeyPress::Unrecognised => continue,
                     }
-                    KeyPress::Redraw | KeyPress::Unrecognised => {}
                 }
             }
             Event::Key(KeyEvent {
@@ -73,14 +81,9 @@ pub(crate) fn run(
                 kind: KeyEventKind::Press,
                 ..
             }) => {
-                if context::is_root(state) && !state.tab_rows.is_empty() {
-                    let len = state.tab_rows.len();
+                if context::is_tab_list_group(state) && !state.tab_filtered_indices.is_empty() {
+                    let len = state.tab_filtered_indices.len();
                     state.tab_cursor = (state.tab_cursor + len - 1) % len;
-                    continue;
-                }
-                if context::is_window_group(state) && !state.window_rows.is_empty() {
-                    let len = state.window_rows.len();
-                    state.window_cursor = (state.window_cursor + len - 1) % len;
                     continue;
                 }
                 if context::is_launch_group(state) && !state.launch_rows.is_empty() {
@@ -93,35 +96,42 @@ pub(crate) fn run(
                 }
             }
             Event::Key(KeyEvent {
+                code: KeyCode::Backspace,
+                kind: KeyEventKind::Press,
+                ..
+            }) => {
+                if context::is_tab_list_group(state) && !state.tab_rows.is_empty() && !state.tab_filter.is_empty()
+                {
+                    let keep = state.selected_tab_id();
+                    state.tab_filter.pop();
+                    state.recompute_tab_filter_keep(keep);
+                    continue;
+                }
+            }
+            Event::Key(KeyEvent {
                 code: KeyCode::Char(c),
                 kind: KeyEventKind::Press,
                 ..
             }) => {
-                if context::is_root(state) && !state.tab_rows.is_empty() {
+                if context::is_tab_list_group(state) && !state.tab_rows.is_empty() {
                     if let Some(d) = c.to_digit(10) {
                         let idx = d as usize;
                         if (1..=9).contains(&idx) {
                             let j = idx - 1;
-                            if j < state.tab_rows.len() {
-                                let id = state.tab_rows[j].id;
+                            if j < state.tab_filtered_indices.len() {
+                                let row_i = state.tab_filtered_indices[j];
+                                let id = state.tab_rows[row_i].id;
                                 ratatui::restore();
                                 return crate::action::focus_tab_from_leader(id);
                             }
                         }
                     }
-                }
-                if context::is_window_group(state) && !state.window_rows.is_empty() {
-                    if let Some(d) = c.to_digit(10) {
-                        let idx = d as usize;
-                        if (1..=9).contains(&idx) {
-                            let j = idx - 1;
-                            if j < state.window_rows.len() {
-                                let id = state.window_rows[j].id;
-                                ratatui::restore();
-                                return crate::action::focus_window_from_leader(id);
-                            }
-                        }
+                    if !c.is_control() {
+                        let keep = state.selected_tab_id();
+                        state.tab_filter.push(c);
+                        state.recompute_tab_filter_keep(keep);
                     }
+                    continue;
                 }
                 if context::is_launch_group(state) {
                     if !state.launch_rows.is_empty() {
