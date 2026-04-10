@@ -11,8 +11,6 @@
       tags: ['fzf']
     - role: mise
       tags: ['mise']
-    - role: kitty
-      tags: ['kitty']
     - role: ghostty
       tags: ['ghostty']
     - role: tmux

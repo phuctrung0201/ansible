@@ -1,4 +1,4 @@
-//! Tmux leader overlay: same ratatui UX as the kitty leader, backed by `tmux(1)`.
+//! Tmux leader overlay: ratatui UX backed by `tmux(1)`.
 
 mod context;
 mod dividers;

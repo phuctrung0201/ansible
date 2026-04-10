@@ -1,4 +1,4 @@
-{# Window borders — colors from share.yml (same pairing as kitty active/inactive borders). #}
+{# Window borders — colors from share.yml (same pairing as Ghostty active/inactive borders). #}
 {% set _border_active = theme.cyan | replace("#", "") | upper %}
 {% set _border_inactive = theme.comment_bright | replace("#", "") | upper %}
 after-login-command = []
@@ -107,7 +107,7 @@ esc = 'mode main'
 # List current opening apps
 # aerospace list-apps
 [[on-window-detected]]
-if.app-id = 'net.kovidgoyal.kitty'
+if.app-id = 'com.mitchellh.ghostty'
 run = 'move-node-to-workspace --focus-follows-window `'
 
 [[on-window-detected]]

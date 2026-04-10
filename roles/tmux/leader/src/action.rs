@@ -22,7 +22,7 @@ pub struct PendingInput {
 }
 
 // ---------------------------------------------------------------------------
-// Git / kube pills (same behavior as kitty leader)
+// Git / kube pills (same behavior as the original terminal leader UX)
 // ---------------------------------------------------------------------------
 
 fn leader_path_for_shell(s: &str) -> PathBuf {

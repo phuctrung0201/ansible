@@ -22,14 +22,14 @@ pub(crate) fn truncate_pill_label(s: &str, max_chars: usize) -> String {
     }
 }
 
-pub(crate) fn pill_style(selected: bool, kitty_focused: bool, recent: bool) -> Style {
+pub(crate) fn pill_style(selected: bool, term_focused: bool, recent: bool) -> Style {
     let t = palette();
     if selected {
         Style::default()
             .fg(t.pill_fg)
             .bg(t.mauve)
             .add_modifier(Modifier::BOLD)
-    } else if kitty_focused {
+    } else if term_focused {
         Style::default()
             .fg(t.teal)
             .bg(t.pill_bg)

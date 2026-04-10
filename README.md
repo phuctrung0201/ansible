@@ -1,7 +1,7 @@
 # Overview
 This repository is to store personal setup for these tools:
  - [oh-my-zsh](https://ohmyz.sh/)
- - [kitty](https://sw.kovidgoyal.net/kitty/)
+ - [Ghostty](https://ghostty.org/)
  - [aerospace](https://github.com/nikitabobko/aerospace)
  - [Neovim](https://neovim.io/)
  - [mise](https://mise.jdx.dev/)

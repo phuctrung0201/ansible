@@ -13,7 +13,7 @@ theme:
   cyan: "#8be9fd"
   pink: "#ff79c6"
 
-  # ANSI Blue (§1.2.2) is Purple; kept as `blue` for kitty color4 / templates.
+  # ANSI Blue (§1.2.2) is Purple; kept as `blue` for terminal color4 / templates.
   blue: "#bd93f9"
 
   # --- §1.2.2 ANSI ---
@@ -30,7 +30,7 @@ theme:
   # AnsiBrightBlack — spec uses same hex as Comment (#6272A4).
   comment_bright: "#6272a4"
 
-  # AnsiBlack — dracula.nvim `black` / kitty bold black contexts
+  # AnsiBlack — dracula.nvim `black` / terminal bold black contexts
   black: "#21222c"
 
   # Neovim-only (dracula.nvim defaults; not in core syntax spec)

@@ -1,4 +1,4 @@
-# Default leader UI palette — edit locally or override with ~/.config/kitty/leader_theme.yml
+# Default leader UI palette — edit locally or override with ~/.config/tmux/leader_theme.yml
 # Keys mirror share.yml `theme` (Ansible templates this file from share.yml on deploy).
 purple: "#bd93f9"
 orange: "#ffb86c"
