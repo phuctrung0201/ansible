@@ -1,0 +1,29 @@
+- name: Install Ghostty
+  homebrew_cask:
+    name: ghostty
+    state: present
+
+# Ghostty merges XDG then Application Support (later wins). config.ghostty overrides
+# a legacy `config` in the same directory, so only config.ghostty is deployed.
+- name: Configure Ghostty
+  vars:
+    ghostty_xdg_dir: "{{ ansible_env.XDG_CONFIG_HOME | default(ansible_env.HOME ~ '/.config', true) }}/ghostty"
+    ghostty_app_support_dir: "{{ ansible_env.HOME }}/Library/Application Support/com.mitchellh.ghostty"
+    ghostty_config_files:
+      - "{{ ghostty_xdg_dir }}/config.ghostty"
+      - "{{ ghostty_app_support_dir }}/config.ghostty"
+  block:
+    - name: Ensure Ghostty config directories exist
+      file:
+        path: "{{ item }}"
+        state: directory
+      loop:
+        - "{{ ghostty_xdg_dir }}"
+        - "{{ ghostty_app_support_dir }}"
+
+    - name: Deploy Ghostty config
+      template:
+        src: config.ghostty.j2
+        dest: "{{ item }}"
+        backup: true
+      loop: "{{ ghostty_config_files }}"

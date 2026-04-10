@@ -1,0 +1,44 @@
+# Ansible — share.yml (Dracula). See roles/ghostty/tasks for install paths.
+
+# Font
+font-family = "FiraCode Nerd Font Mono"
+font-size = 16
+
+# Colors
+foreground = {{ theme.fg }}
+background = {{ theme.bg }}
+selection-foreground = {{ theme.fg }}
+selection-background = {{ theme.selection }}
+
+palette = 0={{ theme.dark }}
+palette = 1={{ theme.red }}
+palette = 2={{ theme.green }}
+palette = 3={{ theme.yellow }}
+palette = 4={{ theme.blue }}
+palette = 5={{ theme.pink }}
+palette = 6={{ theme.cyan }}
+palette = 7={{ theme.white }}
+palette = 8={{ theme.comment_bright }}
+palette = 9={{ theme.bright_red }}
+palette = 10={{ theme.bright_green }}
+palette = 11={{ theme.bright_yellow }}
+palette = 12={{ theme.bright_purple }}
+palette = 13={{ theme.bright_pink }}
+palette = 14={{ theme.bright_cyan }}
+palette = 15={{ theme.bright_white }}
+palette-generate = true
+
+# Cursor
+cursor-style = bar
+cursor-color = {{ theme.cyan }}
+cursor-text = {{ theme.bg }}
+
+# Window — native frame (rounded); hidden titlebar (not window-decoration = none)
+background-opacity = 0.8
+background-blur = true
+window-decoration = auto
+macos-titlebar-style = hidden
+
+# Splits
+split-divider-color = {{ theme.cyan }}
+unfocused-split-fill = {{ theme.comment_bright }}

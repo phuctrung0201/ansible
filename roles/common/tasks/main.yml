@@ -11,30 +11,3 @@
   homebrew:
     name: ripgrep
     state: present
-
-- name: Uninstall Ghostty (removed from playbook)
-  homebrew_cask:
-    name: ghostty
-    state: absent
-
-- name: Uninstall tmux (removed from playbook)
-  homebrew:
-    name: tmux
-    state: absent
-
-- name: Remove Ghostty config directory
-  file:
-    path: "{{ ansible_env.HOME }}/.config/ghostty"
-    state: absent
-
-- name: Remove tmux config directory
-  file:
-    path: "{{ ansible_env.HOME }}/.config/tmux"
-    state: absent
-
-- name: Remove tmux zsh integration block from .zshrc
-  blockinfile:
-    path: "{{ ansible_env.HOME }}/.zshrc"
-    marker: "# {mark} TMUX"
-    state: absent
-
