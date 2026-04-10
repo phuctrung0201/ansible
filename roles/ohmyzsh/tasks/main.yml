@@ -30,16 +30,17 @@
   loop:
     - 'export XDG_CONFIG_HOME="$HOME/.config"'
     - 'export ZSH="$HOME/.oh-my-zsh"'
-    - 'ZSH_THEME="nicoulaj"'
+    - 'ZSH_THEME="robbyrussell"'
     - 'plugins=(git z zsh-autosuggestions fast-syntax-highlighting)'
     - 'DISABLE_AUTO_UPDATE=true'
     - 'source $ZSH/oh-my-zsh.sh'
 
-- name: Disable right prompt (override theme RPROMPT)
-  lineinfile:
+- name: Arrow-only prompt (U+203A ›; green/red by exit code)
+  blockinfile:
     path: "{{ ansible_env.HOME }}/.zshrc"
-    regexp: '^RPROMPT='
-    line: "RPROMPT=''"
-    state: present
-    create: yes
+    marker: "# {mark} ANSIBLE ohmyzsh PROMPT"
+    insertafter: '^source \$ZSH/oh-my-zsh\.sh'
+    block: |
+      # U+203A = single right-pointing angle quotation mark
+      PROMPT="%(?.%B%F{green}.%B%F{red})"$'\u203A'"%f%b "
 
