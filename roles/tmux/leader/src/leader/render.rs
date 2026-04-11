@@ -1,5 +1,5 @@
 use ratatui::{
-    layout::{Constraint, Direction, Layout, Rect},
+    layout::{Alignment, Constraint, Direction, Layout, Rect},
     style::{Modifier, Style},
     text::{Line, Span},
     widgets::{Block, Borders, Paragraph},
@@ -157,9 +157,9 @@ pub(crate) fn render(frame: &mut Frame, state: &LeaderState) {
         } else {
             Vec::new()
         };
-    // Pending rename prompt: section rule + hint + bordered input field.
+    // Pending rename prompt: section rule + bordered input field + hint row (bottom).
     let input_lines: u16 = if pending_panel {
-        3 + 1 + 3
+        3 + 3 + 1
     } else {
         0
     };
@@ -347,20 +347,17 @@ pub(crate) fn render(frame: &mut Frame, state: &LeaderState) {
                 div_w,
                 t.mauve,
             ));
-            let dim = Style::default()
+            let hint_dim = Style::default()
                 .fg(t.comment_bright)
                 .bg(t.dracula_bg)
                 .add_modifier(Modifier::ITALIC);
-            head.push(Line::from(vec![Span::styled(
-                "  type, then enter · esc · cancel",
-                dim,
-            )]));
             let head_h = head.len() as u16;
             let chunks = Layout::default()
                 .direction(Direction::Vertical)
                 .constraints([
                     Constraint::Length(head_h),
                     Constraint::Length(3),
+                    Constraint::Length(1),
                 ])
                 .split(inner);
             frame.render_widget(
@@ -375,7 +372,7 @@ pub(crate) fn render(frame: &mut Frame, state: &LeaderState) {
                 .style(Style::default().bg(t.dracula_bg));
             let field_style = Style::default()
                 .fg(t.fg)
-                .bg(t.pill_bg)
+                .bg(t.dracula_bg)
                 .add_modifier(Modifier::BOLD);
             render_input_paragraph(
                 frame,
@@ -384,6 +381,15 @@ pub(crate) fn render(frame: &mut Frame, state: &LeaderState) {
                 input_block,
                 field_style,
                 true,
+            );
+            frame.render_widget(
+                Paragraph::new(Line::from(vec![Span::styled(
+                    "type, then enter · esc · cancel",
+                    hint_dim,
+                )]))
+                .style(bg)
+                .alignment(Alignment::Right),
+                chunks[2],
             );
             return;
         }
