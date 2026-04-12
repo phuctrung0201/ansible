@@ -3,6 +3,7 @@ theme:
   # --- §1.2.1 Standard ---
   bg: "#282a36"
   fg: "#f8f8f2"
+  # Darker than prior #575c74; still above bg for contrast (Ghostty, nvim/tmux + Visual via dracula, zellij, leader).
   selection: "#44475a"
   comment: "#6272a4"
   red: "#ff5555"
@@ -33,8 +34,6 @@ theme:
   # AnsiBlack — dracula.nvim `black` / terminal bold black contexts
   black: "#21222c"
 
-  # Neovim-only (dracula.nvim defaults; not in core syntax spec)
-  visual: "#3e4452"
   gutter_fg: "#4b5263"
   nontext: "#3b4048"
 

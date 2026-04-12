@@ -1,4 +1,4 @@
-# Managed by Ansible (roles/tmux)
+# Managed by Ansible (roles/tmux). Colors from share.yml `theme` (playbook vars_files).
 
 set -g mouse on
 
@@ -9,24 +9,28 @@ set -g history-limit 5000
 # Status bar — rounded pills like tmux-leader (`theme.rs`: ROUND_CAP_L \uE0B6, ROUND_CAP_R \uE0B4; Nerd Font).
 set -g status on
 set -g status-position bottom
-# Slower refresh = less work overlapping window resize redraws; avoids #(…) shell every second.
+# Slower refresh = less work overlapping window resize redraws; #(…) cwd runs at this interval too.
 set -g status-interval 5
 # Window list hidden (empty formats below); left/right pills only.
 set -g status-justify left
 # Bar uses terminal background (no fill); pills keep their own bg.
-set -g status-style fg=#f8f8f2,bg=default
+set -g status-style fg={{ theme.fg }},bg=default
 set -g status-left-length 320
 set -g status-right-length 240
-# Left: cwd (green, FA folder-open U+F07C). Plain #{pane_current_path} — no #(…) shell, less jank on resize/redraw.
-set -g status-left '#[fg=#50fa7b,bg=default]#[fg=#282a36,bg=#50fa7b,bold]  #{pane_current_path} #[fg=#50fa7b,bg=default,nobold]'
-set -g status-right '#[fg=#44475a,bg=default]#[fg=#f8f8f2,bg=#44475a,bold] 󰓩 #W #[fg=#44475a,bg=default]#[bg=default] #[fg=#bd93f9,bg=default]#[fg=#282a36,bg=#bd93f9,bold]  #S #[fg=#bd93f9,bg=default]'
+# Left: cwd (green, FA folder). Helper script avoids tmux %(…) vs printf % and #(…) ending at ')' in inline sh.
+set -g status-left "#[fg={{ theme.green }},bg=default]#[fg={{ theme.bg }},bg={{ theme.green }},bold]  #({{ ansible_env.HOME }}/.config/tmux/cwd-for-status.sh \"#{pane_current_path}\") #[fg={{ theme.green }},bg=default,nobold]"
+set -g status-right '#[fg={{ theme.selection }},bg=default]#[fg={{ theme.fg }},bg={{ theme.selection }},bold] 󰓩 #W #[fg={{ theme.selection }},bg=default]#[bg=default] #[fg={{ theme.purple }},bg=default]#[fg={{ theme.bg }},bg={{ theme.purple }},bold]  #S #[fg={{ theme.purple }},bg=default]'
 
 setw -g window-status-separator ""
 setw -g window-status-format ''
 setw -g window-status-current-format ''
 
-set -g pane-border-style fg=#6272a4
-set -g pane-active-border-style fg=#8be9fd
+set -g pane-border-style fg={{ theme.comment }}
+set -g pane-active-border-style fg={{ theme.cyan }}
+
+# Copy mode, choice trees, etc. — tmux defaults to yellow/black; tie to share.yml selection.
+setw -g mode-style fg={{ theme.fg }},bg={{ theme.selection }}
+setw -g menu-selected-style fg={{ theme.fg }},bg={{ theme.selection }}
 
 # --- tmux-leader ---
 # tmux-leader: #{…} in bind-key args/env-vars expand at config-parse time (not key-press
@@ -36,7 +40,7 @@ set -g pane-active-border-style fg=#8be9fd
 # the shell sees '$0' (single-quoted literal) and passes it verbatim to display-popup.
 
 unbind-key -n F12
-bind-key -n F12 run-shell "tmux display-popup -w 90% -h 90% -b rounded -S fg=#8be9fd \
+bind-key -n F12 run-shell "tmux display-popup -w 90% -h 90% -b rounded -S fg={{ theme.cyan }} \
   -e 'LEADER_SID=#{session_id}' \
   -e 'LEADER_WID=#{window_id}' \
   -e 'LEADER_PID=#{pane_id}' \

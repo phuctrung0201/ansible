@@ -14,4 +14,4 @@ comment_bright: "#6272a4"
 bg: "reset"
 # Dark text on bright banner/window pill fills (`bg` may be reset; this must stay #RRGGBB).
 pill_fg: "#282a36"
-selection: "#44475a"
+selection: "#575c74"

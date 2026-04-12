@@ -8,6 +8,12 @@
     path: "{{ ansible_env.HOME }}/.config/tmux"
     state: directory
 
+- name: Install cwd helper for status bar #(…)
+  copy:
+    src: cwd-for-status.sh
+    dest: "{{ ansible_env.HOME }}/.config/tmux/cwd-for-status.sh"
+    mode: "0755"
+
 - name: Install leader theme from share.yml
   template:
     src: leader_theme.yml.j2

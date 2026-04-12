@@ -40,7 +40,10 @@ pub(crate) fn pill_style(selected: bool, term_focused: bool, recent: bool) -> St
             .bg(t.yellow)
             .add_modifier(Modifier::BOLD)
     } else {
-        Style::default().fg(t.fg).bg(t.pill_bg)
+        Style::default()
+            .fg(t.fg)
+            .bg(t.pill_bg)
+            .add_modifier(Modifier::BOLD)
     }
 }
 

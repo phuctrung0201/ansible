@@ -157,9 +157,17 @@ impl LeaderState {
         let tab_rows = windows_res
             .map(leader_rows_from_windows)
             .unwrap_or_default();
-        let session_rows = sessions_res
+        let mut session_rows = sessions_res
             .map(leader_rows_from_sessions)
             .unwrap_or_default();
+        if let Ok(here) = tmux::session_name_for_pane(&target) {
+            let name = here.trim();
+            if !name.is_empty() {
+                for r in session_rows.iter_mut() {
+                    r.current = r.label == name;
+                }
+            }
+        }
         let launch_rows = leader_launch_rows();
         let raw_cwd = cwd_res.ok().filter(|s| !s.is_empty());
         let (git_pill, kube_pill) = std::thread::scope(|s| {
@@ -226,7 +234,15 @@ impl LeaderState {
     }
 
     pub fn session_cursor_follow_active(&mut self) {
-        let pos = self.session_rows.iter().position(|r| r.current);
+        // Same idea as window pills: keep tmux list order; pick the row for *this* client by name
+        // (session_active can be 1 for every attached session, so name beats the flag).
+        let t = tmux::target_pane();
+        let pos = tmux::session_name_for_pane(&t)
+            .ok()
+            .map(|n| n.trim().to_string())
+            .filter(|n| !n.is_empty())
+            .and_then(|name| self.session_rows.iter().position(|r| r.label == name))
+            .or_else(|| self.session_rows.iter().position(|r| r.current));
         pill_strip_cursor_follow(self.session_rows.len(), pos, &mut self.session_cursor);
     }
 
@@ -273,6 +289,7 @@ impl LeaderState {
         self.label = "tmux leader";
         self.pending_input = None;
         self.notice = None;
+        self.session_cursor_follow_active();
         self.root_window_cursor_follow_active();
     }
 }
