@@ -1,10 +1,10 @@
 # fzf shell integration
 source <(fzf --zsh)
 
-# Dracula theme
+# Dracula palette; bg/bg+:-1 uses terminal default (shows through with translucent terminals)
 export FZF_DEFAULT_OPTS='
-  --color=fg:{{ theme.fg }},bg:{{ theme.bg }},hl:{{ theme.orange }}
-  --color=fg+:{{ theme.fg }},bg+:{{ theme.selection }},hl+:{{ theme.red }}
+  --color=fg:{{ theme.fg }},bg:-1,hl:{{ theme.orange }}
+  --color=fg+:{{ theme.fg }}:bold,bg+:-1,hl+:{{ theme.red }}
   --color=info:{{ theme.cyan }},prompt:{{ theme.pink }},pointer:{{ theme.yellow }}
   --color=marker:{{ theme.green }},spinner:{{ theme.purple }},header:{{ theme.red }}
 '
