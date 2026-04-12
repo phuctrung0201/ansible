@@ -5,7 +5,7 @@ use ratatui::{
 };
 use tui_input::backend::crossterm::EventHandler;
 
-use crate::action::{KeyPress, LeaderState, LeaderView};
+use crate::action::{KeyPress, LeaderState};
 
 use super::{context, render::render};
 
@@ -29,7 +29,6 @@ pub(crate) fn run(
                     ..
                 }) => {
                     state.pending_input = None;
-                    state.view = LeaderView::Normal;
                     continue;
                 }
                 Event::Key(KeyEvent {
@@ -44,7 +43,6 @@ pub(crate) fn run(
                             super::term::restore_global();
                             return (pending.confirm)(value);
                         }
-                        state.view = LeaderView::Normal;
                     }
                     continue;
                 }
@@ -73,20 +71,6 @@ pub(crate) fn run(
                 kind: KeyEventKind::Press,
                 ..
             }) => {
-                if context::is_session_list_group(state) && !state.session_filter.is_empty() {
-                    state.session_filter.clear();
-                    state.recompute_session_filter_keep(None);
-                    continue;
-                }
-                if context::is_session_list_group(state) {
-                    state.return_to_root();
-                    continue;
-                }
-                if context::is_launch_group(state) && !state.launch_filter.is_empty() {
-                    state.launch_filter.clear();
-                    state.recompute_launch_filter_keep(None);
-                    continue;
-                }
                 if context::is_launch_group(state) {
                     state.return_to_root();
                     continue;
@@ -102,12 +86,10 @@ pub(crate) fn run(
                 kind: KeyEventKind::Press,
                 ..
             }) => {
-                if context::is_session_list_group(state)
-                    && !state.session_filtered_indices.is_empty()
-                {
-                    if let Some(name) = state.selected_session_name() {
+                if context::is_launch_group(state) && !state.launch_rows.is_empty() {
+                    if let Some(idx) = state.selected_launch_index() {
                         super::term::restore_global();
-                        return crate::action::focus_session_from_leader(name);
+                        return crate::action::execute_launch_at(idx);
                     }
                 }
                 if context::pane_section_visible(state) && !state.pane_rows.is_empty() {
@@ -126,10 +108,13 @@ pub(crate) fn run(
                         return crate::action::focus_tab_from_leader(id);
                     }
                 }
-                if context::is_launch_group(state) && !state.launch_filtered_indices.is_empty() {
-                    if let Some(idx) = state.selected_launch_index() {
+                if context::is_root(state)
+                    && context::root_session_section_visible(state)
+                    && !state.session_rows.is_empty()
+                {
+                    if let Some(name) = state.selected_session_name() {
                         super::term::restore_global();
-                        return crate::action::execute_launch_at(idx);
+                        return crate::action::focus_session_from_leader(name);
                     }
                 }
             }
@@ -141,16 +126,11 @@ pub(crate) fn run(
                 if context::is_input_mode(state) {
                     continue;
                 }
-                if context::is_session_list_group(state)
-                    && !state.session_filtered_indices.is_empty()
-                {
-                    let len = state.session_filtered_indices.len();
-                    state.session_cursor = (state.session_cursor + 1) % len;
-                    continue;
-                }
-                if context::is_launch_group(state) && !state.launch_filtered_indices.is_empty() {
-                    let len = state.launch_filtered_indices.len();
-                    state.launch_cursor = (state.launch_cursor + 1) % len;
+                if context::is_launch_group(state) && !state.launch_rows.is_empty() {
+                    let n = state.launch_rows.len().min(24);
+                    if n > 0 {
+                        state.launch_cursor = (state.launch_cursor + 1) % n;
+                    }
                     continue;
                 }
                 if context::is_launch_group(state) {
@@ -168,58 +148,14 @@ pub(crate) fn run(
                         continue;
                     }
                 }
-                if context::is_root(state) {
-                    match crate::action::press_key(state, '\t') {
-                        KeyPress::Redraw => continue,
-                        KeyPress::Execute(f) => {
-                            super::term::restore_global();
-                            return f();
-                        }
-                        KeyPress::Notice(msg) => {
-                            state.notice = Some(msg);
-                            continue;
-                        }
-                        KeyPress::OpenInput {
-                            prompt,
-                            initial,
-                            confirm,
-                            allow_empty_confirm,
-                        } => {
-                            state.enter_input_mode(
-                                prompt,
-                                initial,
-                                confirm,
-                                allow_empty_confirm,
-                            );
-                            continue;
-                        }
-                        KeyPress::Unrecognised => continue,
+                if context::is_root(state)
+                    && context::root_session_section_visible(state)
+                    && !state.session_rows.is_empty()
+                {
+                    let n = state.session_rows.len().min(24);
+                    if n > 0 {
+                        state.session_cursor = (state.session_cursor + 1) % n;
                     }
-                }
-                match crate::action::press_key(state, '\t') {
-                    KeyPress::Redraw => continue,
-                    KeyPress::Execute(f) => {
-                        super::term::restore_global();
-                        return f();
-                    }
-                    KeyPress::Notice(msg) => {
-                        state.notice = Some(msg);
-                        continue;
-                    }
-                    KeyPress::OpenInput {
-                        prompt,
-                        initial,
-                        confirm,
-                        allow_empty_confirm,
-                    } => {
-                        state.enter_input_mode(
-                            prompt,
-                            initial,
-                            confirm,
-                            allow_empty_confirm,
-                        );
-                    }
-                    KeyPress::Unrecognised => continue,
                 }
             }
             Event::Key(KeyEvent {
@@ -230,16 +166,11 @@ pub(crate) fn run(
                 if context::is_input_mode(state) {
                     continue;
                 }
-                if context::is_session_list_group(state)
-                    && !state.session_filtered_indices.is_empty()
-                {
-                    let len = state.session_filtered_indices.len();
-                    state.session_cursor = (state.session_cursor + len - 1) % len;
-                    continue;
-                }
-                if context::is_launch_group(state) && !state.launch_filtered_indices.is_empty() {
-                    let len = state.launch_filtered_indices.len();
-                    state.launch_cursor = (state.launch_cursor + len - 1) % len;
+                if context::is_launch_group(state) && !state.launch_rows.is_empty() {
+                    let n = state.launch_rows.len().min(24);
+                    if n > 0 {
+                        state.launch_cursor = (state.launch_cursor + n - 1) % n;
+                    }
                     continue;
                 }
                 if context::is_launch_group(state) {
@@ -257,29 +188,14 @@ pub(crate) fn run(
                         continue;
                     }
                 }
-            }
-            Event::Key(KeyEvent {
-                code: KeyCode::Backspace,
-                kind: KeyEventKind::Press,
-                ..
-            }) => {
-                if context::is_session_list_group(state)
+                if context::is_root(state)
+                    && context::root_session_section_visible(state)
                     && !state.session_rows.is_empty()
-                    && !state.session_filter.is_empty()
                 {
-                    let keep = state.selected_session_name();
-                    state.session_filter.pop();
-                    state.recompute_session_filter_keep(keep.as_deref());
-                    continue;
-                }
-                if context::is_launch_group(state)
-                    && !state.launch_rows.is_empty()
-                    && !state.launch_filter.is_empty()
-                {
-                    let keep = state.selected_launch_label();
-                    state.launch_filter.pop();
-                    state.recompute_launch_filter_keep(keep.as_deref());
-                    continue;
+                    let n = state.session_rows.len().min(24);
+                    if n > 0 {
+                        state.session_cursor = (state.session_cursor + n - 1) % n;
+                    }
                 }
             }
             Event::Key(KeyEvent {
@@ -287,19 +203,16 @@ pub(crate) fn run(
                 kind: KeyEventKind::Press,
                 ..
             }) => {
-                if context::is_session_list_group(state) && !state.session_rows.is_empty() {
-                    if !c.is_control() {
-                        let keep = state.selected_session_name();
-                        state.session_filter.push(c);
-                        state.recompute_session_filter_keep(keep.as_deref());
-                    }
-                    continue;
-                }
                 if context::is_launch_group(state) && !state.launch_rows.is_empty() {
-                    if !c.is_control() {
-                        let keep = state.selected_launch_label();
-                        state.launch_filter.push(c);
-                        state.recompute_launch_filter_keep(keep.as_deref());
+                    if let Some(d) = c.to_digit(10) {
+                        let idx = d as usize;
+                        if (1..=9).contains(&idx) {
+                            let i = idx - 1;
+                            if i < state.launch_rows.len() {
+                                super::term::restore_global();
+                                return crate::action::execute_launch_at(i);
+                            }
+                        }
                     }
                     continue;
                 }
@@ -329,6 +242,23 @@ pub(crate) fn run(
                         }
                     }
                 }
+                if context::is_root(state)
+                    && context::root_session_section_visible(state)
+                    && !state.session_rows.is_empty()
+                {
+                    if let Some(d) = c.to_digit(10) {
+                        let idx = d as usize;
+                        if (1..=9).contains(&idx) {
+                            let i = idx - 1;
+                            let n = state.session_rows.len().min(24);
+                            if i < n {
+                                let name = state.session_rows[i].label.clone();
+                                super::term::restore_global();
+                                return crate::action::focus_session_from_leader(name);
+                            }
+                        }
+                    }
+                }
                 match crate::action::press_key(state, c) {
                     KeyPress::Execute(f) => {
                         super::term::restore_global();
@@ -343,12 +273,7 @@ pub(crate) fn run(
                         confirm,
                         allow_empty_confirm,
                     } => {
-                        state.enter_input_mode(
-                            prompt,
-                            initial,
-                            confirm,
-                            allow_empty_confirm,
-                        );
+                        state.enter_input_mode(prompt, initial, confirm, allow_empty_confirm);
                     }
                     KeyPress::Redraw | KeyPress::Unrecognised => {}
                 }

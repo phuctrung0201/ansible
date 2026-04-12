@@ -39,15 +39,13 @@
       source-file ~/.config/tmux/tmux.conf
     backup: yes
 
-- name: Copy tmux zsh integration
+- name: Install tmux zsh auto-attach helper
   copy:
     src: tmux.zsh
     dest: "{{ ansible_env.HOME }}/.config/tmux/tmux.zsh"
     mode: "0644"
 
-- name: Source tmux.zsh from zshrc
+- name: Source tmux auto-attach in zshrc
   lineinfile:
     path: "{{ ansible_env.HOME }}/.zshrc"
     line: "source ~/.config/tmux/tmux.zsh"
-    state: present
-    create: yes

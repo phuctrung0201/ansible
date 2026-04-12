@@ -28,7 +28,11 @@ pub fn log_to_file(context: &str, msg: &str) {
     let path = log_file_path();
     let ts = now_epoch_secs();
     let line = format!("[{ts}] [{context}] {msg}\n");
-    if let Ok(mut f) = std::fs::OpenOptions::new().create(true).append(true).open(&path) {
+    if let Ok(mut f) = std::fs::OpenOptions::new()
+        .create(true)
+        .append(true)
+        .open(&path)
+    {
         let _ = f.write_all(line.as_bytes());
     }
 }
@@ -52,13 +56,7 @@ pub fn print_params(argv_after_flag: &[String]) -> anyhow::Result<()> {
     }
     println!("==========");
     println!("environment (leader cares about TMUX / TMUX_PANE):");
-    for key in [
-        "TMUX",
-        "TMUX_PANE",
-        "TERM",
-        "COLUMNS",
-        "LINES",
-    ] {
+    for key in ["TMUX", "TMUX_PANE", "TERM", "COLUMNS", "LINES"] {
         println!("  {key}={:?}", std::env::var(key));
     }
     println!("==========");
@@ -75,7 +73,10 @@ pub fn print_params(argv_after_flag: &[String]) -> anyhow::Result<()> {
             println!("  session_id: {:?}", p.session_id);
             println!("  window_id: {}", p.window_id);
             println!("  pane_id: {:?}", p.pane_id);
-            println!("  client_size (w×h from tmux, if passed): {:?}", p.client_size);
+            println!(
+                "  client_size (w×h from tmux, if passed): {:?}",
+                p.client_size
+            );
         }
         Err(e) => {
             println!("  FAILED: {e:#}");

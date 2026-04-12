@@ -37,7 +37,10 @@ fn parse_wh(raw_w: &str, raw_h: &str) -> anyhow::Result<(u16, u16)> {
         .trim()
         .parse()
         .map_err(|_| anyhow::anyhow!("client height {:?} is not a number", raw_h.trim()))?;
-    anyhow::ensure!(w >= 1 && h >= 1, "client size must be at least 1×1, got {w}×{h}");
+    anyhow::ensure!(
+        w >= 1 && h >= 1,
+        "client size must be at least 1×1, got {w}×{h}"
+    );
     Ok((w, h))
 }
 
@@ -124,7 +127,10 @@ fn init_from_env() -> anyhow::Result<()> {
         if is_expanded(sid) && is_expanded(wid) && is_expanded(pid) {
             crate::diag::log_to_file("init_path", "env-vars (LEADER_SID/WID/PID)");
             let window_id = parse_window_id(wid.trim())?;
-            anyhow::ensure!(!sid.is_empty() && !pid.is_empty(), "LEADER_* env vars are empty");
+            anyhow::ensure!(
+                !sid.is_empty() && !pid.is_empty(),
+                "LEADER_* env vars are empty"
+            );
             return CTX
                 .set(LeaderContext {
                     session_id: sid.trim().to_string(),
@@ -157,24 +163,29 @@ fn init_from_env() -> anyhow::Result<()> {
     let session_id = parts.next().unwrap_or("").to_string();
     let window_id_raw = parts.next().unwrap_or("").trim().to_string();
     let window_id = parse_window_id(&window_id_raw)?;
-    anyhow::ensure!(!session_id.is_empty(), "display-message returned empty session_id");
+    anyhow::ensure!(
+        !session_id.is_empty(),
+        "display-message returned empty session_id"
+    );
 
     // Use the window's currently-active pane as the target (the originating pane that was
     // active before the popup overlay, not the popup pane itself).
     let window_target = format!("{}:{}", session_id, window_id_raw);
-    let pane_id = output_lossy(&[
-        "display-message",
-        "-t",
-        &window_target,
-        "-p",
-        "#{pane_id}",
-    ])?
-    .trim()
-    .to_string();
-    anyhow::ensure!(!pane_id.is_empty(), "could not resolve active pane for window {window_target}");
+    let pane_id = output_lossy(&["display-message", "-t", &window_target, "-p", "#{pane_id}"])?
+        .trim()
+        .to_string();
+    anyhow::ensure!(
+        !pane_id.is_empty(),
+        "could not resolve active pane for window {window_target}"
+    );
 
-    CTX.set(LeaderContext { session_id, window_id, pane_id, client_size: None })
-        .map_err(|_| anyhow::anyhow!("leader context already initialized"))?;
+    CTX.set(LeaderContext {
+        session_id,
+        window_id,
+        pane_id,
+        client_size: None,
+    })
+    .map_err(|_| anyhow::anyhow!("leader context already initialized"))?;
     Ok(())
 }
 
@@ -207,10 +218,7 @@ pub fn client_viewport_wh() -> Option<(u16, u16)> {
 fn looks_like_binary_path(s: &str) -> bool {
     let t = s.trim();
     t.contains("tmux-leader")
-        || (t.contains('/')
-            && !t.starts_with('$')
-            && !t.starts_with('@')
-            && !t.starts_with('%'))
+        || (t.contains('/') && !t.starts_with('$') && !t.starts_with('@') && !t.starts_with('%'))
 }
 
 /// Last tokens: `$session`, `@window`, `%pane`, optional `width` `height`; leading tokens are the binary path.
@@ -236,14 +244,8 @@ fn parse_targets_from_combined_e_arg(combined: &str) -> anyhow::Result<ParsedArg
     let pane = parts[n - 1].trim();
     let win = parts[n - 2].trim();
     let sess = parts[n - 3].trim();
-    anyhow::ensure!(
-        pane.starts_with('%'),
-        "pane id should be %n, got {pane:?}"
-    );
-    anyhow::ensure!(
-        win.starts_with('@'),
-        "window id should be @n, got {win:?}"
-    );
+    anyhow::ensure!(pane.starts_with('%'), "pane id should be %n, got {pane:?}");
+    anyhow::ensure!(win.starts_with('@'), "window id should be @n, got {win:?}");
     anyhow::ensure!(
         sess.starts_with('$'),
         "session id should be $n, got {sess:?}"
@@ -306,7 +308,13 @@ pub fn output_lossy(args: &[&str]) -> anyhow::Result<String> {
 }
 
 pub fn pane_cwd(target: &str) -> anyhow::Result<String> {
-    let s = output_lossy(&["display-message", "-t", target, "-p", "#{pane_current_path}"])?;
+    let s = output_lossy(&[
+        "display-message",
+        "-t",
+        target,
+        "-p",
+        "#{pane_current_path}",
+    ])?;
     Ok(s.trim().to_string())
 }
 
@@ -396,7 +404,8 @@ pub struct PaneLine {
     pub active: bool,
 }
 
-pub fn list_panes_for_window() -> anyhow::Result<Vec<PaneLine>> {
+/// List panes for any valid tmux `-t` target (pane id, window, or session).
+pub fn list_panes_for_target(target: &str) -> anyhow::Result<Vec<PaneLine>> {
     const FMT: &str = concat!(
         "#{pane_id}",
         "\u{1f}",
@@ -406,8 +415,7 @@ pub fn list_panes_for_window() -> anyhow::Result<Vec<PaneLine>> {
         "\u{1f}",
         "#{?pane_active,1,0}"
     );
-    let wt = window_target(initial_window_id());
-    let raw = output_lossy(&["list-panes", "-t", &wt, "-F", FMT])?;
+    let raw = output_lossy(&["list-panes", "-t", target, "-F", FMT])?;
     let mut out = Vec::new();
     for line in raw.lines() {
         let parts: Vec<&str> = line.split('\u{1f}').collect();
@@ -430,17 +438,18 @@ pub fn list_panes_for_window() -> anyhow::Result<Vec<PaneLine>> {
     Ok(out)
 }
 
+pub fn list_panes_for_window() -> anyhow::Result<Vec<PaneLine>> {
+    let wt = window_target(initial_window_id());
+    list_panes_for_target(&wt)
+}
+
 pub struct SessionLine {
     pub name: String,
     pub active: bool,
 }
 
 pub fn list_sessions() -> anyhow::Result<Vec<SessionLine>> {
-    const FMT: &str = concat!(
-        "#{session_name}",
-        "\u{1f}",
-        "#{?session_active,1,0}"
-    );
+    const FMT: &str = concat!("#{session_name}", "\u{1f}", "#{?session_active,1,0}");
     let raw = output_lossy(&["list-sessions", "-F", FMT])?;
     let mut out = Vec::new();
     for line in raw.lines() {
@@ -454,21 +463,17 @@ pub fn list_sessions() -> anyhow::Result<Vec<SessionLine>> {
     Ok(out)
 }
 
-pub fn should_skip_duplicate_leader(target: &str) -> anyhow::Result<bool> {
-    let my_pane = std::env::var("TMUX_PANE").unwrap_or_default();
-    let raw = output_lossy(&["list-panes", "-t", target, "-F", "#{pane_id} #{pane_current_command}"])?;
-    for line in raw.lines() {
-        let mut it = line.splitn(2, ' ');
-        let pid = it.next().unwrap_or("").trim();
-        let cmd = it.next().unwrap_or("").trim();
-        if pid == my_pane {
+/// True if another pane in `lines` (typically from [`list_panes_for_target`]) is running tmux-leader.
+pub fn other_leader_running(my_pane: &str, lines: &[PaneLine]) -> bool {
+    for pl in lines {
+        if pl.pane_id == my_pane {
             continue;
         }
-        if cmd.contains("tmux-leader") {
-            return Ok(true);
+        if pl.command.contains("tmux-leader") {
+            return true;
         }
     }
-    Ok(false)
+    false
 }
 
 #[cfg(test)]

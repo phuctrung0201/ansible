@@ -9,6 +9,4 @@ mod state;
 pub use commands::*;
 pub use dispatch::press_key;
 pub use key_press::KeyPress;
-pub use state::{
-    execute_launch_at, LeaderPaneRow, LeaderState, LeaderView, LeaderWindowRow,
-};
+pub use state::{execute_launch_at, LeaderPaneRow, LeaderState, LeaderWindowRow};

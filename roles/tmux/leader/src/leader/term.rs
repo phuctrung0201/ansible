@@ -11,13 +11,11 @@ use std::io;
 
 use ratatui::crossterm::{
     execute,
-    terminal::{self, disable_raw_mode, enable_raw_mode, EnterAlternateScreen, LeaveAlternateScreen},
+    terminal::{
+        self, disable_raw_mode, enable_raw_mode, EnterAlternateScreen, LeaveAlternateScreen,
+    },
 };
-use ratatui::{
-    backend::CrosstermBackend,
-    layout::Rect,
-    Terminal, TerminalOptions, Viewport,
-};
+use ratatui::{backend::CrosstermBackend, layout::Rect, Terminal, TerminalOptions, Viewport};
 
 #[cfg(unix)]
 use std::fs::File;

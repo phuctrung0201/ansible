@@ -27,10 +27,6 @@ pub fn press_key(state: &mut LeaderState, key: char) -> KeyPress {
                     }
                     return KeyPress::Execute(*f);
                 }
-                crate::keynode::KeyNodeKind::SessionList => {
-                    state.enter_session_list_picker();
-                    return KeyPress::Redraw;
-                }
                 crate::keynode::KeyNodeKind::CloseWindow => return close_window_keypress(),
                 crate::keynode::KeyNodeKind::PromptAction {
                     prompt,
@@ -54,8 +50,7 @@ pub fn press_key(state: &mut LeaderState, key: char) -> KeyPress {
                         state.root_pane_cursor_follow_active();
                     }
                     if std::ptr::eq(nodes.as_ptr(), launcher::NODES.as_ptr()) {
-                        state.launch_filter.clear();
-                        state.recompute_launch_filter_keep(None);
+                        state.launch_cursor = 0;
                     }
                     return KeyPress::Redraw;
                 }

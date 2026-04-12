@@ -116,7 +116,8 @@ fn load_or_embedded() -> Result<Palette> {
         }
         let bytes = std::fs::read(&path)
             .with_context(|| format!("read leader theme {}", path.display()))?;
-        return load_yaml_bytes(&bytes).with_context(|| format!("invalid leader theme {}", path.display()));
+        return load_yaml_bytes(&bytes)
+            .with_context(|| format!("invalid leader theme {}", path.display()));
     }
     load_yaml_bytes(EMBEDDED_YML.as_bytes()).context("embedded leader_theme.yml")
 }

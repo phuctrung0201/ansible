@@ -90,14 +90,8 @@ fn git_executable_candidates() -> Vec<PathBuf> {
             out.push(Path::new(&home).join(rel));
         }
     }
-    if let Ok(path_var) = std::env::var("PATH") {
-        for dir in std::env::split_paths(&path_var) {
-            let g = dir.join("git");
-            if g.is_file() {
-                out.push(g);
-            }
-        }
-    }
+    // Intentionally no full `PATH` walk: that was O(dirs) syscalls every leader open.
+    // `git` first plus fixed paths covers normal setups; exec still resolves PATH.
     let mut deduped: Vec<PathBuf> = Vec::new();
     for p in out {
         if !deduped.iter().any(|q| q == &p) {
@@ -151,7 +145,11 @@ fn git_branch_via_cli(workdir: &Path) -> Option<String> {
         return None;
     }
     let h = String::from_utf8_lossy(&short.stdout).trim().to_string();
-    if h.is_empty() { None } else { Some(h) }
+    if h.is_empty() {
+        None
+    } else {
+        Some(h)
+    }
 }
 
 fn branch_label_at_worktree(worktree: &Path) -> Option<String> {

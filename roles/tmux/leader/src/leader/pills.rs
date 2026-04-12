@@ -122,68 +122,6 @@ pub(crate) fn banner_pills_prefix_spans(
     Some(out)
 }
 
-/// Scrollable plain list for fuzzy pickers; `cursor` indexes into `filtered` (not `tab_rows`).
-pub(crate) fn tab_list_lines(
-    tab_rows: &[LeaderWindowRow],
-    filtered: &[usize],
-    cursor: usize,
-    max_visible: usize,
-    max_label_width: usize,
-    no_match_text: &str,
-) -> Vec<Line<'static>> {
-    let t = palette();
-    let n = filtered.len();
-    if n == 0 {
-        return vec![Line::from(vec![Span::styled(
-            format!("  ({})", no_match_text),
-            Style::default().fg(t.comment_bright).bg(t.dracula_bg),
-        )])];
-    }
-    let max_vis = max_visible.max(1);
-    let skip = if n <= max_vis {
-        0
-    } else {
-        cursor
-            .saturating_sub(max_vis / 2)
-            .min(n.saturating_sub(max_vis))
-    };
-    let mut lines: Vec<Line<'static>> = Vec::new();
-    if skip > 0 {
-        lines.push(Line::from(vec![Span::styled(
-            format!("  ··· {} above", skip),
-            Style::default().fg(t.comment_bright).bg(t.dracula_bg),
-        )]));
-    }
-    let take = (n - skip).min(max_vis);
-    for j in skip..skip + take {
-        let row_i = filtered[j];
-        let row = &tab_rows[row_i];
-        let is_sel = j == cursor;
-        let bullet = if is_sel { "› " } else { "  " };
-        let label = truncate_pill_label(&row.label, max_label_width);
-        let mut style = Style::default().bg(t.dracula_bg);
-        if is_sel {
-            style = style.fg(t.pink).add_modifier(Modifier::BOLD);
-        } else if row.current {
-            style = style.fg(t.teal).add_modifier(Modifier::BOLD);
-        } else {
-            style = style.fg(t.fg);
-        }
-        lines.push(Line::from(vec![
-            Span::styled(bullet, style),
-            Span::styled(label, style),
-        ]));
-    }
-    if skip + take < n {
-        let rem = n - (skip + take);
-        lines.push(Line::from(vec![Span::styled(
-            format!("  ··· {} below", rem),
-            Style::default().fg(t.comment_bright).bg(t.dracula_bg),
-        )]));
-    }
-    lines
-}
-
 /// Top row banner pills (read‑only): git · kube, centered.
 pub(crate) fn banner_pills_line(
     git: Option<&str>,

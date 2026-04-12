@@ -1,17 +1,14 @@
 //! Leader keyboard layers: root [`KEYMAP`]. Apps live in [`crate::launcher`].
 //!
-//! Root actions are ordered for the grid: **non-letters first** (e.g. space, tab), then **a–z
+//! Root actions are ordered for the grid: **non-letters first** (e.g. space), then **a–z
 //! case-insensitively** (for the same letter, lowercase before uppercase).
 //!
-//! **tab** = list sessions only (no session block on the root grid). In that view: type to filter,
-//! **Tab** / Shift-Tab move the cursor, **Enter** attaches, **Esc** returns to the grid.
+//! **Sessions** are a pill strip on the root grid (not a key): **Tab** / Shift-Tab cycle,
+//! **1–9** attach immediately, **Enter** attaches the highlighted session.
 
 use crate::action;
 use crate::keynode::{KeyNode, KeyNodeKind};
 use crate::launcher;
-
-/// Empty grid while the session picker (root **Tab**) is active.
-pub static SESSION_LIST_NODES: &[KeyNode] = &[];
 
 /// Pane sub-group (`p` on root). Pane strip + **h** / **v** splits + **r** rename pane.
 pub static PANE_NODES: &[KeyNode] = &[
@@ -85,11 +82,6 @@ pub static KEYMAP: &[KeyNode] = &[
         key: ' ',
         label: "last session",
         kind: KeyNodeKind::Action(action::last_session),
-    },
-    KeyNode {
-        key: '\t',
-        label: "list sessions",
-        kind: KeyNodeKind::SessionList,
     },
     // --- a–z (case-insensitive; lower then upper per letter) ---
     KeyNode {

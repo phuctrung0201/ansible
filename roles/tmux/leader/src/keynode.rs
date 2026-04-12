@@ -8,8 +8,6 @@ pub struct KeyNode {
 
 pub enum KeyNodeKind {
     Action(fn() -> anyhow::Result<()>),
-    /// Root **tab** — list sessions (replaces the action grid until Esc).
-    SessionList,
     /// **w k** — close current window; toast in-popup if it is the only window in the session.
     CloseWindow,
     /// Opens an inline text-input prompt within the TUI popup before running the action.

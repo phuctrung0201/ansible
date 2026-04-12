@@ -46,13 +46,7 @@ fn tmux_new_window_after_session_last(cwd: &str) -> anyhow::Result<Command> {
 }
 
 pub fn edit_command() -> anyhow::Result<()> {
-    tmux::run_status(&[
-        "send-keys",
-        "-t",
-        &target(),
-        "C-x",
-        "C-e",
-    ])
+    tmux::run_status(&["send-keys", "-t", &target(), "C-x", "C-e"])
 }
 
 /// Dumps pane scrollback to a temp file and opens it in **nvim** in a **new window** at the **end**
@@ -60,17 +54,8 @@ pub fn edit_command() -> anyhow::Result<()> {
 pub fn open_buffer() -> anyhow::Result<()> {
     let t = target();
     let cwd = tmux::pane_cwd(&t).unwrap_or_default();
-    let capture = tmux::output_lossy(&[
-        "capture-pane",
-        "-p",
-        "-S",
-        "-",
-        "-E",
-        "-",
-        "-t",
-        &t,
-    ])
-    .context("capture-pane")?;
+    let capture = tmux::output_lossy(&["capture-pane", "-p", "-S", "-", "-E", "-", "-t", &t])
+        .context("capture-pane")?;
     let stamp = std::time::SystemTime::now()
         .duration_since(std::time::UNIX_EPOCH)
         .unwrap_or_default()
@@ -287,14 +272,8 @@ pub fn detach_session() -> anyhow::Result<()> {
 pub fn do_new_session(name: String) -> anyhow::Result<()> {
     let name = name.trim();
     if name.is_empty() {
-        let raw = tmux::output_lossy(&[
-            "new-session",
-            "-d",
-            "-P",
-            "-F",
-            "#{session_name}",
-        ])
-        .context("new-session -d (unnamed)")?;
+        let raw = tmux::output_lossy(&["new-session", "-d", "-P", "-F", "#{session_name}"])
+            .context("new-session -d (unnamed)")?;
         let sname = raw.trim();
         anyhow::ensure!(!sname.is_empty(), "new-session returned empty session name");
         tmux::run_status(&["switch-client", "-t", sname])?;

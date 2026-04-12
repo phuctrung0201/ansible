@@ -2,18 +2,23 @@
 
 set -g mouse on
 
+# Scrollback: resize reflow cost scales with lines kept per pane (tmux walks history on width change).
+# No option disables that; smaller limit + clear-history on noisy panes helps. Pipe huge logs to a file.
+set -g history-limit 5000
+
 # Status bar — rounded pills like tmux-leader (`theme.rs`: ROUND_CAP_L \uE0B6, ROUND_CAP_R \uE0B4; Nerd Font).
 set -g status on
 set -g status-position bottom
-set -g status-interval 1
+# Slower refresh = less work overlapping window resize redraws; avoids #(…) shell every second.
+set -g status-interval 5
 # Window list hidden (empty formats below); left/right pills only.
 set -g status-justify left
 # Bar uses terminal background (no fill); pills keep their own bg.
 set -g status-style fg=#f8f8f2,bg=default
 set -g status-left-length 320
 set -g status-right-length 240
-# Left: cwd with ~ for $HOME (green, FA folder-open U+F07C). Right: window (tab U+F04E9), session (bars U+F0C9).
-set -g status-left '#[fg=#50fa7b,bg=default]#[fg=#282a36,bg=#50fa7b,bold]  #(path="#{pane_current_path}"; home="$HOME"; [ "$path" = "$home" ] && echo ~ || echo "$path" | sed "s|^$home/|~/|") #[fg=#50fa7b,bg=default,nobold]'
+# Left: cwd (green, FA folder-open U+F07C). Plain #{pane_current_path} — no #(…) shell, less jank on resize/redraw.
+set -g status-left '#[fg=#50fa7b,bg=default]#[fg=#282a36,bg=#50fa7b,bold]  #{pane_current_path} #[fg=#50fa7b,bg=default,nobold]'
 set -g status-right '#[fg=#44475a,bg=default]#[fg=#f8f8f2,bg=#44475a,bold] 󰓩 #W #[fg=#44475a,bg=default]#[bg=default] #[fg=#bd93f9,bg=default]#[fg=#282a36,bg=#bd93f9,bold]  #S #[fg=#bd93f9,bg=default]'
 
 setw -g window-status-separator ""

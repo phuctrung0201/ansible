@@ -153,7 +153,15 @@ fn render_pick(
                 let item = &group.items[ii];
                 let focused = cursor_pos == Some((gi, ii));
                 let key_str = key_char.to_string();
-                let pair = slot_spans_str(&key_str, &item.label, "", lw, is_last, focused, item.current);
+                let pair = slot_spans_str(
+                    &key_str,
+                    &item.label,
+                    "",
+                    lw,
+                    is_last,
+                    focused,
+                    item.current,
+                );
                 spans.extend(pair);
             }
             lines.push(Line::from(spans));
