@@ -133,7 +133,10 @@ fn leader_rows_from_sessions(sessions: Vec<tmux::SessionLine>) -> Vec<LeaderWind
         .enumerate()
         .map(|(i, s)| LeaderWindowRow {
             id: i as u64,
-            label: s.name,
+            // `list-sessions` can include trailing spaces in `#{session_name}`; `session_name_for_pane`
+            // returns trimmed. Without normalizing, `r.label == name` misses (e.g. second session),
+            // every `current` becomes false, and the cursor stays on pill 0.
+            label: s.name.trim().to_string(),
             focused: false,
             current: s.active,
         })
@@ -164,7 +167,7 @@ impl LeaderState {
             let name = here.trim();
             if !name.is_empty() {
                 for r in session_rows.iter_mut() {
-                    r.current = r.label == name;
+                    r.current = r.label.trim() == name;
                 }
             }
         }
@@ -241,7 +244,7 @@ impl LeaderState {
             .ok()
             .map(|n| n.trim().to_string())
             .filter(|n| !n.is_empty())
-            .and_then(|name| self.session_rows.iter().position(|r| r.label == name))
+            .and_then(|name| self.session_rows.iter().position(|r| r.label.trim() == name.as_str()))
             .or_else(|| self.session_rows.iter().position(|r| r.current));
         pill_strip_cursor_follow(self.session_rows.len(), pos, &mut self.session_cursor);
     }
