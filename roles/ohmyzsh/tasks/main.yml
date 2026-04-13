@@ -21,6 +21,18 @@
     repo: https://github.com/zdharma-continuum/fast-syntax-highlighting.git
     dest: "{{ ansible_env.HOME }}/.oh-my-zsh/custom/plugins/fast-syntax-highlighting"
 
+- name: Ensure zsh config directory for Ansible theme
+  file:
+    path: "{{ ansible_env.HOME }}/.config/zsh"
+    state: directory
+    mode: "0755"
+
+- name: Deploy zsh theme from share.yml
+  template:
+    src: ansible-theme.zsh.j2
+    dest: "{{ ansible_env.HOME }}/.config/zsh/ansible-theme.zsh"
+    mode: "0644"
+
 - name: Configure .zshrc settings
   lineinfile:
     path: "{{ ansible_env.HOME }}/.zshrc"
@@ -35,12 +47,11 @@
     - 'DISABLE_AUTO_UPDATE=true'
     - 'source $ZSH/oh-my-zsh.sh'
 
-- name: Arrow-only prompt (U+203A ›; green/red by exit code)
+- name: Source Ansible zsh theme (prompt + highlights from share.yml)
   blockinfile:
     path: "{{ ansible_env.HOME }}/.zshrc"
     marker: "# {mark} ANSIBLE ohmyzsh PROMPT"
     insertafter: '^source \$ZSH/oh-my-zsh\.sh'
     block: |
-      # U+203A = single right-pointing angle quotation mark
-      PROMPT="%(?.%B%F{green}.%B%F{red})"$'\u203A'"%f%b "
+      source "${HOME}/.config/zsh/ansible-theme.zsh"
 

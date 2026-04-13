@@ -60,7 +60,7 @@ pub fn open_buffer() -> anyhow::Result<()> {
         .duration_since(std::time::UNIX_EPOCH)
         .unwrap_or_default()
         .as_nanos();
-    let path = std::env::temp_dir().join(format!("tmux-leader-buffer-{stamp}"));
+    let path = std::env::temp_dir().join(format!("tmux-leader-buffer-{stamp}.txt"));
     std::fs::write(&path, capture.as_bytes()).context("write scrollback snapshot")?;
     let mut cmd = tmux_new_window_after_session_last(&cwd)?;
     cmd.arg("-n").arg("buffer");

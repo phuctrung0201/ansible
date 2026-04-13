@@ -1,0 +1,37 @@
+# Managed by Ansible — colors from share.yml `theme`.
+# Regenerate: ansible-playbook main.yml --tags ohmyzsh
+
+# Prompt: ››› (U+203A ×3); purple on success, red on failure (share.yml truecolor).
+# Hex via vars so the Jinja template parser stays happy (no raw truecolor tokens in PROMPT).
+_theme_ok='#{{ theme.purple | replace("#", "") }}'
+_theme_err='#{{ theme.red | replace("#", "") }}'
+PROMPT="%(?.%B%F{${_theme_ok}}.%B%F{${_theme_err}})"$'\u203A\u203A\u203A'"%f%b "
+
+# Suggestions: same muted tone as `theme.comment`
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=#{{ theme.comment | replace('#', '') }}'
+
+# fast-syntax-highlighting — ANSI names map to Ghostty palette (blue→purple, magenta→pink, etc.)
+typeset -gA ZSH_HIGHLIGHT_STYLES
+ZSH_HIGHLIGHT_STYLES[default]='none'
+ZSH_HIGHLIGHT_STYLES[unknown-token]='fg=red,bold'
+ZSH_HIGHLIGHT_STYLES[reserved-word]='fg=yellow,bold'
+ZSH_HIGHLIGHT_STYLES[alias]='fg=green,bold'
+ZSH_HIGHLIGHT_STYLES[builtin]='fg=cyan,bold'
+ZSH_HIGHLIGHT_STYLES[function]='fg=green,bold'
+ZSH_HIGHLIGHT_STYLES[command]='fg=blue,bold'
+ZSH_HIGHLIGHT_STYLES[precommand]='fg=green,bold'
+ZSH_HIGHLIGHT_STYLES[path]='underline,fg=cyan'
+ZSH_HIGHLIGHT_STYLES[path_pathseparator]='fg=12'
+ZSH_HIGHLIGHT_STYLES[path_prefix]='underline,fg=cyan'
+ZSH_HIGHLIGHT_STYLES[globbing]='fg=magenta,bold'
+ZSH_HIGHLIGHT_STYLES[history-expansion]='fg=green,bold'
+ZSH_HIGHLIGHT_STYLES[single-hyphen-option]='fg=yellow'
+ZSH_HIGHLIGHT_STYLES[double-hyphen-option]='fg=yellow'
+ZSH_HIGHLIGHT_STYLES[redirection]='fg=yellow,bold'
+ZSH_HIGHLIGHT_STYLES[back-quoted-argument]='fg=magenta'
+ZSH_HIGHLIGHT_STYLES[single-quoted-argument]='fg=green'
+ZSH_HIGHLIGHT_STYLES[double-quoted-argument]='fg=green'
+ZSH_HIGHLIGHT_STYLES[dollar-quoted-argument]='fg=green'
+ZSH_HIGHLIGHT_STYLES[back-dollar-quoted-argument]='fg=green'
+ZSH_HIGHLIGHT_STYLES[assign]='none'
+ZSH_HIGHLIGHT_STYLES[comment]='fg=8,bold'

@@ -1,5 +1,4 @@
-# Default leader UI palette — edit locally or override with ~/.config/tmux/leader_theme.yml
-# Keys mirror share.yml `theme` (Ansible templates this file from share.yml on deploy).
+# Compile-time default for tmux-leader; keep in sync with share.yml / leader_theme.yml.j2.
 purple: "#bd93f9"
 orange: "#ffb86c"
 cyan: "#8be9fd"
@@ -10,8 +9,6 @@ bright_cyan: "#a4ffff"
 fg: "#f8f8f2"
 comment: "#6272a4"
 comment_bright: "#6272a4"
-# Use terminal default background (often appears transparent over tmux popups).
 bg: "reset"
-# Dark text on bright banner/window pill fills (`bg` may be reset; this must stay #RRGGBB).
 pill_fg: "#282a36"
-selection: "#575c74"
+selection: "#44475a"

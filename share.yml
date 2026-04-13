@@ -1,9 +1,7 @@
 # Theme — https://spec.draculatheme.com/ (§1.2 Standard + ANSI)
 theme:
-  # --- §1.2.1 Standard ---
   bg: "#282a36"
   fg: "#f8f8f2"
-  # Darker than prior #575c74; still above bg for contrast (Ghostty, nvim/tmux + Visual via dracula, zellij, leader).
   selection: "#44475a"
   comment: "#6272a4"
   red: "#ff5555"
@@ -13,32 +11,17 @@ theme:
   purple: "#bd93f9"
   cyan: "#8be9fd"
   pink: "#ff79c6"
-
-  # ANSI Blue (§1.2.2) is Purple; kept as `blue` for terminal color4 / templates.
   blue: "#bd93f9"
-
-  # --- §1.2.2 ANSI ---
-  dark: "#21222c" # AnsiBlack
-  white: "#f8f8f2" # AnsiWhite (same as fg)
+  dark: "#21222c"
+  white: "#f8f8f2"
   bright_red: "#ff6e6e"
   bright_green: "#69ff94"
   bright_yellow: "#ffffa5"
-  bright_purple: "#d6acff" # AnsiBrightBlue
-  bright_pink: "#ff92df" # AnsiBrightMagenta
+  bright_purple: "#d6acff"
+  bright_pink: "#ff92df"
   bright_cyan: "#a4ffff"
-  bright_white: "#ffffff" # AnsiBrightWhite
-
-  # AnsiBrightBlack — spec uses same hex as Comment (#6272A4).
+  bright_white: "#ffffff"
   comment_bright: "#6272a4"
-
-  # AnsiBlack — dracula.nvim `black` / terminal bold black contexts
   black: "#21222c"
-
   gutter_fg: "#4b5263"
   nontext: "#3b4048"
-
-  rosewater: "#ff79c6" # alias of Pink — fzf / legacy
-
-  # nb ANSI 256 (purple / pink)
-  nb_primary: 141
-  nb_secondary: 212
