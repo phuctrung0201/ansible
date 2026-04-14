@@ -9,6 +9,8 @@
       tags: ['common']
     - role: fzf
       tags: ['fzf']
+    - role: nb
+      tags: ['nb']
     - role: mise
       tags: ['mise']
     - role: ghostty
