@@ -1,0 +1,52 @@
+# Ansible roles/tmux — status #(…) helpers and zsh auto-attach.
+# Tmux runs (examples):
+#   zsh ~/.config/tmux/tmux.zsh cwd-status "#{pane_current_path}"
+#   zsh ~/.config/tmux/tmux.zsh git-pill "#{pane_current_path}"
+
+_tmux_cwd_for_status() {
+  local p="$1"
+  local h="${HOME%/}"
+  [[ -z "$h" ]] && { echo "$p"; return 0; }
+  [[ "$p" == "$h" ]] && { echo '~'; return 0; }
+  [[ "$p" == "$h"/* ]] && { echo "~/${p#"$h"/}"; return 0; }
+  echo "$p"
+}
+
+_tmux_git_pill_for_status() {
+  local path="${1%/}"
+  [[ -z "$path" ]] && return 0
+  local branch
+  while [[ -n "$path" ]]; do
+    if git -C "$path" rev-parse --git-dir &>/dev/null; then
+      branch=$(git -C "$path" symbolic-ref -q --short HEAD 2>/dev/null) \
+        || branch=$(git -C "$path" rev-parse --short HEAD 2>/dev/null) \
+        || branch=""
+      [[ -z "$branch" ]] && return 0
+      print -r -- "#[fg={{ theme.orange }},bg=default]#[fg={{ theme.bg }},bg={{ theme.orange }},bold]  $branch #[fg={{ theme.orange }},bg=default]#[bg=default] "
+      return 0
+    fi
+    [[ "$path" == */* ]] || break
+    path="${path%/*}"
+  done
+  return 0
+}
+
+# When invoked directly by tmux status-bar: zsh tmux.zsh cwd-status "…"
+# $# > 0 only in that case; $# == 0 when sourced from zshrc.
+if [[ $# -gt 0 ]]; then
+  case "$1" in
+    cwd-status) shift; _tmux_cwd_for_status "$@" ;;
+    git-pill)   shift; _tmux_git_pill_for_status "$@" ;;
+  esac
+  return 0
+fi
+
+# --- auto-attach to session "main" (create if missing) ---
+# No exec: after detach the tmux client exits but this shell keeps running.
+[[ "$TMUX_AUTOSTART" == "0" ]] && return
+[[ -o interactive ]] || return
+[[ -z "$TMUX" ]] || return
+[[ -t 1 ]] || return
+command -v tmux &>/dev/null || return
+
+tmux new-session -As main

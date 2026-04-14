@@ -118,11 +118,6 @@ pub static KEYMAP: &[KeyNode] = &[
         },
     },
     KeyNode {
-        key: 'o',
-        label: "open buffer",
-        kind: KeyNodeKind::Action(action::open_buffer),
-    },
-    KeyNode {
         key: 'p',
         label: "panes",
         kind: KeyNodeKind::Group {
@@ -139,6 +134,11 @@ pub static KEYMAP: &[KeyNode] = &[
             confirm_fn: action::do_rename_session,
             allow_empty_confirm: false,
         },
+    },
+    KeyNode {
+        key: 's',
+        label: "scrollback",
+        kind: KeyNodeKind::Action(action::open_scrollback),
     },
     KeyNode {
         key: 'w',

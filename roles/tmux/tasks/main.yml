@@ -8,11 +8,19 @@
     path: "{{ ansible_env.HOME }}/.config/tmux"
     state: directory
 
-- name: Install cwd helper for status bar #(…)
-  copy:
-    src: cwd-for-status.sh
-    dest: "{{ ansible_env.HOME }}/.config/tmux/cwd-for-status.sh"
-    mode: "0755"
+- name: Remove legacy status helpers (merged into tmux.zsh)
+  file:
+    path: "{{ ansible_env.HOME }}/.config/tmux/{{ item }}"
+    state: absent
+  loop:
+    - cwd-for-status.sh
+    - git-pill-for-status.sh
+
+- name: Install tmux.zsh (auto-attach and tmux status-line helpers)
+  template:
+    src: tmux.zsh.j2
+    dest: "{{ ansible_env.HOME }}/.config/tmux/tmux.zsh"
+    mode: "0644"
 
 - name: Install leader theme from share.yml
   template:
@@ -44,12 +52,6 @@
       # Ansible (roles/tmux): full config lives in ~/.config/tmux/tmux.conf
       source-file ~/.config/tmux/tmux.conf
     backup: yes
-
-- name: Install tmux zsh auto-attach helper
-  copy:
-    src: tmux.zsh
-    dest: "{{ ansible_env.HOME }}/.config/tmux/tmux.zsh"
-    mode: "0644"
 
 - name: Source tmux auto-attach in zshrc
   lineinfile:

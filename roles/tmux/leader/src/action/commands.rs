@@ -28,7 +28,7 @@ fn tmux_new_window_after_current(cwd: &str) -> Command {
 /// `new-window -a` after the **last** window in the session (bottom of the window list).
 fn tmux_new_window_after_session_last(cwd: &str) -> anyhow::Result<Command> {
     let sid = tmux::session_id();
-    let windows = tmux::list_windows_for_target().context("list-windows (buffer placement)")?;
+    let windows = tmux::list_windows_for_target().context("list-windows (scrollback placement)")?;
     let last_index = windows
         .iter()
         .map(|w| w.index)
@@ -51,7 +51,7 @@ pub fn edit_command() -> anyhow::Result<()> {
 
 /// Dumps pane scrollback to a temp file and opens it in **nvim** in a **new window** at the **end**
 /// of the session’s window list (`new-window -a -t $session:<last-index>`).
-pub fn open_buffer() -> anyhow::Result<()> {
+pub fn open_scrollback() -> anyhow::Result<()> {
     let t = target();
     let cwd = tmux::pane_cwd(&t).unwrap_or_default();
     let capture = tmux::output_lossy(&["capture-pane", "-p", "-S", "-", "-E", "-", "-t", &t])
@@ -60,17 +60,17 @@ pub fn open_buffer() -> anyhow::Result<()> {
         .duration_since(std::time::UNIX_EPOCH)
         .unwrap_or_default()
         .as_nanos();
-    let path = std::env::temp_dir().join(format!("tmux-leader-buffer-{stamp}.txt"));
+    let path = std::env::temp_dir().join(format!("tmux-leader-scrollback-{stamp}.txt"));
     std::fs::write(&path, capture.as_bytes()).context("write scrollback snapshot")?;
     let mut cmd = tmux_new_window_after_session_last(&cwd)?;
-    cmd.arg("-n").arg("buffer");
+    cmd.arg("-n").arg("scrollback");
     // `+"…"` runs after the first file is loaded (:help +cmd): no number gutter, then EOF.
     cmd.arg("nvim").arg(concat!(
         "+setlocal nonumber norelativenumber signcolumn=no foldcolumn=0",
         " | silent! normal! G",
     ));
     cmd.arg(path.as_os_str());
-    let st = cmd.status().context("tmux new-window nvim (buffer)")?;
+    let st = cmd.status().context("tmux new-window nvim (scrollback)")?;
     anyhow::ensure!(st.success(), "tmux new-window exited with {:?}", st.code());
     Ok(())
 }

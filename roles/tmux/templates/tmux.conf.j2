@@ -2,10 +2,6 @@
 
 set -g mouse on
 
-# Scrollback: resize reflow cost scales with lines kept per pane (tmux walks history on width change).
-# No option disables that; smaller limit + clear-history on noisy panes helps. Pipe huge logs to a file.
-set -g history-limit 5000
-
 # Status bar — rounded pills like tmux-leader (`theme.rs`: ROUND_CAP_L \uE0B6, ROUND_CAP_R \uE0B4; Nerd Font).
 set -g status on
 set -g status-position bottom
@@ -16,10 +12,10 @@ set -g status-justify left
 # Bar uses terminal background (no fill); pills keep their own bg.
 set -g status-style fg={{ theme.fg }},bg=default
 set -g status-left-length 320
-set -g status-right-length 240
-# Left: cwd (green, FA folder). Helper script avoids tmux %(…) vs printf % and #(…) ending at ')' in inline sh.
-set -g status-left "#[fg={{ theme.green }},bg=default]#[fg={{ theme.bg }},bg={{ theme.green }},bold]  #({{ ansible_env.HOME }}/.config/tmux/cwd-for-status.sh \"#{pane_current_path}\") #[fg={{ theme.green }},bg=default,nobold]"
-set -g status-right '#[fg={{ theme.selection }},bg=default]#[fg={{ theme.fg }},bg={{ theme.selection }},bold] 󰓩 #W #[fg={{ theme.selection }},bg=default]#[bg=default] #[fg={{ theme.purple }},bg=default]#[fg={{ theme.bg }},bg={{ theme.purple }},bold]  #S #[fg={{ theme.purple }},bg=default]'
+set -g status-right-length 200
+# Left: cwd (green). Right: git branch pill — helpers live in tmux.zsh (cwd-status / git-pill).
+set -g status-left "#[fg={{ theme.green }},bg=default]#[fg={{ theme.bg }},bg={{ theme.green }},bold]  #(zsh {{ ansible_env.HOME }}/.config/tmux/tmux.zsh cwd-status \"#{pane_current_path}\") #[fg={{ theme.green }},bg=default,nobold]"
+set -g status-right '#[bg=default]#(zsh {{ ansible_env.HOME }}/.config/tmux/tmux.zsh git-pill "#{pane_current_path}")'
 
 setw -g window-status-separator ""
 setw -g window-status-format ''
