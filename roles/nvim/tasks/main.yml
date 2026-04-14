@@ -39,3 +39,10 @@
     path: "{{ ansible_env.HOME }}/wiki"
     state: directory
     mode: "0755"
+
+- name: Ensure wiki index exists (empty installs only)
+  copy:
+    dest: "{{ ansible_env.HOME }}/wiki/index.md"
+    content: |
+      # Wiki
+    force: false
