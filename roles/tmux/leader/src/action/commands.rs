@@ -226,12 +226,18 @@ pub fn launch_lazysql() -> anyhow::Result<()> {
     launch_app_in_new_window("lazysql", &["lazysql"])
 }
 
-pub fn launch_nb() -> anyhow::Result<()> {
-    launch_app_in_new_window("nb", &["sh", "-c", "nb -i"])
-}
-
 pub fn launch_nvim() -> anyhow::Result<()> {
     launch_app_in_new_window("nvim", &["nvim"])
+}
+
+pub fn launch_wiki() -> anyhow::Result<()> {
+    let home = std::env::var("HOME").unwrap_or_default();
+    let wiki_dir = format!("{home}/wiki");
+    let mut cmd = tmux_new_window_after_current(&wiki_dir);
+    cmd.arg("-n").arg("wiki").arg("zsh").arg("-ic").arg("wiki");
+    let st = cmd.status().context("tmux new-window (wiki)")?;
+    anyhow::ensure!(st.success(), "tmux new-window exited with {:?}", st.code());
+    Ok(())
 }
 
 pub fn last_session() -> anyhow::Result<()> {

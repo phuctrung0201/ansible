@@ -19,3 +19,6 @@ The full setup can be run with:
 Each role has a tag to run a specific one:
 
 > ansible-playbook main.yml --tags "ohmyzsh"
+
+
+

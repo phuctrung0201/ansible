@@ -1,6 +1,6 @@
 //! Map keymap nodes to [`KeyPress`] outcomes and update [`LeaderState`](super::state::LeaderState).
 
-use crate::{keymap, launcher, move_session, tmux};
+use crate::{keymap, move_session, tmux};
 
 use super::commands::close_window_keypress;
 use super::state::LeaderState;
@@ -49,9 +49,6 @@ pub fn press_key(state: &mut LeaderState, key: char) -> KeyPress {
                     if std::ptr::eq(nodes.as_ptr(), keymap::PANE_NODES.as_ptr()) {
                         state.refresh_pane_rows();
                         state.root_pane_cursor_follow_active();
-                    }
-                    if std::ptr::eq(nodes.as_ptr(), launcher::NODES.as_ptr()) {
-                        state.launch_cursor = 0;
                     }
                     return KeyPress::Redraw;
                 }

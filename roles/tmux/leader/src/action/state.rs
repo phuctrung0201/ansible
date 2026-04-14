@@ -1,9 +1,8 @@
 //! Leader UI state: window/session/launcher rows, filters, and pill metadata.
 
-use anyhow::Context;
 use tui_input::Input;
 
-use crate::{launcher, tmux};
+use crate::tmux;
 
 /// Full-screen rename-style prompt within the popup (section rule, hint, bordered field).
 pub struct PendingInput {
@@ -62,33 +61,6 @@ pub(crate) fn window_rows() -> anyhow::Result<Vec<LeaderWindowRow>> {
     Ok(rows)
 }
 
-pub fn leader_launch_rows() -> Vec<LeaderWindowRow> {
-    launcher::NODES
-        .iter()
-        .enumerate()
-        .map(|(i, n)| LeaderWindowRow {
-            id: i as u64,
-            label: n.label.to_string(),
-            focused: false,
-            current: false,
-        })
-        .collect()
-}
-
-pub fn execute_launch_at(index: usize) -> anyhow::Result<()> {
-    let node = launcher::NODES
-        .get(index)
-        .with_context(|| format!("launch index {index} out of range"))?;
-    match &node.kind {
-        crate::keynode::KeyNodeKind::Action(f) => f(),
-        crate::keynode::KeyNodeKind::PromptAction { .. }
-        | crate::keynode::KeyNodeKind::Group { .. }
-        | crate::keynode::KeyNodeKind::CloseWindow => {
-            anyhow::bail!("launch node must be an action")
-        }
-    }
-}
-
 pub struct LeaderState {
     pub nodes: &'static [crate::keynode::KeyNode],
     pub icon: &'static str,
@@ -97,8 +69,6 @@ pub struct LeaderState {
     pub session_rows: Vec<LeaderWindowRow>,
     pub session_cursor: usize,
     pub pending_input: Option<PendingInput>,
-    pub launch_rows: Vec<LeaderWindowRow>,
-    pub launch_cursor: usize,
     pub root_window_cursor: usize,
     pub pane_rows: Vec<LeaderPaneRow>,
     pub root_pane_cursor: usize,
@@ -158,7 +128,6 @@ impl LeaderState {
         let session_rows = sessions_res
             .map(leader_rows_from_sessions)
             .unwrap_or_default();
-        let launch_rows = leader_launch_rows();
         let mut state = LeaderState {
             nodes: crate::keymap::KEYMAP,
             icon: LEADER_HEADER_ICON,
@@ -167,8 +136,6 @@ impl LeaderState {
             session_rows,
             session_cursor: 0,
             pending_input: None,
-            launch_rows,
-            launch_cursor: 0,
             root_window_cursor: 0,
             pane_rows: Vec::new(),
             root_pane_cursor: 0,
@@ -244,16 +211,6 @@ impl LeaderState {
         self.session_rows
             .get(self.session_cursor.min(n - 1))
             .map(|r| r.label.clone())
-    }
-
-    pub fn selected_launch_index(&self) -> Option<usize> {
-        let n = self.launch_rows.len().min(PILL_STRIP_CAP);
-        if n == 0 {
-            return None;
-        }
-        self.launch_rows
-            .get(self.launch_cursor.min(n - 1))
-            .map(|r| r.id as usize)
     }
 
     pub fn enter_input_mode(

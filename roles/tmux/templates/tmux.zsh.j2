@@ -22,7 +22,7 @@ _tmux_git_pill_for_status() {
         || branch=$(git -C "$walk" rev-parse --short HEAD 2>/dev/null) \
         || branch=""
       [[ -z "$branch" ]] && return 0
-      print -r -- "#[fg={{ theme.orange }},bg=default]#[fg={{ theme.bg }},bg={{ theme.orange }},bold]  $branch #[fg={{ theme.orange }},bg=default]#[bg=default] "
+      print -r -- "#[fg={{ theme.orange }},bg=default]#[fg={{ theme.bg }},bg={{ theme.orange }},bold]  $branch #[fg={{ theme.orange }},bg=default]"
       return 0
     fi
     [[ "$walk" == */* ]] || break

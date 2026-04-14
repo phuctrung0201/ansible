@@ -75,10 +75,6 @@ pub(crate) fn run(
                     state.return_to_windows();
                     continue;
                 }
-                if context::is_launch_group(state) {
-                    state.return_to_root();
-                    continue;
-                }
                 if !context::is_root(state) {
                     state.return_to_root();
                     continue;
@@ -90,12 +86,6 @@ pub(crate) fn run(
                 kind: KeyEventKind::Press,
                 ..
             }) => {
-                if context::is_launch_group(state) && !state.launch_rows.is_empty() {
-                    if let Some(idx) = state.selected_launch_index() {
-                        super::term::restore_global();
-                        return crate::action::execute_launch_at(idx);
-                    }
-                }
                 if context::is_move_session_group(state) && !state.session_rows.is_empty() {
                     if let Some(name) = state.selected_session_name() {
                         super::term::restore_global();
@@ -136,16 +126,6 @@ pub(crate) fn run(
                 if context::is_input_mode(state) {
                     continue;
                 }
-                if context::is_launch_group(state) && !state.launch_rows.is_empty() {
-                    let n = state.launch_rows.len().min(24);
-                    if n > 0 {
-                        state.launch_cursor = (state.launch_cursor + 1) % n;
-                    }
-                    continue;
-                }
-                if context::is_launch_group(state) {
-                    continue;
-                }
                 if context::is_move_session_group(state) && !state.session_rows.is_empty() {
                     let n = state.session_rows.len().min(24);
                     if n > 0 {
@@ -183,16 +163,6 @@ pub(crate) fn run(
                 if context::is_input_mode(state) {
                     continue;
                 }
-                if context::is_launch_group(state) && !state.launch_rows.is_empty() {
-                    let n = state.launch_rows.len().min(24);
-                    if n > 0 {
-                        state.launch_cursor = (state.launch_cursor + n - 1) % n;
-                    }
-                    continue;
-                }
-                if context::is_launch_group(state) {
-                    continue;
-                }
                 if context::is_move_session_group(state) && !state.session_rows.is_empty() {
                     let n = state.session_rows.len().min(24);
                     if n > 0 {
@@ -227,19 +197,6 @@ pub(crate) fn run(
                 kind: KeyEventKind::Press,
                 ..
             }) => {
-                if context::is_launch_group(state) && !state.launch_rows.is_empty() {
-                    if let Some(d) = c.to_digit(10) {
-                        let idx = d as usize;
-                        if (1..=9).contains(&idx) {
-                            let i = idx - 1;
-                            if i < state.launch_rows.len() {
-                                super::term::restore_global();
-                                return crate::action::execute_launch_at(i);
-                            }
-                        }
-                    }
-                    continue;
-                }
                 if context::is_move_session_group(state) && !state.session_rows.is_empty() {
                     if let Some(d) = c.to_digit(10) {
                         let idx = d as usize;

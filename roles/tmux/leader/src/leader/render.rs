@@ -16,8 +16,8 @@ use super::{
     layout::{label_width, slot_spans, top_rect},
     pills::{pane_pill_lines, window_pill_lines},
     theme::{
-        palette, ACTIONS_TITLE_ICON, COLS, LAUNCHER_SECTION_ICON, PANES_SECTION_ICON,
-        SESSIONS_SECTION_ICON, TABS_SECTION_ICON,
+        palette, ACTIONS_TITLE_ICON, COLS, PANES_SECTION_ICON, SESSIONS_SECTION_ICON,
+        TABS_SECTION_ICON,
     },
 };
 
@@ -58,10 +58,7 @@ pub(crate) fn render(frame: &mut Frame, state: &LeaderState) {
 
     let pending_panel = state.pending_input.is_some();
 
-    let n_rows = if pending_panel
-        || context::is_launch_group(state)
-        || context::is_move_session_group(state)
-    {
+    let n_rows = if pending_panel || context::is_move_session_group(state) {
         0
     } else {
         (nodes.len() as u16).div_ceil(COLS as u16)
@@ -109,36 +106,15 @@ pub(crate) fn render(frame: &mut Frame, state: &LeaderState) {
         ));
     }
 
-    let mut launcher_list_block: Vec<Line<'static>> = Vec::new();
-    if context::is_launch_group(state) && !state.launch_rows.is_empty() {
-        launcher_list_block.extend(divider_with_vertical_margin(
-            &format!("{} launcher", LAUNCHER_SECTION_ICON),
-            div_w,
-            t.mauve,
-        ));
-        launcher_list_block.extend(window_pill_lines(
-            &state.launch_rows,
-            state.launch_cursor,
-            pill_max_w,
-            true,
-        ));
-    }
     // Pending rename prompt: section rule + bordered input field + hint row (bottom).
     let input_lines: u16 = if pending_panel { 3 + 3 + 1 } else { 0 };
 
     let notice_lines = u16::from(state.notice.is_some());
     let session_section_lines = session_list_block.len() as u16;
     let move_session_section_lines = move_session_list_block.len() as u16;
-    let launcher_section_lines = launcher_list_block.len() as u16;
-    let strip_extra = notice_lines
-        + session_section_lines
-        + move_session_section_lines
-        + launcher_section_lines;
+    let strip_extra = notice_lines + session_section_lines + move_session_section_lines;
 
-    let header_rule_lines: u16 = if pending_panel
-        || context::is_launch_group(state)
-        || context::is_move_session_group(state)
-    {
+    let header_rule_lines: u16 = if pending_panel || context::is_move_session_group(state) {
         0
     } else {
         3
@@ -218,7 +194,6 @@ pub(crate) fn render(frame: &mut Frame, state: &LeaderState) {
     }
     lines.extend(session_list_block);
     lines.extend(move_session_list_block);
-    lines.extend(launcher_list_block);
     if context::window_tab_strip_visible(state) {
         lines.extend(divider_with_vertical_margin(
             &format!("{} windows", TABS_SECTION_ICON),
@@ -255,10 +230,7 @@ pub(crate) fn render(frame: &mut Frame, state: &LeaderState) {
             lines.extend(pills);
         }
     }
-    if !pending_panel
-        && !context::is_launch_group(state)
-        && !context::is_move_session_group(state)
-    {
+    if !pending_panel && !context::is_move_session_group(state) {
         lines.extend(divider_with_vertical_margin(&header, div_w, t.mauve));
         for chunk in nodes.chunks(COLS) {
             let mut spans: Vec<Span> = Vec::new();

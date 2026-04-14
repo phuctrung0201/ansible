@@ -10,33 +10,33 @@ use crate::keynode::{KeyNode, KeyNodeKind};
 
 pub static NODES: &[KeyNode] = &[
     KeyNode {
-        key: '\0',
+        key: 'c',
         label: "caffeinate",
         kind: KeyNodeKind::Action(action::launch_caffeinate),
     },
     KeyNode {
-        key: '\0',
+        key: 'g',
         label: "lazygit",
         kind: KeyNodeKind::Action(action::launch_lazygit),
     },
     KeyNode {
-        key: '\0',
+        key: 'k',
         label: "k9s",
         kind: KeyNodeKind::Action(action::launch_k9s),
     },
     KeyNode {
-        key: '\0',
-        label: "nb",
-        kind: KeyNodeKind::Action(action::launch_nb),
+        key: 'n',
+        label: "nvim",
+        kind: KeyNodeKind::Action(action::launch_nvim),
     },
     KeyNode {
-        key: '\0',
+        key: 's',
         label: "lazysql",
         kind: KeyNodeKind::Action(action::launch_lazysql),
     },
     KeyNode {
-        key: '\0',
-        label: "nvim",
-        kind: KeyNodeKind::Action(action::launch_nvim),
+        key: 'w',
+        label: "wiki",
+        kind: KeyNodeKind::Action(action::launch_wiki),
     },
 ];

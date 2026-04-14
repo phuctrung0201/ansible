@@ -21,6 +21,3 @@ pub(crate) const SESSIONS_SECTION_ICON: &str = "\u{f233}";
 
 /// Pane strip (`p` group); matches panes group icon in `keymap` (fa-columns `\u{f0db}`).
 pub(crate) const PANES_SECTION_ICON: &str = "\u{f0db}";
-
-/// Matches launcher group icon in `keymap` (`󱓞`).
-pub(crate) const LAUNCHER_SECTION_ICON: &str = "󱓞";

@@ -26,3 +26,16 @@
     line: 'export EDITOR="nvim"'
     state: present
     create: yes
+
+- name: Add wiki alias
+  lineinfile:
+    path: "{{ ansible_env.HOME }}/.zshrc"
+    regexp: "^alias wiki="
+    line: "alias wiki='nvim +WikiIndex'"
+    state: present
+
+- name: Ensure wiki directory exists
+  file:
+    path: "{{ ansible_env.HOME }}/wiki"
+    state: directory
+    mode: "0755"

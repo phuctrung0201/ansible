@@ -1,13 +1,9 @@
 use std::ptr;
 
-use crate::{action::LeaderState, keymap, launcher, move_session};
+use crate::{action::LeaderState, keymap, move_session};
 
 pub(crate) fn is_root(state: &LeaderState) -> bool {
     std::ptr::eq(state.nodes.as_ptr(), keymap::KEYMAP.as_ptr())
-}
-
-pub(crate) fn is_launch_group(state: &LeaderState) -> bool {
-    std::ptr::eq(state.nodes.as_ptr(), launcher::NODES.as_ptr())
 }
 
 pub(crate) fn is_move_session_group(state: &LeaderState) -> bool {
@@ -33,7 +29,7 @@ pub(crate) fn is_pane_subgroup(state: &LeaderState) -> bool {
 
 /// **Panes** pill strip (`p` group only).
 pub(crate) fn pane_section_visible(state: &LeaderState) -> bool {
-    if !is_pane_subgroup(state) || is_launch_group(state) {
+    if !is_pane_subgroup(state) {
         return false;
     }
     state.pending_input.is_none()
@@ -41,7 +37,7 @@ pub(crate) fn pane_section_visible(state: &LeaderState) -> bool {
 
 /// **Windows** pill strip + Tab / Enter / 1–9 — only inside **`w`** (windows group).
 pub(crate) fn window_tab_strip_visible(state: &LeaderState) -> bool {
-    if is_launch_group(state) || !is_window_subgroup(state) {
+    if !is_window_subgroup(state) {
         return false;
     }
     state.pending_input.is_none()
