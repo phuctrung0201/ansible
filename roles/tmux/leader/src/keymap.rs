@@ -1,4 +1,5 @@
-//! Leader keyboard layers: root [`KEYMAP`]. Apps live in [`crate::launcher`].
+//! Leader keyboard layers: root [`KEYMAP`]. Apps live in [`crate::launcher`]; move-window targets
+//! in [`crate::move_session`] (**w m**), same pill UX as the launcher.
 //!
 //! Root actions are ordered for the grid: **non-letters first** (e.g. space), then **a–z
 //! case-insensitively** (for the same letter, lowercase before uppercase).
@@ -9,6 +10,7 @@
 use crate::action;
 use crate::keynode::{KeyNode, KeyNodeKind};
 use crate::launcher;
+use crate::move_session;
 
 /// Pane sub-group (`p` on root). Pane strip + **h** / **v** splits + **r** rename pane.
 pub static PANE_NODES: &[KeyNode] = &[
@@ -34,7 +36,7 @@ pub static PANE_NODES: &[KeyNode] = &[
     },
 ];
 
-/// Window-scoped sub-group (`w` on root). **w a** = add window; **w m** = move window to session + switch.
+/// Window-scoped sub-group (`w` on root). **w m** opens a launcher-style view to pick the target session.
 pub static WINDOW_NODES: &[KeyNode] = &[
     // --- special (not a–z / A–Z) ---
     KeyNode {
@@ -61,7 +63,10 @@ pub static WINDOW_NODES: &[KeyNode] = &[
     KeyNode {
         key: 'm',
         label: "move window to session",
-        kind: KeyNodeKind::Action(action::attach_tab),
+        kind: KeyNodeKind::Group {
+            icon: "\u{f233}",
+            nodes: move_session::NODES,
+        },
     },
     KeyNode {
         key: 'r',

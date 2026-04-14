@@ -4,7 +4,7 @@ use std::process::Command;
 
 use anyhow::Context;
 
-use crate::{leader, tmux};
+use crate::tmux;
 
 use super::state::window_rows;
 
@@ -180,41 +180,14 @@ pub fn split_pane_vertical() -> anyhow::Result<()> {
     tmux::run_status(&["split-window", "-v", "-t", &t])
 }
 
-pub(crate) fn other_session_names_for_move_window() -> anyhow::Result<Vec<String>> {
-    let t = target();
-    let here = tmux::session_name_for_pane(&t)?;
-    let all = tmux::list_session_names()?;
-    Ok(all.into_iter().filter(|s| s != &here).collect())
-}
-
-pub fn attach_tab() -> anyhow::Result<()> {
-    let names = other_session_names_for_move_window()?;
-    if names.is_empty() {
-        return Ok(());
-    }
-    let labels = names.clone();
-    let items: Vec<leader::PickItem> = labels
-        .into_iter()
-        .map(|s| leader::PickItem {
-            label: s,
-            focused: false,
-            current: false,
-        })
-        .collect();
-    let groups = vec![leader::PickGroup {
-        label: String::new(),
-        items,
-    }];
-    let result = leader::pick("move window to session", &groups)?;
-    if let Some((_g, i)) = result {
-        let name = names
-            .get(i)
-            .with_context(|| format!("session pick index {i}"))?;
-        let src = tmux::window_target(tmux::initial_window_id());
-        let dst = format!("{}:", name);
-        tmux::run_status(&["move-window", "-s", &src, "-t", &dst])?;
-        tmux::run_status(&["switch-client", "-t", name.as_str()])?;
-    }
+/// Move the current window to `session` and attach the client there. Used after pill selection (**w m**).
+pub fn move_window_to_session(session: &str) -> anyhow::Result<()> {
+    let name = session.trim();
+    anyhow::ensure!(!name.is_empty(), "session name is empty");
+    let src = tmux::window_target(tmux::initial_window_id());
+    let dst = format!("{name}:");
+    tmux::run_status(&["move-window", "-s", &src, "-t", &dst])?;
+    tmux::run_status(&["switch-client", "-t", name])?;
     Ok(())
 }
 

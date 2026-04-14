@@ -462,6 +462,21 @@ pub fn list_sessions() -> anyhow::Result<Vec<SessionLine>> {
     Ok(out)
 }
 
+/// Same order and names as [`list_sessions`], but `active` is reconciled with the session this
+/// client is attached to (`session_name_for_pane`), matching the root session strip in the leader.
+pub fn list_sessions_reconciled_for_pane(target_pane: &str) -> anyhow::Result<Vec<SessionLine>> {
+    let mut sessions = list_sessions()?;
+    if let Ok(here) = session_name_for_pane(target_pane) {
+        let name = here.trim();
+        if !name.is_empty() {
+            for s in sessions.iter_mut() {
+                s.active = s.name.trim() == name;
+            }
+        }
+    }
+    Ok(sessions)
+}
+
 /// True if another pane in `lines` (typically from [`list_panes_for_target`]) is running tmux-leader.
 pub fn other_leader_running(my_pane: &str, lines: &[PaneLine]) -> bool {
     for pl in lines {

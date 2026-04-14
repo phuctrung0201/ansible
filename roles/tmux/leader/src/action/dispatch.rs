@@ -1,8 +1,8 @@
 //! Map keymap nodes to [`KeyPress`] outcomes and update [`LeaderState`](super::state::LeaderState).
 
-use crate::{keymap, launcher};
+use crate::{keymap, launcher, move_session, tmux};
 
-use super::commands::{attach_tab, close_window_keypress, other_session_names_for_move_window};
+use super::commands::close_window_keypress;
 use super::state::LeaderState;
 
 pub use super::key_press::KeyPress;
@@ -12,19 +12,6 @@ pub fn press_key(state: &mut LeaderState, key: char) -> KeyPress {
         if node.key == key {
             match &node.kind {
                 crate::keynode::KeyNodeKind::Action(f) => {
-                    if std::ptr::fn_addr_eq(*f, attach_tab as fn() -> anyhow::Result<()>) {
-                        match other_session_names_for_move_window() {
-                            Ok(names) if names.is_empty() => {
-                                return KeyPress::Notice(
-                                    "move window: no other sessions".to_string(),
-                                );
-                            }
-                            Ok(_) => {}
-                            Err(e) => {
-                                return KeyPress::Notice(format!("move window: {e:#}"));
-                            }
-                        }
-                    }
                     return KeyPress::Execute(*f);
                 }
                 crate::keynode::KeyNodeKind::CloseWindow => return close_window_keypress(),
@@ -42,6 +29,20 @@ pub fn press_key(state: &mut LeaderState, key: char) -> KeyPress {
                     };
                 }
                 crate::keynode::KeyNodeKind::Group { icon, nodes } => {
+                    if std::ptr::eq(nodes.as_ptr(), move_session::NODES.as_ptr()) {
+                        match tmux::list_sessions_reconciled_for_pane(&tmux::target_pane()) {
+                            Ok(sessions) if sessions.is_empty() => {
+                                return KeyPress::Notice("move window: no sessions".to_string());
+                            }
+                            Err(e) => {
+                                return KeyPress::Notice(format!("move window: {e:#}"));
+                            }
+                            Ok(_) => {
+                                state.refresh_session_rows();
+                                state.session_cursor_follow_active();
+                            }
+                        }
+                    }
                     state.nodes = nodes;
                     state.icon = icon;
                     state.label = node.label;

@@ -71,6 +71,10 @@ pub(crate) fn run(
                 kind: KeyEventKind::Press,
                 ..
             }) => {
+                if context::is_move_session_group(state) {
+                    state.return_to_windows();
+                    continue;
+                }
                 if context::is_launch_group(state) {
                     state.return_to_root();
                     continue;
@@ -90,6 +94,12 @@ pub(crate) fn run(
                     if let Some(idx) = state.selected_launch_index() {
                         super::term::restore_global();
                         return crate::action::execute_launch_at(idx);
+                    }
+                }
+                if context::is_move_session_group(state) && !state.session_rows.is_empty() {
+                    if let Some(name) = state.selected_session_name() {
+                        super::term::restore_global();
+                        return crate::action::move_window_to_session(name.trim());
                     }
                 }
                 if context::pane_section_visible(state) && !state.pane_rows.is_empty() {
@@ -136,6 +146,13 @@ pub(crate) fn run(
                 if context::is_launch_group(state) {
                     continue;
                 }
+                if context::is_move_session_group(state) && !state.session_rows.is_empty() {
+                    let n = state.session_rows.len().min(24);
+                    if n > 0 {
+                        state.session_cursor = (state.session_cursor + 1) % n;
+                    }
+                    continue;
+                }
                 if context::pane_section_visible(state) && !state.pane_rows.is_empty() {
                     let n = state.pane_rows.len().min(24);
                     state.root_pane_cursor = (state.root_pane_cursor + 1) % n;
@@ -176,6 +193,13 @@ pub(crate) fn run(
                 if context::is_launch_group(state) {
                     continue;
                 }
+                if context::is_move_session_group(state) && !state.session_rows.is_empty() {
+                    let n = state.session_rows.len().min(24);
+                    if n > 0 {
+                        state.session_cursor = (state.session_cursor + n - 1) % n;
+                    }
+                    continue;
+                }
                 if context::pane_section_visible(state) && !state.pane_rows.is_empty() {
                     let n = state.pane_rows.len().min(24);
                     state.root_pane_cursor = (state.root_pane_cursor + n - 1) % n;
@@ -211,6 +235,21 @@ pub(crate) fn run(
                             if i < state.launch_rows.len() {
                                 super::term::restore_global();
                                 return crate::action::execute_launch_at(i);
+                            }
+                        }
+                    }
+                    continue;
+                }
+                if context::is_move_session_group(state) && !state.session_rows.is_empty() {
+                    if let Some(d) = c.to_digit(10) {
+                        let idx = d as usize;
+                        if (1..=9).contains(&idx) {
+                            let i = idx - 1;
+                            let n = state.session_rows.len().min(24);
+                            if i < n {
+                                let name = state.session_rows[i].label.clone();
+                                super::term::restore_global();
+                                return crate::action::move_window_to_session(name.trim());
                             }
                         }
                     }

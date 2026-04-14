@@ -1,7 +1,7 @@
 //! Applications launched from the leader (`l` → launcher). Keeps TUI apps out of [`crate::keymap`].
 //! Each entry opens a **new tmux window** named after the app, in the pane’s working directory.
 //!
-//! The launcher UI matches the session picker: wrapping **pills** (like window tabs), **1–9** /
+//! The launcher UI matches the root session pills: wrapping **pills** (like window tabs), **1–9** /
 //! **Tab** / **Shift+Tab**, and **Enter**.
 //! The `key` field on each [`KeyNode`] is a placeholder (`'\0'`) and is not used for dispatch.
 

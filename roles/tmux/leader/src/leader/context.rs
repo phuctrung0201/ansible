@@ -1,6 +1,6 @@
 use std::ptr;
 
-use crate::{action::LeaderState, keymap, launcher};
+use crate::{action::LeaderState, keymap, launcher, move_session};
 
 pub(crate) fn is_root(state: &LeaderState) -> bool {
     std::ptr::eq(state.nodes.as_ptr(), keymap::KEYMAP.as_ptr())
@@ -8,6 +8,10 @@ pub(crate) fn is_root(state: &LeaderState) -> bool {
 
 pub(crate) fn is_launch_group(state: &LeaderState) -> bool {
     std::ptr::eq(state.nodes.as_ptr(), launcher::NODES.as_ptr())
+}
+
+pub(crate) fn is_move_session_group(state: &LeaderState) -> bool {
+    ptr::eq(state.nodes.as_ptr(), move_session::NODES.as_ptr())
 }
 
 /// **Sessions** pill strip — root grid only (above launcher / windows / actions).
@@ -41,4 +45,9 @@ pub(crate) fn window_tab_strip_visible(state: &LeaderState) -> bool {
         return false;
     }
     state.pending_input.is_none()
+}
+
+/// Session pills in the **w m** view (launcher-style full overlay section).
+pub(crate) fn move_session_section_visible(state: &LeaderState) -> bool {
+    is_move_session_group(state) && state.pending_input.is_none()
 }

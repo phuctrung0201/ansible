@@ -4,6 +4,7 @@ mod keymap;
 mod keynode;
 mod launcher;
 mod leader;
+mod move_session;
 mod tmux;
 
 fn main() {

@@ -143,9 +143,10 @@ impl LeaderState {
     /// `startup_panes` comes from a single `list-panes` in [`crate::leader::run`] (avoids a second query).
     pub fn from_tmux(startup_panes: Vec<tmux::PaneLine>) -> Self {
         let target = tmux::target_pane();
+        let target_sessions = target.clone();
         let (windows_res, sessions_res) = std::thread::scope(|s| {
             let w = s.spawn(|| tmux::list_windows_for_target());
-            let se = s.spawn(|| tmux::list_sessions());
+            let se = s.spawn(move || tmux::list_sessions_reconciled_for_pane(&target_sessions));
             (
                 w.join().expect("list windows join"),
                 se.join().expect("list sessions join"),
@@ -154,17 +155,9 @@ impl LeaderState {
         let tab_rows = windows_res
             .map(leader_rows_from_windows)
             .unwrap_or_default();
-        let mut session_rows = sessions_res
+        let session_rows = sessions_res
             .map(leader_rows_from_sessions)
             .unwrap_or_default();
-        if let Ok(here) = tmux::session_name_for_pane(&target) {
-            let name = here.trim();
-            if !name.is_empty() {
-                for r in session_rows.iter_mut() {
-                    r.current = r.label.trim() == name;
-                }
-            }
-        }
         let launch_rows = leader_launch_rows();
         let mut state = LeaderState {
             nodes: crate::keymap::KEYMAP,
@@ -212,6 +205,16 @@ impl LeaderState {
             return;
         };
         self.hydrate_pane_rows_from_tmux_lines(rows);
+    }
+
+    pub fn refresh_session_rows(&mut self) {
+        let target = tmux::target_pane();
+        match tmux::list_sessions_reconciled_for_pane(&target) {
+            Ok(sessions) => {
+                self.session_rows = leader_rows_from_sessions(sessions);
+            }
+            Err(_) => self.session_rows.clear(),
+        }
     }
 
     pub fn root_pane_cursor_follow_active(&mut self) {
@@ -276,6 +279,16 @@ impl LeaderState {
         self.pending_input = None;
         self.notice = None;
         self.session_cursor_follow_active();
+        self.root_window_cursor_follow_active();
+    }
+
+    /// Leave **w m** (move-session view) and restore the windows keymap.
+    pub fn return_to_windows(&mut self) {
+        self.nodes = crate::keymap::WINDOW_NODES;
+        self.icon = "\u{f04e9}";
+        self.label = "windows";
+        self.pending_input = None;
+        self.notice = None;
         self.root_window_cursor_follow_active();
     }
 }

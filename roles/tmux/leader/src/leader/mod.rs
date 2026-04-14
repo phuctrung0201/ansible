@@ -5,13 +5,10 @@ mod dividers;
 mod event_loop;
 mod layout;
 mod palette;
-mod pick;
 mod pills;
 mod render;
 mod term;
 mod theme;
-
-pub use pick::{pick, PickGroup, PickItem};
 
 pub fn run() -> anyhow::Result<()> {
     let target = crate::tmux::target_pane();
