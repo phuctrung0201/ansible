@@ -5,8 +5,6 @@ use tui_input::Input;
 
 use crate::{launcher, tmux};
 
-use super::pills::{git_branch_pill_for_leader, leader_kube_context_display};
-
 /// Full-screen rename-style prompt within the popup (section rule, hint, bordered field).
 pub struct PendingInput {
     pub prompt: &'static str,
@@ -104,8 +102,6 @@ pub struct LeaderState {
     pub root_window_cursor: usize,
     pub pane_rows: Vec<LeaderPaneRow>,
     pub root_pane_cursor: usize,
-    pub kube_pill: Option<String>,
-    pub git_pill: Option<String>,
     pub notice: Option<String>,
 }
 
@@ -147,14 +143,12 @@ impl LeaderState {
     /// `startup_panes` comes from a single `list-panes` in [`crate::leader::run`] (avoids a second query).
     pub fn from_tmux(startup_panes: Vec<tmux::PaneLine>) -> Self {
         let target = tmux::target_pane();
-        let (windows_res, sessions_res, cwd_res) = std::thread::scope(|s| {
+        let (windows_res, sessions_res) = std::thread::scope(|s| {
             let w = s.spawn(|| tmux::list_windows_for_target());
             let se = s.spawn(|| tmux::list_sessions());
-            let cwd = s.spawn(|| tmux::pane_cwd(&target));
             (
                 w.join().expect("list windows join"),
                 se.join().expect("list sessions join"),
-                cwd.join().expect("pane cwd join"),
             )
         });
         let tab_rows = windows_res
@@ -172,15 +166,6 @@ impl LeaderState {
             }
         }
         let launch_rows = leader_launch_rows();
-        let raw_cwd = cwd_res.ok().filter(|s| !s.is_empty());
-        let (git_pill, kube_pill) = std::thread::scope(|s| {
-            let g = s.spawn(|| git_branch_pill_for_leader(raw_cwd.as_deref()));
-            let k = s.spawn(|| leader_kube_context_display());
-            (
-                g.join().expect("git pill join"),
-                k.join().expect("kube pill join"),
-            )
-        });
         let mut state = LeaderState {
             nodes: crate::keymap::KEYMAP,
             icon: LEADER_HEADER_ICON,
@@ -194,8 +179,6 @@ impl LeaderState {
             root_window_cursor: 0,
             pane_rows: Vec::new(),
             root_pane_cursor: 0,
-            kube_pill,
-            git_pill,
             notice: None,
         };
         state.session_cursor_follow_active();

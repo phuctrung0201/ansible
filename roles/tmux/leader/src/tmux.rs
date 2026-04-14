@@ -193,7 +193,7 @@ fn init_from_env() -> anyhow::Result<()> {
 ///
 /// Preferred tmux.conf form — no format args needed, avoids `#` comment / quoting issues:
 /// ```text
-/// bind-key -n F12 display-popup -w 90% -h 90% -b rounded -E '/path/tmux-leader'
+/// bind-key -n F12 display-popup -w 90% -h 30% -b rounded -E '/path/tmux-leader'
 /// ```
 pub fn init_from_args(argv: &[String]) -> anyhow::Result<()> {
     if argv.is_empty() {
@@ -390,7 +390,6 @@ pub fn list_windows_for_target() -> anyhow::Result<Vec<WindowLine>> {
 
 pub struct WindowLine {
     pub id: u64,
-    #[allow(dead_code)]
     pub index: u64,
     pub name: String,
     pub active: bool,

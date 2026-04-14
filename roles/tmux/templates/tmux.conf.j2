@@ -15,7 +15,7 @@ set -g status-left-length 320
 set -g status-right-length 200
 # Left: cwd (green). Right: git branch pill — helpers live in tmux.zsh (cwd-status / git-pill).
 set -g status-left "#[fg={{ theme.green }},bg=default]#[fg={{ theme.bg }},bg={{ theme.green }},bold]  #(zsh {{ ansible_env.HOME }}/.config/tmux/tmux.zsh cwd-status \"#{pane_current_path}\") #[fg={{ theme.green }},bg=default,nobold]"
-set -g status-right '#[bg=default]#(zsh {{ ansible_env.HOME }}/.config/tmux/tmux.zsh git-pill "#{pane_current_path}")'
+set -g status-right "#[bg=default]#(zsh {{ ansible_env.HOME }}/.config/tmux/tmux.zsh git-pill \"#{pane_current_path}\")"
 
 setw -g window-status-separator ""
 setw -g window-status-format ''
@@ -36,7 +36,7 @@ setw -g menu-selected-style fg={{ theme.fg }},bg={{ theme.selection }}
 # the shell sees '$0' (single-quoted literal) and passes it verbatim to display-popup.
 
 unbind-key -n F12
-bind-key -n F12 run-shell "tmux display-popup -w 90% -h 90% -b rounded -S fg={{ theme.cyan }} \
+bind-key -n F12 run-shell "tmux display-popup -w 90% -h 30% -b rounded -S fg={{ theme.cyan }} \
   -e 'LEADER_SID=#{session_id}' \
   -e 'LEADER_WID=#{window_id}' \
   -e 'LEADER_PID=#{pane_id}' \

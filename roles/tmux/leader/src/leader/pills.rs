@@ -8,7 +8,7 @@ use crate::action::{LeaderPaneRow, LeaderWindowRow};
 
 use super::{
     layout::popup_gap,
-    theme::{palette, GIT_PILL_ICON, KUBE_PILL_ICON, ROUND_CAP_L, ROUND_CAP_R},
+    theme::{palette, ROUND_CAP_L, ROUND_CAP_R},
 };
 
 pub(crate) fn truncate_pill_label(s: &str, max_chars: usize) -> String {
@@ -57,82 +57,6 @@ pub(crate) fn pill_cap_fill_color(selected: bool, current: bool) -> ratatui::sty
     } else {
         t.pill_bg
     }
-}
-
-fn kube_pill_spans(ctx: &str, max_line_width: usize) -> Vec<Span<'static>> {
-    let t = palette();
-    let max_inner = max_line_width.saturating_sub(4).clamp(8, 120);
-    let icon_reserve = KUBE_PILL_ICON.chars().count().saturating_add(1);
-    let max_text = max_inner.saturating_sub(icon_reserve).max(4);
-    let inner_text = truncate_pill_label(ctx, max_text);
-    let inner = format!(" {} {} ", KUBE_PILL_ICON, inner_text);
-    let mid = Style::default()
-        .fg(t.pill_fg)
-        .bg(t.kube_pill_bg)
-        .add_modifier(Modifier::BOLD);
-    let cap = Style::default().fg(t.kube_pill_bg).bg(t.dracula_bg);
-    vec![
-        Span::styled(ROUND_CAP_L, cap),
-        Span::styled(inner, mid),
-        Span::styled(ROUND_CAP_R, cap),
-    ]
-}
-
-fn git_pill_spans(branch: &str, max_line_width: usize) -> Vec<Span<'static>> {
-    let t = palette();
-    let max_inner = max_line_width.saturating_sub(4).clamp(8, 120);
-    let icon_reserve = GIT_PILL_ICON.chars().count().saturating_add(1);
-    let max_text = max_inner.saturating_sub(icon_reserve).max(4);
-    let inner_text = truncate_pill_label(branch, max_text);
-    let inner = format!(" {} {} ", GIT_PILL_ICON, inner_text);
-    let mid = Style::default()
-        .fg(t.pill_fg)
-        .bg(t.orange)
-        .add_modifier(Modifier::BOLD);
-    let cap = Style::default().fg(t.orange).bg(t.dracula_bg);
-    vec![
-        Span::styled(ROUND_CAP_L, cap),
-        Span::styled(inner, mid),
-        Span::styled(ROUND_CAP_R, cap),
-    ]
-}
-
-/// Top banner: git · kube in one row, centered in the popup width.
-pub(crate) fn banner_pills_prefix_spans(
-    git: Option<&str>,
-    kube: Option<&str>,
-    max_line_width: usize,
-) -> Option<Vec<Span<'static>>> {
-    let n = usize::from(git.is_some()) + usize::from(kube.is_some());
-    if n == 0 {
-        return None;
-    }
-
-    let gap_chars = n.saturating_sub(1);
-    let per_pill = (max_line_width.saturating_sub(gap_chars) / n).max(12);
-
-    let mut out: Vec<Span<'static>> = Vec::new();
-    if let Some(g) = git {
-        out.extend(git_pill_spans(g, per_pill));
-    }
-    if let Some(k) = kube {
-        if !out.is_empty() {
-            out.push(popup_gap());
-        }
-        out.extend(kube_pill_spans(k, per_pill));
-    }
-
-    Some(out)
-}
-
-/// Top row banner pills (read‑only): git · kube, centered.
-pub(crate) fn banner_pills_line(
-    git: Option<&str>,
-    kube: Option<&str>,
-    max_line_width: usize,
-) -> Option<Line<'static>> {
-    let spans = banner_pills_prefix_spans(git, kube, max_line_width)?;
-    Some(Line::from(spans).alignment(Alignment::Center))
 }
 
 fn window_pill_line(line: Line<'static>, center: bool) -> Line<'static> {

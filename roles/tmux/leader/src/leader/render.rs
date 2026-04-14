@@ -14,7 +14,7 @@ use super::{
     context,
     dividers::divider_with_vertical_margin,
     layout::{label_width, slot_spans, top_rect},
-    pills::{banner_pills_line, pane_pill_lines, window_pill_lines},
+    pills::{pane_pill_lines, window_pill_lines},
     theme::{
         palette, ACTIONS_TITLE_ICON, COLS, LAUNCHER_SECTION_ICON, PANES_SECTION_ICON,
         SESSIONS_SECTION_ICON, TABS_SECTION_ICON,
@@ -65,7 +65,6 @@ pub(crate) fn render(frame: &mut Frame, state: &LeaderState) {
     };
 
     let pill_max_w = (area.width as usize).saturating_sub(4).max(20);
-    let has_any_banner = state.kube_pill.is_some() || state.git_pill.is_some();
 
     let mut session_list_block: Vec<Line<'static>> = Vec::new();
     if context::root_session_section_visible(state) {
@@ -109,11 +108,10 @@ pub(crate) fn render(frame: &mut Frame, state: &LeaderState) {
     // Pending rename prompt: section rule + bordered input field + hint row (bottom).
     let input_lines: u16 = if pending_panel { 3 + 3 + 1 } else { 0 };
 
-    let banner_lines = u16::from(has_any_banner);
     let notice_lines = u16::from(state.notice.is_some());
     let session_section_lines = session_list_block.len() as u16;
     let launcher_section_lines = launcher_list_block.len() as u16;
-    let strip_extra = banner_lines + notice_lines + session_section_lines + launcher_section_lines;
+    let strip_extra = notice_lines + session_section_lines + launcher_section_lines;
 
     let header_rule_lines: u16 = if pending_panel || context::is_launch_group(state) {
         0
@@ -183,13 +181,6 @@ pub(crate) fn render(frame: &mut Frame, state: &LeaderState) {
     let lw = label_width(inner_width);
 
     let mut lines: Vec<Line> = Vec::new();
-    if let Some(line) = banner_pills_line(
-        state.git_pill.as_deref(),
-        state.kube_pill.as_deref(),
-        pill_max_w,
-    ) {
-        lines.push(line);
-    }
     if let Some(ref msg) = state.notice {
         let dim = Style::default()
             .fg(t.comment_bright)
@@ -265,13 +256,6 @@ pub(crate) fn render(frame: &mut Frame, state: &LeaderState) {
 
     if let Some(ref pending) = state.pending_input {
         let mut head: Vec<Line<'static>> = Vec::new();
-        if let Some(line) = banner_pills_line(
-            state.git_pill.as_deref(),
-            state.kube_pill.as_deref(),
-            pill_max_w,
-        ) {
-            head.push(line);
-        }
         let section_title = format!(
             "{} {}",
             ACTIONS_TITLE_ICON,

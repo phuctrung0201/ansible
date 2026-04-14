@@ -29,14 +29,3 @@
     path: "{{ ansible_env.HOME }}/.zshrc"
     line: 'export PAGER=bat'
     state: present
-
-- name: Install nb via Homebrew
-  community.general.homebrew:
-    name: nb
-    state: present
-
-- name: Copy nbrc config
-  template:
-    src: nbrc.j2
-    dest: "{{ ansible_env.HOME }}/.nbrc"
-    backup: yes

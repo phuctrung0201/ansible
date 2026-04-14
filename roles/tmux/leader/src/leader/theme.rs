@@ -24,9 +24,3 @@ pub(crate) const PANES_SECTION_ICON: &str = "\u{f0db}";
 
 /// Matches launcher group icon in `keymap` (`󱓞`).
 pub(crate) const LAUNCHER_SECTION_ICON: &str = "󱓞";
-
-/// Nerd Fonts Devicons `nf-dev-kubernetes` (`U+E81D`). Use a patched Nerd Font in the terminal.
-pub(crate) const KUBE_PILL_ICON: &str = "\u{e81d}";
-
-/// Nerd Fonts Devicons `nf-dev-git_branch` (`U+E725`).
-pub(crate) const GIT_PILL_ICON: &str = "\u{e725}";

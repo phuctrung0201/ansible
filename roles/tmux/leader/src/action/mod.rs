@@ -1,9 +1,8 @@
-//! Leader actions: tmux commands, UI state, environment pills, and key dispatch.
+//! Leader actions: tmux commands, UI state, and key dispatch.
 
 mod commands;
 mod dispatch;
 mod key_press;
-mod pills;
 mod state;
 
 pub use commands::*;

@@ -13,20 +13,20 @@ _tmux_cwd_for_status() {
 }
 
 _tmux_git_pill_for_status() {
-  local path="${1%/}"
-  [[ -z "$path" ]] && return 0
+  local walk="${1%/}"
+  [[ -z "$walk" ]] && return 0
   local branch
-  while [[ -n "$path" ]]; do
-    if git -C "$path" rev-parse --git-dir &>/dev/null; then
-      branch=$(git -C "$path" symbolic-ref -q --short HEAD 2>/dev/null) \
-        || branch=$(git -C "$path" rev-parse --short HEAD 2>/dev/null) \
+  while [[ -n "$walk" ]]; do
+    if git -C "$walk" rev-parse --git-dir &>/dev/null; then
+      branch=$(git -C "$walk" symbolic-ref -q --short HEAD 2>/dev/null) \
+        || branch=$(git -C "$walk" rev-parse --short HEAD 2>/dev/null) \
         || branch=""
       [[ -z "$branch" ]] && return 0
       print -r -- "#[fg={{ theme.orange }},bg=default]#[fg={{ theme.bg }},bg={{ theme.orange }},bold]  $branch #[fg={{ theme.orange }},bg=default]#[bg=default] "
       return 0
     fi
-    [[ "$path" == */* ]] || break
-    path="${path%/*}"
+    [[ "$walk" == */* ]] || break
+    walk="${walk%/*}"
   done
   return 0
 }

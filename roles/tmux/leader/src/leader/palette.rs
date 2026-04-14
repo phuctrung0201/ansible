@@ -18,18 +18,15 @@ fn default_pill_fg_hex() -> String {
 #[derive(Debug, Deserialize)]
 struct LeaderThemeFile {
     purple: String,
-    orange: String,
     cyan: String,
-    green: String,
     yellow: String,
     pink: String,
-    bright_cyan: String,
     fg: String,
     comment: String,
     comment_bright: String,
     bg: String,
     selection: String,
-    /// Dark text on bright pill bodies (banner + window pills). Separate from `bg` so popup can use `reset`.
+    /// Dark text on bright pill bodies (window/pane pills). Separate from `bg` so popup can use `reset`.
     #[serde(default = "default_pill_fg_hex")]
     pill_fg: String,
 }
@@ -37,11 +34,7 @@ struct LeaderThemeFile {
 #[derive(Debug, Clone)]
 pub(crate) struct Palette {
     pub mauve: Color,
-    pub orange: Color,
     pub teal: Color,
-    /// Reserved (e.g. cwd pill); kept so `green` stays in theme YAML.
-    #[allow(dead_code)]
-    pub green: Color,
     pub yellow: Color,
     pub pink: Color,
     pub fg: Color,
@@ -51,17 +44,13 @@ pub(crate) struct Palette {
     /// Foreground for text on colored pill fills (always RGB; see `pill_fg` in theme YAML).
     pub pill_fg: Color,
     pub pill_bg: Color,
-    pub kube_pill_bg: Color,
 }
 
 impl Palette {
     fn from_entry(entry: LeaderThemeFile) -> Result<Self> {
-        let kube_pill_bg = parse_hex(&entry.bright_cyan).context("bright_cyan")?;
         Ok(Self {
             mauve: parse_hex(&entry.purple).context("purple")?,
-            orange: parse_hex(&entry.orange).context("orange")?,
             teal: parse_hex(&entry.cyan).context("cyan")?,
-            green: parse_hex(&entry.green).context("green")?,
             yellow: parse_hex(&entry.yellow).context("yellow")?,
             pink: parse_hex(&entry.pink).context("pink")?,
             fg: parse_hex(&entry.fg).context("fg")?,
@@ -70,7 +59,6 @@ impl Palette {
             dracula_bg: parse_bg(&entry.bg).context("bg")?,
             pill_fg: parse_hex(&entry.pill_fg).context("pill_fg")?,
             pill_bg: parse_hex(&entry.selection).context("selection")?,
-            kube_pill_bg,
         })
     }
 }
