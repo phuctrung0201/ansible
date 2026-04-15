@@ -1,24 +1,32 @@
 # Overview
-This repository is to store personal setup for these tools:
+This repository stores personal machine setup for:
  - [oh-my-zsh](https://ohmyz.sh/)
  - [Ghostty](https://ghostty.org/)
- - [aerospace](https://github.com/nikitabobko/aerospace)
+ - [AeroSpace](https://github.com/nikitabobko/AeroSpace)
  - [Neovim](https://neovim.io/)
+ - [tmux](https://github.com/tmux/tmux)
  - [mise](https://mise.jdx.dev/)
+
+# Prerequisites
+
+[mise](https://mise.jdx.dev/getting-started.html) is the only prerequisite.
 
 # Runbook
 
-To run the setup, ansible needs installing:
+Install tools and bootstrap Ansible:
 
-> brew install ansible
+```sh
+mise install
+```
 
-The full setup can be run with:
+Run the full setup:
 
-> ansible-playbook main.yml
+```sh
+mise run install
+```
 
-Each role has a tag to run a specific one:
+Run a specific role:
 
-> ansible-playbook main.yml --tags "ohmyzsh"
-
-
-
+```sh
+mise run install -- --tags "ohmyzsh"
+```

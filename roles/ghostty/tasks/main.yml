@@ -4,6 +4,12 @@
     state: present
     install_options: cask
 
+- name: Install FiraCode Nerd Font
+  community.general.homebrew:
+    name: font-fira-code-nerd-font
+    state: present
+    install_options: cask
+
 - name: Ensure Ghostty config directory exists
   file:
     path: "{{ ansible_env.HOME }}/.config/ghostty"

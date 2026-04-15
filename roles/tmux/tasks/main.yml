@@ -8,14 +8,6 @@
     path: "{{ ansible_env.HOME }}/.config/tmux"
     state: directory
 
-- name: Remove legacy status helpers (merged into tmux.zsh)
-  file:
-    path: "{{ ansible_env.HOME }}/.config/tmux/{{ item }}"
-    state: absent
-  loop:
-    - cwd-for-status.sh
-    - git-pill-for-status.sh
-
 - name: Install tmux.zsh (auto-attach and tmux status-line helpers)
   template:
     src: tmux.zsh.j2

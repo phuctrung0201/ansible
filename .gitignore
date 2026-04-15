@@ -1,1 +1,2 @@
 roles/tmux/leader/target/
+.venv/

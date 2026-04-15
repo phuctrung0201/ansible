@@ -1,2 +1,18 @@
 [tools]
-go = "latest"
+python = "3.12"
+rust = "latest"
+
+[env]
+_.python.venv = { path = ".venv", create = true }
+
+[tasks.bootstrap]
+description = "Install Ansible and Galaxy collections"
+run = [
+  "pip install --quiet ansible ansible-lint",
+  "ansible-galaxy collection install -r requirements.yml",
+]
+
+[tasks.install]
+description = "Run the main playbook"
+depends = ["bootstrap"]
+run = "ansible-playbook main.yml"
