@@ -1,11 +1,27 @@
-- name: Ensure Homebrew is installed
+- name: Check for Xcode Command Line Tools
+  command: xcode-select -p
+  register: xcode_check
+  changed_when: false
+  failed_when: false
+
+- name: Ensure Xcode Command Line Tools are installed
+  fail:
+    msg: "Xcode Command Line Tools not found. Run: xcode-select --install, then re-run this playbook."
+  when: xcode_check.rc != 0
+
+- name: Check for Homebrew (Apple Silicon)
   stat:
     path: /opt/homebrew/bin/brew
-  register: brew_check
+  register: brew_arm
+
+- name: Check for Homebrew (Intel)
+  stat:
+    path: /usr/local/bin/brew
+  register: brew_intel
 
 - name: Install Homebrew if not present
   shell: /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-  when: not brew_check.stat.exists
+  when: not brew_arm.stat.exists and not brew_intel.stat.exists
 
 - name: Install ripgrep
   homebrew:

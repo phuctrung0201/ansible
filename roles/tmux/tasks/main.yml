@@ -31,7 +31,8 @@
   command:
     cmd: cargo build --release --manifest-path roles/tmux/leader/Cargo.toml
     chdir: "{{ playbook_dir }}"
-  changed_when: true
+  register: cargo_build
+  changed_when: "'Compiling' in cargo_build.stderr"
 
 - name: Copy tmux-leader binary
   copy:

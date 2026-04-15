@@ -4,7 +4,7 @@
     state: present
 
 - name: Install aerospace
-  homebrew_cask:
+  community.general.homebrew_cask:
     name: aerospace
     state: present
 
@@ -23,7 +23,7 @@
   file:
     path: "{{ ansible_env.HOME }}/.aerospace.toml"
     state: absent
-  ignore_errors: yes
 
-- name: Activate aerospace globally
-  shell: "open -a AeroSpace.app"
+- name: Activate aerospace if not already running
+  shell: "pgrep -x AeroSpace || open -a AeroSpace.app"
+  changed_when: false
