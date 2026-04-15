@@ -1,7 +1,8 @@
 - name: Install Ghostty
-  community.general.homebrew_cask:
+  community.general.homebrew:
     name: ghostty
     state: present
+    install_options: cask
 
 - name: Ensure Ghostty config directory exists
   file:

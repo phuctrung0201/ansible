@@ -4,9 +4,10 @@
     state: present
 
 - name: Install aerospace
-  community.general.homebrew_cask:
+  community.general.homebrew:
     name: aerospace
     state: present
+    install_options: cask
 
 - name: Ensure aerospace config directory exists 
   file:
