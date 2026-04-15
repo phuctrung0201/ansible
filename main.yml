@@ -3,10 +3,10 @@
   vars_files:
     - share.yml
   roles:
-    - role: ohmyzsh
-      tags: ['ohmyzsh']
     - role: common
       tags: ['common']
+    - role: ohmyzsh
+      tags: ['ohmyzsh']
     - role: fzf
       tags: ['fzf']
     - role: mise
