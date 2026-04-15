@@ -49,6 +49,28 @@ pub fn edit_command() -> anyhow::Result<()> {
     tmux::run_status(&["send-keys", "-t", &target(), "C-x", "C-e"])
 }
 
+/// Remove leading / trailing whitespace-only lines from `capture-pane` output (pane padding).
+fn trim_scrollback_capture(text: &str) -> String {
+    let lines: Vec<&str> = text.lines().collect();
+    let mut start = 0usize;
+    let mut end = lines.len();
+    while start < end && lines[start].trim().is_empty() {
+        start += 1;
+    }
+    while start < end && lines[end - 1].trim().is_empty() {
+        end -= 1;
+    }
+    if start >= end {
+        return String::new();
+    }
+    let body = lines[start..end].join("\n");
+    if text.ends_with('\n') {
+        body + "\n"
+    } else {
+        body
+    }
+}
+
 /// Dumps pane scrollback to a temp file and opens it in **nvim** in a **new window** at the **end**
 /// of the session’s window list (`new-window -a -t $session:<last-index>`).
 pub fn open_scrollback() -> anyhow::Result<()> {
@@ -56,6 +78,7 @@ pub fn open_scrollback() -> anyhow::Result<()> {
     let cwd = tmux::pane_cwd(&t).unwrap_or_default();
     let capture = tmux::output_lossy(&["capture-pane", "-p", "-S", "-", "-E", "-", "-t", &t])
         .context("capture-pane")?;
+    let capture = trim_scrollback_capture(&capture);
     let stamp = std::time::SystemTime::now()
         .duration_since(std::time::UNIX_EPOCH)
         .unwrap_or_default()
