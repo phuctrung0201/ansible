@@ -1,26 +1,22 @@
 use std::ptr;
 
-use crate::{action::LeaderState, keymap, move_session};
+use crate::{action::LeaderState, attach_session, keymap};
 
 pub(crate) fn is_root(state: &LeaderState) -> bool {
     std::ptr::eq(state.nodes.as_ptr(), keymap::KEYMAP.as_ptr())
 }
 
-pub(crate) fn is_move_session_group(state: &LeaderState) -> bool {
-    ptr::eq(state.nodes.as_ptr(), move_session::NODES.as_ptr())
+pub(crate) fn is_session_subgroup(state: &LeaderState) -> bool {
+    ptr::eq(state.nodes.as_ptr(), keymap::SESSION_NODES.as_ptr())
 }
 
-/// **Sessions** pill strip — root grid only (above launcher / windows / actions).
-pub(crate) fn root_session_section_visible(state: &LeaderState) -> bool {
-    is_root(state) && state.pending_input.is_none()
+/// **Sessions** pill strip — **s** subgroup only (switch target before other session actions).
+pub(crate) fn session_pill_strip_visible(state: &LeaderState) -> bool {
+    is_session_subgroup(state) && state.pending_input.is_none()
 }
 
 pub(crate) fn is_input_mode(state: &LeaderState) -> bool {
     state.pending_input.is_some()
-}
-
-pub(crate) fn is_window_subgroup(state: &LeaderState) -> bool {
-    ptr::eq(state.nodes.as_ptr(), keymap::WINDOW_NODES.as_ptr())
 }
 
 pub(crate) fn is_pane_subgroup(state: &LeaderState) -> bool {
@@ -35,15 +31,16 @@ pub(crate) fn pane_section_visible(state: &LeaderState) -> bool {
     state.pending_input.is_none()
 }
 
-/// **Windows** pill strip + Tab / Enter / 1–9 — only inside **`w`** (windows group).
+/// **Windows** pill strip + Tab / Enter / 1–9 — root only.
 pub(crate) fn window_tab_strip_visible(state: &LeaderState) -> bool {
-    if !is_window_subgroup(state) {
-        return false;
-    }
-    state.pending_input.is_none()
+    is_root(state) && state.pending_input.is_none()
 }
 
-/// Session pills in the **w m** view (launcher-style full overlay section).
-pub(crate) fn move_session_section_visible(state: &LeaderState) -> bool {
-    is_move_session_group(state) && state.pending_input.is_none()
+pub(crate) fn is_attach_session_group(state: &LeaderState) -> bool {
+    ptr::eq(state.nodes.as_ptr(), attach_session::NODES.as_ptr())
+}
+
+/// Session pills in the **A** (attach to session) view.
+pub(crate) fn attach_session_section_visible(state: &LeaderState) -> bool {
+    is_attach_session_group(state) && state.pending_input.is_none()
 }

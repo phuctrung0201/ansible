@@ -27,7 +27,7 @@ pub struct LeaderPaneRow {
 }
 
 const LEADER_HEADER_ICON: &str = "\u{f0e7}";
-const PILL_STRIP_CAP: usize = 24;
+pub const PILL_STRIP_CAP: usize = 24;
 
 fn pill_strip_cursor_follow(rows_len: usize, current_idx: Option<usize>, cursor: &mut usize) {
     let n = rows_len.min(PILL_STRIP_CAP);
@@ -40,25 +40,6 @@ fn pill_strip_cursor_follow(rows_len: usize, current_idx: Option<usize>, cursor:
     } else {
         *cursor = (*cursor).min(n - 1);
     }
-}
-
-pub(crate) fn window_rows() -> anyhow::Result<Vec<LeaderWindowRow>> {
-    let lines = tmux::list_windows_for_target()?;
-    let mut rows = Vec::new();
-    for w in lines {
-        let label = if w.name.is_empty() {
-            format!("window {}", w.index)
-        } else {
-            w.name.clone()
-        };
-        rows.push(LeaderWindowRow {
-            id: w.id,
-            label,
-            focused: false,
-            current: w.active,
-        });
-    }
-    Ok(rows)
 }
 
 pub struct LeaderState {
@@ -239,13 +220,4 @@ impl LeaderState {
         self.root_window_cursor_follow_active();
     }
 
-    /// Leave **w m** (move-session view) and restore the windows keymap.
-    pub fn return_to_windows(&mut self) {
-        self.nodes = crate::keymap::WINDOW_NODES;
-        self.icon = "\u{f04e9}";
-        self.label = "windows";
-        self.pending_input = None;
-        self.notice = None;
-        self.root_window_cursor_follow_active();
-    }
 }

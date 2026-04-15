@@ -6,8 +6,6 @@ use anyhow::Context;
 
 use crate::tmux;
 
-use super::state::window_rows;
-
 fn target() -> String {
     tmux::target_pane()
 }
@@ -183,10 +181,10 @@ pub fn do_rename_pane(name: String) -> anyhow::Result<()> {
 pub fn close_other_tabs() -> anyhow::Result<()> {
     let t = target();
     let cur = tmux::window_id_for_pane(&t)?;
-    let rows = window_rows()?;
-    for r in rows {
-        if r.id != cur {
-            let wt = tmux::window_target(r.id);
+    let windows = tmux::list_windows_for_target()?;
+    for w in windows {
+        if w.id != cur {
+            let wt = tmux::window_target(w.id);
             tmux::run_status(&["kill-window", "-t", &wt]).ok();
         }
     }
@@ -201,17 +199,6 @@ pub fn split_pane_horizontal() -> anyhow::Result<()> {
 pub fn split_pane_vertical() -> anyhow::Result<()> {
     let t = target();
     tmux::run_status(&["split-window", "-v", "-t", &t])
-}
-
-/// Move the current window to `session` and attach the client there. Used after pill selection (**w m**).
-pub fn move_window_to_session(session: &str) -> anyhow::Result<()> {
-    let name = session.trim();
-    anyhow::ensure!(!name.is_empty(), "session name is empty");
-    let src = tmux::window_target(tmux::initial_window_id());
-    let dst = format!("{name}:");
-    tmux::run_status(&["move-window", "-s", &src, "-t", &dst])?;
-    tmux::run_status(&["switch-client", "-t", name])?;
-    Ok(())
 }
 
 fn launch_app_in_new_window(window_name: &str, app_argv: &[&str]) -> anyhow::Result<()> {

@@ -5,9 +5,53 @@ use ratatui::{
 };
 use tui_input::backend::crossterm::EventHandler;
 
-use crate::action::{KeyPress, LeaderState};
+use crate::action::{KeyPress, LeaderState, PILL_STRIP_CAP};
 
 use super::{context, render::render};
+
+fn cycle_cursor(state: &mut LeaderState, forward: bool) {
+    if context::is_attach_session_group(state) && !state.session_rows.is_empty() {
+        let n = state.session_rows.len().min(PILL_STRIP_CAP);
+        if n > 0 {
+            if forward {
+                state.session_cursor = (state.session_cursor + 1) % n;
+            } else {
+                state.session_cursor = (state.session_cursor + n - 1) % n;
+            }
+        }
+        return;
+    }
+    if context::pane_section_visible(state) && !state.pane_rows.is_empty() {
+        let n = state.pane_rows.len().min(PILL_STRIP_CAP);
+        if forward {
+            state.root_pane_cursor = (state.root_pane_cursor + 1) % n;
+        } else {
+            state.root_pane_cursor = (state.root_pane_cursor + n - 1) % n;
+        }
+        return;
+    }
+    if context::window_tab_strip_visible(state) {
+        let n = state.tab_rows.len().min(PILL_STRIP_CAP);
+        if n > 0 {
+            if forward {
+                state.root_window_cursor = (state.root_window_cursor + 1) % n;
+            } else {
+                state.root_window_cursor = (state.root_window_cursor + n - 1) % n;
+            }
+            return;
+        }
+    }
+    if context::session_pill_strip_visible(state) && !state.session_rows.is_empty() {
+        let n = state.session_rows.len().min(PILL_STRIP_CAP);
+        if n > 0 {
+            if forward {
+                state.session_cursor = (state.session_cursor + 1) % n;
+            } else {
+                state.session_cursor = (state.session_cursor + n - 1) % n;
+            }
+        }
+    }
+}
 
 pub(crate) fn run(
     terminal: &mut Terminal<impl Backend>,
@@ -71,10 +115,6 @@ pub(crate) fn run(
                 kind: KeyEventKind::Press,
                 ..
             }) => {
-                if context::is_move_session_group(state) {
-                    state.return_to_windows();
-                    continue;
-                }
                 if !context::is_root(state) {
                     state.return_to_root();
                     continue;
@@ -86,14 +126,14 @@ pub(crate) fn run(
                 kind: KeyEventKind::Press,
                 ..
             }) => {
-                if context::is_move_session_group(state) && !state.session_rows.is_empty() {
+                if context::is_attach_session_group(state) && !state.session_rows.is_empty() {
                     if let Some(name) = state.selected_session_name() {
                         super::term::restore_global();
-                        return crate::action::move_window_to_session(name.trim());
+                        return crate::action::focus_session_from_leader(name);
                     }
                 }
                 if context::pane_section_visible(state) && !state.pane_rows.is_empty() {
-                    let n = state.pane_rows.len().min(24);
+                    let n = state.pane_rows.len().min(PILL_STRIP_CAP);
                     let pid = state.pane_rows[state.root_pane_cursor.min(n - 1)]
                         .pane_id
                         .clone();
@@ -101,17 +141,14 @@ pub(crate) fn run(
                     return crate::action::focus_pane_from_leader(&pid);
                 }
                 if context::window_tab_strip_visible(state) && !state.tab_rows.is_empty() {
-                    let n = state.tab_rows.len().min(24);
+                    let n = state.tab_rows.len().min(PILL_STRIP_CAP);
                     if n > 0 {
                         let id = state.tab_rows[state.root_window_cursor].id;
                         super::term::restore_global();
                         return crate::action::focus_tab_from_leader(id);
                     }
                 }
-                if context::is_root(state)
-                    && context::root_session_section_visible(state)
-                    && !state.session_rows.is_empty()
-                {
+                if context::session_pill_strip_visible(state) && !state.session_rows.is_empty() {
                     if let Some(name) = state.selected_session_name() {
                         super::term::restore_global();
                         return crate::action::focus_session_from_leader(name);
@@ -126,34 +163,7 @@ pub(crate) fn run(
                 if context::is_input_mode(state) {
                     continue;
                 }
-                if context::is_move_session_group(state) && !state.session_rows.is_empty() {
-                    let n = state.session_rows.len().min(24);
-                    if n > 0 {
-                        state.session_cursor = (state.session_cursor + 1) % n;
-                    }
-                    continue;
-                }
-                if context::pane_section_visible(state) && !state.pane_rows.is_empty() {
-                    let n = state.pane_rows.len().min(24);
-                    state.root_pane_cursor = (state.root_pane_cursor + 1) % n;
-                    continue;
-                }
-                if context::window_tab_strip_visible(state) {
-                    let n = state.tab_rows.len().min(24);
-                    if n > 0 {
-                        state.root_window_cursor = (state.root_window_cursor + 1) % n;
-                        continue;
-                    }
-                }
-                if context::is_root(state)
-                    && context::root_session_section_visible(state)
-                    && !state.session_rows.is_empty()
-                {
-                    let n = state.session_rows.len().min(24);
-                    if n > 0 {
-                        state.session_cursor = (state.session_cursor + 1) % n;
-                    }
-                }
+                cycle_cursor(state, true);
             }
             Event::Key(KeyEvent {
                 code: KeyCode::BackTab,
@@ -163,50 +173,23 @@ pub(crate) fn run(
                 if context::is_input_mode(state) {
                     continue;
                 }
-                if context::is_move_session_group(state) && !state.session_rows.is_empty() {
-                    let n = state.session_rows.len().min(24);
-                    if n > 0 {
-                        state.session_cursor = (state.session_cursor + n - 1) % n;
-                    }
-                    continue;
-                }
-                if context::pane_section_visible(state) && !state.pane_rows.is_empty() {
-                    let n = state.pane_rows.len().min(24);
-                    state.root_pane_cursor = (state.root_pane_cursor + n - 1) % n;
-                    continue;
-                }
-                if context::window_tab_strip_visible(state) {
-                    let n = state.tab_rows.len().min(24);
-                    if n > 0 {
-                        state.root_window_cursor = (state.root_window_cursor + n - 1) % n;
-                        continue;
-                    }
-                }
-                if context::is_root(state)
-                    && context::root_session_section_visible(state)
-                    && !state.session_rows.is_empty()
-                {
-                    let n = state.session_rows.len().min(24);
-                    if n > 0 {
-                        state.session_cursor = (state.session_cursor + n - 1) % n;
-                    }
-                }
+                cycle_cursor(state, false);
             }
             Event::Key(KeyEvent {
                 code: KeyCode::Char(c),
                 kind: KeyEventKind::Press,
                 ..
             }) => {
-                if context::is_move_session_group(state) && !state.session_rows.is_empty() {
+                if context::is_attach_session_group(state) && !state.session_rows.is_empty() {
                     if let Some(d) = c.to_digit(10) {
                         let idx = d as usize;
                         if (1..=9).contains(&idx) {
                             let i = idx - 1;
-                            let n = state.session_rows.len().min(24);
+                            let n = state.session_rows.len().min(PILL_STRIP_CAP);
                             if i < n {
                                 let name = state.session_rows[i].label.clone();
                                 super::term::restore_global();
-                                return crate::action::move_window_to_session(name.trim());
+                                return crate::action::focus_session_from_leader(name);
                             }
                         }
                     }
@@ -238,15 +221,12 @@ pub(crate) fn run(
                         }
                     }
                 }
-                if context::is_root(state)
-                    && context::root_session_section_visible(state)
-                    && !state.session_rows.is_empty()
-                {
+                if context::session_pill_strip_visible(state) && !state.session_rows.is_empty() {
                     if let Some(d) = c.to_digit(10) {
                         let idx = d as usize;
                         if (1..=9).contains(&idx) {
                             let i = idx - 1;
-                            let n = state.session_rows.len().min(24);
+                            let n = state.session_rows.len().min(PILL_STRIP_CAP);
                             if i < n {
                                 let name = state.session_rows[i].label.clone();
                                 super::term::restore_global();

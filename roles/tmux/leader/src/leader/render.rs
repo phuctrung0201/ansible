@@ -58,16 +58,16 @@ pub(crate) fn render(frame: &mut Frame, state: &LeaderState) {
 
     let pending_panel = state.pending_input.is_some();
 
-    let n_rows = if pending_panel || context::is_move_session_group(state) {
-        0
+    let n_rows = if pending_panel || context::is_attach_session_group(state) {
+        0u16
     } else {
-        (nodes.len() as u16).div_ceil(COLS as u16)
+        COLS as u16
     };
 
     let pill_max_w = (area.width as usize).saturating_sub(4).max(20);
 
     let mut session_list_block: Vec<Line<'static>> = Vec::new();
-    if context::root_session_section_visible(state) {
+    if context::session_pill_strip_visible(state) {
         session_list_block.extend(divider_with_vertical_margin(
             &format!("{} sessions", SESSIONS_SECTION_ICON),
             div_w,
@@ -91,14 +91,14 @@ pub(crate) fn render(frame: &mut Frame, state: &LeaderState) {
         }
     }
 
-    let mut move_session_list_block: Vec<Line<'static>> = Vec::new();
-    if context::move_session_section_visible(state) && !state.session_rows.is_empty() {
-        move_session_list_block.extend(divider_with_vertical_margin(
-            &format!("{} move window → session", SESSIONS_SECTION_ICON),
+    let mut attach_session_list_block: Vec<Line<'static>> = Vec::new();
+    if context::attach_session_section_visible(state) && !state.session_rows.is_empty() {
+        attach_session_list_block.extend(divider_with_vertical_margin(
+            &format!("{} attach to session", SESSIONS_SECTION_ICON),
             div_w,
             t.mauve,
         ));
-        move_session_list_block.extend(window_pill_lines(
+        attach_session_list_block.extend(window_pill_lines(
             &state.session_rows,
             state.session_cursor,
             pill_max_w,
@@ -111,10 +111,10 @@ pub(crate) fn render(frame: &mut Frame, state: &LeaderState) {
 
     let notice_lines = u16::from(state.notice.is_some());
     let session_section_lines = session_list_block.len() as u16;
-    let move_session_section_lines = move_session_list_block.len() as u16;
-    let strip_extra = notice_lines + session_section_lines + move_session_section_lines;
+    let attach_session_section_lines = attach_session_list_block.len() as u16;
+    let strip_extra = notice_lines + session_section_lines + attach_session_section_lines;
 
-    let header_rule_lines: u16 = if pending_panel || context::is_move_session_group(state) {
+    let header_rule_lines: u16 = if pending_panel || context::is_attach_session_group(state) {
         0
     } else {
         3
@@ -193,7 +193,7 @@ pub(crate) fn render(frame: &mut Frame, state: &LeaderState) {
         ]));
     }
     lines.extend(session_list_block);
-    lines.extend(move_session_list_block);
+    lines.extend(attach_session_list_block);
     if context::window_tab_strip_visible(state) {
         lines.extend(divider_with_vertical_margin(
             &format!("{} windows", TABS_SECTION_ICON),
@@ -230,23 +230,27 @@ pub(crate) fn render(frame: &mut Frame, state: &LeaderState) {
             lines.extend(pills);
         }
     }
-    if !pending_panel && !context::is_move_session_group(state) {
+    if !pending_panel && !context::is_attach_session_group(state) {
         lines.extend(divider_with_vertical_margin(&header, div_w, t.mauve));
-        for chunk in nodes.chunks(COLS) {
+        for row in 0..COLS {
             let mut spans: Vec<Span> = Vec::new();
-            for (i, node) in chunk.iter().enumerate() {
-                let is_last = i + 1 == chunk.len();
-                let icon = match &node.kind {
-                    keynode::KeyNodeKind::Group { icon, .. } if !icon.is_empty() => {
-                        format!("{} ", icon)
-                    }
-                    _ => String::new(),
-                };
-                let label = match &node.kind {
-                    keynode::KeyNodeKind::Group { .. } => format!("{}+", node.label),
-                    _ => node.label.to_string(),
-                };
-                spans.extend(slot_spans(node.key, &label, &icon, lw, is_last, false));
+            for col in 0..COLS {
+                let idx = col * COLS + row;
+                if let Some(node) = nodes.get(idx) {
+                    let is_last = col + 1 == COLS
+                        || (col + 1..COLS).all(|c| nodes.get(c * COLS + row).is_none());
+                    let icon = match &node.kind {
+                        keynode::KeyNodeKind::Group { icon, .. } if !icon.is_empty() => {
+                            format!("{} ", icon)
+                        }
+                        _ => String::new(),
+                    };
+                    let label = match &node.kind {
+                        keynode::KeyNodeKind::Group { .. } => format!("{}+", node.label),
+                        _ => node.label.to_string(),
+                    };
+                    spans.extend(slot_spans(node.key, &label, &icon, lw, is_last, false));
+                }
             }
             lines.push(Line::from(spans));
         }

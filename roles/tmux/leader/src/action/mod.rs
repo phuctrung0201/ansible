@@ -8,4 +8,4 @@ mod state;
 pub use commands::*;
 pub use dispatch::press_key;
 pub use key_press::KeyPress;
-pub use state::{LeaderPaneRow, LeaderState, LeaderWindowRow};
+pub use state::{LeaderPaneRow, LeaderState, LeaderWindowRow, PILL_STRIP_CAP};

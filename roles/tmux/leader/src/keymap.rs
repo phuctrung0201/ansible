@@ -1,16 +1,55 @@
-//! Leader keyboard layers: root [`KEYMAP`]. Apps live in [`crate::launcher`]; move-window targets
-//! in [`crate::move_session`] (**w m**), same pill UX as the launcher.
+//! Leader keyboard layers: root [`KEYMAP`]. Apps live in [`crate::launcher`].
 //!
 //! Root actions are ordered for the grid: **non-letters first** (e.g. space), then **a–z
 //! case-insensitively** (for the same letter, lowercase before uppercase).
 //!
-//! **Sessions** are a pill strip on the root grid (not a key): **Tab** / Shift-Tab cycle,
-//! **1–9** attach immediately, **Enter** attaches the highlighted session.
+//! **Window** actions and the window pill strip are on the root. **Sessions** live under **s**;
+//! **S** opens scrollback. Session subgroup: pill strip plus **space** last session, **a** add,
+//! **d** detach, **k** / **K** kill, **r** rename.
 
 use crate::action;
+use crate::attach_session;
 use crate::keynode::{KeyNode, KeyNodeKind};
 use crate::launcher;
-use crate::move_session;
+
+/// Session sub-group (**s** on root). Session pills + session-scoped actions.
+pub static SESSION_NODES: &[KeyNode] = &[
+    KeyNode {
+        key: ' ',
+        label: "last session",
+        kind: KeyNodeKind::Action(action::last_session),
+    },
+    KeyNode {
+        key: 'a',
+        label: "add session",
+        kind: KeyNodeKind::Action(action::add_session),
+    },
+    KeyNode {
+        key: 'd',
+        label: "detach session",
+        kind: KeyNodeKind::Action(action::detach_session),
+    },
+    KeyNode {
+        key: 'k',
+        label: "kill session",
+        kind: KeyNodeKind::Action(action::kill_session),
+    },
+    KeyNode {
+        key: 'K',
+        label: "kill other sessions",
+        kind: KeyNodeKind::Action(action::kill_other_sessions),
+    },
+    KeyNode {
+        key: 'r',
+        label: "rename session",
+        kind: KeyNodeKind::PromptAction {
+            prompt: "rename session:",
+            initial_fn: action::get_session_name,
+            confirm_fn: action::do_rename_session,
+            allow_empty_confirm: false,
+        },
+    },
+];
 
 /// Pane sub-group (`p` on root). Pane strip + **h** / **v** splits + **r** rename pane.
 pub static PANE_NODES: &[KeyNode] = &[
@@ -36,8 +75,8 @@ pub static PANE_NODES: &[KeyNode] = &[
     },
 ];
 
-/// Window-scoped sub-group (`w` on root). **w m** opens a launcher-style view to pick the target session.
-pub static WINDOW_NODES: &[KeyNode] = &[
+/// Root keymap (includes window actions; window pill strip on root).
+pub static KEYMAP: &[KeyNode] = &[
     // --- special (not a–z / A–Z) ---
     KeyNode {
         key: ' ',
@@ -51,53 +90,12 @@ pub static WINDOW_NODES: &[KeyNode] = &[
         kind: KeyNodeKind::Action(action::add_window),
     },
     KeyNode {
-        key: 'k',
-        label: "close window",
-        kind: KeyNodeKind::CloseWindow,
-    },
-    KeyNode {
-        key: 'K',
-        label: "close other windows",
-        kind: KeyNodeKind::Action(action::close_other_tabs),
-    },
-    KeyNode {
-        key: 'm',
-        label: "move window to session",
+        key: 'A',
+        label: "attach to session",
         kind: KeyNodeKind::Group {
             icon: "\u{f233}",
-            nodes: move_session::NODES,
+            nodes: attach_session::NODES,
         },
-    },
-    KeyNode {
-        key: 'r',
-        label: "rename window",
-        kind: KeyNodeKind::PromptAction {
-            prompt: "rename window:",
-            initial_fn: action::get_window_name,
-            confirm_fn: action::do_rename_window,
-            allow_empty_confirm: false,
-        },
-    },
-];
-
-/// Root keymap — session-focused.
-pub static KEYMAP: &[KeyNode] = &[
-    // --- special (not a–z / A–Z) ---
-    KeyNode {
-        key: ' ',
-        label: "last session",
-        kind: KeyNodeKind::Action(action::last_session),
-    },
-    // --- a–z (case-insensitive; lower then upper per letter) ---
-    KeyNode {
-        key: 'a',
-        label: "add session",
-        kind: KeyNodeKind::Action(action::add_session),
-    },
-    KeyNode {
-        key: 'd',
-        label: "detach session",
-        kind: KeyNodeKind::Action(action::detach_session),
     },
     KeyNode {
         key: 'e',
@@ -106,13 +104,13 @@ pub static KEYMAP: &[KeyNode] = &[
     },
     KeyNode {
         key: 'k',
-        label: "kill session",
-        kind: KeyNodeKind::Action(action::kill_session),
+        label: "close window",
+        kind: KeyNodeKind::CloseWindow,
     },
     KeyNode {
         key: 'K',
-        label: "kill other sessions",
-        kind: KeyNodeKind::Action(action::kill_other_sessions),
+        label: "close other windows",
+        kind: KeyNodeKind::Action(action::close_other_tabs),
     },
     KeyNode {
         key: 'l',
@@ -132,25 +130,25 @@ pub static KEYMAP: &[KeyNode] = &[
     },
     KeyNode {
         key: 'r',
-        label: "rename session",
+        label: "rename window",
         kind: KeyNodeKind::PromptAction {
-            prompt: "rename session:",
-            initial_fn: action::get_session_name,
-            confirm_fn: action::do_rename_session,
+            prompt: "rename window:",
+            initial_fn: action::get_window_name,
+            confirm_fn: action::do_rename_window,
             allow_empty_confirm: false,
         },
     },
     KeyNode {
         key: 's',
-        label: "scrollback",
-        kind: KeyNodeKind::Action(action::open_scrollback),
+        label: "sessions",
+        kind: KeyNodeKind::Group {
+            icon: "\u{f233}",
+            nodes: SESSION_NODES,
+        },
     },
     KeyNode {
-        key: 'w',
-        label: "windows",
-        kind: KeyNodeKind::Group {
-            icon: "\u{f04e9}",
-            nodes: WINDOW_NODES,
-        },
+        key: 'S',
+        label: "scrollback",
+        kind: KeyNodeKind::Action(action::open_scrollback),
     },
 ];

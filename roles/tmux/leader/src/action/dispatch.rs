@@ -1,6 +1,6 @@
 //! Map keymap nodes to [`KeyPress`] outcomes and update [`LeaderState`](super::state::LeaderState).
 
-use crate::{keymap, move_session, tmux};
+use crate::{attach_session, keymap};
 
 use super::commands::close_window_keypress;
 use super::state::LeaderState;
@@ -29,19 +29,11 @@ pub fn press_key(state: &mut LeaderState, key: char) -> KeyPress {
                     };
                 }
                 crate::keynode::KeyNodeKind::Group { icon, nodes } => {
-                    if std::ptr::eq(nodes.as_ptr(), move_session::NODES.as_ptr()) {
-                        match tmux::list_sessions_reconciled_for_pane(&tmux::target_pane()) {
-                            Ok(sessions) if sessions.is_empty() => {
-                                return KeyPress::Notice("move window: no sessions".to_string());
-                            }
-                            Err(e) => {
-                                return KeyPress::Notice(format!("move window: {e:#}"));
-                            }
-                            Ok(_) => {
-                                state.refresh_session_rows();
-                                state.session_cursor_follow_active();
-                            }
-                        }
+                    if std::ptr::eq(nodes.as_ptr(), keymap::SESSION_NODES.as_ptr())
+                        || std::ptr::eq(nodes.as_ptr(), attach_session::NODES.as_ptr())
+                    {
+                        state.refresh_session_rows();
+                        state.session_cursor_follow_active();
                     }
                     state.nodes = nodes;
                     state.icon = icon;
