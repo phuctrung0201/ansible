@@ -45,6 +45,8 @@ fi
 # No exec: after detach the tmux client exits but this shell keeps running.
 [[ "$TMUX_AUTOSTART" == "0" ]] && return
 [[ -o interactive ]] || return
+# Pane scrollback survives normal `clear`; also run tmux clear-history for this pane.
+[[ -n "$TMUX" ]] && alias clear='command clear && tmux clear-history'
 [[ -z "$TMUX" ]] || return
 [[ -t 1 ]] || return
 command -v tmux &>/dev/null || return
