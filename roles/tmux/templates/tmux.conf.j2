@@ -11,11 +11,11 @@ set -g status-interval 5
 set -g status-justify left
 # Bar uses terminal background (no fill); pills keep their own bg.
 set -g status-style fg={{ theme.fg }},bg=default
-set -g status-left-length 320
-set -g status-right-length 200
-# Left: cwd (green). Right: git branch pill — helpers live in tmux.zsh (cwd-status / git-pill).
-set -g status-left "#[fg={{ theme.green }},bg=default]#[fg={{ theme.bg }},bg={{ theme.green }},bold]  #(zsh {{ ansible_env.HOME }}/.config/tmux/tmux.zsh cwd-status \"#{pane_current_path}\") #[fg={{ theme.green }},bg=default,nobold]"
-set -g status-right "#[bg=default]#(zsh {{ ansible_env.HOME }}/.config/tmux/tmux.zsh git-pill \"#{pane_current_path}\")"
+set -g status-left-length 200
+set -g status-right-length 320
+# Left: session (green) + git pills. Right: cwd (pink) — helpers live in tmux.zsh (session-pill / git-pill / cwd-pill).
+set -g status-left "#[bg=default]#(zsh {{ ansible_env.HOME }}/.config/tmux/tmux.zsh session-pill \"#{session_name}\") #(zsh {{ ansible_env.HOME }}/.config/tmux/tmux.zsh git-pill \"#{pane_current_path}\")"
+set -g status-right "#[fg={{ theme.pink }},bg=default]#[fg={{ theme.bg }},bg={{ theme.pink }},bold]  #(zsh {{ ansible_env.HOME }}/.config/tmux/tmux.zsh cwd-pill \"#{pane_current_path}\") #[fg={{ theme.pink }},bg=default,nobold]"
 
 setw -g window-status-separator ""
 setw -g window-status-format ''

@@ -1,6 +1,6 @@
 # Ansible roles/tmux — status #(…) helpers and zsh auto-attach.
 # Tmux runs (examples):
-#   zsh ~/.config/tmux/tmux.zsh cwd-status "#{pane_current_path}"
+#   zsh ~/.config/tmux/tmux.zsh cwd-pill "#{pane_current_path}"
 #   zsh ~/.config/tmux/tmux.zsh git-pill "#{pane_current_path}"
 
 _tmux_cwd_for_status() {
@@ -10,6 +10,12 @@ _tmux_cwd_for_status() {
   [[ "$p" == "$h" ]] && { echo '~'; return 0; }
   [[ "$p" == "$h"/* ]] && { echo "~/${p#"$h"/}"; return 0; }
   echo "$p"
+}
+
+_tmux_session_pill_for_status() {
+  local name="$1"
+  [[ -z "$name" ]] && return 0
+  print -r -- "#[fg={{ theme.green }},bg=default]#[fg={{ theme.bg }},bg={{ theme.green }},bold]  $name #[fg={{ theme.green }},bg=default]"
 }
 
 _tmux_git_pill_for_status() {
@@ -31,12 +37,13 @@ _tmux_git_pill_for_status() {
   return 0
 }
 
-# When invoked directly by tmux status-bar: zsh tmux.zsh cwd-status "…"
+# When invoked directly by tmux status-bar: zsh tmux.zsh cwd-pill "…"
 # $# > 0 only in that case; $# == 0 when sourced from zshrc.
 if [[ $# -gt 0 ]]; then
   case "$1" in
-    cwd-status) shift; _tmux_cwd_for_status "$@" ;;
-    git-pill)   shift; _tmux_git_pill_for_status "$@" ;;
+    cwd-pill)    shift; _tmux_cwd_for_status "$@" ;;
+    git-pill)      shift; _tmux_git_pill_for_status "$@" ;;
+    session-pill)  shift; _tmux_session_pill_for_status "$@" ;;
   esac
   return 0
 fi
