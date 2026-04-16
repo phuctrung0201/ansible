@@ -1,27 +1,29 @@
-# Theme — https://github.com/nyoom-engineering/oxocarbon (IBM Carbon)
+# Theme — Catppuccin mix: Mocha bases (darkest bg) + Macchiato surfaces/overlays (more contrast separation)
+# Mocha:     https://github.com/catppuccin/catppuccin?tab=readme-ov-file#-palette  flavour=mocha
+# Macchiato: https://github.com/catppuccin/catppuccin?tab=readme-ov-file#-palette  flavour=macchiato
 theme:
-  bg: "#161616"             # Carbon Gray 100
-  fg: "#f2f4f8"             # Carbon Gray 10
-  selection: "#393939"      # Carbon Gray 80
-  comment: "#8d8d8d"        # Carbon Gray 50
-  red: "#ee5396"            # Carbon Magenta 50
-  orange: "#ff832b"         # Carbon Orange 40
-  yellow: "#ffe97b"         # Carbon Yellow 20
-  green: "#42be65"          # Carbon Green 40
-  purple: "#be95ff"         # Carbon Purple 40
-  cyan: "#3ddbd9"           # Carbon Teal 30
-  pink: "#ff7eb6"           # Carbon Magenta 30
-  blue: "#78a9ff"           # Carbon Blue 30
-  dark: "#262626"           # Carbon Gray 90 (terminal ANSI black)
-  white: "#dde1e6"          # Carbon Gray 20
-  bright_red: "#ff7eb6"     # Carbon Magenta 30
-  bright_green: "#6fdc8c"   # Carbon Green 30
-  bright_yellow: "#f1c21b"  # Carbon Yellow 40
-  bright_purple: "#d4bbff"  # Carbon Purple 30
-  bright_pink: "#ff7eb6"    # Carbon Magenta 30
-  bright_cyan: "#08bdba"    # Carbon Teal 40
-  bright_white: "#f2f4f8"   # Carbon Gray 10
-  comment_bright: "#525252" # Carbon Gray 60
-  black: "#161616"          # Carbon Gray 100
-  gutter_fg: "#525252"      # Carbon Gray 60
-  nontext: "#262626"        # Carbon Gray 90
+  bg: "#11111b"             # Mocha Crust       (darkest bg = best text contrast)
+  fg: "#cdd6f4"             # Mocha Text
+  selection: "#363a4f"      # Macchiato Surface0 (lighter than Mocha's #313244, more visible selection)
+  comment: "#8087a2"        # Macchiato Overlay1 (brighter than Mocha Overlay0, readable dimmed text)
+  red: "#f38ba8"            # Mocha Red          (more vivid than Macchiato #ed8796)
+  orange: "#fab387"         # Mocha Peach        (warmer/more orange than Macchiato #f5a97f)
+  yellow: "#f9e2af"         # Mocha Yellow       (brighter than Macchiato #eed49f)
+  green: "#a6e3a1"          # Mocha Green        (brighter than Macchiato #a6da95)
+  purple: "#cba6f7"         # Mocha Mauve        (slightly more vibrant)
+  cyan: "#94e2d5"           # Mocha Teal         (more vivid than Macchiato #8bd5ca)
+  pink: "#f5c2e7"           # Mocha Pink
+  blue: "#89b4fa"           # Mocha Blue
+  dark: "#494d64"           # Macchiato Surface1 (ANSI black; lighter than Mocha #45475a for terminal visibility)
+  white: "#bac2de"          # Mocha Subtext1
+  bright_red: "#eba0ac"     # Mocha Maroon
+  bright_green: "#a6e3a1"   # Mocha Green
+  bright_yellow: "#f9e2af"  # Mocha Yellow
+  bright_purple: "#74c7ec"  # Mocha Sapphire     (ANSI bright blue)
+  bright_pink: "#cba6f7"    # Mocha Mauve        (ANSI bright magenta)
+  bright_cyan: "#89dceb"    # Mocha Sky
+  bright_white: "#cdd6f4"   # Mocha Text
+  comment_bright: "#5b6078" # Macchiato Surface2 (ANSI bright black; aerospace inactive border)
+  black: "#11111b"          # Mocha Crust
+  gutter_fg: "#6e738d"      # Macchiato Overlay0 (more visible line numbers than Mocha surface2)
+  nontext: "#363a4f"        # Macchiato Surface0 (slightly lighter than Mocha surface0, visible but subtle)

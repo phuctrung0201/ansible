@@ -1,26 +1,21 @@
 return {
   {
-    "nyoom-engineering/oxocarbon.nvim",
-    name = "oxocarbon",
+    "catppuccin/nvim",
+    name = "catppuccin",
     lazy = false,
     priority = 1000,
     config = function()
-      vim.opt.background = "dark"
+      require("catppuccin").setup({
+        flavour = "mocha",
+        transparent_background = true,   -- Normal, StatusLine, TabLine, etc.
+        float = { transparent = true },  -- NormalFloat, FloatBorder, FloatTitle (all Snacks modules)
+        integrations = { snacks = true },
+      })
       vim.opt.fillchars = { eob = " " }
-      vim.cmd.colorscheme("oxocarbon")
+      vim.cmd.colorscheme("catppuccin")
 
-      local groups = {
-        "Normal", "NormalNC", "NormalFloat",
-        "FloatBorder", "FloatTitle",
-        "SignColumn",
-        "LineNr", "LineNrAbove", "LineNrBelow", "CursorLineNr",
-        "WinBar", "WinBarNC",
-        "TabLine", "TabLineFill",
-        "StatusLine", "StatusLineNC",
-        "MsgArea",
-        "WinSeparator",
-        "SnacksPickerBorder", "SnacksExplorerBorder", "SnacksWinBorder",
-      }
+      -- MsgArea has no float/transparent equivalent in catppuccin
+      local groups = { "MsgArea" }
 
       local function apply_transparent()
         for _, hl in ipairs(groups) do
