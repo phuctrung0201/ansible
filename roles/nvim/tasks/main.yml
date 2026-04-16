@@ -23,6 +23,7 @@
 - name: Set EDITOR environment variable
   lineinfile:
     path: "{{ ansible_env.HOME }}/.zshrc"
+    regexp: '^export EDITOR='
     line: 'export EDITOR="nvim"'
     state: present
     create: yes

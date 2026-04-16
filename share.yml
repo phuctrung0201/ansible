@@ -1,27 +1,27 @@
-# Theme — https://spec.draculatheme.com/ (§1.2 Standard + ANSI)
+# Theme — https://github.com/nyoom-engineering/oxocarbon (IBM Carbon)
 theme:
-  bg: "#282a36"
-  fg: "#f8f8f2"
-  selection: "#44475a"
-  comment: "#6272a4"
-  red: "#ff5555"
-  orange: "#ffb86c"
-  yellow: "#f1fa8c"
-  green: "#50fa7b"
-  purple: "#bd93f9"
-  cyan: "#8be9fd"
-  pink: "#ff79c6"
-  blue: "#bd93f9"
-  dark: "#21222c"
-  white: "#f8f8f2"
-  bright_red: "#ff6e6e"
-  bright_green: "#69ff94"
-  bright_yellow: "#ffffa5"
-  bright_purple: "#d6acff"
-  bright_pink: "#ff92df"
-  bright_cyan: "#a4ffff"
-  bright_white: "#ffffff"
-  comment_bright: "#6272a4"
-  black: "#21222c"
-  gutter_fg: "#4b5263"
-  nontext: "#3b4048"
+  bg: "#161616"             # Carbon Gray 100
+  fg: "#f2f4f8"             # Carbon Gray 10
+  selection: "#393939"      # Carbon Gray 80
+  comment: "#8d8d8d"        # Carbon Gray 50
+  red: "#ee5396"            # Carbon Magenta 50
+  orange: "#ff832b"         # Carbon Orange 40
+  yellow: "#ffe97b"         # Carbon Yellow 20
+  green: "#42be65"          # Carbon Green 40
+  purple: "#be95ff"         # Carbon Purple 40
+  cyan: "#3ddbd9"           # Carbon Teal 30
+  pink: "#ff7eb6"           # Carbon Magenta 30
+  blue: "#78a9ff"           # Carbon Blue 30
+  dark: "#262626"           # Carbon Gray 90 (terminal ANSI black)
+  white: "#dde1e6"          # Carbon Gray 20
+  bright_red: "#ff7eb6"     # Carbon Magenta 30
+  bright_green: "#6fdc8c"   # Carbon Green 30
+  bright_yellow: "#f1c21b"  # Carbon Yellow 40
+  bright_purple: "#d4bbff"  # Carbon Purple 30
+  bright_pink: "#ff7eb6"    # Carbon Magenta 30
+  bright_cyan: "#08bdba"    # Carbon Teal 40
+  bright_white: "#f2f4f8"   # Carbon Gray 10
+  comment_bright: "#525252" # Carbon Gray 60
+  black: "#161616"          # Carbon Gray 100
+  gutter_fg: "#525252"      # Carbon Gray 60
+  nontext: "#262626"        # Carbon Gray 90

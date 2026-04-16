@@ -1,48 +1,47 @@
 return {
   {
-    "Mofiqul/dracula.nvim",
-    name = "dracula",
+    "nyoom-engineering/oxocarbon.nvim",
+    name = "oxocarbon",
     lazy = false,
     priority = 1000,
-    opts = {
-      transparent_bg = true,
-      colors = {
-        bg = "{{ theme.bg }}",
-        fg = "{{ theme.fg }}",
-        selection = "{{ theme.selection }}",
-        comment = "{{ theme.comment }}",
-        red = "{{ theme.red }}",
-        orange = "{{ theme.orange }}",
-        yellow = "{{ theme.yellow }}",
-        green = "{{ theme.green }}",
-        purple = "{{ theme.purple }}",
-        cyan = "{{ theme.cyan }}",
-        pink = "{{ theme.pink }}",
-        bright_red = "{{ theme.bright_red }}",
-        bright_green = "{{ theme.bright_green }}",
-        bright_yellow = "{{ theme.bright_yellow }}",
-        bright_blue = "{{ theme.bright_purple }}",
-        bright_magenta = "{{ theme.bright_pink }}",
-        bright_cyan = "{{ theme.bright_cyan }}",
-        bright_white = "{{ theme.bright_white }}",
-        menu = "{{ theme.dark }}",
-        visual = "{{ theme.selection }}",
-        gutter_fg = "{{ theme.gutter_fg }}",
-        nontext = "{{ theme.nontext }}",
-        white = "{{ theme.white }}",
-        black = "{{ theme.black }}",
-      },
-      overrides = function()
-        return {
-          NormalFloat = { bg = "NONE" },
-          FloatBorder = { bg = "NONE" },
-          FloatTitle = { bg = "NONE" },
-        }
-      end,
-    },
-    config = function(_, opts)
-      require("dracula").setup(opts)
-      require("dracula").load()
+    config = function()
+      vim.opt.background = "dark"
+      vim.opt.fillchars = { eob = " " }
+      vim.cmd.colorscheme("oxocarbon")
+
+      local groups = {
+        "Normal", "NormalNC", "NormalFloat",
+        "FloatBorder", "FloatTitle",
+        "SignColumn",
+        "LineNr", "LineNrAbove", "LineNrBelow", "CursorLineNr",
+        "WinBar", "WinBarNC",
+        "TabLine", "TabLineFill",
+        "StatusLine", "StatusLineNC",
+        "MsgArea",
+        "WinSeparator",
+        "SnacksPickerBorder", "SnacksExplorerBorder", "SnacksWinBorder",
+      }
+
+      local function apply_transparent()
+        for _, hl in ipairs(groups) do
+          vim.cmd("highlight " .. hl .. " guibg=NONE ctermbg=NONE")
+        end
+      end
+
+      apply_transparent()
+      vim.api.nvim_create_autocmd("ColorScheme", { callback = apply_transparent })
+
+      -- Snacks highlights applied after all plugins load (snacks initializes during VeryLazy)
+      vim.api.nvim_create_autocmd("User", {
+        pattern = "VeryLazy",
+        once = true,
+        callback = function()
+          local cl = vim.api.nvim_get_hl(0, { name = "CursorLine", link = false })
+          vim.api.nvim_set_hl(0, "SnacksCursorLine", cl)
+          vim.cmd("highlight SnacksPickerDir   guifg={{ theme.comment }}")
+          vim.cmd("highlight SnacksPickerMatch guifg={{ theme.pink }}")
+        end,
+      })
     end,
   },
 
@@ -139,6 +138,9 @@ return {
               ["<a-h>"] = { "toggle_hidden", mode = { "i", "n" } },
               ["<a-i>"] = { "toggle_ignored", mode = { "i", "n" } },
             },
+          },
+          list = {
+            wo = { winhighlight = "CursorLine:CursorLine" },
           },
         },
       },
