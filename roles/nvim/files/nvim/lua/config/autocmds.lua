@@ -42,6 +42,24 @@ autocmd("BufWritePre", {
   end,
 })
 
+autocmd("BufNewFile", {
+  group = augroup("wiki_journal_template", { clear = true }),
+  pattern = vim.fn.expand("~/wiki/journal") .. "/*.md",
+  callback = function()
+    local template_path = vim.fn.stdpath("config") .. "/templates/journal.md"
+    if vim.fn.filereadable(template_path) == 0 then
+      return
+    end
+    local lines = vim.fn.readfile(template_path)
+    for i, line in ipairs(lines) do
+      lines[i] = line:gsub("%%%(date:([^)]+)%)", function(fmt)
+        return vim.fn.strftime(fmt)
+      end)
+    end
+    vim.api.nvim_buf_set_lines(0, 0, -1, false, lines)
+  end,
+})
+
 autocmd("BufReadPost", {
   group = augroup("last_cursor_position", { clear = true }),
   callback = function()
