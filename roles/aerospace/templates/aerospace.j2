@@ -45,69 +45,63 @@ outer.bottom = 4
 outer.top = 4
 outer.right = 4
 
-# Main mode is passive — all keys pass through to apps.
-# f11 toggles action mode (see f11 in [mode.action.binding]).
-[mode.main.binding]
-f11 = 'mode action'
-
-# Action mode — persistent window management.
+# Window management: Option (⌥) + key. On macOS, AeroSpace's `alt-` prefix is the Option key.
+# No separate binding mode — chords run directly from main mode.
 # Workspaces: `=terminal 1=browser 2=fallback 3=empty F1=slack F2=outlook F3=zoom
-[mode.action.binding]
-f11 = 'mode main'
+[mode.main.binding]
 
-# space: previous ↔ current window; tab: next window in workspace (DFS order, wraps)
-tab = ['focus --boundaries-action wrap-around-the-workspace dfs-next', 'mode main']
-backtick = ['workspace --auto-back-and-forth `', 'mode main']
-shift-backtick = ['move-node-to-workspace --focus-follows-window `', 'mode main']
-space = ['focus-back-and-forth', 'mode main']
-shift-space = 'workspace --wrap-around next'
+# tab/space in the old action mode → Option+key
+alt-tab = 'focus --boundaries-action wrap-around-the-workspace dfs-next'
+alt-space = 'focus-back-and-forth'
+alt-shift-space = 'workspace --wrap-around next'
 
-# Focus (hjkl)
-h = 'focus left'
-j = 'focus down'
-k = 'focus up'
-l = 'focus right'
+alt-backtick = 'workspace --auto-back-and-forth `'
+alt-shift-backtick = 'move-node-to-workspace --focus-follows-window `'
 
-# Move windows (shift-hjkl)
-shift-h = 'move left'
-shift-j = 'move down'
-shift-k = 'move up'
-shift-l = 'move right'
+# Focus (aswd — left/down/up/right)
+alt-a = 'focus left'
+alt-s = 'focus down'
+alt-w = 'focus up'
+alt-d = 'focus right'
+
+# Move windows (Option+Shift+aswd)
+alt-shift-a = 'move left'
+alt-shift-s = 'move down'
+alt-shift-w = 'move up'
+alt-shift-d = 'move right'
 
 # Workspaces
-1 = ['workspace 1', 'mode main']
-2 = ['workspace 2', 'mode main']
-3 = ['workspace 3', 'mode main']
-f3 = ['workspace F3', 'mode main']
-f2 = ['workspace F2', 'mode main']
-f1 = ['workspace F1', 'mode main']
-shift-1 = 'move-node-to-workspace --focus-follows-window 1'
-shift-2 = 'move-node-to-workspace --focus-follows-window 2'
-shift-3 = 'move-node-to-workspace --focus-follows-window 3'
-shift-f3 = 'move-node-to-workspace --focus-follows-window F3'
-shift-f2 = 'move-node-to-workspace --focus-follows-window F2'
-shift-f1 = 'move-node-to-workspace --focus-follows-window F1'
+alt-1 = 'workspace 1'
+alt-2 = 'workspace 2'
+alt-3 = 'workspace 3'
+alt-f3 = 'workspace F3'
+alt-f2 = 'workspace F2'
+alt-f1 = 'workspace F1'
+alt-shift-1 = 'move-node-to-workspace --focus-follows-window 1'
+alt-shift-2 = 'move-node-to-workspace --focus-follows-window 2'
+alt-shift-3 = 'move-node-to-workspace --focus-follows-window 3'
+alt-shift-f3 = 'move-node-to-workspace --focus-follows-window F3'
+alt-shift-f2 = 'move-node-to-workspace --focus-follows-window F2'
+alt-shift-f1 = 'move-node-to-workspace --focus-follows-window F1'
 
 # Monitor (brackets)
-leftSquareBracket = ['focus-monitor --wrap-around prev', 'mode main']
-rightSquareBracket = ['focus-monitor --wrap-around next', 'mode main']
-shift-leftSquareBracket = 'move-workspace-to-monitor --wrap-around prev'
-shift-rightSquareBracket = 'move-workspace-to-monitor --wrap-around next'
+alt-leftSquareBracket = 'focus-monitor --wrap-around prev'
+alt-rightSquareBracket = 'focus-monitor --wrap-around next'
+alt-shift-leftSquareBracket = 'move-workspace-to-monitor --wrap-around prev'
+alt-shift-rightSquareBracket = 'move-workspace-to-monitor --wrap-around next'
 
 # Layout
-t = ['layout accordion tiles', 'mode main']
-f = ['layout floating tiling', 'mode main']
+alt-t = 'layout accordion tiles'
+alt-f = 'layout floating tiling'
 
 # Resize
-minus = ['resize smart -50', 'mode main']
-equal = ['resize smart +50', 'mode main']
+alt-minus = 'resize smart -50'
+alt-equal = 'resize smart +50'
 
 # Service
-r = ['reload-config', 'mode main']
-x = 'close'
-shift-x = ['close-all-windows-but-current', 'mode main']
-
-esc = 'mode main'
+alt-r = 'reload-config'
+alt-x = 'close'
+alt-shift-x = 'close-all-windows-but-current'
 
 # List current opening apps
 # aerospace list-apps
