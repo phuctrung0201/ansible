@@ -31,7 +31,7 @@
   lineinfile:
     path: "{{ ansible_env.HOME }}/.zshrc"
     regexp: "^alias wiki="
-    line: "alias wiki='nvim +WikiIndex'"
+    line: "alias wiki='nvim +WikiJournal'"
     state: present
 
 - name: Ensure wiki directory exists

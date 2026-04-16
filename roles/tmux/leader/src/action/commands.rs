@@ -289,6 +289,18 @@ pub fn do_rename_session(name: String) -> anyhow::Result<()> {
     tmux::run_status(&["rename-session", "-t", tmux::session_id(), &name])
 }
 
+/// Rename the current session to the basename of the active pane’s working directory.
+pub fn rename_session_to_pane_folder() -> anyhow::Result<()> {
+    let t = target();
+    let cwd = tmux::pane_cwd(&t).context("pane cwd")?;
+    let name = std::path::Path::new(cwd.trim())
+        .file_name()
+        .map(|s| s.to_string_lossy().trim().to_string())
+        .filter(|s| !s.is_empty())
+        .ok_or_else(|| anyhow::anyhow!("cannot derive folder name from cwd {cwd:?}"))?;
+    do_rename_session(name)
+}
+
 pub fn kill_session() -> anyhow::Result<()> {
     let t = target();
     let cur = tmux::session_name_for_pane(&t)?;

@@ -5,7 +5,7 @@
 //!
 //! **Window** actions and the window pill strip are on the root. **Sessions** live under **s**;
 //! **S** opens scrollback. Session subgroup: pill strip plus **space** last session, **a** add,
-//! **d** detach, **k** / **K** kill, **r** rename.
+//! **d** detach, **k** / **K** kill, **r** rename, **R** rename to cwd (basename).
 
 use crate::action;
 use crate::attach_session;
@@ -48,6 +48,11 @@ pub static SESSION_NODES: &[KeyNode] = &[
             confirm_fn: action::do_rename_session,
             allow_empty_confirm: false,
         },
+    },
+    KeyNode {
+        key: 'R',
+        label: "rename to cwd",
+        kind: KeyNodeKind::Action(action::rename_session_to_pane_folder),
     },
 ];
 
