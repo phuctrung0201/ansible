@@ -4,7 +4,7 @@
 //! case-insensitively** (for the same letter, lowercase before uppercase).
 //!
 //! **Window** actions and the window pill strip are on the root. **Sessions** live under **s**;
-//! **S** opens scrollback. Session subgroup: pill strip plus **space** last session, **a** add,
+//! **o** opens scrollback. Session subgroup: pill strip plus **space** last session, **a** add,
 //! **d** detach, **k** / **K** kill, **r** rename, **p** pin pwd (rename to cwd basename).
 
 use crate::action;
@@ -152,8 +152,8 @@ pub static KEYMAP: &[KeyNode] = &[
         },
     },
     KeyNode {
-        key: 'S',
-        label: "scrollback",
+        key: 'o',
+        label: "open scrollback",
         kind: KeyNodeKind::Action(action::open_scrollback),
     },
 ];
