@@ -3,9 +3,11 @@ return {
     "lervag/wiki.vim",
     lazy = false,
     keys = {
-      { "<leader>wj", "<cmd>WikiJournal<cr>", desc = "Journal today" },
-      { "<leader>wi", "<cmd>WikiIndex<cr>", desc = "Wiki index" },
+      { "<leader>ww", "<cmd>WikiJournal<cr>", desc = "Journal today" },
+      { "<leader>wI", "<cmd>WikiIndex<cr>", desc = "Wiki index" },
       { "<leader>wp", "<cmd>WikiPages<cr>", desc = "Wiki pages" },
+      { "<leader>wo", "<cmd>WikiGraphOut<cr>", desc = "Wiki graph out" },
+      { "<leader>wi", "<cmd>WikiGraphIn<cr>", desc = "Wiki graph in" },
     },
     init = function()
       vim.g.wiki_mappings_use_defaults = 0
