@@ -110,7 +110,7 @@ pub fn do_rename_window(name: String) -> anyhow::Result<()> {
     tmux::run_status(&["rename-window", "-t", &wt, &name])
 }
 
-pub fn add_window() -> anyhow::Result<()> {
+pub fn new_window() -> anyhow::Result<()> {
     do_new_window(String::new())
 }
 
@@ -276,7 +276,7 @@ pub fn do_new_session(name: String) -> anyhow::Result<()> {
     }
 }
 
-pub fn add_session() -> anyhow::Result<()> {
+pub fn new_session() -> anyhow::Result<()> {
     do_new_session(String::new())
 }
 

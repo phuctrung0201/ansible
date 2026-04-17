@@ -4,7 +4,7 @@
 //! case-insensitively** (for the same letter, lowercase before uppercase).
 //!
 //! **Window** actions and the window pill strip are on the root. **Sessions** live under **s**;
-//! **o** opens scrollback. Session subgroup: pill strip plus **space** last session, **a** add,
+//! **o** opens scrollback. Session subgroup: pill strip plus **space** last session, **n** new,
 //! **d** detach, **k** / **K** kill, **r** rename, **p** pin pwd (rename to cwd basename).
 
 use crate::action;
@@ -18,11 +18,6 @@ pub static SESSION_NODES: &[KeyNode] = &[
         key: ' ',
         label: "last session",
         kind: KeyNodeKind::Action(action::last_session),
-    },
-    KeyNode {
-        key: 'a',
-        label: "add session",
-        kind: KeyNodeKind::Action(action::add_session),
     },
     KeyNode {
         key: 'd',
@@ -40,6 +35,16 @@ pub static SESSION_NODES: &[KeyNode] = &[
         kind: KeyNodeKind::Action(action::kill_other_sessions),
     },
     KeyNode {
+        key: 'n',
+        label: "new session",
+        kind: KeyNodeKind::Action(action::new_session),
+    },
+    KeyNode {
+        key: 'p',
+        label: "pin pwd",
+        kind: KeyNodeKind::Action(action::rename_session_to_pane_folder),
+    },
+    KeyNode {
         key: 'r',
         label: "rename session",
         kind: KeyNodeKind::PromptAction {
@@ -48,11 +53,6 @@ pub static SESSION_NODES: &[KeyNode] = &[
             confirm_fn: action::do_rename_session,
             allow_empty_confirm: false,
         },
-    },
-    KeyNode {
-        key: 'p',
-        label: "pin pwd",
-        kind: KeyNodeKind::Action(action::rename_session_to_pane_folder),
     },
 ];
 
@@ -91,11 +91,6 @@ pub static KEYMAP: &[KeyNode] = &[
     // --- a–z (case-insensitive; lower then upper per letter) ---
     KeyNode {
         key: 'a',
-        label: "add window",
-        kind: KeyNodeKind::Action(action::add_window),
-    },
-    KeyNode {
-        key: 'A',
         label: "attach to session",
         kind: KeyNodeKind::Group {
             icon: "\u{f233}",
@@ -126,6 +121,16 @@ pub static KEYMAP: &[KeyNode] = &[
         },
     },
     KeyNode {
+        key: 'n',
+        label: "new window",
+        kind: KeyNodeKind::Action(action::new_window),
+    },
+    KeyNode {
+        key: 'o',
+        label: "open scrollback",
+        kind: KeyNodeKind::Action(action::open_scrollback),
+    },
+    KeyNode {
         key: 'p',
         label: "panes",
         kind: KeyNodeKind::Group {
@@ -150,10 +155,5 @@ pub static KEYMAP: &[KeyNode] = &[
             icon: "\u{f233}",
             nodes: SESSION_NODES,
         },
-    },
-    KeyNode {
-        key: 'o',
-        label: "open scrollback",
-        kind: KeyNodeKind::Action(action::open_scrollback),
     },
 ];
