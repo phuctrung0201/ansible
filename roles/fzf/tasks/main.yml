@@ -10,22 +10,22 @@
 
 - name: Ensure fzf config directory exists
   file:
-    path: "{{ ansible_env.HOME }}/.config/fzf"
+    path: "~/.config/fzf"
     state: directory
 
 - name: Copy fzf zsh config
   template:
     src: fzf.zsh.j2
-    dest: "{{ ansible_env.HOME }}/.config/fzf/fzf.zsh"
+    dest: "~/.config/fzf/fzf.zsh"
 
 - name: Source fzf.zsh from zshrc
   lineinfile:
-    path: "{{ ansible_env.HOME }}/.zshrc"
+    path: "~/.zshrc"
     line: "source ~/.config/fzf/fzf.zsh"
     state: present
 
 - name: Set PAGER environment variable
   lineinfile:
-    path: "{{ ansible_env.HOME }}/.zshrc"
+    path: "~/.zshrc"
     line: 'export PAGER=bat'
     state: present

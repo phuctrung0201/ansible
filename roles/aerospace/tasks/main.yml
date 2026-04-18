@@ -11,18 +11,18 @@
 
 - name: Ensure aerospace config directory exists 
   file:
-    path: "{{ ansible_env.HOME }}/.config/aerospace"
+    path: "~/.config/aerospace"
     state: directory
 
 - name: Deploy aerospace config
   template:
     src: aerospace.j2
-    dest: "{{ ansible_env.HOME }}/.config/aerospace/aerospace.toml"
+    dest: "~/.config/aerospace/aerospace.toml"
     backup: yes
 
 - name: Remove the origin config
   file:
-    path: "{{ ansible_env.HOME }}/.aerospace.toml"
+    path: "~/.aerospace.toml"
     state: absent
 
 - name: Activate aerospace if not already running

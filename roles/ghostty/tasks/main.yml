@@ -6,7 +6,7 @@
 
 - name: Check if FiraCode Nerd Font is installed
   stat:
-    path: "{{ ansible_env.HOME }}/Library/Fonts/FiraCodeNerdFont-Bold.ttf"
+    path: "~/Library/Fonts/FiraCodeNerdFont-Bold.ttf"
   register: firacode_font
 
 - name: Install FiraCode Nerd Font
@@ -18,11 +18,11 @@
 
 - name: Ensure Ghostty config directory exists
   file:
-    path: "{{ ansible_env.HOME }}/.config/ghostty"
+    path: "~/.config/ghostty"
     state: directory
 
 - name: Deploy Ghostty config
   template:
     src: config.ghostty.j2
-    dest: "{{ ansible_env.HOME }}/.config/ghostty/config"
+    dest: "~/.config/ghostty/config"
     backup: true

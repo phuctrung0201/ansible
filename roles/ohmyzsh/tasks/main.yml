@@ -1,6 +1,6 @@
 - name: Check if Oh My Zsh is installed
   stat:
-    path: "{{ ansible_env.HOME }}/.oh-my-zsh"
+    path: "~/.oh-my-zsh"
   register: ohmyzsh_dir
 
 - name: Install Oh My Zsh (if not installed)
@@ -14,45 +14,45 @@
 - name: Ensure zsh-autosuggestions plugin is installed
   git:
     repo: https://github.com/zsh-users/zsh-autosuggestions.git
-    dest: "{{ ansible_env.HOME }}/.oh-my-zsh/custom/plugins/zsh-autosuggestions"
+    dest: "~/.oh-my-zsh/custom/plugins/zsh-autosuggestions"
 
 - name: Ensure fast-syntax-highlighting plugin is installed
   git:
     repo: https://github.com/zdharma-continuum/fast-syntax-highlighting.git
-    dest: "{{ ansible_env.HOME }}/.oh-my-zsh/custom/plugins/fast-syntax-highlighting"
+    dest: "~/.oh-my-zsh/custom/plugins/fast-syntax-highlighting"
 
 - name: Ensure zsh config directory for Ansible theme
   file:
-    path: "{{ ansible_env.HOME }}/.config/zsh"
+    path: "~/.config/zsh"
     state: directory
     mode: "0755"
 
 - name: Deploy zsh theme from share.yml
   template:
     src: ansible-theme.zsh.j2
-    dest: "{{ ansible_env.HOME }}/.config/zsh/ansible-theme.zsh"
+    dest: "~/.config/zsh/ansible-theme.zsh"
     mode: "0644"
 
 - name: Configure .zshrc settings
   lineinfile:
-    path: "{{ ansible_env.HOME }}/.zshrc"
+    path: "~/.zshrc"
     line: "{{ item.line }}"
     regexp: "{{ item.regexp | default(omit) }}"
     state: present
     create: yes
   loop:
     - line: 'export XDG_CONFIG_HOME="$HOME/.config"'
+    - line: 'plugins=(git z zsh-autosuggestions fast-syntax-highlighting)'
+      regexp: '^plugins='
     - line: 'export ZSH="$HOME/.oh-my-zsh"'
     - line: 'ZSH_THEME=""'
       regexp: '^ZSH_THEME='
-    - line: 'plugins=(git z zsh-autosuggestions fast-syntax-highlighting)'
-      regexp: '^plugins='
     - line: 'DISABLE_AUTO_UPDATE=true'
     - line: 'source $ZSH/oh-my-zsh.sh'
 
 - name: Source Ansible zsh theme (prompt + highlights from share.yml)
   blockinfile:
-    path: "{{ ansible_env.HOME }}/.zshrc"
+    path: "~/.zshrc"
     marker: "# {mark} ANSIBLE ohmyzsh PROMPT"
     insertafter: '^source \$ZSH/oh-my-zsh\.sh'
     block: |
