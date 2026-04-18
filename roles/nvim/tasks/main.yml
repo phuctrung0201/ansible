@@ -8,11 +8,12 @@
     path: "~/.config/nvim" 
     state: directory
 
-- name: Copy the nvim setup default
-  copy:
+- name: Sync nvim config (remove files not in source)
+  synchronize:
     src: nvim/
     dest: "~/.config/nvim/"
-    backup: yes
+    delete: yes
+    recursive: yes
 
 - name: Template ui.lua with color variables
   template:

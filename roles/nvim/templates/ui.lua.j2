@@ -1,32 +1,75 @@
 return {
+  { "akinsho/bufferline.nvim", enabled = false },
+
+  {
+    "nvim-lualine/lualine.nvim",
+    opts = function(_, opts)
+      local function hl_bg(name)
+        local hl = vim.api.nvim_get_hl(0, { name = name, link = false })
+        return hl.bg and string.format("#%06x", hl.bg) or "NONE"
+      end
+
+      local function cap_color()
+        local map = {
+          n = "lualine_a_normal",  i = "lualine_a_insert",
+          v = "lualine_a_visual",  V = "lualine_a_visual",
+          ["\22"] = "lualine_a_visual", c = "lualine_a_command",
+          R = "lualine_a_replace", r = "lualine_a_replace",
+        }
+        return { fg = hl_bg(map[vim.fn.mode()] or "lualine_a_normal"), bg = "NONE" }
+      end
+
+      opts.sections = { lualine_a = {}, lualine_b = {}, lualine_c = {}, lualine_x = {}, lualine_y = {}, lualine_z = {} }
+      opts.inactive_sections = { lualine_a = {}, lualine_b = {}, lualine_c = {}, lualine_x = {}, lualine_y = {}, lualine_z = {} }
+      opts.tabline = {
+        lualine_a = {
+          { function() return "\u{e0b6}" end, padding = 0, color = cap_color, separator = "" },
+          { "mode", padding = { left = 1, right = 1 }, separator = "" },
+          { function() return "\u{e0b4}" end, padding = 0, color = cap_color, separator = "" },
+        },
+        lualine_b = {}, lualine_c = {}, lualine_x = {}, lualine_y = {},
+        lualine_z = {
+          { function() return "\u{e0b6}" end, padding = 0, color = { fg = "{{ theme.dark }}", bg = "NONE" }, separator = "" },
+          { "filename", path = 1, padding = { left = 1, right = 1 }, separator = "", color = { fg = "{{ theme.fg }}", bg = "{{ theme.dark }}" } },
+          { function() return "\u{e0b4}" end, padding = 0, color = { fg = "{{ theme.dark }}", bg = "NONE" }, separator = "" },
+        },
+      }
+      opts.options = vim.tbl_extend("force", opts.options or {}, {
+        section_separators = "",
+        component_separators = "",
+      })
+      return opts
+    end,
+  },
+
   {
     "catppuccin/nvim",
     name = "catppuccin",
     lazy = false,
     priority = 1000,
-    config = function()
-      require("catppuccin").setup({
-        flavour = "mocha",
-        transparent_background = true,   -- Normal, StatusLine, TabLine, etc.
-        float = { transparent = true },  -- NormalFloat, FloatBorder, FloatTitle (all Snacks modules)
-        integrations = { snacks = true },
-      })
-      vim.opt.fillchars = { eob = " " }
+    opts = {
+      flavour = "mocha",
+      transparent_background = true,
+      integrations = { snacks = true },
+      custom_highlights = function()
+        return {
+          NormalFloat = { bg = "NONE" },
+          FloatBorder = { bg = "NONE" },
+          FloatTitle = { bg = "NONE" },
+        }
+      end,
+    },
+    config = function(_, opts)
+      require("catppuccin").setup(opts)
       vim.cmd.colorscheme("catppuccin")
-
-      -- MsgArea has no float/transparent equivalent in catppuccin
-      local groups = { "MsgArea" }
+      vim.opt.fillchars = { eob = " " }
 
       local function apply_transparent()
-        for _, hl in ipairs(groups) do
-          vim.cmd("highlight " .. hl .. " guibg=NONE ctermbg=NONE")
-        end
+        vim.cmd("highlight MsgArea guibg=NONE ctermbg=NONE")
       end
-
       apply_transparent()
       vim.api.nvim_create_autocmd("ColorScheme", { callback = apply_transparent })
 
-      -- Snacks highlights applied after all plugins load (snacks initializes during VeryLazy)
       vim.api.nvim_create_autocmd("User", {
         pattern = "VeryLazy",
         once = true,
@@ -41,27 +84,9 @@ return {
   },
 
   {
-    "echasnovski/mini.icons",
-    lazy = true,
-    opts = {},
-    init = function()
-      package.preload["nvim-web-devicons"] = function()
-        require("mini.icons").mock_nvim_web_devicons()
-        return package.loaded["nvim-web-devicons"]
-      end
-    end,
-  },
-
-  {
     "folke/which-key.nvim",
-    event = "VeryLazy",
     opts = {
       spec = {
-        { "<leader>b", group = "Buffer" },
-        { "<leader>c", group = "Code" },
-        { "<leader>f", group = "Find" },
-        { "<leader>g", group = "Git" },
-        { "<leader>q", group = "Quit" },
         { "<leader>w", group = "Wiki", icon = "󱗖" },
       },
     },
@@ -69,24 +94,8 @@ return {
 
   {
     "folke/snacks.nvim",
-    lazy = false,
-    priority = 1000,
-    keys = {
-      { "<leader>e", function() Snacks.explorer() end, desc = "Toggle file explorer" },
-      { "<leader><leader>", function() Snacks.picker.files() end, desc = "Find files" },
-      { "<leader>ff", function() Snacks.picker.files() end, desc = "Find files" },
-      { "<leader>fg", function() Snacks.picker.grep() end, desc = "Live grep" },
-      { "<leader>fb", function() Snacks.picker.buffers() end, desc = "Buffers" },
-      { "<leader>fr", function() Snacks.picker.recent({ filter = { cwd = true } }) end, desc = "Recent files" },
-      { "<leader>fh", function() Snacks.picker.help() end, desc = "Help tags" },
-      { "<leader>fq", function() Snacks.picker.qflist() end, desc = "Quickfix" },
-      { "<leader>f/", function() Snacks.picker.lines() end, desc = "Grep buffer" },
-      { "<leader>bR", function() Snacks.rename.rename_file() end, desc = "Rename file" },
-      { "<leader>gz", function() Snacks.lazygit() end, desc = "Lazygit" },
-    },
     opts = {
       dashboard = {
-        enabled = true,
         preset = {
           keys = {
             { icon = "󰈞 ", key = "f", desc = "Find File", action = ":lua Snacks.dashboard.pick('files')" },
@@ -105,19 +114,12 @@ return {
           { section = "startup" },
         },
       },
-      explorer = { enabled = true },
-      lazygit = { enabled = true },
-      input = { enabled = true },
-      notifier = { enabled = true },
-      rename = { enabled = true },
       picker = {
-        ui_select = true,
         sources = {
           explorer = {
             win = {
               list = {
                 keys = {
-                  -- defaults use H / I; disable so only Alt matches picker + Ghostty macos-option-as-alt
                   ["H"] = false,
                   ["I"] = false,
                   ["<a-h>"] = "toggle_hidden",
@@ -144,9 +146,6 @@ return {
           wo = { wrap = true },
         },
       },
-      indent = { enabled = true },
-      words = { enabled = true },
-      statuscolumn = { enabled = true },
     },
   },
 }

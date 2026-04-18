@@ -44,7 +44,6 @@ return {
 
   {
     "mason-org/mason.nvim",
-    cmd = "Mason",
     opts = {
       registries = {
         "github:mason-org/mason-registry",
@@ -52,94 +51,70 @@ return {
       },
     },
   },
-  {
-    "mason-org/mason-lspconfig.nvim",
-    event = "VeryLazy",
-    dependencies = {
-      "mason-org/mason.nvim",
-      "neovim/nvim-lspconfig",
-      "saghen/blink.cmp",
-    },
-    config = function()
-      vim.lsp.config("*", {
-        capabilities = require("blink.cmp").get_lsp_capabilities(),
-      })
 
-      vim.lsp.config("gopls", {
-        settings = {
-          gopls = {
-            completeUnimported = true,
-            usePlaceholders = true,
-          },
+  -- Per-server settings overrides
+  {
+    "neovim/nvim-lspconfig",
+    opts = {
+      servers = {
+        bashls = {
+          filetypes = { "sh", "zsh", "bash" },
         },
-      })
-      vim.lsp.config("pyright", {
-        settings = {
-          python = {
-            analysis = {
-              autoImportCompletions = true,
+        gopls = {
+          settings = {
+            gopls = {
+              completeUnimported = true,
+              usePlaceholders = true,
             },
           },
         },
-      })
-      vim.lsp.config("vtsls", {
-        settings = {
-          typescript = {
-            tsserver = { maxTsServerMemory = 4096 },
-            suggest = { autoImports = true },
-            preferences = { includePackageJsonAutoImports = "auto" },
-          },
-          javascript = {
-            tsserver = { maxTsServerMemory = 4096 },
-            suggest = { autoImports = true },
-            preferences = { includePackageJsonAutoImports = "auto" },
+        pyright = {
+          settings = {
+            python = {
+              analysis = { autoImportCompletions = true },
+            },
           },
         },
-      })
-      vim.lsp.config("rust_analyzer", {
-        settings = {
-          ["rust-analyzer"] = {
-            completion = { autoimport = { enable = true } },
+        vtsls = {
+          settings = {
+            typescript = {
+              tsserver = { maxTsServerMemory = 4096 },
+              suggest = { autoImports = true },
+              preferences = { includePackageJsonAutoImports = "auto" },
+            },
+            javascript = {
+              tsserver = { maxTsServerMemory = 4096 },
+              suggest = { autoImports = true },
+              preferences = { includePackageJsonAutoImports = "auto" },
+            },
           },
         },
-      })
-      vim.lsp.config("bashls", {
-        filetypes = { "sh", "zsh", "bash" },
-      })
-      vim.lsp.config("lua_ls", {
-        settings = {
-          Lua = {
-            workspace = { checkThirdParty = false },
-            telemetry = { enable = false },
+        rust_analyzer = {
+          settings = {
+            ["rust-analyzer"] = {
+              completion = { autoimport = { enable = true } },
+            },
           },
         },
-      })
-
-      require("mason-lspconfig").setup({
-        ensure_installed = {
-          "bashls",
-          "gopls",
-          "pyright",
-          "vtsls",
-          "rust_analyzer",
-          "jsonls",
-          "lua_ls",
+        lua_ls = {
+          settings = {
+            Lua = {
+              workspace = { checkThirdParty = false },
+              telemetry = { enable = false },
+            },
+          },
         },
-        automatic_enable = true,
-      })
-    end,
+      },
+    },
   },
+
   {
     "saghen/blink.cmp",
-    version = "*",
-    event = { "InsertEnter", "CmdlineEnter" },
     opts = {
       keymap = { preset = "enter" },
       completion = {
         menu = {
-          draw = {
-            treesitter = { "lsp" },
-          },
+          draw = { treesitter = { "lsp" } },
         },
         documentation = {
           auto_show = true,
@@ -150,7 +125,7 @@ return {
         completion = {
           list = { selection = { preselect = false } },
           menu = {
-            auto_show = function(ctx)
+            auto_show = function()
               return vim.fn.getcmdtype() == ":"
             end,
           },
@@ -158,6 +133,7 @@ return {
       },
     },
   },
+
   {
     "seblyng/roslyn.nvim",
     event = "VeryLazy",
