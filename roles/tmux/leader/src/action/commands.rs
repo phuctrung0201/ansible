@@ -278,17 +278,6 @@ pub fn new_session() -> anyhow::Result<()> {
     do_new_session(String::new())
 }
 
-pub fn switch_to_cwd_session() -> anyhow::Result<()> {
-    let t = target();
-    let cwd = tmux::pane_cwd(&t).context("pane cwd")?;
-    let name = std::path::Path::new(cwd.trim())
-        .file_name()
-        .map(|s| s.to_string_lossy().trim().to_string())
-        .filter(|s| !s.is_empty())
-        .ok_or_else(|| anyhow::anyhow!("cannot derive session name from cwd {cwd:?}"))?;
-    do_new_session(name)
-}
-
 pub fn get_session_name() -> String {
     let t = target();
     tmux::session_name_for_pane(&t).unwrap_or_default()

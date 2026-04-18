@@ -35,8 +35,8 @@ setw -g menu-selected-style fg={{ theme.fg }},bg={{ theme.selection }}
 # interpreting $0 etc. as shell variables: tmux expands #{session_id}→$0 first, then
 # the shell sees '$0' (single-quoted literal) and passes it verbatim to display-popup.
 
-unbind-key -n F1
-bind-key -n F1 run-shell "tmux display-popup -w 90% -h 30% -b rounded -S fg={{ theme.purple }} \
+unbind-key -n F12
+bind-key -n F12 run-shell "tmux display-popup -w 90% -h 30% -b rounded -S fg={{ theme.purple }} \
   -e 'LEADER_SID=#{session_id}' \
   -e 'LEADER_WID=#{window_id}' \
   -e 'LEADER_PID=#{pane_id}' \
