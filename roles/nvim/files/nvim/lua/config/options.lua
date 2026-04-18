@@ -1,6 +1,7 @@
 local opt = vim.opt
 
 -- Deltas from LazyVim defaults
+opt.spell = false
 opt.number = true
 opt.relativenumber = true
 opt.showtabline = 2

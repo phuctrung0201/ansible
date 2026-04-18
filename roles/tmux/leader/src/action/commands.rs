@@ -86,8 +86,9 @@ pub fn open_scrollback() -> anyhow::Result<()> {
     let mut cmd = tmux_new_window_after_session_last(&cwd)?;
     cmd.arg("-n").arg("scrollback");
     // `+"…"` runs after the first file is loaded (:help +cmd): no number gutter, then EOF.
+    // statuscolumn= clears any plugin-set statuscolumn (e.g. snacks.nvim) that survives the other flags.
     cmd.arg("nvim").arg(concat!(
-        "+setlocal nonumber norelativenumber signcolumn=no foldcolumn=0",
+        "+setlocal nonumber norelativenumber signcolumn=no foldcolumn=0 statuscolumn=",
         " | silent! normal! G",
     ));
     cmd.arg(path.as_os_str());
@@ -254,9 +255,6 @@ pub fn last_session() -> anyhow::Result<()> {
     tmux::run_status(&["switch-client", "-l"])
 }
 
-pub fn detach_session() -> anyhow::Result<()> {
-    tmux::run_status(&["detach-client"])
-}
 
 pub fn do_new_session(name: String) -> anyhow::Result<()> {
     let name = name.trim();
@@ -278,6 +276,17 @@ pub fn do_new_session(name: String) -> anyhow::Result<()> {
 
 pub fn new_session() -> anyhow::Result<()> {
     do_new_session(String::new())
+}
+
+pub fn switch_to_cwd_session() -> anyhow::Result<()> {
+    let t = target();
+    let cwd = tmux::pane_cwd(&t).context("pane cwd")?;
+    let name = std::path::Path::new(cwd.trim())
+        .file_name()
+        .map(|s| s.to_string_lossy().trim().to_string())
+        .filter(|s| !s.is_empty())
+        .ok_or_else(|| anyhow::anyhow!("cannot derive session name from cwd {cwd:?}"))?;
+    do_new_session(name)
 }
 
 pub fn get_session_name() -> String {
