@@ -9,13 +9,24 @@ return {
   },
 
   {
+    "mfussenegger/nvim-lint",
+    opts = {
+      linters = {
+        sqlfluff = {
+          args = { "lint", "--format=json", "--dialect", "mysql" },
+        },
+      },
+    },
+  },
+
+  {
     "kristijanhusak/vim-dadbod-ui",
     keys = {
       { "<leader>DD", "<cmd>DBUIToggle<CR>", desc = "Toggle DB UI" },
     },
     init = function()
       vim.g.db_ui_use_nvim_notify = true
-      vim.g.db_ui_no_mappings = 1
+      vim.g.db_ui_disable_mappings = 1
 
       vim.api.nvim_create_autocmd("BufWinEnter", {
         callback = function()
@@ -43,6 +54,27 @@ return {
           map("n", "<leader>DE", "<Plug>(DBUI_EditBindParameters)", "Execute with bind params")
         end,
       })
+
+      vim.api.nvim_create_autocmd("FileType", {
+        pattern = "dbui",
+        callback = function(ev)
+          local map = function(l, r, desc)
+            vim.keymap.set("n", l, r, { buffer = ev.buf, desc = desc })
+          end
+          map("o", "<Plug>(DBUI_SelectLine)", "Open/toggle")
+          map("<CR>", "<Plug>(DBUI_SelectLine)", "Open/toggle")
+          map("<2-LeftMouse>", "<Plug>(DBUI_SelectLine)", "Open/toggle")
+          map("v", "<Plug>(DBUI_SelectLineVsplit)", "Open in vsplit")
+          map("d", "<Plug>(DBUI_DeleteLine)", "Delete")
+          map("D", "<Plug>(DBUI_DeleteLine)", "Delete connection")
+          map("R", "<Plug>(DBUI_Redraw)", "Redraw")
+          map("r", "<Plug>(DBUI_RenameLine)", "Rename")
+          map("A", "<Plug>(DBUI_AddConnection)", "Add connection")
+          map("H", "<Plug>(DBUI_ToggleDetails)", "Toggle details")
+          map("q", "<Plug>(DBUI_Quit)", "Quit")
+          map("?", "<Plug>(DBUI_ToggleHelp)", "Toggle help")
+        end,
+      })
     end,
   },
 
@@ -51,6 +83,7 @@ return {
     opts = {
       spec = {
         { "<leader>D", group = "database" },
+        { "<leader>D", group = "database", mode = "x" },
       },
     },
   },
