@@ -2,3 +2,14 @@
   homebrew:
     name: lazysql
     state: present
+
+- name: Ensure lazysql config directory exists
+  file:
+    path: "~/.config/lazysql"
+    state: directory
+
+- name: Deploy lazysql config
+  template:
+    src: config.toml.j2
+    dest: "~/.config/lazysql/config.toml"
+    backup: true
