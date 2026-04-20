@@ -5,6 +5,7 @@
   loop:
     - neovim
     - lazygit
+    - ripgrep
 
 - name: Ensure nvim config directory exists
   file:

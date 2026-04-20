@@ -22,8 +22,3 @@
 - name: Install Homebrew if not present
   shell: /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
   when: not brew_arm.stat.exists and not brew_intel.stat.exists
-
-- name: Install ripgrep
-  homebrew:
-    name: ripgrep
-    state: present

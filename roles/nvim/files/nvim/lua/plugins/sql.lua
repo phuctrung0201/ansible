@@ -9,14 +9,29 @@ return {
   },
 
   {
+    "stevearc/conform.nvim",
+    optional = true,
+    opts = function(_, opts)
+      opts.formatters_by_ft = opts.formatters_by_ft or {}
+      for _, ft in ipairs({ "sql", "mysql", "plsql" }) do
+        opts.formatters_by_ft[ft] = vim.tbl_filter(function(f)
+          return f ~= "sqlfluff"
+        end, opts.formatters_by_ft[ft] or {})
+      end
+    end,
+  },
+
+  {
     "mfussenegger/nvim-lint",
-    opts = {
-      linters = {
-        sqlfluff = {
-          args = { "lint", "--format=json", "--dialect", "mysql" },
-        },
-      },
-    },
+    optional = true,
+    opts = function(_, opts)
+      opts.linters_by_ft = opts.linters_by_ft or {}
+      for _, ft in ipairs({ "sql", "mysql", "plsql" }) do
+        opts.linters_by_ft[ft] = vim.tbl_filter(function(l)
+          return l ~= "sqlfluff"
+        end, opts.linters_by_ft[ft] or {})
+      end
+    end,
   },
 
   {
