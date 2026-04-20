@@ -30,11 +30,6 @@ pub static NODES: &[KeyNode] = &[
         kind: KeyNodeKind::Action(action::launch_nvim),
     },
     KeyNode {
-        key: 's',
-        label: "lazysql",
-        kind: KeyNodeKind::Action(action::launch_lazysql),
-    },
-    KeyNode {
         key: 'w',
         label: "wiki",
         kind: KeyNodeKind::Action(action::launch_wiki),

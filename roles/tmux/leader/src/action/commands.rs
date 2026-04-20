@@ -233,10 +233,6 @@ pub fn launch_k9s() -> anyhow::Result<()> {
     launch_app_in_new_window("k9s", &["k9s"])
 }
 
-pub fn launch_lazysql() -> anyhow::Result<()> {
-    launch_app_in_new_window("lazysql", &["lazysql"])
-}
-
 pub fn launch_nvim() -> anyhow::Result<()> {
     launch_app_in_new_window("nvim", &["nvim"])
 }
