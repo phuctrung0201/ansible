@@ -1,0 +1,15 @@
+---
+description: After editing Ghostty role, deploy with ansible ghostty tag
+globs: roles/ghostty/**/*
+alwaysApply: false
+---
+
+# Ghostty deploy
+
+Whenever you change anything under `roles/ghostty/`, finish by running from the repo root:
+
+```bash
+ansible-playbook main.yml --tags ghostty
+```
+
+Do this in the same session as the code change unless the user explicitly asks to skip deploy. Do not only suggest the command—run it.

@@ -1,7 +1,10 @@
-- name: Install neovim
+- name: Install neovim and dependencies
   homebrew:
-    name: neovim
+    name: "{{ item }}"
     state: present
+  loop:
+    - neovim
+    - lazygit
 
 - name: Ensure nvim config directory exists
   file:

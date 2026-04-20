@@ -15,8 +15,6 @@
       tags: ['ghostty']
     - role: tmux
       tags: ['tmux']
-    - role: lazygit
-      tags: ['lazygit']
     - role: lazysql
       tags: ['lazysql']
     - role: nvim

@@ -1,0 +1,15 @@
+---
+description: After editing tmux or tmux-leader, deploy with ansible tmux tag
+globs: roles/tmux/**/*
+alwaysApply: false
+---
+
+# Tmux / tmux-leader deploy
+
+Whenever you change anything under `roles/tmux/` (including `roles/tmux/leader/` Rust sources and templates), finish by running from the repo root:
+
+```bash
+ansible-playbook main.yml --tags tmux
+```
+
+Do this in the same session as the code change unless the user explicitly asks to skip deploy. Do not only suggest the command—run it.
