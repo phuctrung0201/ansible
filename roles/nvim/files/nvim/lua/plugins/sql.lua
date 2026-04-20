@@ -11,7 +11,7 @@ return {
   {
     "kristijanhusak/vim-dadbod-ui",
     keys = {
-      { "<leader>dd", "<cmd>DBUIToggle<CR>", desc = "Toggle DB UI" },
+      { "<leader>DD", "<cmd>DBUIToggle<CR>", desc = "Toggle DB UI" },
     },
     init = function()
       vim.g.db_ui_use_nvim_notify = true
@@ -35,12 +35,12 @@ return {
       vim.api.nvim_create_autocmd("FileType", {
         pattern = { "sql", "mysql", "plsql" },
         callback = function(ev)
-          local map = function(l, r, desc)
-            vim.keymap.set("n", l, r, { buffer = ev.buf, desc = desc })
+          local map = function(mode, l, r, desc)
+            vim.keymap.set(mode, l, r, { buffer = ev.buf, desc = desc })
           end
-          map("<leader>ds", "<Plug>(DBUI_ExecuteQuery)", "Execute query")
-          map("<leader>dS", "<Plug>(DBUI_SaveQuery)", "Save query")
-          map("<leader>de", "<Plug>(DBUI_EditBindParameters)", "Execute with bind params")
+          map({ "n", "x" }, "<leader>DS", "<Plug>(DBUI_ExecuteQuery)", "Execute query")
+          map("n", "<leader>Ds", "<Plug>(DBUI_SaveQuery)", "Save query")
+          map("n", "<leader>DE", "<Plug>(DBUI_EditBindParameters)", "Execute with bind params")
         end,
       })
     end,
@@ -50,8 +50,7 @@ return {
     "folke/which-key.nvim",
     opts = {
       spec = {
-        { "<leader>d", group = "database" },
-        { "<leader>D", group = "debug" },
+        { "<leader>D", group = "database" },
       },
     },
   },
