@@ -11,11 +11,11 @@ return {
   {
     "kristijanhusak/vim-dadbod-ui",
     keys = {
-      { "<leader>D", false },
       { "<leader>dd", "<cmd>DBUIToggle<CR>", desc = "Toggle DB UI" },
     },
     init = function()
       vim.g.db_ui_use_nvim_notify = true
+      vim.g.db_ui_no_mappings = 1
 
       vim.api.nvim_create_autocmd("BufWinEnter", {
         callback = function()
