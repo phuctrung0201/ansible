@@ -129,7 +129,7 @@ pub(crate) fn run(
                 if context::is_attach_session_group(state) && !state.session_rows.is_empty() {
                     if let Some(name) = state.selected_session_name() {
                         super::term::restore_global();
-                        return crate::action::focus_session_from_leader(name);
+                        return crate::action::attach_session_from_leader(name);
                     }
                 }
                 if context::pane_section_visible(state) && !state.pane_rows.is_empty() {
@@ -189,7 +189,7 @@ pub(crate) fn run(
                             if i < n {
                                 let name = state.session_rows[i].label.clone();
                                 super::term::restore_global();
-                                return crate::action::focus_session_from_leader(name);
+                                return crate::action::attach_session_from_leader(name);
                             }
                         }
                     }

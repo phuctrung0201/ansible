@@ -320,3 +320,9 @@ pub fn kill_other_sessions() -> anyhow::Result<()> {
 pub fn focus_session_from_leader(name: String) -> anyhow::Result<()> {
     tmux::run_status(&["switch-client", "-t", &name])
 }
+
+pub fn attach_session_from_leader(name: String) -> anyhow::Result<()> {
+    let wt = tmux::window_target(tmux::initial_window_id());
+    tmux::run_status(&["move-window", "-s", &wt, "-t", &name])?;
+    tmux::run_status(&["switch-client", "-t", &name])
+}
