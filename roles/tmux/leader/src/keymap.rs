@@ -20,6 +20,11 @@ pub static SESSION_NODES: &[KeyNode] = &[
         kind: KeyNodeKind::Action(action::last_session),
     },
     KeyNode {
+        key: 'a',
+        label: "add session",
+        kind: KeyNodeKind::Action(action::new_session),
+    },
+    KeyNode {
         key: 'k',
         label: "kill session",
         kind: KeyNodeKind::Action(action::kill_session),
@@ -28,11 +33,6 @@ pub static SESSION_NODES: &[KeyNode] = &[
         key: 'K',
         label: "kill other sessions",
         kind: KeyNodeKind::Action(action::kill_other_sessions),
-    },
-    KeyNode {
-        key: 'n',
-        label: "new session",
-        kind: KeyNodeKind::Action(action::new_session),
     },
     KeyNode {
         key: 'p',
@@ -86,6 +86,11 @@ pub static KEYMAP: &[KeyNode] = &[
     // --- a–z (case-insensitive; lower then upper per letter) ---
     KeyNode {
         key: 'a',
+        label: "add window",
+        kind: KeyNodeKind::Action(action::new_window),
+    },
+    KeyNode {
+        key: 'A',
         label: "attach to session",
         kind: KeyNodeKind::Group {
             icon: "\u{f233}",
@@ -114,11 +119,6 @@ pub static KEYMAP: &[KeyNode] = &[
             icon: "\u{f14de}",
             nodes: launcher::NODES,
         },
-    },
-    KeyNode {
-        key: 'n',
-        label: "new window",
-        kind: KeyNodeKind::Action(action::new_window),
     },
     KeyNode {
         key: 'S',
