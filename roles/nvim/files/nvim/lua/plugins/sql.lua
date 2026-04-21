@@ -42,6 +42,7 @@ return {
     init = function()
       vim.g.db_ui_use_nvim_notify = true
       vim.g.db_ui_disable_mappings = 1
+      vim.g.db_ui_auto_execute_table_helpers = 0
 
       vim.api.nvim_create_autocmd("BufWinEnter", {
         callback = function()
