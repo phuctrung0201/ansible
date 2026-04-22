@@ -16,7 +16,7 @@ use super::{
     layout::{label_width, slot_spans, top_rect},
     pills::{pane_pill_lines, window_pill_lines},
     theme::{
-        palette, ACTIONS_TITLE_ICON, COLS, PANES_SECTION_ICON, SESSIONS_SECTION_ICON,
+        palette, ACTIONS_TITLE_ICON, COLS, PANES_SECTION_ICON, ROWS, SESSIONS_SECTION_ICON,
         TABS_SECTION_ICON,
     },
 };
@@ -61,7 +61,7 @@ pub(crate) fn render(frame: &mut Frame, state: &LeaderState) {
     let n_rows = if pending_panel || context::is_attach_session_group(state) {
         0u16
     } else {
-        COLS as u16
+        ROWS as u16
     };
 
     let pill_max_w = (area.width as usize).saturating_sub(4).max(20);
@@ -232,13 +232,13 @@ pub(crate) fn render(frame: &mut Frame, state: &LeaderState) {
     }
     if !pending_panel && !context::is_attach_session_group(state) {
         lines.extend(divider_with_vertical_margin(&header, div_w, t.mauve));
-        for row in 0..COLS {
+        for row in 0..ROWS {
             let mut spans: Vec<Span> = Vec::new();
             for col in 0..COLS {
-                let idx = col * COLS + row;
+                let idx = col * ROWS + row;
                 if let Some(node) = nodes.get(idx) {
                     let is_last = col + 1 == COLS
-                        || (col + 1..COLS).all(|c| nodes.get(c * COLS + row).is_none());
+                        || (col + 1..COLS).all(|c| nodes.get(c * ROWS + row).is_none());
                     let icon = match &node.kind {
                         keynode::KeyNodeKind::Group { icon, .. } if !icon.is_empty() => {
                             format!("{} ", icon)

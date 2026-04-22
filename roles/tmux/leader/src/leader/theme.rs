@@ -3,6 +3,7 @@
 pub(crate) use super::palette::palette;
 
 pub(crate) const COLS: usize = 4;
+pub(crate) const ROWS: usize = 3;
 pub(crate) const KEY_WIDTH: usize = 5; // widest key label is "space" (5 chars)
 
 /// Nerd Fonts / Powerline Extra. Both caps use `bg(dracula_bg)` / `fg` = pill fill color.

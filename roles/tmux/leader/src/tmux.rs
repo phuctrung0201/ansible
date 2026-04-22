@@ -193,7 +193,7 @@ fn init_from_env() -> anyhow::Result<()> {
 ///
 /// Preferred tmux.conf form — no format args needed, avoids `#` comment / quoting issues:
 /// ```text
-/// bind-key -n F12 display-popup -w 90% -h 30% -b rounded -E '/path/tmux-leader'
+/// bind-key -n F12 display-popup -w 90% -h 25% -b rounded -E '/path/tmux-leader'
 /// ```
 pub fn init_from_args(argv: &[String]) -> anyhow::Result<()> {
     if argv.is_empty() {
