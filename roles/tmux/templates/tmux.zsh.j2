@@ -15,7 +15,7 @@ _tmux_cwd_for_status() {
 _tmux_session_pill_for_status() {
   local name="$1"
   [[ -z "$name" ]] && return 0
-  print -r -- "#[fg={{ theme.green }},bg=default]#[fg={{ theme.bg }},bg={{ theme.green }},bold] $name  #[fg={{ theme.green }},bg=default]"
+  print -r -- "#[fg={{ theme.green }},bg=default]#[fg={{ theme.bg }},bg={{ theme.green }},bold]  $name #[fg={{ theme.green }},bg=default]"
 }
 
 _tmux_k8s_pill_for_status() {
@@ -23,7 +23,7 @@ _tmux_k8s_pill_for_status() {
   local ctx
   ctx=$(kubectl config current-context 2>/dev/null) || return 0
   [[ -z "$ctx" ]] && return 0
-  print -r -- "#[fg={{ theme.blue }},bg=default]#[fg={{ theme.bg }},bg={{ theme.blue }},bold] $ctx ⎈ #[fg={{ theme.blue }},bg=default]"
+  print -r -- "#[fg={{ theme.blue }},bg=default]#[fg={{ theme.bg }},bg={{ theme.blue }},bold] ⎈ $ctx #[fg={{ theme.blue }},bg=default]"
 }
 
 _tmux_git_pill_for_status() {
@@ -36,7 +36,7 @@ _tmux_git_pill_for_status() {
         || branch=$(git -C "$walk" rev-parse --short HEAD 2>/dev/null) \
         || branch=""
       [[ -z "$branch" ]] && return 0
-      print -r -- "#[fg={{ theme.orange }},bg=default]#[fg={{ theme.bg }},bg={{ theme.orange }},bold] $branch  #[fg={{ theme.orange }},bg=default]"
+      print -r -- "#[fg={{ theme.orange }},bg=default]#[fg={{ theme.bg }},bg={{ theme.orange }},bold]  $branch #[fg={{ theme.orange }},bg=default]"
       return 0
     fi
     [[ "$walk" == */* ]] || break
