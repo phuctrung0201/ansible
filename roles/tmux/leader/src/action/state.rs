@@ -26,6 +26,7 @@ pub struct LeaderPaneRow {
     pub current: bool,
 }
 
+
 const LEADER_HEADER_ICON: &str = "\u{f0e7}";
 pub const PILL_STRIP_CAP: usize = 24;
 

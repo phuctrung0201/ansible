@@ -3,7 +3,7 @@
 set -g mouse on
 
 # Status bar — rounded pills like tmux-leader (`theme.rs`: ROUND_CAP_L \uE0B6, ROUND_CAP_R \uE0B4; Nerd Font).
-set -g status on
+set -g status 2
 set -g status-position bottom
 # Slower refresh = less work overlapping window resize redraws; #(…) cwd runs at this interval too.
 set -g status-interval 5
@@ -13,9 +13,11 @@ set -g status-justify left
 set -g status-style fg={{ theme.fg }},bg=default
 set -g status-left-length 200
 set -g status-right-length 320
-# Left: session (green) + git pills. Right: cwd (pink) — helpers live in tmux.zsh (session-pill / git-pill / cwd-pill).
-set -g status-left "#[bg=default]#(zsh ~/.config/tmux/tmux.zsh session-pill \"#{session_name}\") #(zsh ~/.config/tmux/tmux.zsh git-pill \"#{pane_current_path}\")"
-set -g status-right "#[fg={{ theme.pink }},bg=default]#[fg={{ theme.bg }},bg={{ theme.pink }},bold]  #(zsh ~/.config/tmux/tmux.zsh cwd-pill \"#{pane_current_path}\") #[fg={{ theme.pink }},bg=default,nobold]"
+# Two lines: git alone (top), cwd + session together (bottom).
+set -g status-left ""
+set -g status-right ""
+set -g status-format[0] "#[align=right,bg=default]#(zsh ~/.config/tmux/tmux.zsh git-pill \"#{pane_current_path}\") #(zsh ~/.config/tmux/tmux.zsh k8s-pill)"
+set -g status-format[1] "#[align=right,bg=default]#[fg={{ theme.pink }},bg=default]#[fg={{ theme.bg }},bg={{ theme.pink }},bold] #(zsh ~/.config/tmux/tmux.zsh cwd-pill \"#{pane_current_path}\")  #[fg={{ theme.pink }},bg=default,nobold]#[default] #(zsh ~/.config/tmux/tmux.zsh session-pill \"#{session_name}\")"
 
 setw -g window-status-separator ""
 setw -g window-status-format ''
