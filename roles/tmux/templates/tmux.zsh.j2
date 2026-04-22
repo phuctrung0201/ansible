@@ -3,13 +3,15 @@
 #   zsh ~/.config/tmux/tmux.zsh cwd-pill "#{pane_current_path}"
 #   zsh ~/.config/tmux/tmux.zsh git-pill "#{pane_current_path}"
 
-_tmux_cwd_for_status() {
+_tmux_cwd_pill_for_status() {
   local p="$1"
   local h="${HOME%/}"
-  [[ -z "$h" ]] && { echo "$p"; return 0; }
-  [[ "$p" == "$h" ]] && { echo '~'; return 0; }
-  [[ "$p" == "$h"/* ]] && { echo "~/${p#"$h"/}"; return 0; }
-  echo "$p"
+  if [[ -n "$h" ]]; then
+    [[ "$p" == "$h" ]] && p='~'
+    [[ "$p" == "$h"/* ]] && p="~/${p#"$h"/}"
+  fi
+  [[ -z "$p" ]] && return 0
+  print -r -- "#[fg={{ theme.pink }},bg=default]#[fg={{ theme.bg }},bg={{ theme.pink }},bold]  $p #[fg={{ theme.pink }},bg=default]"
 }
 
 _tmux_session_pill_for_status() {
@@ -49,7 +51,7 @@ _tmux_git_pill_for_status() {
 # $# > 0 only in that case; $# == 0 when sourced from zshrc.
 if [[ $# -gt 0 ]]; then
   case "$1" in
-    cwd-pill)    shift; _tmux_cwd_for_status "$@" ;;
+    cwd-pill)    shift; _tmux_cwd_pill_for_status "$@" ;;
     git-pill)      shift; _tmux_git_pill_for_status "$@" ;;
     k8s-pill)      _tmux_k8s_pill_for_status ;;
     session-pill)  shift; _tmux_session_pill_for_status "$@" ;;

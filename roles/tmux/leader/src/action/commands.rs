@@ -88,7 +88,7 @@ pub fn open_scrollback() -> anyhow::Result<()> {
     // `+"…"` runs after the first file is loaded (:help +cmd): no number gutter, then EOF.
     // statuscolumn= clears any plugin-set statuscolumn (e.g. snacks.nvim) that survives the other flags.
     cmd.arg("nvim").arg(concat!(
-        "+setlocal nonumber norelativenumber signcolumn=no foldcolumn=0 statuscolumn=",
+        "+setlocal nonumber relativenumber signcolumn=no foldcolumn=0 statuscolumn= nowrap nomodifiable",
         " | silent! normal! G",
     ));
     cmd.arg(path.as_os_str());
