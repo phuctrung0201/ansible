@@ -16,8 +16,8 @@ set -g status-right-length 320
 # Two lines: git alone (top), cwd + session together (bottom).
 set -g status-left ""
 set -g status-right ""
-set -g status-format[0] "#[align=right,bg=default]#(zsh ~/.config/tmux/tmux.zsh git-pill \"#{pane_current_path}\") #(zsh ~/.config/tmux/tmux.zsh k8s-pill)"
-set -g status-format[1] "#[align=right,bg=default]#[fg={{ theme.pink }},bg=default]#[fg={{ theme.bg }},bg={{ theme.pink }},bold] #(zsh ~/.config/tmux/tmux.zsh cwd-pill \"#{pane_current_path}\")  #[fg={{ theme.pink }},bg=default,nobold]#[default] #(zsh ~/.config/tmux/tmux.zsh session-pill \"#{session_name}\")"
+set -g status-format[0] "#[align=right,bg=default]#(zsh ~/.config/tmux/tmux.zsh git-pill \"#{pane_current_path}\")#(zsh ~/.config/tmux/tmux.zsh k8s-pill)"
+set -g status-format[1] "#[align=right,bg=default]#[fg={{ theme.pink }},bg=default]#[fg={{ theme.bg }},bg={{ theme.pink }},bold] #(zsh ~/.config/tmux/tmux.zsh cwd-pill \"#{pane_current_path}\")  #[fg={{ theme.pink }},bg=default,nobold]#(zsh ~/.config/tmux/tmux.zsh session-pill \"#{session_name}\")"
 
 setw -g window-status-separator ""
 setw -g window-status-format ''
