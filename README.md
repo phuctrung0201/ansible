@@ -4,7 +4,6 @@ This repository stores personal machine setup for:
  - [Ghostty](https://ghostty.org/)
  - [AeroSpace](https://github.com/nikitabobko/AeroSpace)
  - [Neovim](https://neovim.io/)
- - [tmux](https://github.com/tmux/tmux)
  - [mise](https://mise.jdx.dev/)
 
 # Prerequisites

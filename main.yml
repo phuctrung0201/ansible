@@ -13,8 +13,6 @@
       tags: ['mise']
     - role: ghostty
       tags: ['ghostty']
-    - role: tmux
-      tags: ['tmux']
     - role: nvim
       tags: ['nvim']
     - role: aerospace

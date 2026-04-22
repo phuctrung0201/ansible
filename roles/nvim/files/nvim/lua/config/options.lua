@@ -2,9 +2,9 @@ local opt = vim.opt
 
 -- Deltas from LazyVim defaults
 opt.spell = false
-opt.number = true
+opt.number = false
 opt.relativenumber = true
-opt.showtabline = 2
+opt.showtabline = 0
 opt.wrap = true
 opt.scrolloff = 8
 opt.tabstop = 2

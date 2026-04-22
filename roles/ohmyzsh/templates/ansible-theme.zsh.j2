@@ -5,7 +5,8 @@
 # Hex via vars so the Jinja template parser stays happy (no raw truecolor tokens in PROMPT).
 _theme_ok='#{{ theme.purple | replace("#", "") }}'
 _theme_err='#{{ theme.red | replace("#", "") }}'
-PROMPT="%(?.%B%F{${_theme_ok}}.%B%F{${_theme_err}})"$'\u203A\u203A\u203A'"%f%b "
+_theme_green='#{{ theme.green | replace("#", "") }}'
+PROMPT="%F{${_theme_ok}}%~%f"$'\n'"%(?.%B%F{${_theme_green}}.%B%F{${_theme_err}})"$'\u2192'"%f%b "
 
 # Suggestions: same muted tone as `theme.comment`
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=#{{ theme.comment | replace('#', '') }}'
