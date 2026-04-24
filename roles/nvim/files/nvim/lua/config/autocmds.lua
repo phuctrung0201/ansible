@@ -6,3 +6,8 @@ autocmd("FileType", {
   pattern = "*",
   callback = function() vim.opt_local.spell = false end,
 })
+
+autocmd("TermOpen", {
+  group = augroup("term_scrollback", { clear = true }),
+  callback = function() vim.opt_local.scrollback = 1000 end,
+})
