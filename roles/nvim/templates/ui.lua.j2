@@ -2,6 +2,18 @@ return {
   { "akinsho/bufferline.nvim", enabled = false },
 
   {
+    "nvim-lualine/lualine.nvim",
+    opts = function(_, opts)
+      opts.sections.lualine_c = {
+        { "filename", path = 3 },
+      }
+      opts.sections.lualine_y = {}
+      opts.sections.lualine_z = {}
+      return opts
+    end,
+  },
+
+  {
     "catppuccin/nvim",
     name = "catppuccin",
     lazy = false,
