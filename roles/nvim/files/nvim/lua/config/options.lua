@@ -2,7 +2,6 @@ local opt = vim.opt
 
 -- Deltas from LazyVim defaults
 opt.spell = false
-opt.showtabline = 0
 opt.wrap = true
 opt.scrolloff = 8
 opt.tabstop = 2
