@@ -8,4 +8,15 @@ return {
     },
   },
 
+  {
+    "akinsho/bufferline.nvim",
+    opts = function(_, opts)
+      opts.options = opts.options or {}
+      opts.options.offsets = vim.tbl_filter(function(o)
+        return o.filetype ~= "snacks_layout_box"
+      end, opts.options.offsets or {})
+      return opts
+    end,
+  },
+
 }
