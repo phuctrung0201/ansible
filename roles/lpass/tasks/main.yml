@@ -2,3 +2,9 @@
   homebrew:
     name: lastpass-cli
     state: present
+
+- name: Set LPASS_AGENT_TIMEOUT to never expire
+  lineinfile:
+    path: "~/.zshrc"
+    line: 'export LPASS_AGENT_TIMEOUT=0'
+    state: present
