@@ -58,3 +58,12 @@
     block: |
       source "${HOME}/.config/zsh/ansible-theme.zsh"
 
+- name: Configure zsh edit-command-line keybinding (alt+e)
+  blockinfile:
+    path: "~/.zshrc"
+    marker: "# {mark} ANSIBLE zsh keybindings"
+    block: |
+      autoload -U edit-command-line
+      zle -N edit-command-line
+      bindkey '^[e' edit-command-line
+
