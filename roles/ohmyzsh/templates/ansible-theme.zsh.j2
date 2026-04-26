@@ -1,12 +1,5 @@
-# Managed by Ansible — colors from share.yml `theme`.
+# Managed by Ansible — shell styling from share.yml `theme`.
 # Regenerate: ansible-playbook main.yml --tags ohmyzsh
-
-# Prompt: ››› (U+203A ×3); purple on success, red on failure (share.yml truecolor).
-# Hex via vars so the Jinja template parser stays happy (no raw truecolor tokens in PROMPT).
-_theme_ok='#{{ theme.purple | replace("#", "") }}'
-_theme_err='#{{ theme.red | replace("#", "") }}'
-_theme_green='#{{ theme.green | replace("#", "") }}'
-PROMPT="%F{${_theme_ok}}%~%f"$'\n'"%(?.%B%F{${_theme_green}}.%B%F{${_theme_err}})"$'\u2192'"%f%b "
 
 # Suggestions: same muted tone as `theme.comment`
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=#{{ theme.comment | replace('#', '') }}'
