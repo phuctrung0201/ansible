@@ -1,11 +1,7 @@
 return {
   {
     "akinsho/bufferline.nvim",
-    opts = {
-      options = {
-        always_show_bufferline = true,
-      },
-    },
+    enabled = false,
   },
 
   {
@@ -13,7 +9,7 @@ return {
     opts = function(_, opts)
       opts.sections.lualine_c = {}
       opts.sections.lualine_y = {}
-      opts.sections.lualine_z = {}
+      opts.sections.lualine_z = { { "filename", path = 3, color = { bg = "NONE", fg = "{{ theme.comment }}" } } }
       opts.winbar = {}
       opts.inactive_winbar = {}
       return opts
