@@ -1,7 +1,22 @@
 return {
   {
     "akinsho/bufferline.nvim",
-    enabled = false,
+    opts = {
+      options = {
+        mode = "tabs",
+        tab_size = 18,
+        show_buffer_close_icons = false,
+        show_close_icon = false,
+        always_show_bufferline = true,
+        name_formatter = function(buf)
+          for i, tp in ipairs(vim.api.nvim_list_tabpages()) do
+            if tp == buf.tabnr then
+              return vim.fn.fnamemodify(vim.fn.getcwd(-1, i), ":t")
+            end
+          end
+        end,
+      },
+    },
   },
 
   {
@@ -99,6 +114,14 @@ return {
       },
       picker = {
         sources = {
+          projects = {
+            confirm = function(picker, item)
+              picker:close()
+              if item then
+                vim.cmd.tcd(Snacks.picker.util.dir(item))
+              end
+            end,
+          },
           explorer = {
             win = {
               list = {
