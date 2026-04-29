@@ -130,5 +130,8 @@ return {
         },
       },
     },
+    keys = {
+      { "<leader>,", function() Snacks.picker.buffers({ layout = { preview = false } }) end, desc = "Switch Buffer" },
+    },
   },
 }
