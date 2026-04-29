@@ -1,6 +1,7 @@
 local opt = vim.opt
 
 -- Deltas from LazyVim defaults
+opt.confirm = false
 opt.spell = false
 opt.wrap = false
 opt.scrolloff = 8
