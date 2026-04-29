@@ -2,6 +2,29 @@ return {
   { "terrastruct/d2-vim", ft = "d2" },
 
   {
+    "folke/snacks.nvim",
+    opts = {
+      picker = {
+        win = {
+          input = {
+            keys = {
+              ["<c-g>"] = { "toggle_ignored", mode = { "i", "n" } },
+              ["<c-h>"] = { "toggle_hidden", mode = { "i", "n" } },
+            },
+          },
+          list = {
+            keys = {
+              ["<c-g>"] = "toggle_ignored",
+              ["<c-h>"] = "toggle_hidden",
+            },
+          },
+        },
+      },
+    },
+  },
+
+
+  {
     "nvim-treesitter/nvim-treesitter",
     opts = {
       ensure_installed = { "c_sharp" },
