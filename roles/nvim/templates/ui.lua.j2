@@ -154,7 +154,9 @@ return {
       },
     },
     keys = {
-      { "<leader>,", function() Snacks.picker.buffers({ layout = { preview = false } }) end, desc = "Switch Buffer" },
+      { "<leader>,", function() Snacks.picker.buffers({ layout = { preview = false }, filter = { cwd = true } }) end, desc = "Switch Buffer" },
+      { "<leader>fb", function() Snacks.picker.buffers({ layout = { preview = false } }) end, desc = "Buffers" },
+      { "<leader>fB", function() Snacks.picker.buffers({ hidden = true, nofile = true, layout = { preview = false } }) end, desc = "Buffers (all)" },
     },
   },
 }
