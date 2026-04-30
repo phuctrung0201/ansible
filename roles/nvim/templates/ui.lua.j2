@@ -8,13 +8,6 @@ return {
         show_buffer_close_icons = false,
         show_close_icon = false,
         always_show_bufferline = true,
-        name_formatter = function(buf)
-          for i, tp in ipairs(vim.api.nvim_list_tabpages()) do
-            if tp == buf.tabnr then
-              return vim.fn.fnamemodify(vim.fn.getcwd(-1, i), ":t")
-            end
-          end
-        end,
       },
     },
   },
@@ -114,14 +107,6 @@ return {
       },
       picker = {
         sources = {
-          projects = {
-            confirm = function(picker, item)
-              picker:close()
-              if item then
-                vim.cmd.tcd(Snacks.picker.util.dir(item))
-              end
-            end,
-          },
           explorer = {
             win = {
               list = {
@@ -154,7 +139,7 @@ return {
       },
     },
     keys = {
-      { "<leader>,", function() Snacks.picker.buffers({ layout = { preview = false }, filter = { cwd = true } }) end, desc = "Switch Buffer" },
+      { "<leader>,", function() Snacks.picker.buffers({ layout = { preview = false } }) end, desc = "Buffers" },
       { "<leader>fb", function() Snacks.picker.buffers({ layout = { preview = false } }) end, desc = "Buffers" },
       { "<leader>fB", function() Snacks.picker.buffers({ hidden = true, nofile = true, layout = { preview = false } }) end, desc = "Buffers (all)" },
     },
