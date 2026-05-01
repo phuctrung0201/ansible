@@ -17,7 +17,7 @@ return {
     opts = function(_, opts)
       opts.sections.lualine_c = {}
       opts.sections.lualine_y = {}
-      opts.sections.lualine_z = { { "filename", path = 3, color = { bg = "NONE", fg = "{{ theme.comment }}" } } }
+      opts.sections.lualine_z = { { "filename", path = 3, color = { bg = "{{ theme.selection }}", fg = "{{ theme.comment }}" } } }
       opts.winbar = {}
       opts.inactive_winbar = {}
       return opts
