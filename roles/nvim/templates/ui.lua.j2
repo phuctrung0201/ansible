@@ -4,10 +4,9 @@ return {
     opts = {
       options = {
         mode = "tabs",
-        tab_size = 18,
+        always_show_bufferline = false,
         show_buffer_close_icons = false,
         show_close_icon = false,
-        always_show_bufferline = true,
       },
     },
   },
@@ -16,9 +15,9 @@ return {
     "nvim-lualine/lualine.nvim",
     opts = function(_, opts)
       opts.sections.lualine_c = {}
-      opts.sections.lualine_y = {}
-      opts.sections.lualine_z = { { "filename", path = 3, color = { bg = "{{ theme.selection }}", fg = "{{ theme.comment }}" } } }
-      opts.winbar = {}
+      opts.sections.lualine_y = { { "filename", path = 3 } }
+      opts.sections.lualine_z = {}
+      opts.winbar = { lualine_y = { { function() return vim.fn.fnamemodify(vim.fn.getcwd(), ":~") end, icon = "" } } }
       opts.inactive_winbar = {}
       return opts
     end,
