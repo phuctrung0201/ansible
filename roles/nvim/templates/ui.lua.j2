@@ -14,10 +14,14 @@ return {
   {
     "nvim-lualine/lualine.nvim",
     opts = function(_, opts)
+      opts.sections.lualine_b = { { function()
+        local branch = vim.fn.systemlist("git -C " .. vim.fn.shellescape(vim.fn.getcwd()) .. " rev-parse --abbrev-ref HEAD 2>/dev/null")[1]
+        return (branch and not branch:match("^fatal")) and branch or ""
+      end, icon = "" } }
       opts.sections.lualine_c = {}
-      opts.sections.lualine_y = { { "filename", path = 3 } }
+      opts.sections.lualine_y = { { function() return vim.fn.fnamemodify(vim.fn.getcwd(), ":~") end, icon = "" } }
       opts.sections.lualine_z = {}
-      opts.winbar = { lualine_y = { { function() return vim.fn.fnamemodify(vim.fn.getcwd(), ":~") end, icon = "" } } }
+      opts.winbar = { lualine_x = { { "filename", path = 3 } } }
       opts.inactive_winbar = {}
       return opts
     end,
