@@ -37,4 +37,4 @@ bind -n M-\\ display-menu -T " helper " -S "fg={{ theme.purple }}" -x R -y P \
   "switch session"        S "choose-tree -Zs" \
   "switch window"         W "choose-window -Z" \
   "copy mode"            c "copy-mode" \
-  "copy buffer"          C "display-popup -E 'tmux capture-pane -pS - -t #{pane_id} | nvim -M - -c \"norm G\"'"
+  "copy buffer"          C "display-popup -E 'tmux capture-pane -pS - -t #{pane_id} | nvim - -c \"setlocal nomodifiable\" -c \"norm G\"'"
