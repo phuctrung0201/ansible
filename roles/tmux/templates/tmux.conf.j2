@@ -2,6 +2,7 @@ set -g default-terminal "tmux-256color"
 set -ag terminal-overrides ",xterm-256color:RGB"
 
 set -g mode-keys vi
+set -g mouse on
 set -g status-position top
 
 # Status bar
@@ -20,13 +21,11 @@ set -g pane-active-border-style "fg={{ theme.purple }}"
 bind -n M-\\ display-menu -T " helper " -S "fg={{ theme.purple }}" -x R -y P \
   "delete other sessions" O "kill-session -a" \
   "delete other windows"  o "kill-window -a" \
-  "delete session"        D "display-popup -E 'zsh -ic _tmux_kill_session'" \
-  "delete window"         d "display-popup -E 'zsh -ic _tmux_delete_window'" \
-  "new session"         N "display-popup -E 'zsh -ic _tmux_new_session'" \
-  "new window"          n "display-popup -E 'zsh -ic _tmux_new_window'" \
-  "rename session"      R "display-popup -E 'zsh -ic _tmux_rename_session'" \
-  "rename window"       r "display-popup -E 'zsh -ic _tmux_rename_window'" \
-  "split horizontal"    h "split-window -h" \
-  "split vertical"      v "split-window -v" \
-  "switch session"      S "display-popup -E 'zsh -ic _tmux_switch_session'" \
-  "switch window"       s "display-popup -E 'zsh -ic _tmux_switch_window'"
+  "new session"           N "new-session" \
+  "new window"            n "new-window" \
+  "rename session"        R "command-prompt -I '#S' 'rename-session %%'" \
+  "rename window"         r "command-prompt -I '#W' 'rename-window %%'" \
+  "split horizontal"      h "split-window -h" \
+  "split vertical"        v "split-window -v" \
+  "switch session"        S "choose-tree -Zs" \
+  "switch window"         s "choose-window -Z"
