@@ -9,33 +9,25 @@ set -g mode-keys vi
 set -g mouse on
 set -g status-position top
 
-# Status bar
+# Appearance
 set -g status-style "bg=default,fg={{ theme.fg }}"
 set -g status-left ""
-set -g status-right "#[fg={{ theme.fg }},bg=default,nobold] #W #[fg={{ theme.surface0 }},bg=default]#[fg=#{?client_prefix,{{ theme.blue }},#{?pane_in_mode,{{ theme.purple }},{{ theme.green }}}},bg={{ theme.surface0 }},nobold] #S 󰽘 #[fg=#{?client_prefix,{{ theme.blue }},#{?pane_in_mode,{{ theme.purple }},{{ theme.green }}}},bg={{ theme.surface0 }}]#[fg={{ theme.bg }},bg=#{?client_prefix,{{ theme.blue }},#{?pane_in_mode,{{ theme.purple }},{{ theme.green }}}},bold] #{?client_prefix,PREFIX,#{?pane_in_mode,COPY,SHELL}} "
+set -g status-right "#[fg={{ theme.fg }},bg=default,nobold] #W #[fg={{ theme.surface0 }},bg=default]#[fg=#{?client_prefix,{{ theme.blue }},#{?pane_in_mode,{{ theme.purple }},{{ theme.green }}}},bg={{ theme.surface0 }},nobold] #S 󰽘 #[fg=#{?client_prefix,{{ theme.blue }},#{?pane_in_mode,{{ theme.purple }},{{ theme.green }}}},bg={{ theme.surface0 }}]#[fg={{ theme.bg }},bg=#{?client_prefix,{{ theme.blue }},#{?pane_in_mode,{{ theme.purple }},{{ theme.green }}}},bold] #{?client_prefix,PREFIX,#{?pane_in_mode,COPY,SHELL}} "
 set -g status-right-length 80
 set -g window-status-format ""
 set -g window-status-current-format ""
+set -g message-style "bg={{ theme.purple }},fg={{ theme.bg }}"
+set -g message-command-style "bg={{ theme.purple }},fg={{ theme.bg }}"
+set -g menu-selected-style "bg={{ theme.selection }},fg={{ theme.fg }},bold"
+set -g popup-border-style "fg={{ theme.purple }}"
+set -g pane-border-style "fg={{ theme.comment_bright }}"
+set -g pane-active-border-style "fg={{ theme.purple }}"
 
 # Copy mode
 bind -T copy-mode-vi v send -X begin-selection
 bind -T copy-mode-vi y send -X copy-selection-and-cancel
 
-# Command prompt
-set -g message-style "bg={{ theme.purple }},fg={{ theme.bg }}"
-set -g message-command-style "bg={{ theme.purple }},fg={{ theme.bg }}"
-
-# Menu
-set -g menu-selected-style "bg={{ theme.selection }},fg={{ theme.fg }},bold"
-
-# Popup border
-set -g popup-border-style "fg={{ theme.purple }}"
-
-# Pane borders
-set -g pane-border-style "fg={{ theme.comment_bright }}"
-set -g pane-active-border-style "fg={{ theme.purple }}"
-
-# Tmux menu
+# Helper menu
 bind \\ display-menu -T " helper " -S "fg={{ theme.purple }}" -x R -y P \
   "add session"           A "new-session" \
   "add window"            a "new-window -c '#{pane_current_path}'" \
