@@ -14,14 +14,11 @@ return {
   {
     "nvim-lualine/lualine.nvim",
     opts = function(_, opts)
-      opts.sections.lualine_b = { { function()
-        local branch = vim.fn.systemlist("git -C " .. vim.fn.shellescape(vim.fn.getcwd()) .. " rev-parse --abbrev-ref HEAD 2>/dev/null")[1]
-        return (branch and not branch:match("^fatal")) and branch or ""
-      end, icon = "" } }
-      opts.sections.lualine_c = {}
-      opts.sections.lualine_y = { { function() return vim.fn.fnamemodify(vim.fn.getcwd(), ":~") end, icon = "" } }
+      opts.sections.lualine_b = { "branch" }
+      opts.sections.lualine_c = { { "filename", path = 3 } }
+      opts.sections.lualine_y = {}
       opts.sections.lualine_z = {}
-      opts.winbar = { lualine_x = { { "filename", path = 3 } } }
+      opts.winbar = {}
       opts.inactive_winbar = {}
       return opts
     end,
@@ -66,15 +63,6 @@ return {
         end,
       })
     end,
-  },
-
-  {
-    "levouh/tint.nvim",
-    event = "WinNew",
-    opts = {
-      tint = -30,
-      saturation = 0.7,
-    },
   },
 
   {
@@ -140,11 +128,6 @@ return {
           wo = { wrap = true },
         },
       },
-    },
-    keys = {
-      { "<leader>,", function() Snacks.picker.buffers({ layout = { preview = false } }) end, desc = "Buffers" },
-      { "<leader>fb", function() Snacks.picker.buffers({ layout = { preview = false } }) end, desc = "Buffers" },
-      { "<leader>fB", function() Snacks.picker.buffers({ hidden = true, nofile = true, layout = { preview = false } }) end, desc = "Buffers (all)" },
     },
   },
 }

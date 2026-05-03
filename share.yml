@@ -5,6 +5,7 @@ theme:
   bg: "#11111b"             # Mocha Crust       (darkest bg = best text contrast)
   fg: "#cdd6f4"             # Mocha Text
   selection: "#363a4f"      # Macchiato Surface0 (lighter than Mocha's #313244, more visible selection)
+  surface0: "#313244"       # Mocha Surface0     (lualine_b/y background)
   comment: "#8087a2"        # Macchiato Overlay1 (brighter than Mocha Overlay0, readable dimmed text)
   red: "#f38ba8"            # Mocha Red          (more vivid than Macchiato #ed8796)
   orange: "#fab387"         # Mocha Peach        (warmer/more orange than Macchiato #f5a97f)

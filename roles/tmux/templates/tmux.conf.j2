@@ -1,0 +1,20 @@
+set -g default-terminal "tmux-256color"
+set -ag terminal-overrides ",xterm-256color:RGB"
+
+set -g mode-keys vi
+set -g status-position top
+
+# Status bar
+set -g status-style "bg=default,fg={{ theme.fg }}"
+set -g status-left ""
+set -g status-right "#[fg={{ theme.fg }},bg=default,nobold] #W #[fg={{ theme.surface0 }},bg=default]#[fg=#{?client_prefix,{{ theme.blue }},#{?pane_in_mode,{{ theme.purple }},{{ theme.green }}}},bg={{ theme.surface0 }},nobold] #S 󱇈 #[fg=#{?client_prefix,{{ theme.blue }},#{?pane_in_mode,{{ theme.purple }},{{ theme.green }}}},bg={{ theme.surface0 }}]#[fg={{ theme.bg }},bg=#{?client_prefix,{{ theme.blue }},#{?pane_in_mode,{{ theme.purple }},{{ theme.green }}}},bold] #{?client_prefix,PREFIX,#{?pane_in_mode,COPY,SHELL}} "
+set -g status-right-length 80
+set -g window-status-format ""
+set -g window-status-current-format ""
+
+# Pane borders
+set -g pane-border-style "fg={{ theme.comment_bright }}"
+set -g pane-active-border-style "fg={{ theme.purple }}"
+
+# Popup
+bind -n M-\\ display-popup -E -S "fg={{ theme.purple }}" "zsh -i -c fzf_helper"

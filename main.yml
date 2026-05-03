@@ -7,8 +7,6 @@
       tags: ['common']
     - role: ohmyzsh
       tags: ['ohmyzsh']
-    - role: fzf
-      tags: ['fzf']
     - role: mise
       tags: ['mise']
     - role: ghostty
@@ -17,5 +15,7 @@
       tags: ['nvim']
     - role: aerospace
       tags: ['aerospace']
+    - role: tmux
+      tags: ['tmux']
     - role: lpass
       tags: ['lpass']
