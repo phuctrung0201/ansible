@@ -16,5 +16,17 @@ set -g window-status-current-format ""
 set -g pane-border-style "fg={{ theme.comment_bright }}"
 set -g pane-active-border-style "fg={{ theme.purple }}"
 
-# Popup
-bind -n M-\\ display-popup -E -S "fg={{ theme.purple }}" "zsh -i -c fzf_helper"
+# Tmux menu
+bind -n M-\\ display-menu -T " helper " -S "fg={{ theme.purple }}" -x R -y P \
+  "delete other sessions" O "kill-session -a" \
+  "delete other windows"  o "kill-window -a" \
+  "delete session"        D "display-popup -E 'zsh -ic _tmux_kill_session'" \
+  "delete window"         d "display-popup -E 'zsh -ic _tmux_delete_window'" \
+  "new session"         N "display-popup -E 'zsh -ic _tmux_new_session'" \
+  "new window"          n "display-popup -E 'zsh -ic _tmux_new_window'" \
+  "rename session"      R "display-popup -E 'zsh -ic _tmux_rename_session'" \
+  "rename window"       r "display-popup -E 'zsh -ic _tmux_rename_window'" \
+  "split horizontal"    h "split-window -h" \
+  "split vertical"      v "split-window -v" \
+  "switch session"      S "display-popup -E 'zsh -ic _tmux_switch_session'" \
+  "switch window"       s "display-popup -E 'zsh -ic _tmux_switch_window'"

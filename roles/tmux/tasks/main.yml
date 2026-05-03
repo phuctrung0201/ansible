@@ -13,38 +13,6 @@
     src: tmux.conf.j2
     dest: "~/.config/tmux/tmux.conf"
 
-- name: Install bat
-  homebrew:
-    name: bat
-    state: present
-
-- name: Install fzf
-  homebrew:
-    name: fzf
-    state: present
-
-- name: Ensure fzf config directory exists
-  file:
-    path: "~/.config/fzf"
-    state: directory
-
-- name: Copy fzf zsh config
-  template:
-    src: fzf.zsh.j2
-    dest: "~/.config/fzf/fzf.zsh"
-
-- name: Source fzf.zsh from zshrc
-  lineinfile:
-    path: "~/.zshrc"
-    line: "source ~/.config/fzf/fzf.zsh"
-    state: present
-
-- name: Set PAGER environment variable
-  lineinfile:
-    path: "~/.zshrc"
-    line: 'export PAGER=bat'
-    state: present
-
 - name: Copy tmux zsh config
   template:
     src: tmux.zsh.j2

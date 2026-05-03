@@ -1,0 +1,38 @@
+# fzf shell integration
+source <(fzf --zsh)
+
+flpass() {
+  local action
+  action=$(printf 'copy password\ncopy username\ncopy url\ngenerate password\nedit entry\ndelete entry\nadd entry' \
+    | fzf --reverse --prompt="LastPass> ") || return
+
+  if [[ "$action" == "add entry" ]]; then
+    read "new_name?Entry name: "
+    [[ -n "$new_name" ]] && lpass add "$new_name"
+    return
+  fi
+
+  local entry
+  entry=$(lpass ls 2>/dev/null | fzf --reverse --prompt="Entry> " --header="$action") || return
+
+  local id
+  id=$(echo "$entry" | grep -oE '\[id: [0-9]+\]' | grep -oE '[0-9]+')
+  [[ -z "$id" ]] && return
+
+  case "$action" in
+    "copy password")     lpass show --clip --password $id ;;
+    "copy username")     lpass show --clip --username $id ;;
+    "copy url")          lpass show --clip --url $id ;;
+    "generate password") lpass generate --clip $id 20 ;;
+    "edit entry")        lpass edit $id ;;
+    "delete entry")      lpass rm $id ;;
+  esac
+}
+
+# Catppuccin palette; bg:-1 uses terminal default (shows through with translucent terminals)
+export FZF_DEFAULT_OPTS='
+  --color=fg:{{ theme.fg }},bg:-1,hl:{{ theme.orange }}
+  --color=fg+:{{ theme.fg }}:bold,bg+:{{ theme.selection }},hl+:{{ theme.red }}
+  --color=info:{{ theme.cyan }},prompt:{{ theme.pink }},pointer:{{ theme.yellow }}
+  --color=marker:{{ theme.green }},spinner:{{ theme.purple }},header:{{ theme.red }}
+'

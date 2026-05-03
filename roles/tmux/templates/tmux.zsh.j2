@@ -1,82 +1,48 @@
 [[ -z "$TMUX" ]] && tmux new-session -A -s default
 
-fzf_helper() {
-  local tool
-  tool=$(printf 'lastpass\ntmux' | fzf --reverse --prompt="Application> ") || return
 
-  case "$tool" in
-    "lastpass")
-      local action
-      action=$(printf 'copy password\ncopy username\ncopy url\ngenerate password\nedit entry\ndelete entry\nadd entry' \
-        | fzf --reverse --prompt="Action> ") || return
+_tmux_new_session() {
+  read "sname?Session name: "
+  [[ -n "$sname" ]] && tmux new-session -d -s "$sname"
+}
 
-      if [[ "$action" == "add entry" ]]; then
-        read "new_name?Entry name: "
-        [[ -n "$new_name" ]] && lpass add "$new_name"
-        return
-      fi
+_tmux_switch_session() {
+  local session
+  session=$(tmux ls 2>/dev/null | fzf --reverse --prompt="Session> " | cut -d: -f1) || return
+  tmux switch-client -t "$session"
+}
 
-      local entry
-      entry=$(lpass ls 2>/dev/null | fzf --reverse --prompt="Entry> " --header="$action") || return
+_tmux_kill_session() {
+  local session
+  session=$(tmux ls 2>/dev/null | fzf --reverse --prompt="Session> " | cut -d: -f1) || return
+  tmux kill-session -t "$session"
+}
 
-      local name id
-      name=$(echo "$entry" | sed 's/ \[id: [0-9]*\]$//')
-      id=$(echo "$entry" | grep -oE '\[id: [0-9]+\]' | grep -oE '[0-9]+')
-      [[ -z "$id" ]] && return
+_tmux_rename_session() {
+  local session new_name
+  session=$(tmux ls 2>/dev/null | fzf --reverse --prompt="Session> " | cut -d: -f1) || return
+  read "new_name?New name: "
+  [[ -n "$new_name" ]] && tmux rename-session -t "$session" "$new_name"
+}
 
-      case "$action" in
-        "copy password")     lpass show --clip --password $id ;;
-        "copy username")     lpass show --clip --username $id ;;
-        "copy url")          lpass show --clip --url $id ;;
-        "generate password") lpass generate --clip $id 20 ;;
-        "edit entry")        lpass edit $id ;;
-        "delete entry")      lpass rm $id ;;
-      esac
-      ;;
-    "tmux")
-      local action
-      action=$(printf 'kill other sessions\nkill other windows\nkill session\nnew session\nnew window\nrename session\nrename window\nsplit horizontal\nsplit vertical\nswitch session\nswitch window' \
-        | fzf --reverse --prompt="Action> ") || return
+_tmux_new_window() {
+  read "wname?Window name: "
+  tmux new-window ${wname:+-n "$wname"}
+}
 
-      case "$action" in
-        "new session")
-          read "sname?Session name: "
-          [[ -n "$sname" ]] && tmux new-session -d -s "$sname"
-          ;;
-        "switch session")
-          local session
-          session=$(tmux ls 2>/dev/null | fzf --reverse --prompt="Session> " | cut -d: -f1) || return
-          tmux switch-client -t "$session"
-          ;;
-        "kill session")
-          local session
-          session=$(tmux ls 2>/dev/null | fzf --reverse --prompt="Session> " | cut -d: -f1) || return
-          tmux kill-session -t "$session"
-          ;;
-        "kill other sessions") tmux kill-session -a ;;
-        "rename session")
-          local session new_name
-          session=$(tmux ls 2>/dev/null | fzf --reverse --prompt="Session> " | cut -d: -f1) || return
-          read "new_name?New name: "
-          [[ -n "$new_name" ]] && tmux rename-session -t "$session" "$new_name"
-          ;;
-        "new window")
-          read "wname?Window name: "
-          tmux new-window ${wname:+-n "$wname"}
-          ;;
-        "switch window")
-          local window
-          window=$(tmux list-windows 2>/dev/null | fzf --reverse --prompt="Window> " | cut -d: -f1) || return
-          tmux select-window -t "$window"
-          ;;
-        "kill other windows") tmux kill-window -a ;;
-        "rename window")
-          read "wname?New name: "
-          [[ -n "$wname" ]] && tmux rename-window "$wname"
-          ;;
-        "split horizontal") tmux split-window -h ;;
-        "split vertical")   tmux split-window -v ;;
-      esac
-      ;;
-  esac
+_tmux_delete_window() {
+  local window
+  window=$(tmux list-windows 2>/dev/null | fzf --reverse --prompt="Window> " | cut -d: -f1) || return
+  tmux kill-window -t "$window"
+}
+
+_tmux_switch_window() {
+  local window
+  window=$(tmux list-windows 2>/dev/null | fzf --reverse --prompt="Window> " | cut -d: -f1) || return
+  tmux select-window -t "$window"
+}
+
+_tmux_rename_window() {
+  read "wname?New name: "
+  [[ -n "$wname" ]] && tmux rename-window "$wname"
 }
