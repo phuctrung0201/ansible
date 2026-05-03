@@ -22,11 +22,11 @@ bind -n M-\\ display-menu -T " helper " -S "fg={{ theme.purple }}" -x R -y P \
   "delete other sessions" O "kill-session -a" \
   "delete other windows"  o "kill-window -a" \
   "kill window"           x "kill-window" \
-  "new session"           N "new-session" \
-  "new window"            n "new-window -c '#{pane_current_path}'" \
+  "new session"           S "new-session" \
+  "new window"            W "new-window -c '#{pane_current_path}'" \
   "rename session"        R "command-prompt -I '#S' 'rename-session %%'" \
   "rename window"         r "command-prompt -I '#W' 'rename-window %%'" \
   "split horizontal"      h "split-window -h" \
   "split vertical"        v "split-window -v" \
-  "switch session"        S "choose-tree -Zs" \
-  "switch window"         s "choose-window -Z"
+  "switch session"        s "choose-tree -Zs" \
+  "switch window"         w "choose-window -Z"
