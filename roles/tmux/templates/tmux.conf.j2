@@ -1,6 +1,10 @@
 set -g default-terminal "tmux-256color"
 set -ag terminal-overrides ",xterm-256color:RGB"
 
+set -g prefix M-\\
+unbind C-b
+bind M-\\ send-prefix
+
 set -g mode-keys vi
 set -g mouse on
 set -g status-position top
@@ -17,24 +21,30 @@ set -g window-status-current-format ""
 bind -T copy-mode-vi v send -X begin-selection
 bind -T copy-mode-vi y send -X copy-selection-and-cancel
 
+# Command prompt
+set -g message-style "bg={{ theme.purple }},fg={{ theme.bg }}"
+set -g message-command-style "bg={{ theme.purple }},fg={{ theme.bg }}"
+
+# Menu
+set -g menu-selected-style "bg={{ theme.selection }},fg={{ theme.fg }},bold"
+
+# Popup border
+set -g popup-border-style "fg={{ theme.purple }}"
+
 # Pane borders
 set -g pane-border-style "fg={{ theme.comment_bright }}"
 set -g pane-active-border-style "fg={{ theme.purple }}"
 
 # Tmux menu
-bind -n M-\\ display-menu -T " helper " -S "fg={{ theme.purple }}" -x R -y P \
+bind \\ display-menu -T " helper " -S "fg={{ theme.purple }}" -x R -y P \
+  "add session"           A "new-session" \
+  "add window"            a "new-window -c '#{pane_current_path}'" \
+  "copy buffer"           C "display-popup -E 'tmux capture-pane -pS - -t #{pane_id} | nvim - -c \"setlocal nomodifiable\" -c \"norm G\"'" \
   "delete other sessions" O "kill-session -a" \
   "delete other windows"  o "kill-window -a" \
-  "kill window"           x "confirm-before -p 'kill window? (y/n)' kill-window" \
-  "new session"           s "new-session" \
-  "new window"            w "new-window -c '#{pane_current_path}'" \
   "rename session"        R "command-prompt -I '#S' 'rename-session %%'" \
   "rename window"         r "command-prompt -I '#W' 'rename-window %%'" \
-  "previous session"       P "switch-client -p" \
-  "previous window"       p "previous-window" \
-  "split horizontal"      h "split-window -h" \
-  "split vertical"        v "split-window -v" \
-  "switch session"        S "choose-tree -Zs" \
-  "switch window"         W "choose-window -Z" \
-  "copy mode"            c "copy-mode" \
-  "copy buffer"          C "display-popup -E 'tmux capture-pane -pS - -t #{pane_id} | nvim - -c \"setlocal nomodifiable\" -c \"norm G\"'"
+  "search session"        S "display-popup -E 'tmux list-sessions -F \"##{session_name}\" | fzf --prompt \"session > \" | xargs -I% tmux switch-client -t %'" \
+  "search window"         s "display-popup -E 'tmux list-windows -a -F \"##{session_name}:##{window_index} ##{window_name}\" | fzf --prompt \"window > \" | cut -d\" \" -f1 | xargs -I% tmux switch-client -t %'" \
+  "split horizontal"      % "split-window -h -c '#{pane_current_path}'" \
+  "split vertical"        '"' "split-window -v -c '#{pane_current_path}'"
