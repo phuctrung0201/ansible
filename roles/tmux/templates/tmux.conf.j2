@@ -35,8 +35,8 @@ bind \\ display-menu -T " helper " -S "fg={{ theme.purple }}" -x R -y P \
   "copy buffer"           C "display-popup -E 'tmux capture-pane -pS - -t #{pane_id} | nvim - -c \"setlocal nomodifiable\" -c \"norm G\"'" \
   "delete other sessions" O "kill-session -a" \
   "delete other windows"  o "kill-window -a" \
-  "rename session"        R "command-prompt -I '#S' 'rename-session %%'" \
-  "rename window"         r "command-prompt -I '#W' 'rename-window %%'" \
+  "rename session"        R "command-prompt -I '#{b:pane_current_path}' 'rename-session %%'" \
+  "rename window"         r "command-prompt -I '#{b:pane_current_path}' 'rename-window %%'" \
   "search session"        S "display-popup -E 'tmux list-sessions -F \"##{session_name}\" | fzf --prompt \"session > \" | xargs -I% tmux switch-client -t %'" \
   "search window"         s "display-popup -E 'tmux list-windows -a -F \"##{session_name}:##{window_index} ##{window_name}\" | fzf --prompt \"window > \" | cut -d\" \" -f1 | xargs -I% tmux switch-client -t %'" \
   "split horizontal"      % "split-window -h -c '#{pane_current_path}'" \
