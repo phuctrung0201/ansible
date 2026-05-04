@@ -19,6 +19,7 @@ set -g window-status-current-format ""
 set -g message-style "bg={{ theme.purple }},fg={{ theme.bg }}"
 set -g message-command-style "bg={{ theme.purple }},fg={{ theme.bg }}"
 set -g menu-selected-style "bg={{ theme.selection }},fg={{ theme.fg }},bold"
+set -g menu-border-style "fg={{ theme.purple }}"
 set -g popup-border-style "fg={{ theme.purple }}"
 set -g mode-style "bg={{ theme.purple }},fg={{ theme.bg }},bold"
 set -g pane-border-style "fg={{ theme.comment_bright }}"
@@ -29,14 +30,14 @@ bind -T copy-mode-vi v send -X begin-selection
 bind -T copy-mode-vi y send -X copy-selection-and-cancel
 
 # Helper menu
-bind \\ display-menu -T " helper " -S "fg={{ theme.purple }}" -x R -y P \
+bind \\ display-menu -T " helper " -x R -y "#{popup_pane_bottom}" \
   "add session"           A "new-session" \
   "add window"            a "new-window -c '#{pane_current_path}'" \
   "copy buffer"           C "display-popup -E 'tmux capture-pane -pS - -t #{pane_id} | nvim - -c \"setlocal nomodifiable\" -c \"norm G\"'" \
   "delete other sessions" O "kill-session -a" \
   "delete other windows"  o "kill-window -a" \
-  "rename session"        R "command-prompt -I '#{b:pane_current_path}' 'rename-session %%'" \
-  "rename window"         r "command-prompt -I '#{b:pane_current_path}' 'rename-window %%'" \
+  "rename session"        R "display-menu -T ' rename session ' -x R -y #{popup_pane_bottom} 'basename' b 'rename-session #{b:pane_current_path}' 'agent' a 'rename-session agent' 'git' g 'rename-session git' 'k8s' k 'rename-session k8s' 'markserv' m 'rename-session markserv' 'nvim' n 'rename-session nvim'" \
+  "rename window"         r "display-menu -T ' rename window ' -x R -y #{popup_pane_bottom} 'basename' b 'rename-window #{b:pane_current_path}' 'agent' a 'rename-window agent' 'git' g 'rename-window git' 'k8s' k 'rename-window k8s' 'markserv' m 'rename-window markserv' 'nvim' n 'rename-window nvim'" \
   "search session"        S "display-popup -E 'tmux list-sessions -F \"##{session_name}\" | fzf --prompt \"session > \" | xargs -I% tmux switch-client -t %'" \
   "search window"         s "display-popup -E 'tmux list-windows -a -F \"##{session_name}:##{window_index} ##{window_name}\" | fzf --prompt \"window > \" | cut -d\" \" -f1 | xargs -I% tmux switch-client -t %'" \
   "split horizontal"      % "split-window -h -c '#{pane_current_path}'" \
