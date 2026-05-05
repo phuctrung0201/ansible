@@ -48,12 +48,13 @@ config.colors = {
     '{{ theme.bright_cyan }}',
     '{{ theme.bright_white }}',
   },
-  -- Native tab cells hidden; tabs are rendered manually in right_status
   tab_bar = {
     background         = 'rgba(0,0,0,0)',
     active_tab         = { bg_color = 'rgba(0,0,0,0)', fg_color = 'rgba(0,0,0,0)' },
     inactive_tab       = { bg_color = 'rgba(0,0,0,0)', fg_color = 'rgba(0,0,0,0)' },
     inactive_tab_hover = { bg_color = 'rgba(0,0,0,0)', fg_color = 'rgba(0,0,0,0)' },
+    new_tab            = { bg_color = 'rgba(0,0,0,0)', fg_color = 'rgba(0,0,0,0)' },
+    new_tab_hover      = { bg_color = 'rgba(0,0,0,0)', fg_color = 'rgba(0,0,0,0)' },
   },
 }
 
@@ -120,19 +121,18 @@ config.use_fancy_tab_bar = false
 config.tab_bar_at_bottom = true
 config.hide_tab_bar_if_only_one_tab = false
 config.show_new_tab_button_in_tab_bar = false
-config.tab_max_width = 32
 
--- Powerline arrows + rounded pill caps
+-- Powerline arrows
 local L = wezterm.nerdfonts.pl_right_hard_divider  --
 local R = wezterm.nerdfonts.pl_left_hard_divider   --
-local PILL_L = utf8.char(0xe0b6)                   --  left half-circle
-local PILL_R = utf8.char(0xe0b4)                   --  right half-circle
 
--- Collapse native tab cells to (near-)zero width; tabs are drawn in right_status
-wezterm.on('format-tab-title', function() return { { Text = '' } } end)
-
--- Left: [mode] > [workspace]   Right: [tab pills...]
-wezterm.on('update-right-status', function(window, _pane)
+-- Left: [mode] > [workspace] > [tab/pane name]
+wezterm.on('update-right-status', function(window, pane)
+  local tab = window:mux_window():active_tab()
+  local tab_title = tab:get_title()
+  if not tab_title or tab_title == '' then
+    tab_title = pane:get_title()
+  end
   local workspace = window:active_workspace()
 
   local mode_color, mode_text
@@ -142,6 +142,7 @@ wezterm.on('update-right-status', function(window, _pane)
     mode_color, mode_text = C.green, 'SHELL'
   end
 
+  window:set_right_status('')
   window:set_left_status(wezterm.format({
     -- mode pill
     { Background = { Color = mode_color } },
@@ -161,34 +162,11 @@ wezterm.on('update-right-status', function(window, _pane)
     { Background = { Color = 'rgba(0,0,0,0)' } },
     { Foreground = { Color = C.surface0 } },
     { Text = R },
+    -- tab/pane name
+    { Background = { Color = 'rgba(0,0,0,0)' } },
+    { Foreground = { Color = C.fg } },
+    { Text = ' ' .. tab_title .. ' ' },
   }))
-
-  -- Right: active tab as purple pill, inactive as bare title
-  local edge = 'rgba(0,0,0,0)'
-  local active_tab_id = window:active_tab():tab_id()
-  local pills = {}
-  for _, t in ipairs(window:mux_window():tabs()) do
-    local title = t:get_title()
-    if not title or title == '' then title = t:active_pane():get_title() end
-    if t:tab_id() == active_tab_id then
-      table.insert(pills, { Background = { Color = edge } })
-      table.insert(pills, { Foreground = { Color = C.cyan } })
-      table.insert(pills, { Text = PILL_L })
-      table.insert(pills, { Background = { Color = C.cyan } })
-      table.insert(pills, { Foreground = { Color = C.bg } })
-      table.insert(pills, { Attribute = { Intensity = 'Bold' } })
-      table.insert(pills, { Text = ' ' .. title .. ' ' })
-      table.insert(pills, { Background = { Color = edge } })
-      table.insert(pills, { Foreground = { Color = C.cyan } })
-      table.insert(pills, { Text = PILL_R .. ' ' })
-    else
-      table.insert(pills, { Background = { Color = edge } })
-      table.insert(pills, { Foreground = { Color = C.comment } })
-      table.insert(pills, { Attribute = { Intensity = 'Normal' } })
-      table.insert(pills, { Text = ' ' .. title .. '  ' })
-    end
-  end
-  window:set_right_status(wezterm.format(pills))
 end)
 
 return config
