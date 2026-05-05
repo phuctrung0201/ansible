@@ -1,6 +1,6 @@
-- name: Install Ghostty
+- name: Install WezTerm
   community.general.homebrew:
-    name: ghostty
+    name: wezterm
     state: present
     install_options: cask
 
@@ -16,13 +16,13 @@
     install_options: cask
   when: not firacode_font.stat.exists
 
-- name: Ensure Ghostty config directory exists
+- name: Ensure WezTerm config directory exists
   file:
-    path: "~/.config/ghostty"
+    path: "~/.config/wezterm"
     state: directory
 
-- name: Deploy Ghostty config
+- name: Deploy WezTerm config
   template:
-    src: config.ghostty.j2
-    dest: "~/.config/ghostty/config"
+    src: wezterm.lua.j2
+    dest: "~/.config/wezterm/wezterm.lua"
     backup: true

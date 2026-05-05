@@ -9,15 +9,13 @@
       tags: ['ohmyzsh']
     - role: mise
       tags: ['mise']
-    - role: ghostty
-      tags: ['ghostty']
     - role: nvim
       tags: ['nvim']
     - role: aerospace
       tags: ['aerospace']
     - role: fzf
       tags: ['fzf']
-    - role: tmux
-      tags: ['tmux']
+    - role: wezterm
+      tags: ['wezterm']
     - role: lpass
       tags: ['lpass']
