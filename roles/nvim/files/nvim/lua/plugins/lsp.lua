@@ -20,6 +20,7 @@ return {
         "github:mason-org/mason-registry",
         "github:Crashdummyy/mason-registry",
       },
+      ensure_installed = { "roslyn" },
     },
   },
 
@@ -109,7 +110,13 @@ return {
     "seblyng/roslyn.nvim",
     event = "VeryLazy",
     dependencies = { "mason-org/mason.nvim" },
-    opts = {},
+    opts = {
+      extensions = {
+        razor = {
+          enabled = false,
+        },
+      },
+    },
     init = function()
       vim.lsp.config("roslyn", {
         settings = {
