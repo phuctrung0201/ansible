@@ -102,6 +102,7 @@ config.keys = {
       if id == 'workspace-cwd' then
         local name = cwd_basename(pane)
         if name then wezterm.mux.rename_workspace(window:active_workspace(), name) end
+        window:active_tab():set_title(name)
       elseif id == 'tab-agent' then
         window:active_tab():set_title('agent')
       elseif id == 'tab-markserve' then
