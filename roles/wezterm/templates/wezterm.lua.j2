@@ -12,6 +12,7 @@ local C = {
   cyan     = '{{ theme.cyan }}',
   green    = '{{ theme.green }}',
   purple   = '{{ theme.purple }}',
+  red      = '{{ theme.red }}',
 }
 
 -- Font
@@ -50,9 +51,9 @@ config.colors = {
   },
   tab_bar = {
     background         = 'rgba(0,0,0,0)',
-    active_tab         = { bg_color = 'rgba(0,0,0,0)', fg_color = 'rgba(0,0,0,0)' },
-    inactive_tab       = { bg_color = 'rgba(0,0,0,0)', fg_color = 'rgba(0,0,0,0)' },
-    inactive_tab_hover = { bg_color = 'rgba(0,0,0,0)', fg_color = 'rgba(0,0,0,0)' },
+    active_tab         = { bg_color = C.cyan,         fg_color = C.bg },
+    inactive_tab       = { bg_color = 'rgba(0,0,0,0)', fg_color = C.comment },
+    inactive_tab_hover = { bg_color = 'rgba(0,0,0,0)', fg_color = C.fg },
     new_tab            = { bg_color = 'rgba(0,0,0,0)', fg_color = 'rgba(0,0,0,0)' },
     new_tab_hover      = { bg_color = 'rgba(0,0,0,0)', fg_color = 'rgba(0,0,0,0)' },
   },
@@ -84,15 +85,17 @@ config.keys = {
   { key = 'p', mods = 'ALT', action = wezterm.action.ActivateCommandPalette },
   { key = '\\', mods = 'ALT', action = wezterm.action.InputSelector {
     title = ' helper ',
-    alphabet = 'acdmsvx',
+    alphabet = 'acdmpstvx',
     choices = {
-      { label = 'rename tab to agent',     id = 'tab-agent' },
-      { label = 'activate copy mode',      id = 'copy-mode' },
-      { label = 'rename workspace to cwd', id = 'workspace-cwd' },
-      { label = 'rename tab to markserve', id = 'tab-markserve' },
-      { label = 'split horizontal',        id = 'split' },
-      { label = 'split vertical',          id = 'vsplit' },
-      { label = 'close pane',              id = 'close-pane' },
+      { label = 'rename to agent',     id = 'tab-agent' },
+      { label = 'copy mode',           id = 'copy-mode' },
+      { label = 'rename to cwd',       id = 'workspace-cwd' },
+      { label = 'rename to markserve', id = 'tab-markserve' },
+      { label = 'previous tab',        id = 'tab-prev' },
+      { label = 'split horizontal',    id = 'split' },
+      { label = 'tab navigator',       id = 'tab-nav' },
+      { label = 'split vertical',      id = 'vsplit' },
+      { label = 'close pane',          id = 'close-pane' },
     },
     action = wezterm.action_callback(function(window, pane, id, _label)
       if not id then return end
@@ -109,6 +112,10 @@ config.keys = {
         pane:split { direction = 'Bottom' }
       elseif id == 'copy-mode' then
         window:perform_action(wezterm.action.ActivateCopyMode, pane)
+      elseif id == 'tab-nav' then
+        window:perform_action(wezterm.action.ShowTabNavigator, pane)
+      elseif id == 'tab-prev' then
+        window:perform_action(wezterm.action.ActivateTabRelative(-1), pane)
       elseif id == 'close-pane' then
         window:perform_action(wezterm.action.CloseCurrentPane { confirm = false }, pane)
       end
@@ -116,7 +123,7 @@ config.keys = {
   } },
 }
 
--- Tab bar — retro, positioned at top; tabs hidden (status bar kept for left status)
+-- Tab bar — bottom, simple style with rounded pill tabs
 config.use_fancy_tab_bar = false
 config.tab_bar_at_bottom = true
 config.hide_tab_bar_if_only_one_tab = false
@@ -126,13 +133,34 @@ config.show_new_tab_button_in_tab_bar = false
 local L = wezterm.nerdfonts.pl_right_hard_divider  --
 local R = wezterm.nerdfonts.pl_left_hard_divider   --
 
--- Left: [mode] > [workspace] > [tab/pane name]
-wezterm.on('update-right-status', function(window, pane)
-  local tab = window:mux_window():active_tab()
-  local tab_title = tab:get_title()
-  if not tab_title or tab_title == '' then
-    tab_title = pane:get_title()
+config.tab_max_width = 32
+
+wezterm.on('format-tab-title', function(tab, _tabs, _panes, _config, hover, max_width)
+  local title = tab.tab_title
+  if not title or title == '' then
+    title = tab.active_pane.title
   end
+
+  local fg, intensity
+  if tab.is_active then
+    fg, intensity = C.fg, 'Bold'
+  elseif hover then
+    fg, intensity = C.fg, 'Normal'
+  else
+    fg, intensity = C.comment, 'Normal'
+  end
+
+  local body = ' ' .. wezterm.truncate_right(title, math.max(1, max_width - 3)) .. ' '
+  return {
+    { Background = { Color = 'rgba(0,0,0,0)' } },
+    { Foreground = { Color = fg } },
+    { Attribute = { Intensity = intensity } },
+    { Text = ' ' .. body },
+  }
+end)
+
+-- Left: [mode] [workspace]
+wezterm.on('update-right-status', function(window, _pane)
   local workspace = window:active_workspace()
 
   local mode_color, mode_text
@@ -144,28 +172,24 @@ wezterm.on('update-right-status', function(window, pane)
 
   window:set_right_status('')
   window:set_left_status(wezterm.format({
-    -- mode pill
+    -- mode body
     { Background = { Color = mode_color } },
     { Foreground = { Color = C.bg } },
     { Attribute = { Intensity = 'Bold' } },
     { Text = ' ' .. mode_text .. ' ' },
-    -- mode_color → surface0
+    -- mode_color → surface0 wedge
     { Background = { Color = C.surface0 } },
     { Foreground = { Color = mode_color } },
     { Text = R },
-    -- workspace
+    -- workspace body (reversed: surface0 bg, mode-colored fg)
     { Background = { Color = C.surface0 } },
     { Foreground = { Color = mode_color } },
-    { Attribute = { Intensity = 'Normal' } },
     { Text = ' 󰽘 ' .. workspace .. ' ' },
-    -- surface0 → transparent
+    -- surface0 → transparent wedge
     { Background = { Color = 'rgba(0,0,0,0)' } },
     { Foreground = { Color = C.surface0 } },
+    { Attribute = { Intensity = 'Normal' } },
     { Text = R },
-    -- tab/pane name
-    { Background = { Color = 'rgba(0,0,0,0)' } },
-    { Foreground = { Color = C.fg } },
-    { Text = ' ' .. tab_title .. ' ' },
   }))
 end)
 
