@@ -1,3 +1,5 @@
+local theme = require("config.env")
+
 return {
   {
     "akinsho/bufferline.nvim",
@@ -7,6 +9,12 @@ return {
         always_show_bufferline = false,
         show_buffer_close_icons = false,
         show_close_icon = false,
+        name_formatter = function(buf)
+          if buf.tabnr then
+            local ok, name = pcall(vim.api.nvim_tabpage_get_var, buf.tabnr, "tab_name")
+            if ok and name and name ~= "" then return name end
+          end
+        end,
       },
     },
   },
@@ -89,8 +97,8 @@ return {
         callback = function()
           local cl = vim.api.nvim_get_hl(0, { name = "CursorLine", link = false })
           vim.api.nvim_set_hl(0, "SnacksCursorLine", cl)
-          vim.cmd("highlight SnacksPickerDir   guifg={{ theme.comment }}")
-          vim.cmd("highlight SnacksPickerMatch guifg={{ theme.pink }}")
+          vim.cmd("highlight SnacksPickerDir   guifg=" .. theme.comment)
+          vim.cmd("highlight SnacksPickerMatch guifg=" .. theme.pink)
         end,
       })
     end,

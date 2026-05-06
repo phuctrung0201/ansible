@@ -15,9 +15,5 @@
       tags: ['aerospace']
     - role: fzf
       tags: ['fzf']
-    - role: wezterm
-      tags: ['wezterm']
     - role: ghostty
       tags: ['ghostty']
-    - role: lpass
-      tags: ['lpass']

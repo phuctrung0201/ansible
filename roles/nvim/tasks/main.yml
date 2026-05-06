@@ -6,6 +6,13 @@
     - neovim
     - lazygit
     - ripgrep
+    - lastpass-cli
+
+- name: Set LPASS_AGENT_TIMEOUT to never expire
+  lineinfile:
+    path: "~/.zshrc"
+    line: 'export LPASS_AGENT_TIMEOUT=0'
+    state: present
 
 - name: Ensure nvim config directory exists
   file:
@@ -19,10 +26,10 @@
     delete: yes
     recursive: yes
 
-- name: Template ui.lua with color variables
+- name: Template env.lua with shared theme colors
   template:
-    src: ui.lua.j2
-    dest: "~/.config/nvim/lua/plugins/ui.lua"
+    src: env.lua.j2
+    dest: "~/.config/nvim/lua/config/env.lua"
     backup: yes
 
 - name: Set EDITOR environment variable
