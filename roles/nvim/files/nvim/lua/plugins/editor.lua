@@ -10,12 +10,14 @@ return {
             keys = {
               ["<c-g>"] = { "toggle_ignored", mode = { "i", "n" } },
               ["<c-h>"] = { "toggle_hidden", mode = { "i", "n" } },
+              ["<a-g>"] = { "toggle_live", mode = { "i", "n" } },
             },
           },
           list = {
             keys = {
               ["<c-g>"] = "toggle_ignored",
               ["<c-h>"] = "toggle_hidden",
+              ["<a-g>"] = "toggle_live",
             },
           },
         },
