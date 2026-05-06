@@ -17,9 +17,4 @@ autocmd("DirChanged", {
   callback = function() vim.cmd("redrawtabline") end,
 })
 
-vim.api.nvim_create_user_command("RenameTabByDir", function()
-  vim.t.tab_name = vim.fn.fnamemodify(vim.fn.getcwd(), ":t")
-  vim.cmd("redrawtabline")
-end, {})
-
 vim.api.nvim_create_user_command("Lpass", function() require("config.lpass").run() end, {})
