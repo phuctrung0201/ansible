@@ -5,6 +5,11 @@ return {
     "folke/snacks.nvim",
     opts = {
       picker = {
+        sources = {
+          buffers = {
+            preview = "none",
+          },
+        },
         win = {
           input = {
             keys = {

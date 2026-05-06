@@ -1,0 +1,49 @@
+# Ansible — Catppuccin Mocha/Macchiato mix. Mirrors roles/wezterm/templates/wezterm.lua.j2.
+
+# Font
+font-family = FiraCode Nerd Font Mono
+font-size = 16
+
+# Colors
+background = {{ theme.bg }}
+foreground = {{ theme.fg }}
+selection-background = {{ theme.selection }}
+selection-foreground = {{ theme.fg }}
+cursor-color = {{ theme.cyan }}
+cursor-text = {{ theme.bg }}
+
+# ANSI palette (0-7)
+palette = 0={{ theme.dark }}
+palette = 1={{ theme.red }}
+palette = 2={{ theme.green }}
+palette = 3={{ theme.yellow }}
+palette = 4={{ theme.blue }}
+palette = 5={{ theme.pink }}
+palette = 6={{ theme.cyan }}
+palette = 7={{ theme.white }}
+# Bright (8-15)
+palette = 8={{ theme.comment_bright }}
+palette = 9={{ theme.bright_red }}
+palette = 10={{ theme.bright_green }}
+palette = 11={{ theme.bright_yellow }}
+palette = 12={{ theme.bright_purple }}
+palette = 13={{ theme.bright_pink }}
+palette = 14={{ theme.bright_cyan }}
+palette = 15={{ theme.bright_white }}
+
+# Cursor
+cursor-style = bar
+
+# macOS: Option sends Alt (Neovim/Snacks <a-h> / <a-i>)
+macos-option-as-alt = true
+
+# Window — hidden titlebar, opacity/blur matching WezTerm
+background-opacity = 0.65
+background-blur-radius = 20
+macos-titlebar-style = hidden
+window-padding-x = 0
+window-padding-y = 0
+window-padding-balance = true
+
+# Tab bar styling — keep native, just hide the new-tab button area visually
+window-theme = ghostty
