@@ -1,0 +1,64 @@
+- name: Install tmux and palette dependencies
+  community.general.homebrew:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - tmux
+    - fzf
+    - bat
+    - lastpass-cli
+
+- name: Set LPASS_AGENT_TIMEOUT to never expire
+  lineinfile:
+    path: "~/.zshrc"
+    line: 'export LPASS_AGENT_TIMEOUT=0'
+    state: present
+
+- name: Set PAGER environment variable
+  lineinfile:
+    path: "~/.zshrc"
+    line: 'export PAGER=bat'
+    state: present
+
+- name: Ensure fzf config directory exists
+  file:
+    path: "~/.config/fzf"
+    state: directory
+
+- name: Deploy fzf zsh config
+  template:
+    src: fzf.zsh.j2
+    dest: "~/.config/fzf/fzf.zsh"
+
+- name: Source fzf.zsh from zshrc
+  lineinfile:
+    path: "~/.zshrc"
+    line: "source ~/.config/fzf/fzf.zsh"
+    state: present
+
+- name: Ensure tmux config directory exists
+  file:
+    path: "~/.config/tmux"
+    state: directory
+
+- name: Deploy tmux config
+  template:
+    src: tmux.conf.j2
+    dest: "~/.config/tmux/tmux.conf"
+    backup: true
+
+- name: Deploy tmux command palette
+  copy:
+    src: palette.sh
+    dest: "~/.config/tmux/palette.sh"
+    mode: "0755"
+
+- name: Deploy tmux lpass picker
+  copy:
+    src: lpass.sh
+    dest: "~/.config/tmux/lpass.sh"
+    mode: "0755"
+
+- name: Reload tmux config (if server running)
+  shell: tmux info >/dev/null 2>&1 && tmux source-file ~/.config/tmux/tmux.conf || true
+  changed_when: false

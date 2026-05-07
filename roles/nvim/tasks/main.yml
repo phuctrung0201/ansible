@@ -6,13 +6,6 @@
     - neovim
     - lazygit
     - ripgrep
-    - lastpass-cli
-
-- name: Set LPASS_AGENT_TIMEOUT to never expire
-  lineinfile:
-    path: "~/.zshrc"
-    line: 'export LPASS_AGENT_TIMEOUT=0'
-    state: present
 
 - name: Ensure nvim config directory exists
   file:

@@ -13,7 +13,7 @@
       tags: ['nvim']
     - role: aerospace
       tags: ['aerospace']
-    - role: fzf
-      tags: ['fzf']
     - role: ghostty
       tags: ['ghostty']
+    - role: tmux
+      tags: ['tmux']
