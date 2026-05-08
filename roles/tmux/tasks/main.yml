@@ -59,6 +59,3 @@
     dest: "~/.config/tmux/lpass.sh"
     mode: "0755"
 
-- name: Reload tmux config (if server running)
-  shell: tmux info >/dev/null 2>&1 && tmux source-file ~/.config/tmux/tmux.conf || true
-  changed_when: false
