@@ -37,6 +37,12 @@ exec-on-workspace-change = ['/bin/bash', '-c', 'im-select com.apple.keylayout.AB
 
 [key-mapping]
 preset = 'qwerty'
+
+# Pin workspaces to monitors by index (1 = main, 2 = secondary).
+[workspace-to-monitor-force-assignment]
+F1 = 1
+F2 = 2
+
 [gaps]
 inner.horizontal = 8
 inner.vertical = 8
@@ -73,16 +79,12 @@ alt-shift-l = 'move right'
 # Workspaces
 alt-1 = 'workspace 1'
 alt-2 = 'workspace 2'
-alt-3 = 'workspace 3'
-alt-f3 = 'workspace F3'
 alt-f2 = 'workspace F2'
 alt-f1 = 'workspace F1'
 alt-shift-1 = 'move-node-to-workspace --focus-follows-window 1'
 alt-shift-2 = 'move-node-to-workspace --focus-follows-window 2'
-alt-shift-3 = 'move-node-to-workspace --focus-follows-window 3'
-alt-shift-f3 = 'move-node-to-workspace --focus-follows-window F3'
-alt-shift-f2 = 'move-node-to-workspace --focus-follows-window F2'
 alt-shift-f1 = 'move-node-to-workspace --focus-follows-window F1'
+alt-shift-f2 = 'move-node-to-workspace --focus-follows-window F2'
 
 # Monitor (brackets)
 alt-leftSquareBracket = 'focus-monitor --wrap-around prev'
@@ -112,18 +114,6 @@ run = 'move-node-to-workspace --focus-follows-window `'
 [[on-window-detected]]
 if.app-id = 'app.zen-browser.zen'
 run = 'move-node-to-workspace --focus-follows-window 1'
-
-[[on-window-detected]]
-if.app-id = 'com.tinyspeck.slackmacgap'
-run = 'move-node-to-workspace --focus-follows-window F1'
-
-[[on-window-detected]]
-if.app-id = 'com.microsoft.Outlook'
-run = 'move-node-to-workspace --focus-follows-window F2'
-
-[[on-window-detected]]
-if.app-id = 'us.zoom.xos'
-run = 'move-node-to-workspace --focus-follows-window F3'
 
 [[on-window-detected]]
 check-further-callbacks = true
