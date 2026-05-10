@@ -13,7 +13,7 @@
       tags: ['nvim']
     - role: aerospace
       tags: ['aerospace']
-    - role: ghostty
-      tags: ['ghostty']
+    - role: kitty
+      tags: ['kitty']
     - role: tmux
       tags: ['tmux']
