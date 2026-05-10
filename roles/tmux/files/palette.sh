@@ -52,6 +52,10 @@ Detach session	tmux	detach-client
 Break pane to window	tmux	break-pane
 Move window to session	tmux	!move_window_to_session
 Move pane to window	tmux	!move_pane_to_window
+Swap pane left	tmux	swap-pane -s '{left-of}'
+Swap pane down	tmux	swap-pane -s '{down-of}'
+Swap pane up	tmux	swap-pane -s '{up-of}'
+Swap pane right	tmux	swap-pane -s '{right-of}'
 Copy password	lpass	!~/.config/tmux/lpass.sh password
 Copy username	lpass	!~/.config/tmux/lpass.sh username
 Add credential	lpass	!~/.config/tmux/lpass.sh add
