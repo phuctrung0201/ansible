@@ -30,7 +30,7 @@ set -g status-right-length 100
 
 # Left: mode (bg flips per state) > session, joined by powerline arrows (U+E0B0)
 # SHELL = green, PREFIX = orange, COPY = purple
-set -g status-left "#[fg={{ theme.bg }},bg=#{?client_prefix,{{ theme.orange }},#{?pane_in_mode,{{ theme.purple }},{{ theme.green }}}},bold] #{?client_prefix,PREFIX,#{?pane_in_mode,COPY,SHELL}} #[fg=#{?client_prefix,{{ theme.orange }},#{?pane_in_mode,{{ theme.purple }},{{ theme.green }}}},bg={{ theme.surface0 }},nobold]#[fg=#{?client_prefix,{{ theme.orange }},#{?pane_in_mode,{{ theme.purple }},{{ theme.green }}}},bg={{ theme.surface0 }}] 󰊠 #S #[fg={{ theme.surface0 }},bg=default]"
+set -g status-left "#[fg={{ theme.bg }},bg=#{?client_prefix,{{ theme.orange }},#{?pane_in_mode,{{ theme.purple }},{{ theme.green }}}},bold] #{?client_prefix,PREFIX,#{?pane_in_mode,COPY,SHELL}} #[fg=#{?client_prefix,{{ theme.orange }},#{?pane_in_mode,{{ theme.purple }},{{ theme.green }}}},bg={{ theme.surface0 }},nobold]#[fg=#{?client_prefix,{{ theme.orange }},#{?pane_in_mode,{{ theme.purple }},{{ theme.green }}}},bg={{ theme.surface0 }}]  #S #[fg={{ theme.surface0 }},bg=default]"
 
 # Window list — no bg, just bold fg for active
 setw -g window-status-style "fg={{ theme.comment }},bg=default"
