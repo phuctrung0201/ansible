@@ -40,40 +40,40 @@ move_pane_to_window() {
 # Lines starting with `!` run as raw shell — these can call helpers above,
 # external scripts, or use $(...) substitution.
 static=$(cat <<'EOF'
-Rename session to current folder	tmux	!tmux rename-session "$(basename "$(tmux display-message -p '#{pane_current_path}')")"
-Rename window to agent	tmux	rename-window agent
-Rename window to markserv	tmux	rename-window markserv
-Close current window	tmux	kill-window
-Close current pane	tmux	kill-pane
-Close all other sessions	tmux	kill-session -a
-Close all other windows	tmux	kill-window -a
-Close all other panes	tmux	kill-pane -a
-Detach session	tmux	detach-client
-New window	tmux	new-window
-Break pane to window	tmux	break-pane
-Split pane left	tmux	split-window -hb -c "#{pane_current_path}"
-Split pane right	tmux	split-window -h -c "#{pane_current_path}"
-Split pane up	tmux	split-window -vb -c "#{pane_current_path}"
-Split pane down	tmux	split-window -v -c "#{pane_current_path}"
-Move window to session	tmux	!move_window_to_session
-Move pane to window	tmux	!move_pane_to_window
-Swap pane left	tmux	swap-pane -s '{left-of}'
-Swap pane down	tmux	swap-pane -s '{down-of}'
-Swap pane up	tmux	swap-pane -s '{up-of}'
-Swap pane right	tmux	swap-pane -s '{right-of}'
-Copy password	lpass	!~/.config/tmux/lpass.sh password
-Copy username	lpass	!~/.config/tmux/lpass.sh username
-Add credential	lpass	!~/.config/tmux/lpass.sh add
-Generate password	lpass	!~/.config/tmux/lpass.sh generate
+Session: rename to current folder	tmux	!tmux rename-session "$(basename "$(tmux display-message -p '#{pane_current_path}')")"
+Session: detach	tmux	detach-client
+Session: kill all others	tmux	kill-session -a
+Window: rename to agent	tmux	rename-window agent
+Window: rename to markserv	tmux	rename-window markserv
+Window: kill current	tmux	kill-window
+Window: kill all others	tmux	kill-window -a
+Window: new	tmux	new-window
+Window: move to another session	tmux	!move_window_to_session
+Pane: kill current	tmux	kill-pane
+Pane: kill all others	tmux	kill-pane -a
+Pane: break out to new window	tmux	break-pane
+Pane: split left	tmux	split-window -hb -c "#{pane_current_path}"
+Pane: split right	tmux	split-window -h -c "#{pane_current_path}"
+Pane: split up	tmux	split-window -vb -c "#{pane_current_path}"
+Pane: split down	tmux	split-window -v -c "#{pane_current_path}"
+Pane: swap left	tmux	swap-pane -s '{left-of}'
+Pane: swap down	tmux	swap-pane -s '{down-of}'
+Pane: swap up	tmux	swap-pane -s '{up-of}'
+Pane: swap right	tmux	swap-pane -s '{right-of}'
+Pane: move to another window	tmux	!move_pane_to_window
+Credential: copy password	lpass	!~/.config/tmux/lpass.sh password
+Credential: copy username	lpass	!~/.config/tmux/lpass.sh username
+Credential: add new	lpass	!~/.config/tmux/lpass.sh add
+Credential: generate password	lpass	!~/.config/tmux/lpass.sh generate
 EOF
 )
 
 # Dynamic: one entry per existing session and per window in current session.
 sessions=$(tmux list-sessions -F '#{session_name}' 2>/dev/null \
-  | awk -v OFS='\t' '{print "Switch to session " $0, "tmux", "switch-client -t \"" $0 "\""}')
+  | awk -v OFS='\t' '{print "Session: switch to " $0, "tmux", "switch-client -t \"" $0 "\""}')
 
 windows=$(tmux list-windows -F $'#{window_index}\t#{window_name}' 2>/dev/null \
-  | awk -F'\t' -v OFS='\t' '{print "Switch to window " $2, "tmux", "select-window -t " $1}')
+  | awk -F'\t' -v OFS='\t' '{print "Window: switch to " $2, "tmux", "select-window -t " $1}')
 
 # Render <label>  <colored-hint>\t<cmd> so fzf shows the hint as a tight
 # inline suffix instead of a tab-stop-wide gap. `sort -f` alphabetizes.
