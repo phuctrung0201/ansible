@@ -50,6 +50,10 @@ Close all other windows	tmux	kill-window -a
 Close all other panes	tmux	kill-pane -a
 Detach session	tmux	detach-client
 Break pane to window	tmux	break-pane
+Split pane left	tmux	split-window -hb -c "#{pane_current_path}"
+Split pane right	tmux	split-window -h -c "#{pane_current_path}"
+Split pane up	tmux	split-window -vb -c "#{pane_current_path}"
+Split pane down	tmux	split-window -v -c "#{pane_current_path}"
 Move window to session	tmux	!move_window_to_session
 Move pane to window	tmux	!move_pane_to_window
 Swap pane left	tmux	swap-pane -s '{left-of}'
