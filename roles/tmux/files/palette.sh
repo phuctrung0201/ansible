@@ -49,6 +49,7 @@ Close all other sessions	tmux	kill-session -a
 Close all other windows	tmux	kill-window -a
 Close all other panes	tmux	kill-pane -a
 Detach session	tmux	detach-client
+New window	tmux	new-window
 Break pane to window	tmux	break-pane
 Split pane left	tmux	split-window -hb -c "#{pane_current_path}"
 Split pane right	tmux	split-window -h -c "#{pane_current_path}"
