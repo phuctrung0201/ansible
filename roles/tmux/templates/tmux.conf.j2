@@ -19,8 +19,12 @@ set -g history-limit 5000
 set -g focus-events on
 setw -g mode-keys vi
 
-# Command palette — fzf picker over useful tmux commands (Alt+Space, no prefix needed)
-bind -n M-Space display-popup -E -w 60% -h 40% "~/.config/tmux/palette.sh"
+# Copy mode — vi-style v/y for select/yank
+bind -T copy-mode-vi v send -X begin-selection
+bind -T copy-mode-vi y send -X copy-pipe-and-cancel "pbcopy"
+
+# Command palette — fzf picker over useful tmux commands (prefix + Space)
+bind Space display-popup -E -w 50% -h 25% "~/.config/tmux/palette.sh"
 
 # Status bar — simple colored blocks, no special glyphs required
 set -g status-style "bg=default,fg={{ theme.fg }}"
