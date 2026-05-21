@@ -4,7 +4,7 @@
 after-login-command = []
 
 after-startup-command = [
-'exec-and-forget borders active_color=0xCC{{ _border_active }} inactive_color=0x30{{ _border_inactive }} width=2.0'
+'exec-and-forget borders active_color=0xCC{{ _border_active }} inactive_color=0x30{{ _border_inactive }} width=3.0'
 ]
 
 # Start AeroSpace at login
@@ -53,7 +53,7 @@ outer.right = 4
 
 # Window management: Option (⌥) + key. On macOS, AeroSpace's `alt-` prefix is the Option key.
 # No separate binding mode — chords run directly from main mode.
-# Workspaces: `=terminal 1=browser 2=fallback 3=empty F1=slack F2=outlook F3=zoom
+# Workspaces: `=terminal 1=browser 2=obsidian 3=fallback F1=screen 1 F2=screen 2
 [mode.main.binding]
 
 # tab/backslash in the old action mode → Option+key
@@ -79,10 +79,12 @@ alt-shift-l = 'move right'
 # Workspaces
 alt-1 = 'workspace 1'
 alt-2 = 'workspace 2'
+alt-3 = 'workspace 3'
 alt-f2 = 'workspace F2'
 alt-f1 = 'workspace F1'
 alt-shift-1 = 'move-node-to-workspace --focus-follows-window 1'
 alt-shift-2 = 'move-node-to-workspace --focus-follows-window 2'
+alt-shift-3 = 'move-node-to-workspace --focus-follows-window 3'
 alt-shift-f1 = 'move-node-to-workspace --focus-follows-window F1'
 alt-shift-f2 = 'move-node-to-workspace --focus-follows-window F2'
 
@@ -116,5 +118,9 @@ if.app-id = 'app.zen-browser.zen'
 run = 'move-node-to-workspace --focus-follows-window 1'
 
 [[on-window-detected]]
-check-further-callbacks = true
+if.app-id = 'md.obsidian'
 run = 'move-node-to-workspace --focus-follows-window 2'
+
+[[on-window-detected]]
+check-further-callbacks = true
+run = 'move-node-to-workspace --focus-follows-window 3'

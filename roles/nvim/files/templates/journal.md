@@ -1,7 +1,7 @@
-# %(date:%A, %B %-d %Y)
+# {{date}}
 
 ## Tasks
-- [ ] 
+- [ ]
 
 ## Notes
 

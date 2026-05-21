@@ -33,13 +33,6 @@
     state: present
     create: yes
 
-- name: Add wiki alias
-  lineinfile:
-    path: "~/.zshrc"
-    regexp: "^alias wiki="
-    line: "alias wiki='nvim +WikiJournal'"
-    state: present
-
 - name: Ensure wiki directory exists
   file:
     path: "~/wiki"
@@ -52,3 +45,14 @@
     content: |
       # Wiki
     force: false
+
+- name: Ensure obsidian templates directory exists in vault
+  file:
+    path: "~/wiki/templates"
+    state: directory
+    mode: "0755"
+
+- name: Install journal template into vault
+  copy:
+    src: templates/journal.md
+    dest: "~/wiki/templates/journal.md"
