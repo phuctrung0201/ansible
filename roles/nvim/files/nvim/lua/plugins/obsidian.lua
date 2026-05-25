@@ -46,7 +46,7 @@ return {
         name = "snacks.pick",
       },
       link = {
-        style = "markdown",
+        style = "wiki",
       },
       frontmatter = {
         enabled = false,
