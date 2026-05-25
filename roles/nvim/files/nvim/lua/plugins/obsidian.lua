@@ -51,7 +51,7 @@ return {
       frontmatter = {
         enabled = false,
       },
-      ui = { enable = false },
+      ui = { enable = true },
     },
   },
 }
