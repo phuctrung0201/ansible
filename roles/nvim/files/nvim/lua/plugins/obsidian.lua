@@ -29,7 +29,7 @@ return {
         return title:lower():gsub("[^%w]+", "_"):gsub("^_+", ""):gsub("_+$", "")
       end,
       daily_notes = {
-        folder = "journal",
+        folder = "journals",
         date_format = "%Y-%m-%d",
         template = "journal.md",
       },

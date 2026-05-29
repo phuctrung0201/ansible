@@ -49,8 +49,8 @@ outer.right = 4
 
 # tab/backslash in the old action mode → Option+key
 alt-backslash = 'focus-back-and-forth'
-alt-tab = 'focus dfs-next'
-alt-shift-tab = 'focus dfs-prev'
+alt-tab = 'focus-monitor --wrap-around next'
+alt-shift-tab = 'move-workspace-to-monitor --wrap-around next'
 
 alt-backtick = 'summon-workspace `'
 alt-shift-backtick = 'move-node-to-workspace --focus-follows-window `'
@@ -77,11 +77,9 @@ alt-shift-2 = 'move-node-to-workspace --focus-follows-window 2'
 alt-shift-f1 = 'move-node-to-workspace --focus-follows-window F1'
 alt-shift-f2 = 'move-node-to-workspace --focus-follows-window F2'
 
-# Monitor (brackets)
-alt-leftSquareBracket = 'focus-monitor  prev'
-alt-rightSquareBracket = 'focus-monitor next'
-alt-shift-leftSquareBracket = 'move-workspace-to-monitor prev'
-alt-shift-rightSquareBracket = 'move-workspace-to-monitor next'
+# Window focus (brackets)
+alt-leftSquareBracket = 'focus dfs-prev'
+alt-rightSquareBracket = 'focus dfs-next'
 
 # Layout
 alt-t = 'layout accordion tiles'
