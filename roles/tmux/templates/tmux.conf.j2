@@ -23,8 +23,8 @@ setw -g mode-keys vi
 bind -T copy-mode-vi v send -X begin-selection
 bind -T copy-mode-vi y send -X copy-pipe-and-cancel "pbcopy"
 
-# Command palette — fzf picker over useful tmux commands (prefix + Space)
-bind Space display-popup -E -w 50% -h 25% "~/.config/tmux/palette.sh"
+# Command palette — fzf picker over useful tmux commands (Alt + Space)
+bind -n M-Space display-popup -E -w 50% -h 25% "~/.config/tmux/palette.sh"
 
 # Status bar — simple colored blocks, no special glyphs required
 set -g status-style "bg=default,fg={{ theme.fg }}"
