@@ -37,7 +37,8 @@ return {
   {
     "kristijanhusak/vim-dadbod-ui",
     keys = {
-      { "<leader>DD", "<cmd>DBUIToggle<CR>", desc = "Toggle DB UI" },
+      { "<leader>D", false },
+      { "<leader>dd", "<cmd>DBUIToggle<CR>", desc = "Toggle DB UI" },
     },
     init = function()
       vim.g.db_ui_use_nvim_notify = true
@@ -66,9 +67,9 @@ return {
           local map = function(mode, l, r, desc)
             vim.keymap.set(mode, l, r, { buffer = ev.buf, desc = desc })
           end
-          map({ "n", "x" }, "<leader>DS", "<Plug>(DBUI_ExecuteQuery)", "Execute query")
-          map("n", "<leader>Ds", "<Plug>(DBUI_SaveQuery)", "Save query")
-          map("n", "<leader>DE", "<Plug>(DBUI_EditBindParameters)", "Execute with bind params")
+          map({ "n", "x" }, "<leader>de", "<Plug>(DBUI_ExecuteQuery)", "Execute query")
+          map("n", "<leader>dE", "<Plug>(DBUI_EditBindParameters)", "Execute with bind params")
+          map("n", "<leader>ds", "<Plug>(DBUI_SaveQuery)", "Save query")
         end,
       })
 
@@ -81,13 +82,12 @@ return {
           map("o", "<Plug>(DBUI_SelectLine)", "Open/toggle")
           map("<CR>", "<Plug>(DBUI_SelectLine)", "Open/toggle")
           map("<2-LeftMouse>", "<Plug>(DBUI_SelectLine)", "Open/toggle")
-          map("v", "<Plug>(DBUI_SelectLineVsplit)", "Open in vsplit")
-          map("d", "<Plug>(DBUI_DeleteLine)", "Delete")
-          map("D", "<Plug>(DBUI_DeleteLine)", "Delete connection")
+          map("D", "<Plug>(DBUI_DeleteLine)", "Delete")
+          map("d", "<Plug>(DBUI_DeleteLine)", "Delete connection")
           map("R", "<Plug>(DBUI_Redraw)", "Redraw")
           map("r", "<Plug>(DBUI_RenameLine)", "Rename")
-          map("A", "<Plug>(DBUI_AddConnection)", "Add connection")
-          map("H", "<Plug>(DBUI_ToggleDetails)", "Toggle details")
+          map("a", "<Plug>(DBUI_AddConnection)", "Add connection")
+          map("h", "<Plug>(DBUI_ToggleDetails)", "Toggle details")
           map("q", "<Plug>(DBUI_Quit)", "Quit")
           map("?", "<Plug>(DBUI_ToggleHelp)", "Toggle help")
         end,
@@ -99,8 +99,8 @@ return {
     "folke/which-key.nvim",
     opts = {
       spec = {
-        { "<leader>D", group = "database" },
-        { "<leader>D", group = "database", mode = "x" },
+        { "<leader>d", group = "database" },
+        { "<leader>d", group = "database", mode = "x" },
       },
     },
   },
