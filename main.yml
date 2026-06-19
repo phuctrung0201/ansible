@@ -9,6 +9,8 @@
       tags: ['ohmyzsh']
     - role: mise
       tags: ['mise']
+    - role: nushell
+      tags: ['nushell']
     - role: nvim
       tags: ['nvim']
     - role: aerospace

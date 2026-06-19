@@ -1,0 +1,58 @@
+- name: Install nushell
+  homebrew:
+    name:
+      - nushell
+      - zoxide
+    state: present
+
+- name: Locate nushell binary
+  command: which nu
+  register: nushell_bin
+  changed_when: false
+
+- name: Resolve nushell config directories
+  shell: |
+    "{{ nushell_bin.stdout | trim }}" -c 'print ($nu.home-dir | path join ".config" "nushell")'
+    "{{ nushell_bin.stdout | trim }}" -c 'print ($nu.default-config-dir)'
+    env -i HOME="{{ lookup('env', 'HOME') }}" "{{ nushell_bin.stdout | trim }}" -c 'print ($nu.default-config-dir)'
+  register: nushell_paths
+  changed_when: false
+
+- name: Set nushell config paths
+  set_fact:
+    nushell_config_dirs: "{{ nushell_paths.stdout_lines | map('trim') | unique | list }}"
+    nushell_canonical_config_dir: "{{ nushell_paths.stdout_lines | map('trim') | first }}"
+
+- name: Ensure nushell config directories exist
+  file:
+    path: "{{ item }}"
+    state: directory
+  loop: "{{ nushell_config_dirs }}"
+
+- name: Deploy nushell env config
+  copy:
+    src: env.nu
+    dest: "{{ item }}/env.nu"
+    backup: yes
+  loop: "{{ nushell_config_dirs }}"
+
+- name: Deploy nushell config
+  copy:
+    src: config.nu
+    dest: "{{ item }}/config.nu"
+    backup: yes
+  loop: "{{ nushell_config_dirs }}"
+
+- name: Deploy zoxide command wrappers
+  copy:
+    src: zoxide-cmd.nu
+    dest: "{{ nushell_canonical_config_dir }}/zoxide-cmd.nu"
+    backup: yes
+
+- name: Generate mise activation for nushell
+  shell: "mise activate nu > '{{ nushell_canonical_config_dir }}/mise.nu'"
+  changed_when: true
+
+- name: Generate zoxide activation for nushell
+  shell: "zoxide init nushell --no-cmd > '{{ lookup('env', 'HOME') }}/.zoxide.nu'"
+  changed_when: true
