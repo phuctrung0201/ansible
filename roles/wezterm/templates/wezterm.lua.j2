@@ -1,0 +1,116 @@
+-- Ansible — Catppuccin Mocha/Macchiato mix.
+
+local wezterm = require('wezterm')
+local act = wezterm.action
+
+local config = wezterm.config_builder()
+
+local bg = '{{ theme.bg }}'
+local fg = '{{ theme.fg }}'
+local comment = '{{ theme.comment }}'
+local selection = '{{ theme.selection }}'
+local opacity = 0.65
+
+-- Font
+config.font = wezterm.font('FiraCode Nerd Font Mono')
+config.font_size = 16.0
+
+-- Colors
+config.colors = {
+  foreground = fg,
+  background = bg,
+  cursor_bg = '{{ theme.cyan }}',
+  cursor_fg = bg,
+  selection_bg = selection,
+  selection_fg = fg,
+  ansi = {
+    '{{ theme.dark }}',
+    '{{ theme.red }}',
+    '{{ theme.green }}',
+    '{{ theme.yellow }}',
+    '{{ theme.blue }}',
+    '{{ theme.pink }}',
+    '{{ theme.cyan }}',
+    '{{ theme.white }}',
+  },
+  brights = {
+    '{{ theme.comment_bright }}',
+    '{{ theme.bright_red }}',
+    '{{ theme.bright_green }}',
+    '{{ theme.bright_yellow }}',
+    '{{ theme.bright_purple }}',
+    '{{ theme.bright_pink }}',
+    '{{ theme.bright_cyan }}',
+    '{{ theme.bright_white }}',
+  },
+  -- Retro tab bar draws on the same cell grid as the terminal — use the same bg.
+  tab_bar = {
+    background = bg,
+    active_tab = {
+      bg_color = bg,
+      fg_color = fg,
+      intensity = 'Bold',
+    },
+    inactive_tab = {
+      bg_color = bg,
+      fg_color = comment,
+    },
+    inactive_tab_hover = {
+      bg_color = bg,
+      fg_color = fg,
+    },
+    new_tab = {
+      bg_color = bg,
+      fg_color = comment,
+    },
+    new_tab_hover = {
+      bg_color = bg,
+      fg_color = fg,
+    },
+    inactive_tab_edge = bg,
+  },
+}
+
+-- Cursor
+config.default_cursor_style = 'BlinkingBar'
+
+-- Window — hidden titlebar, opacity/blur
+config.window_decorations = 'RESIZE'
+config.window_background_opacity = opacity
+config.macos_window_background_blur = 20
+config.window_padding = {
+  left = 0,
+  right = 0,
+  top = 0,
+  bottom = 0,
+}
+
+-- Retro tab bar — same render path as terminal (fancy bar uses a separate opaque layer)
+config.enable_tab_bar = true
+config.use_fancy_tab_bar = false
+config.tab_bar_at_bottom = true
+config.show_new_tab_button_in_tab_bar = false
+config.tab_max_width = 32
+
+-- Homebrew bins (wezterm cli, lpass) — launch env omits /opt/homebrew/bin when started from Dock
+local path = os.getenv('PATH') or ''
+config.set_environment_variables = {
+  PATH = path .. ':/opt/homebrew/bin:/usr/local/bin',
+}
+
+-- Custom palette entries (Tab/Pane/Credential) in the built-in command palette
+local palette = dofile((os.getenv('HOME') or '') .. '/.config/wezterm/palette.lua')
+wezterm.on('augment-command-palette', function(window, pane)
+  return palette.build_entries(window, pane)
+end)
+
+config.keys = {
+  -- Command palette (Ctrl+Shift+P is the WezTerm default)
+  {
+    key = ' ',
+    mods = 'ALT',
+    action = act.ActivateCommandPalette,
+  },
+}
+
+return config

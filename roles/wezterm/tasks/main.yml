@@ -1,8 +1,13 @@
-- name: Install Kitty
+- name: Install WezTerm
   community.general.homebrew:
-    name: kitty
+    name: wezterm
     state: present
     install_options: cask
+
+- name: Install lastpass-cli
+  community.general.homebrew:
+    name: lastpass-cli
+    state: present
 
 - name: Check if FiraCode Nerd Font is installed
   stat:
@@ -16,13 +21,19 @@
     install_options: cask
   when: not firacode_font.stat.exists
 
-- name: Ensure Kitty config directory exists
+- name: Ensure WezTerm config directory exists
   file:
-    path: "~/.config/kitty"
+    path: "~/.config/wezterm"
     state: directory
 
-- name: Deploy Kitty config
+- name: Deploy WezTerm config
   template:
-    src: kitty.conf.j2
-    dest: "~/.config/kitty/kitty.conf"
+    src: wezterm.lua.j2
+    dest: "~/.config/wezterm/wezterm.lua"
     backup: true
+
+- name: Deploy wezterm palette module
+  copy:
+    src: palette.lua
+    dest: "~/.config/wezterm/palette.lua"
+    mode: "0644"

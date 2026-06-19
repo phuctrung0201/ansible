@@ -4,8 +4,7 @@ This repository stores personal machine setup for:
  - [mise](https://mise.jdx.dev/)
  - [Neovim](https://neovim.io/)
  - [AeroSpace](https://github.com/nikitabobko/AeroSpace)
- - [Kitty](https://sw.kovidgoyal.net/kitty/)
- - [tmux](https://github.com/tmux/tmux)
+ - [WezTerm](https://wezfurlong.org/wezterm/)
 
 # Prerequisites
 
