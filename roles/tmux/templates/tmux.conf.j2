@@ -1,9 +1,9 @@
 # tmux config — managed by ansible
 # Theme colors come from share.yml (catppuccin mocha mix)
 
-# Terminal / colors
+# Terminal / colors — truecolor (RGB) for the terminals we actually use
 set -g default-terminal "tmux-256color"
-set -ga terminal-overrides ",xterm-256color:Tc,xterm-ghostty:Tc"
+set -as terminal-features ",xterm-256color:RGB,xterm-kitty:RGB"
 
 # Prefix: Alt+p
 unbind C-b
@@ -15,13 +15,17 @@ set -g mouse on
 set -g base-index 1
 setw -g pane-base-index 1
 set -g renumber-windows on
-set -g history-limit 5000
+set -g history-limit 2000
 set -g focus-events on
 setw -g mode-keys vi
 
 # Copy mode — vi-style v/y for select/yank
 bind -T copy-mode-vi v send -X begin-selection
 bind -T copy-mode-vi y send -X copy-pipe-and-cancel "pbcopy"
+
+# fzf colors (Catppuccin from share.yml) — inherited by the popup pickers below.
+# bg:-1 keeps the terminal's translucent background.
+set-environment -g FZF_DEFAULT_OPTS "--color=fg:{{ theme.fg }},bg:-1,hl:{{ theme.orange }} --color=fg+:{{ theme.fg }}:bold,bg+:{{ theme.selection }},hl+:{{ theme.red }} --color=info:{{ theme.cyan }},prompt:{{ theme.pink }},pointer:{{ theme.yellow }} --color=marker:{{ theme.green }},spinner:{{ theme.purple }},header:{{ theme.red }}"
 
 # Command palette — fzf picker over useful tmux commands (Alt + Space)
 bind -n M-Space display-popup -E -w 50% -h 25% "~/.config/tmux/palette.sh"

@@ -2,7 +2,7 @@ return {
   {
     "nvim-treesitter/nvim-treesitter",
     opts = {
-      ensure_installed = { "c_sharp" },
+      ensure_installed = { "c_sharp", "nu" },
     },
   },
 }

@@ -8,34 +8,6 @@
     - bat
     - lastpass-cli
 
-- name: Set LPASS_AGENT_TIMEOUT to never expire
-  lineinfile:
-    path: "~/.zshrc"
-    line: 'export LPASS_AGENT_TIMEOUT=0'
-    state: present
-
-- name: Set PAGER environment variable
-  lineinfile:
-    path: "~/.zshrc"
-    line: 'export PAGER=bat'
-    state: present
-
-- name: Ensure fzf config directory exists
-  file:
-    path: "~/.config/fzf"
-    state: directory
-
-- name: Deploy fzf zsh config
-  template:
-    src: fzf.zsh.j2
-    dest: "~/.config/fzf/fzf.zsh"
-
-- name: Source fzf.zsh from zshrc
-  lineinfile:
-    path: "~/.zshrc"
-    line: "source ~/.config/fzf/fzf.zsh"
-    state: present
-
 - name: Ensure tmux config directory exists
   file:
     path: "~/.config/tmux"

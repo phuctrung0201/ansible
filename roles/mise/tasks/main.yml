@@ -17,10 +17,3 @@
 - name: Ensure global tools installed
   shell: "mise install"
   changed_when: false
-
-- name: Add mise init line to .zshrc (if not already there)
-  lineinfile:
-    path: "~/.zshrc"
-    line: 'eval "$(mise activate zsh)"'
-    insertafter: EOF
-    state: present

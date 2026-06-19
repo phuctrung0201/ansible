@@ -33,6 +33,9 @@ return {
         bashls = {
           filetypes = { "sh", "zsh", "bash" },
         },
+        nushell = {
+          mason = false,
+        },
         gopls = {
           settings = {
             gopls = {

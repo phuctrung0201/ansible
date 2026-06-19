@@ -25,14 +25,6 @@
     dest: "~/.config/nvim/lua/config/env.lua"
     backup: yes
 
-- name: Set EDITOR environment variable
-  lineinfile:
-    path: "~/.zshrc"
-    regexp: '^export EDITOR='
-    line: 'export EDITOR="nvim"'
-    state: present
-    create: yes
-
 - name: Ensure wiki directory exists
   file:
     path: "~/wiki"
