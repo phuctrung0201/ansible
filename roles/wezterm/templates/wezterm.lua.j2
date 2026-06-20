@@ -9,7 +9,7 @@ local bg = '{{ theme.bg }}'
 local fg = '{{ theme.fg }}'
 local comment = '{{ theme.comment }}'
 local selection = '{{ theme.selection }}'
-local opacity = 0.65
+local green = '{{ theme.green }}'
 
 -- Font
 config.font = wezterm.font('FiraCode Nerd Font Mono')
@@ -43,53 +43,55 @@ config.colors = {
     '{{ theme.bright_cyan }}',
     '{{ theme.bright_white }}',
   },
-  -- Retro tab bar — transparent backgrounds so window blur/opacity shows through.
+  -- Tab bar — solid backgrounds (stable rendering)
   tab_bar = {
-    background = 'none',
+    background = bg,
     active_tab = {
-      bg_color = 'none',
+      bg_color = bg,
       fg_color = fg,
       intensity = 'Bold',
     },
     inactive_tab = {
-      bg_color = 'none',
+      bg_color = bg,
       fg_color = comment,
     },
     inactive_tab_hover = {
-      bg_color = 'none',
+      bg_color = bg,
       fg_color = fg,
     },
     new_tab = {
-      bg_color = 'none',
+      bg_color = bg,
       fg_color = comment,
     },
     new_tab_hover = {
-      bg_color = 'none',
+      bg_color = bg,
       fg_color = fg,
     },
-    inactive_tab_edge = 'none',
+    inactive_tab_edge = bg,
   },
 }
 
 -- Cursor
 config.default_cursor_style = 'BlinkingBar'
 
--- Window — hidden titlebar, opacity/blur
+-- Window — OpenGL default; no opacity/blur (stable rendering)
 config.window_decorations = 'RESIZE'
-config.window_background_opacity = opacity
-config.macos_window_background_blur = 20
+config.window_frame = {
+  active_titlebar_bg = bg,
+  inactive_titlebar_bg = bg,
+}
 config.window_padding = {
-  left = '1cell',
-  right = '1cell',
+  left = 0,
+  right = 0,
   top = '0.5cell',
-  bottom = '0.5cell',
+  bottom = 0,
 }
 
--- Retro tab bar — same render path as terminal (fancy bar uses a separate opaque layer)
 config.enable_tab_bar = true
 config.use_fancy_tab_bar = false
 config.tab_bar_at_bottom = true
 config.show_new_tab_button_in_tab_bar = false
+config.hide_tab_bar_if_only_one_tab = false
 
 -- Persistent local mux — workspaces survive GUI restarts; extra GUIs can show other workspaces.
 config.unix_domains = {
@@ -111,14 +113,21 @@ wezterm.on('augment-command-palette', function(window, pane)
   return palette.build_entries(window, pane)
 end)
 
-wezterm.on('update-right-status', function(window, _pane)
+wezterm.on('update-status', function(window, _pane)
   local mux_win = window:mux_window()
   if not mux_win then
     return
   end
-  window:set_right_status(wezterm.format {
-    { Foreground = { Color = fg } },
-    { Text = mux_win:get_workspace() },
+  local workspace = mux_win:get_workspace()
+  if not workspace or workspace == '' then
+    return
+  end
+
+  window:set_left_status(wezterm.format {
+    { Text = ' ' },
+    { Foreground = { Color = green } },
+    { Attribute = { Intensity = 'Bold' } },
+    { Text = wezterm.nerdfonts.md_layers .. ': ' .. workspace },
   })
 end)
 
