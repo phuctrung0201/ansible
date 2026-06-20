@@ -107,6 +107,10 @@ if.app-id = 'app.zen-browser.zen'
 run = 'move-node-to-workspace --focus-follows-window 2'
 
 [[on-window-detected]]
+if.app-id = 'company.thebrowser.Browser'
+run = 'move-node-to-workspace --focus-follows-window 2'
+
+[[on-window-detected]]
 if.app-id = 'md.obsidian'
 run = 'move-node-to-workspace --focus-follows-window 1'
 
