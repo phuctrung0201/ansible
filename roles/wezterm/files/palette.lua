@@ -20,53 +20,43 @@ local function folder_name(pane)
   return cwd:match('([^/]+)$') or cwd
 end
 
-local function wezterm_bin()
-  local candidates = {
-    '/Applications/WezTerm.app/Contents/MacOS/wezterm',
-    '/opt/homebrew/bin/wezterm',
-    'wezterm',
-  }
+local function first_existing(candidates, fallback)
   for _, path in ipairs(candidates) do
-    if path:sub(1, 1) == '/' then
-      local f = io.open(path, 'r')
-      if f then
-        f:close()
-        return path
-      end
-    else
+    if path:sub(1, 1) ~= '/' then
+      return path
+    end
+    local f = io.open(path, 'r')
+    if f then
+      f:close()
       return path
     end
   end
-  return 'wezterm'
+  return fallback
 end
 
-local function lpass_bin()
-  local candidates = {
-    '/opt/homebrew/bin/lpass',
-    '/usr/local/bin/lpass',
-    'lpass',
-  }
-  for _, path in ipairs(candidates) do
-    if path:sub(1, 1) == '/' then
-      local f = io.open(path, 'r')
-      if f then
-        f:close()
-        return path
-      end
-    else
-      return path
-    end
-  end
-  return 'lpass'
-end
+local WEZTERM = first_existing({
+  '/Applications/WezTerm.app/Contents/MacOS/wezterm',
+  '/opt/homebrew/bin/wezterm',
+}, 'wezterm')
 
-local WEZTERM = wezterm_bin()
-local LPASS = lpass_bin()
+local LPASS = first_existing({
+  '/opt/homebrew/bin/lpass',
+  '/usr/local/bin/lpass',
+}, 'lpass')
+
 local MUX_DOMAIN = 'unix'
 
-local function attach_workspace_window(win, workspace)
+-- Spawn a new GUI window attached to the unix mux in the current workspace.
+function M.attach_current_workspace_window(window)
+  local mux_win = window:mux_window()
+  if not mux_win then
+    window:toast_notification('wezterm', 'No mux window', 'Terminal', 3000)
+    return
+  end
+
+  local workspace = mux_win:get_workspace()
   if not workspace or workspace == '' then
-    win:toast_notification('wezterm', 'No workspace', 'Terminal', 3000)
+    window:toast_notification('wezterm', 'No workspace', 'Terminal', 3000)
     return
   end
 
@@ -78,19 +68,10 @@ local function attach_workspace_window(win, workspace)
     workspace,
   }
   if not ok then
-    local err = stderr or stdout or 'failed to attach workspace window'
+    local err = stderr ~= '' and stderr or stdout ~= '' and stdout or 'failed to attach workspace window'
     wezterm.log_error('attach workspace window: ' .. err)
-    win:toast_notification('wezterm', err, 'Terminal', 5000)
+    window:toast_notification('wezterm', err, 'Terminal', 5000)
   end
-end
-
-function M.attach_current_workspace_window(window)
-  local mux_win = window:mux_window()
-  if not mux_win then
-    window:toast_notification('wezterm', 'No mux window', 'Terminal', 3000)
-    return
-  end
-  attach_workspace_window(window, mux_win:get_workspace())
 end
 
 local function trim(s)
@@ -335,10 +316,6 @@ function M._build_entries(window, pane)
   add('Credential: generate password', 'md_key_change', lpass_credential_action('generate', 'Generate password'))
 
   return entries
-end
-
-function M.register()
-  -- Kept for backwards compatibility; wezterm.lua registers the event directly.
 end
 
 return M

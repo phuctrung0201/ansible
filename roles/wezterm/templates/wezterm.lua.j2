@@ -125,35 +125,13 @@ end)
 config.keys = {
   {
     key = 'w',
-    mods = 'CMD',
+    mods = 'CMD|SHIFT',
     action = act.DetachDomain 'CurrentPaneDomain',
   },
-  {
-    key = 'w',
-    mods = 'CMD|SHIFT',
-    action = act.CloseCurrentTab { confirm = false },
-  },
-  -- Attach a new GUI window to the current workspace (replaces SpawnWindow on Cmd+N)
+  -- Cmd+N — attach a new GUI window to the current mux workspace (overrides SpawnWindow)
   {
     key = 'n',
     mods = 'CMD',
-    action = act.DisableDefaultAssignment,
-  },
-  {
-    key = 'n',
-    mods = 'CMD',
-    action = wezterm.action_callback(function(window, _pane)
-      palette.attach_current_workspace_window(window)
-    end),
-  },
-  {
-    key = 'n',
-    mods = 'CTRL|SHIFT',
-    action = act.DisableDefaultAssignment,
-  },
-  {
-    key = 'n',
-    mods = 'CTRL|SHIFT',
     action = wezterm.action_callback(function(window, _pane)
       palette.attach_current_workspace_window(window)
     end),
