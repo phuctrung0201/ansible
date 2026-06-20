@@ -3,6 +3,7 @@
     name:
       - nushell
       - zoxide
+      - carapace
     state: present
 
 - name: Locate nushell binary
@@ -47,6 +48,12 @@
   copy:
     src: zoxide-cmd.nu
     dest: "{{ nushell_canonical_config_dir }}/zoxide-cmd.nu"
+    backup: yes
+
+- name: Deploy carapace completions
+  copy:
+    src: carapace.nu
+    dest: "{{ nushell_canonical_config_dir }}/carapace.nu"
     backup: yes
 
 - name: Generate mise activation for nushell

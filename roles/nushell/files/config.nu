@@ -4,6 +4,7 @@
 # zoxide must load before other $env.config changes (see zoxide#546)
 source ~/.zoxide.nu
 source ~/.config/nushell/zoxide-cmd.nu
+source ~/.config/nushell/carapace.nu
 
 # env_change.PWD hooks are unreliable with mise; track directories on pre_prompt
 $env.__zoxide_last_pwd = ""

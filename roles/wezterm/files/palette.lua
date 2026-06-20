@@ -3,6 +3,7 @@
 
 local wezterm = require('wezterm')
 local act = wezterm.action
+local mux = wezterm.mux
 
 local M = {}
 
@@ -61,6 +62,36 @@ end
 
 local WEZTERM = wezterm_bin()
 local LPASS = lpass_bin()
+local MUX_DOMAIN = 'unix'
+
+local function attach_workspace_window(win, workspace)
+  if not workspace or workspace == '' then
+    win:toast_notification('wezterm', 'No workspace', 'Terminal', 3000)
+    return
+  end
+
+  local ok, stdout, stderr = wezterm.run_child_process {
+    WEZTERM,
+    'connect',
+    MUX_DOMAIN,
+    '--workspace',
+    workspace,
+  }
+  if not ok then
+    local err = stderr or stdout or 'failed to attach workspace window'
+    wezterm.log_error('attach workspace window: ' .. err)
+    win:toast_notification('wezterm', err, 'Terminal', 5000)
+  end
+end
+
+function M.attach_current_workspace_window(window)
+  local mux_win = window:mux_window()
+  if not mux_win then
+    window:toast_notification('wezterm', 'No mux window', 'Terminal', 3000)
+    return
+  end
+  attach_workspace_window(window, mux_win:get_workspace())
+end
 
 local function trim(s)
   return (s or ''):gsub('^%s+', ''):gsub('%s+$', '')
@@ -209,86 +240,15 @@ local function entry(brief, icon, action, doc)
   }
 end
 
-local function prompt_rename_tab()
+local function prompt_rename_workspace()
   return act.PromptInputLine {
-    description = 'tab name',
+    description = 'workspace name',
     action = wezterm.action_callback(function(window, _pane, line)
       if line then
-        window:active_tab():set_title(line)
-      end
-    end),
-  }
-end
-
-local function first_pane_in_tab(tab)
-  local panes = tab:panes()
-  if #panes == 0 then
-    return nil
-  end
-  return panes[1]
-end
-
-local function move_pane_to_tab_action(window, pane)
-  local mux_win = window:mux_window()
-  local current_tab_id = window:active_tab():tab_id()
-  local source_pane_id = pane:pane_id()
-  local choices = {}
-  local tabs_by_id = {}
-
-  for _, info in ipairs(mux_win:tabs_with_info()) do
-    local tab = info.tab
-    local tab_id = tab:tab_id()
-    if tab_id ~= current_tab_id then
-      local id = tostring(tab_id)
-      table.insert(choices, {
-        id = id,
-        label = tab:get_title(),
-      })
-      tabs_by_id[id] = tab
-    end
-  end
-
-  if #choices == 0 then
-    return wezterm.action_callback(function(win)
-      win:toast_notification('wezterm', 'No other tabs', 'Terminal', 3000)
-    end)
-  end
-
-  return act.InputSelector {
-    title = 'Move pane to tab',
-    choices = choices,
-    fuzzy = true,
-    fuzzy_description = 'to tab ❯ ',
-    action = wezterm.action_callback(function(win, _p, id)
-      if not id then
-        return
-      end
-
-      local tab = tabs_by_id[id]
-      if not tab then
-        return
-      end
-
-      local target_pane = first_pane_in_tab(tab)
-      if not target_pane then
-        win:toast_notification('wezterm', 'Target tab has no panes', 'Terminal', 4000)
-        return
-      end
-
-      local ok, stdout, stderr = wezterm.run_child_process {
-        WEZTERM,
-        'cli',
-        'split-pane',
-        '--pane-id',
-        tostring(target_pane:pane_id()),
-        '--right',
-        '--move-pane-id',
-        tostring(source_pane_id),
-      }
-      if not ok then
-        local err = stderr or stdout or 'unknown error'
-        wezterm.log_error('move pane to tab failed: ' .. err)
-        win:toast_notification('wezterm', 'Move pane failed: ' .. err, 'Terminal', 5000)
+        local mux_win = window:mux_window()
+        if mux_win then
+          mux.rename_workspace(mux_win:get_workspace(), line)
+        end
       end
     end),
   }
@@ -319,15 +279,20 @@ function M._build_entries(window, pane)
     table.insert(entries, entry(brief, icon, action, doc))
   end
 
-  -- Tab — custom only (defaults cover new/close/switch)
+  -- Workspace
   add(
-    'Tab: rename to current folder',
+    'Workspace: rename to current folder',
     'md_folder_rename',
     wezterm.action_callback(function(win, p)
-      win:active_tab():set_title(folder_name(p))
+      local mw = win:mux_window()
+      if mw then
+        mux.rename_workspace(mw:get_workspace(), folder_name(p))
+      end
     end)
   )
-  add('Tab: rename current tab', 'md_rename_box', prompt_rename_tab())
+  add('Workspace: rename current workspace', 'md_rename_box', prompt_rename_workspace())
+
+  -- Tab — custom only (defaults cover new/close/switch)
   add(
     'Tab: close all others',
     'md_tab_unselected',
@@ -362,7 +327,6 @@ function M._build_entries(window, pane)
       p:move_to_new_tab()
     end)
   )
-  add('Pane: move to another tab', 'md_tab_move', move_pane_to_tab_action(window, pane))
 
   -- Credentials — lpass list loads on selection (not when palette opens)
   add('Credential: copy password', 'md_key', lpass_credential_action('password', 'Copy password'))
