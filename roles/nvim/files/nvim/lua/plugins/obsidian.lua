@@ -39,7 +39,6 @@ return {
         time_format = "%H:%M",
       },
       completion = {
-        nvim_cmp = false,
         min_chars = 2,
       },
       picker = {

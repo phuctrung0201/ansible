@@ -30,8 +30,8 @@ return {
             win = {
               list = {
                 keys = {
-                  ["H"] = "toggle_hidden",
-                  ["I"] = "toggle_ignored",
+                  ["<c-h>"] = "toggle_hidden",
+                  ["<c-g>"] = "toggle_ignored",
                 },
               },
             },
@@ -40,8 +40,8 @@ return {
         win = {
           input = {
             keys = {
-              ["H"] = { "toggle_hidden", mode = "n" },
-              ["I"] = { "toggle_ignored", mode = "n" },
+              ["<c-h>"] = { "toggle_hidden", mode = { "n", "i" } },
+              ["<c-g>"] = { "toggle_ignored", mode = { "n", "i" } },
             },
           },
           list = {
