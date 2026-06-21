@@ -76,5 +76,5 @@
   become: true
   tags: ['chsh']
   user:
-    name: "{{ ansible_user_id }}"
+    name: "{{ lookup('env', 'USER') }}"
     shell: "{{ nushell_bin.stdout | trim }}"
