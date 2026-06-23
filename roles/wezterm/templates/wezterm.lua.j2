@@ -153,15 +153,15 @@ config.keys = {
       palette.attach_current_workspace_window(window)
     end),
   },
-  -- Command palette (Ctrl+Shift+P is the WezTerm default)
+  -- Quick select (Ctrl+Shift+S only)
   {
-    key = ' ',
-    mods = 'ALT',
-    action = act.ActivateCommandPalette,
+    key = 'Space',
+    mods = 'SHIFT|CTRL',
+    action = act.DisableDefaultAssignment,
   },
   {
     key = 's',
-    mods = 'ALT',
+    mods = 'SHIFT|CTRL',
     action = act.QuickSelect,
   },
 }

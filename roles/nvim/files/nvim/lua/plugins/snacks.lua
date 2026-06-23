@@ -30,8 +30,11 @@ return {
             win = {
               list = {
                 keys = {
-                  ["<c-h>"] = "toggle_hidden",
-                  ["<c-g>"] = "toggle_ignored",
+                  ["H"] = false,
+                  ["I"] = false,
+                  ["<a-i>"] = false,
+                  ["<a-h>"] = "toggle_hidden",
+                  ["<a-g>"] = "toggle_ignored",
                 },
               },
             },
@@ -40,11 +43,17 @@ return {
         win = {
           input = {
             keys = {
-              ["<c-h>"] = { "toggle_hidden", mode = { "n", "i" } },
-              ["<c-g>"] = { "toggle_ignored", mode = { "n", "i" } },
+              ["<a-i>"] = false,
+              ["<a-h>"] = { "toggle_hidden", mode = { "n", "i" } },
+              ["<a-g>"] = { "toggle_ignored", mode = { "n", "i" } },
             },
           },
           list = {
+            keys = {
+              ["<a-i>"] = false,
+              ["<a-h>"] = "toggle_hidden",
+              ["<a-g>"] = "toggle_ignored",
+            },
             wo = { winhighlight = "CursorLine:CursorLine" },
           },
         },
