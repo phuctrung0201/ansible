@@ -13,27 +13,12 @@ RESET=$'\e[0m'
 
 FZF_OPTS=(--height=100% --layout=reverse --border=rounded)
 
-# Helpers used by !-prefixed entries that need a secondary picker.
-move_window_to_session() {
-  local cur t
-  cur=$(tmux display-message -p '#{session_name}')
-  t=$(tmux list-sessions -F '#{session_name}' \
-      | awk -v c="$cur" '$0 != c' \
-      | fzf "${FZF_OPTS[@]}" --prompt="to session ❯ ")
-  [ -z "$t" ] && return 0
-  tmux move-window -t "$t"
-}
-
 # Format per line: <label>\t<hint>\t<command>
 # Default: <command> is a tmux subcommand (we run `tmux <cmd>`).
-# Lines starting with `!` run as raw shell — these can call helpers above,
-# external scripts, or use $(...) substitution.
+# Lines starting with `!` run as raw shell — external scripts or $(...) substitution.
 static=$(cat <<'EOF'
 Session: rename to current folder	tmux	!tmux rename-session "$(basename "$(tmux display-message -p '#{pane_current_path}')")"
-Window: rename to agent	tmux	rename-window agent
-Window: rename to markserv	tmux	rename-window markserv
 Window: kill current	tmux	kill-window
-Window: move to another session	tmux	!move_window_to_session
 Pane: kill current	tmux	kill-pane
 Pane: break out to new window	tmux	break-pane
 Pane: swap left	tmux	swap-pane -s '{left-of}'
