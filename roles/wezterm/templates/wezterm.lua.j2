@@ -134,6 +134,12 @@ wezterm.on('update-status', function(window, _pane)
 end)
 
 config.keys = {
+  -- Cmd+W — close the current pane (instead of the whole tab)
+  {
+    key = 'w',
+    mods = 'CMD',
+    action = act.CloseCurrentPane { confirm = true },
+  },
   {
     key = 'w',
     mods = 'CMD|SHIFT',
