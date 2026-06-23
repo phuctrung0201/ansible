@@ -4,7 +4,8 @@ This repository stores personal machine setup for:
  - [mise](https://mise.jdx.dev/)
  - [Neovim](https://neovim.io/)
  - [AeroSpace](https://github.com/nikitabobko/AeroSpace)
- - [WezTerm](https://wezfurlong.org/wezterm/)
+ - [Ghostty](https://ghostty.org/) (terminal emulator, integrated with tmux)
+ - [tmux](https://github.com/tmux/tmux) (command palette via Alt+Space)
 
 # Prerequisites
 
