@@ -7,6 +7,7 @@ zsh_brew_packages:
   - zoxide
   - fzf
   - bat
+  - eza
   - lastpass-cli
 
 zsh_set_default_shell: false
