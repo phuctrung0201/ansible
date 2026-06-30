@@ -1,0 +1,12 @@
+zsh_brew_packages:
+  - zsh
+  - starship
+  - zsh-autosuggestions
+  - zsh-syntax-highlighting
+  - zsh-completions
+  - zoxide
+  - fzf
+  - bat
+  - lastpass-cli
+
+zsh_set_default_shell: false

@@ -1,0 +1,17 @@
+# LastPass — managed by Ansible zsh role
+
+flpass() {
+  local action
+  action=$(printf 'copy password\ncopy username\ncopy url\ngenerate password\nedit entry\ndelete entry\nadd entry' \
+    | fzf --reverse --prompt='LastPass> ') || return 0
+
+  case "$action" in
+    copy\ password)     "$HOME/.config/zsh/lpass.sh" password ;;
+    copy\ username)     "$HOME/.config/zsh/lpass.sh" username ;;
+    copy\ url)          "$HOME/.config/zsh/lpass.sh" url ;;
+    generate\ password) "$HOME/.config/zsh/lpass.sh" generate ;;
+    edit\ entry)        "$HOME/.config/zsh/lpass.sh" edit ;;
+    delete\ entry)      "$HOME/.config/zsh/lpass.sh" delete ;;
+    add\ entry)         "$HOME/.config/zsh/lpass.sh" add ;;
+  esac
+}

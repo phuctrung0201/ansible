@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
-# tmux LastPass picker — fuzzy-pick an entry; the action is passed in by
-# the palette, so no second picker is needed.
-# Invoked from the tmux command palette inside a `display-popup -E`.
+# LastPass picker — fuzzy-pick an entry; action is passed as the first argument.
+# Used by the tmux command palette and callable from zsh: ~/.config/zsh/lpass.sh <action>
 
 set -euo pipefail
 
@@ -10,7 +9,13 @@ action=${1:-password}
 # Nerd-font glyph (printf'd to keep the source pure ASCII)
 ICON_KEY=$(printf '\xef\x82\x84')   # nf-fa-key
 
-notify() { tmux display-message -d 2000 "lpass: $*"; }
+notify() {
+  if [[ -n "${TMUX:-}" ]]; then
+    tmux display-message -d 2000 "lpass: $*"
+  else
+    echo "lpass: $*"
+  fi
+}
 
 if ! command -v lpass >/dev/null 2>&1; then
   notify "lpass-cli not installed"

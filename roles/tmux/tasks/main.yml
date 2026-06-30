@@ -1,11 +1,7 @@
-- name: Install tmux and palette dependencies
+- name: Install tmux
   community.general.homebrew:
-    name: "{{ item }}"
+    name: tmux
     state: present
-  loop:
-    - tmux
-    - fzf
-    - lastpass-cli
 
 - name: Ensure tmux config directory exists
   file:
@@ -22,12 +18,6 @@
   copy:
     src: palette.sh
     dest: "~/.config/tmux/palette.sh"
-    mode: "0755"
-
-- name: Deploy tmux lpass picker
-  copy:
-    src: lpass.sh
-    dest: "~/.config/tmux/lpass.sh"
     mode: "0755"
 
 - name: Reload tmux config (if server running)

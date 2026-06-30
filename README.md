@@ -1,6 +1,6 @@
 # Overview
 This repository stores personal machine setup for:
- - [Nushell](https://www.nushell.sh/) (default login shell, with [zoxide](https://github.com/ajeetdsouza/zoxide) integration)
+ - [Zsh](https://www.zsh.org/) (default login shell — syntax highlighting, autosuggestions, [fzf](https://github.com/junegunn/fzf), [LastPass CLI](https://github.com/lastpass/lastpass-cli), [Starship](https://starship.rs/) prompt, vi keybindings, [zoxide](https://github.com/ajeetdsouza/zoxide))
  - [mise](https://mise.jdx.dev/)
  - [Neovim](https://neovim.io/)
  - [AeroSpace](https://github.com/nikitabobko/AeroSpace)
@@ -28,12 +28,12 @@ mise run install
 Run a specific role:
 
 ```sh
-mise run install -- --tags "nushell"
+mise run install -- --tags "zsh"
 ```
 
-Setting Nushell as the default login shell registers it in `/etc/shells` and runs
-`chsh`, which require sudo. Run that part explicitly with `-K` (asks for your password):
+Setting zsh as the default login shell registers it in `/etc/shells` and runs
+`chsh`, which require sudo:
 
 ```sh
-mise run install -- --tags "chsh" -K
+mise run install -- --tags "chsh" -e zsh_set_default_shell=true -K
 ```
