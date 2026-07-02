@@ -32,7 +32,7 @@
 
 - name: Generate carapace completions
   shell: >-
-    nu -c 'carapace _export nushell | save -f "{{ nushell_config_dir }}/carapace.nu"'
+    carapace _carapace nushell > "{{ nushell_config_dir }}/carapace.nu"
   changed_when: false
 
 - name: Generate zoxide init

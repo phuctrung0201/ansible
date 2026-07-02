@@ -32,6 +32,28 @@ source (if ($mise_file | path exists) { $mise_file } else { null })
 const zoxide_file = ($config_dir | path join "zoxide.nu")
 source (if ($zoxide_file | path exists) { $zoxide_file } else { null })
 
+# Nushell 0.103+ ignores external completers for internal commands; re-wrap z/zi.
+def "nu-complete zoxide path" [context: string] {
+    let parts = $context | split row " " | skip 1
+    {
+        options: {
+            sort: false
+            completion_algorithm: prefix
+            positional: false
+            case_sensitive: false
+        }
+        completions: (zoxide query --list --exclude $env.PWD -- ...$parts | lines)
+    }
+}
+
+def --env --wrapped z [...rest: string@"nu-complete zoxide path"] {
+    __zoxide_z ...$rest
+}
+
+def --env --wrapped zi [...rest: string@"nu-complete zoxide path"] {
+    __zoxide_zi ...$rest
+}
+
 if (which eza | is-not-empty) {
     alias ls = ^eza --icons
     alias ll = ^eza -la --icons
