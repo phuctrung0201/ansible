@@ -21,6 +21,24 @@ $env.config = {
     }
 }
 
+# Word-by-word history hints: Alt+l forward, Alt+h undo (macOS blocks Ctrl+Arrow).
+$env.config.keybindings ++= [
+    {
+        name: history_hint_word_complete
+        modifier: alt
+        keycode: char_l
+        mode: [vi_normal vi_insert]
+        event: { send: historyhintwordcomplete }
+    }
+    {
+        name: history_hint_word_undo
+        modifier: alt
+        keycode: char_h
+        mode: [vi_normal vi_insert]
+        event: [{ edit: backspaceword }]
+    }
+]
+
 const config_dir = $nu.default-config-dir
 
 const carapace_file = ($config_dir | path join "carapace.nu")
