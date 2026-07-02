@@ -94,14 +94,4 @@ return {
       })
     end,
   },
-
-  {
-    "folke/which-key.nvim",
-    opts = {
-      spec = {
-        { "<leader>d", group = "database" },
-        { "<leader>d", group = "database", mode = "x" },
-      },
-    },
-  },
 }

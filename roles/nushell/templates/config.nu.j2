@@ -1,0 +1,86 @@
+# config.nu — managed by Ansible nushell role
+
+$env.config = {
+    show_banner: false
+    edit_mode: vi
+    buffer_editor: "nvim"
+    highlight_resolved_externals: true
+    use_kitty_protocol: true
+    cursor_shape: {
+        vi_insert: line
+        vi_normal: block
+    }
+    history: {
+        max_size: 50000
+        sync_on_enter: true
+    }
+    completions: {
+        case_sensitive: false
+        quick: true
+        partial: true
+    }
+}
+
+const config_dir = $nu.default-config-dir
+
+const carapace_file = ($config_dir | path join "carapace.nu")
+source (if ($carapace_file | path exists) { $carapace_file } else { null })
+
+const mise_file = ($config_dir | path join "mise.nu")
+source (if ($mise_file | path exists) { $mise_file } else { null })
+
+const zoxide_file = ($config_dir | path join "zoxide.nu")
+source (if ($zoxide_file | path exists) { $zoxide_file } else { null })
+
+if (which eza | is-not-empty) {
+    alias ls = ^eza --icons
+    alias ll = ^eza -la --icons
+    alias la = ^eza -a --icons
+    alias lt = ^eza --tree --level=2 --icons
+}
+
+def flpass [] {
+    ^($env.HOME | path join ".config" "tmux" "lpass.sh")
+}
+
+def prompt-git [] {
+    let git_dir = (^git rev-parse --git-dir | complete)
+    if $git_dir.exit_code != 0 {
+        return null
+    }
+
+    let branch = (^git branch --show-current | complete)
+    if $branch.exit_code != 0 {
+        return null
+    }
+
+    let name = ($branch.stdout | str trim)
+    if ($name | is-empty) { null } else { $name }
+}
+
+# Default directory on line 1; vi indicator on line 2
+$env.PROMPT_COMMAND = {||
+    let dir = if ($env.PWD | path expand) == ($nu.home-dir | path expand) {
+        "~"
+    } else if ($env.PWD | str starts-with $"($nu.home-dir)/") {
+        $env.PWD | str replace $nu.home-dir "~"
+    } else {
+        $env.PWD
+    }
+
+    let branch = (prompt-git)
+    let line = if ($branch | is-not-empty) {
+        $"(ansi blue)($dir)(ansi reset) (ansi purple)($branch)(ansi reset)"
+    } else {
+        $"(ansi blue)($dir)(ansi reset)"
+    }
+
+    $"($line)\n"
+}
+
+$env.PROMPT_COMMAND_RIGHT = ""
+$env.TRANSIENT_PROMPT_COMMAND_RIGHT = ""
+$env.PROMPT_INDICATOR = "> "
+$env.PROMPT_INDICATOR_VI_INSERT = $"(ansi green_bold):(ansi reset) "
+$env.PROMPT_INDICATOR_VI_NORMAL = $"(ansi yellow_bold)❮(ansi reset) "
+$env.PROMPT_MULTILINE_INDICATOR = "::: "

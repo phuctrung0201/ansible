@@ -25,10 +25,10 @@ Pane: swap left	tmux	swap-pane -s '{left-of}'
 Pane: swap down	tmux	swap-pane -s '{down-of}'
 Pane: swap up	tmux	swap-pane -s '{up-of}'
 Pane: swap right	tmux	swap-pane -s '{right-of}'
-Credential: copy password	lpass	!~/.config/zsh/lpass.sh password
-Credential: copy username	lpass	!~/.config/zsh/lpass.sh username
-Credential: add new	lpass	!~/.config/zsh/lpass.sh add
-Credential: generate password	lpass	!~/.config/zsh/lpass.sh generate
+Credential: copy password	lpass	!~/.config/tmux/lpass.sh password
+Credential: copy username	lpass	!~/.config/tmux/lpass.sh username
+Credential: add new	lpass	!~/.config/tmux/lpass.sh add
+Credential: generate password	lpass	!~/.config/tmux/lpass.sh generate
 EOF
 )
 

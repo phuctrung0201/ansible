@@ -1,12 +1,18 @@
-- name: Install tmux
+- name: Install tmux, fzf, and LastPass CLI
   community.general.homebrew:
-    name: tmux
+    name: "{{ tmux_brew_packages }}"
     state: present
 
 - name: Ensure tmux config directory exists
   file:
     path: "~/.config/tmux"
     state: directory
+
+- name: Deploy LastPass picker script
+  copy:
+    src: lpass.sh
+    dest: "~/.config/tmux/lpass.sh"
+    mode: "0755"
 
 - name: Deploy tmux config
   template:

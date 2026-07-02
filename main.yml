@@ -7,8 +7,8 @@
       tags: ['common']
     - role: mise
       tags: ['mise']
-    - role: zsh
-      tags: ['zsh']
+    - role: nushell
+      tags: ['nushell']
     - role: nvim
       tags: ['nvim']
     - role: aerospace

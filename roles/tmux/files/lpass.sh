@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 # LastPass picker — fuzzy-pick an entry; action is passed as the first argument.
-# Used by the tmux command palette and callable from zsh: ~/.config/zsh/lpass.sh <action>
+# With no action, shows an fzf menu (flpass). Used by the tmux command palette too.
 
 set -euo pipefail
 
-action=${1:-password}
+export LPASS_AGENT_TIMEOUT="${LPASS_AGENT_TIMEOUT:-0}"
 
 # Nerd-font glyph (printf'd to keep the source pure ASCII)
 ICON_KEY=$(printf '\xef\x82\x84')   # nf-fa-key
@@ -16,6 +16,27 @@ notify() {
     echo "lpass: $*"
   fi
 }
+
+pick_action() {
+  local chosen
+  chosen=$(printf 'copy password\ncopy username\ncopy url\ngenerate password\nedit entry\ndelete entry\nadd entry' \
+    | fzf --reverse --prompt='LastPass> ') || exit 0
+  case "$chosen" in
+    copy\ password)     echo password ;;
+    copy\ username)     echo username ;;
+    copy\ url)          echo url ;;
+    generate\ password) echo generate ;;
+    edit\ entry)        echo edit ;;
+    delete\ entry)      echo delete ;;
+    add\ entry)         echo add ;;
+    *) exit 0 ;;
+  esac
+}
+
+action=${1:-}
+if [[ -z "$action" ]]; then
+  action=$(pick_action)
+fi
 
 if ! command -v lpass >/dev/null 2>&1; then
   notify "lpass-cli not installed"

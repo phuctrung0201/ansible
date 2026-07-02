@@ -1,0 +1,9 @@
+nushell_brew_packages:
+  - nushell
+  - carapace
+  - zoxide
+  - bat
+  - eza
+
+# macOS default — see https://www.nushell.sh/book/configuration.html
+nushell_config_dir: "{{ lookup('env', 'HOME') }}/Library/Application Support/nushell"

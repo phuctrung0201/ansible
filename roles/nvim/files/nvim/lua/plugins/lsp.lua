@@ -20,11 +20,10 @@ return {
         "github:mason-org/mason-registry",
         "github:Crashdummyy/mason-registry",
       },
-      ensure_installed = { "roslyn" },
+      ensure_installed = { "roslyn", "shellcheck" },
     },
   },
 
-  -- Per-server settings overrides
   {
     "neovim/nvim-lspconfig",
     opts = {
@@ -36,47 +35,13 @@ return {
         nushell = {
           mason = false,
         },
-        gopls = {
-          settings = {
-            gopls = {
-              completeUnimported = true,
-              usePlaceholders = true,
-            },
-          },
-        },
-        pyright = {
-          settings = {
-            python = {
-              analysis = { autoImportCompletions = true },
-            },
-          },
-        },
         vtsls = {
           settings = {
             typescript = {
               tsserver = { maxTsServerMemory = 4096 },
-              suggest = { autoImports = true },
-              preferences = { includePackageJsonAutoImports = "auto" },
             },
             javascript = {
               tsserver = { maxTsServerMemory = 4096 },
-              suggest = { autoImports = true },
-              preferences = { includePackageJsonAutoImports = "auto" },
-            },
-          },
-        },
-        rust_analyzer = {
-          settings = {
-            ["rust-analyzer"] = {
-              completion = { autoimport = { enable = true } },
-            },
-          },
-        },
-        lua_ls = {
-          settings = {
-            Lua = {
-              workspace = { checkThirdParty = false },
-              telemetry = { enable = false },
             },
           },
         },
@@ -122,7 +87,19 @@ return {
       },
     },
     init = function()
+      local dotnet = vim.fn.exepath("dotnet")
+      local root = dotnet ~= "" and vim.fn.fnamemodify(vim.fn.resolve(dotnet), ":h:h") .. "/libexec" or nil
+      local cmd_env = {
+        Configuration = vim.env.Configuration or "Debug",
+        TMPDIR = vim.env.TMPDIR and vim.fn.resolve(vim.env.TMPDIR) or nil,
+      }
+      if root then
+        cmd_env.DOTNET_ROOT = root
+        cmd_env.DOTNET_ROOT_ARM64 = root
+      end
+
       vim.lsp.config("roslyn", {
+        cmd_env = cmd_env,
         settings = {
           ["csharp|formatting"] = {
             dotnet_organize_imports_on_format = true,
