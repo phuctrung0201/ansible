@@ -6,6 +6,8 @@ return {
         preset = {
           keys = {
             { icon = "󰈞 ", key = "f", desc = "Find File", action = ":lua Snacks.dashboard.pick('files')" },
+            { icon = "󱓧 ", key = "w", desc = "Wiki Today", action = ":Obsidian today<CR>" },
+            { icon = "󰙵 ", key = "W", desc = "Wiki Search", action = ":Obsidian search<CR>" },
             { icon = "󰈤 ", key = "n", desc = "New File", action = ":ene | startinsert" },
             { icon = "󰊄 ", key = "g", desc = "Find Text", action = ":lua Snacks.dashboard.pick('live_grep')" },
             { icon = "󰋚 ", key = "r", desc = "Recent Files", action = ":lua Snacks.dashboard.pick('oldfiles', {filter = {cwd = true}})" },
