@@ -22,6 +22,10 @@ return {
     opts = function()
       return {
         legacy_commands = false,
+        link = {
+          style = "markdown",
+          format = "shortest",
+        },
         workspaces = {
           { name = "wiki", path = "~/wiki" },
         },
