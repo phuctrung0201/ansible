@@ -40,7 +40,7 @@ return {
           template = "journal.md",
         },
         templates = {
-          folder = ".templates",
+          folder = "_templates",
           date_format = "%A, %B %-d %Y",
           time_format = "%H:%M",
         },
