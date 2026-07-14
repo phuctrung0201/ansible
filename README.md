@@ -2,14 +2,14 @@
 
 Personal **macOS** machine setup for:
 
-- [Nushell](https://www.nushell.sh/) (default login shell — [Carapace](https://carapace.sh/) completions, [zoxide](https://github.com/ajeetdsouza/zoxide), vi mode, mise integration)
+- [Fish](https://fishshell.com/) (default login shell — [Carapace](https://carapace.sh/) completions, [zoxide](https://github.com/ajeetdsouza/zoxide), vi mode, mise integration)
 - [mise](https://mise.jdx.dev/)
 - [Neovim](https://neovim.io/)
 - [AeroSpace](https://github.com/nikitabobko/AeroSpace)
 - [Ghostty](https://ghostty.org/) (terminal emulator, integrated with tmux)
 - [tmux](https://github.com/tmux/tmux) (command palette via Alt+Space, [fzf](https://github.com/junegunn/fzf), [LastPass CLI](https://github.com/lastpass/lastpass-cli))
 
-Nushell config is deployed to `~/Library/Application Support/nushell/` (the macOS default).
+Fish config is deployed to `~/.config/fish/`.
 
 # Prerequisites
 
@@ -32,18 +32,18 @@ mise run install
 Run a specific role:
 
 ```sh
-mise run install -- --tags "nushell"
+mise run install -- --tags "fish"
 ```
 
 # Default login shell
 
-To use nushell as your default login shell, register the Homebrew binary in
+To use fish as your default login shell, register the Homebrew binary in
 `/etc/shells` and run `chsh` (requires sudo):
 
 ```sh
-NU="$(brew --prefix)/bin/nu"
-grep -qxF "$NU" /etc/shells || echo "$NU" | sudo tee -a /etc/shells
-chsh -s "$NU"
+FISH="$(brew --prefix)/bin/fish"
+grep -qxF "$FISH" /etc/shells || echo "$FISH" | sudo tee -a /etc/shells
+chsh -s "$FISH"
 ```
 
 Log out and back in (or open a new terminal) for the change to take effect.

@@ -1,0 +1,78 @@
+# config.fish — managed by Ansible fish role
+
+set -g fish_greeting
+
+set -gx EDITOR nvim
+set -gx PAGER bat
+set -gx CARAPACE_BRIDGES "zsh,fish,bash,inshellisense"
+
+fish_add_path -gp "$HOME/.local/bin" "$HOME/.config/carapace/bin" "{{ fish_brew_prefix.stdout | trim }}/bin"
+
+set -g history_size 50000
+
+fish_vi_key_bindings
+source (path dirname (status filename))/conf.d/clipboard.fish
+
+# Word-by-word history: Alt+l forward, Alt+h backward (macOS blocks Ctrl+Arrow).
+bind -M insert \el history-search-forward
+bind -M default \el history-search-forward
+bind -M insert \eh history-search-backward
+bind -M default \eh history-search-backward
+
+if type -q eza
+    alias ls='eza --icons'
+    alias ll='eza -la --icons'
+    alias la='eza -a --icons'
+    alias lt='eza --tree --level=2 --icons'
+end
+
+function flpass
+    $HOME/.config/tmux/lpass.sh
+end
+
+# Syntax highlighting — Catppuccin Mocha dark (built into fish 4.4+)
+fish_config theme choose catppuccin-mocha --color-theme=dark
+
+# Prompt colors from share.yml (mauve, not ANSI purple which maps to pink)
+# Keep last 4 path segments full (D=2 left Documents/integration as D/i on deep repos)
+set -g fish_prompt_pwd_full_dirs 4
+set -g fish_color_cwd "{{ theme.blue }}"
+set -g fish_color_vcs "{{ theme.purple }}"
+
+# Two-line prompt in fish_prompt only (fish_mode_prompt prepends to line 1 otherwise).
+# Empty fish_mode_prompt makes fish re-run fish_prompt on vi mode switch.
+function fish_mode_prompt
+end
+
+function __fish_prompt_git --description 'Git branch with icon, no brackets'
+    set -l branch (fish_git_prompt '%s')
+    test -n "$branch"; or return
+    printf '%s %s %s' ' ' \uf418 $branch
+end
+
+function fish_prompt --description 'Two-line prompt: cwd + git, then vi indicator'
+    set_color $fish_color_cwd
+    echo -n (prompt_pwd)
+    set_color $fish_color_vcs
+    echo -n (__fish_prompt_git)
+    set_color normal
+    echo
+
+    switch $fish_bind_mode
+        case insert
+            set_color --bold "{{ theme.green }}"
+            echo -n '❯ '
+        case default
+            set_color --bold "{{ theme.yellow }}"
+            echo -n '❮ '
+        case replace_one replace
+            set_color --bold "{{ theme.cyan }}"
+            echo -n '▼ '
+        case visual
+            set_color --bold "{{ theme.purple }}"
+            echo -n '◆ '
+    end
+    set_color normal
+end
+
+source (path dirname (status filename))/conf.d/zoxide-completions.fish

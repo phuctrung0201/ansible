@@ -1,0 +1,14 @@
+# Tab-complete z with zoxide matches (paths like ./ or ~/ still use cd-style completion).
+
+function __zoxide_z_complete
+    set -l args (commandline --current-process --tokenize)[2..-1]
+    if test (count $args) -gt 0; and not string match -qr '^(\.|~|/)' -- $args[1]
+        command zoxide query --list -- $args 2>/dev/null
+    else
+        complete --do-complete "'' "(commandline --cut-at-cursor --current-token) | string match -r '.*/$'
+    end
+end
+
+complete --erase -c z; complete --erase -c __zoxide_z
+complete -fc z -a '(__zoxide_z_complete)'
+complete -fc __zoxide_z -a '(__zoxide_z_complete)'

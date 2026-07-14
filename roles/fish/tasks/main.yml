@@ -1,0 +1,69 @@
+- name: Install fish and plugins
+  homebrew:
+    name: "{{ fish_brew_packages }}"
+    state: present
+
+- name: Get Homebrew prefix
+  command: brew --prefix
+  register: fish_brew_prefix
+  changed_when: false
+
+- name: Ensure fish config directory exists
+  file:
+    path: "{{ fish_config_dir }}"
+    state: directory
+
+- name: Ensure fish conf.d directory exists
+  file:
+    path: "{{ fish_config_dir }}/conf.d"
+    state: directory
+
+- name: Ensure carapace bin directory exists
+  file:
+    path: "{{ lookup('env', 'HOME') }}/.config/carapace/bin"
+    state: directory
+
+- name: Deploy config.fish
+  template:
+    src: config.fish.j2
+    dest: "{{ fish_config_dir }}/config.fish"
+    backup: yes
+
+- name: Deploy clipboard integration
+  template:
+    src: clipboard.fish.j2
+    dest: "{{ fish_config_dir }}/conf.d/clipboard.fish"
+    backup: yes
+
+- name: Generate carapace completions
+  shell: >-
+    carapace _carapace fish > "{{ fish_config_dir }}/conf.d/carapace.fish"
+  changed_when: false
+
+- name: Generate zoxide init
+  shell: zoxide init fish > "{{ fish_config_dir }}/conf.d/zoxide.fish"
+  changed_when: false
+
+- name: Deploy zoxide completion fix
+  template:
+    src: zoxide-completions.fish.j2
+    dest: "{{ fish_config_dir }}/conf.d/zoxide-completions.fish"
+    backup: yes
+
+- name: Check for mise
+  stat:
+    path: "{{ fish_brew_prefix.stdout | trim }}/bin/mise"
+  register: fish_mise
+
+- name: Generate mise activation
+  shell: "{{ fish_brew_prefix.stdout | trim }}/bin/mise activate fish > \"{{ fish_config_dir }}/conf.d/mise.fish\""
+  when: fish_mise.stat.exists
+  changed_when: false
+
+- name: Remove stale nushell config directories
+  file:
+    path: "{{ item }}"
+    state: absent
+  loop:
+    - "{{ lookup('env', 'HOME') }}/Library/Application Support/nushell"
+    - "{{ lookup('env', 'HOME') }}/.config/nushell"

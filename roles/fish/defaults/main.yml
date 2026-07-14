@@ -1,0 +1,8 @@
+fish_brew_packages:
+  - fish
+  - carapace
+  - zoxide
+  - bat
+  - eza
+
+fish_config_dir: "{{ lookup('env', 'HOME') }}/.config/fish"

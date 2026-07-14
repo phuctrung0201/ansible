@@ -9,6 +9,6 @@ opt.shiftround = true
 opt.scrollback = 3000
 
 vim.filetype.add({
-  extension = { zsh = "sh", nu = "nu" },
+  extension = { zsh = "sh" },
   filename = { [".zshrc"] = "sh", [".zshenv"] = "sh", [".zprofile"] = "sh" },
 })

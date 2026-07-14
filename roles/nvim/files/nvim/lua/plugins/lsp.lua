@@ -30,10 +30,7 @@ return {
       inlay_hints = { enabled = false },
       servers = {
         bashls = {
-          filetypes = { "sh", "zsh", "bash" },
-        },
-        nushell = {
-          mason = false,
+          filetypes = { "sh", "zsh", "bash", "fish" },
         },
         vtsls = {
           settings = {

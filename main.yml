@@ -7,8 +7,8 @@
       tags: ['common']
     - role: mise
       tags: ['mise']
-    - role: nushell
-      tags: ['nushell']
+    - role: fish
+      tags: ['fish']
     - role: nvim
       tags: ['nvim']
     - role: aerospace

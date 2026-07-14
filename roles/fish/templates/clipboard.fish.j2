@@ -1,0 +1,31 @@
+# Vi yanks and pastes use the system clipboard (pbcopy/pbpaste on macOS).
+
+function __fish_yank_to_clipboard --description 'Copy latest yank to system clipboard'
+    test -n "$fish_killring[1]"; or return
+    printf '%s' "$fish_killring[1]" | fish_clipboard_copy
+end
+
+function fish_vi_yank_selection --description 'Yank selection and sync to system clipboard'
+    set -g fish_cursor_end_mode exclusive
+    commandline -f kill-selection -f yank
+    set -g fish_cursor_end_mode inclusive
+    __fish_yank_to_clipboard
+end
+
+function fish_user_key_bindings --description 'Use system clipboard for vi paste and direct yanks'
+    bind -M default p 'set -g fish_cursor_end_mode exclusive; commandline -f forward-char; set -g fish_cursor_end_mode inclusive; fish_clipboard_paste'
+    bind -M default P fish_clipboard_paste
+
+    bind -M operator y 'fish_vi_exec_motion --linewise; __fish_yank_to_clipboard'
+
+    bind -M default Y 'commandline -f kill-whole-line yank; __fish_yank_to_clipboard'
+    bind -M default y,\$ 'commandline -f kill-line yank; __fish_yank_to_clipboard'
+    bind -M default y,\^ 'commandline -f backward-kill-line yank; __fish_yank_to_clipboard'
+    bind -M default y,0 'commandline -f backward-kill-line yank; __fish_yank_to_clipboard'
+    bind -M default y,i,w 'commandline -f kill-inner-word yank; __fish_yank_to_clipboard'
+    bind -M default y,i,W 'commandline -f kill-inner-bigword yank; __fish_yank_to_clipboard'
+    bind -M default y,a,w 'commandline -f kill-a-word yank; __fish_yank_to_clipboard'
+    bind -M default y,a,W 'commandline -f kill-a-bigword yank; __fish_yank_to_clipboard'
+end
+
+fish_user_key_bindings
