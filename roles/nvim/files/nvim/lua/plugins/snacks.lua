@@ -29,6 +29,7 @@ return {
             preview = "none",
           },
           explorer = {
+            layout = { fullscreen = true },
             win = {
               list = {
                 keys = {
