@@ -19,4 +19,6 @@ vim.pack.add({
   gh("stevearc/conform.nvim"),
   gh("mfussenegger/nvim-lint"),
   gh("terrastruct/d2-vim"),
+  gh("kdheepak/lazygit.nvim"),
+  gh("folke/flash.nvim"),
 })
