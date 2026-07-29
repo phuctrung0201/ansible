@@ -6,6 +6,7 @@
     - neovim
     - lazygit
     - ripgrep
+    - fzf
 
 - name: Ensure nvim config directory exists
   file:
