@@ -6,3 +6,7 @@ autocmd("TermOpen", {
   callback = function() vim.opt_local.scrollback = 1000 end,
 })
 
+autocmd("DirChanged", {
+  group = augroup("bufferline_refresh", { clear = true }),
+  callback = function() vim.cmd("redrawtabline") end,
+})
