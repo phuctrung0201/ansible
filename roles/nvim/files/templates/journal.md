@@ -1,9 +1,6 @@
 # {{date}}
 
-## Tasks
-- [ ]
+## Projects
 
-## Runbooks
-
-## Notes
+## Areas
 
