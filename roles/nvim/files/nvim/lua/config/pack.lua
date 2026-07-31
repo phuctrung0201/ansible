@@ -6,6 +6,7 @@ vim.pack.add({
   gh("nvim-mini/mini.nvim"),
   gh("folke/flash.nvim"),
   gh("kdheepak/lazygit.nvim"),
+  gh("lewis6991/gitsigns.nvim"),
   gh("catppuccin/nvim", { name = "catppuccin" }),
   gh("nvim-treesitter/nvim-treesitter", { version = "main" }),
   gh("mason-org/mason.nvim"),

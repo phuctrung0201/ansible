@@ -1,5 +1,20 @@
 require("mini.icons").setup()
-require("mini.statusline").setup()
+require("mini.statusline").setup({
+  content = {
+    active = function()
+      local mode, mode_hl = MiniStatusline.section_mode({ trunc_width = 9999 })
+      local filename = MiniStatusline.section_filename({ trunc_width = 9999 })
+      local location = MiniStatusline.section_location({ trunc_width = 9999 })
+      return MiniStatusline.combine_groups({
+        { hl = mode_hl, strings = { mode } },
+        "%<",
+        { hl = "MiniStatuslineFilename", strings = { filename } },
+        "%=",
+        { hl = mode_hl, strings = { location } },
+      })
+    end,
+  },
+})
 require("mini.notify").setup()
 vim.o.laststatus = 0
 vim.o.showtabline = 2
@@ -48,6 +63,12 @@ require("mini.clue").setup({
     { mode = "x", keys = "g" },
     { mode = "n", keys = "z" },
     { mode = "x", keys = "z" },
+    { mode = "n", keys = "y" },
+    { mode = "x", keys = "y" },
+    { mode = "n", keys = "s" },
+    { mode = "x", keys = "s" },
+    { mode = "o", keys = "i" },
+    { mode = "x", keys = "i" },
     { mode = "i", keys = "<C-x>" },
     { mode = "n", keys = "[" },
     { mode = "n", keys = "]" },
@@ -65,7 +86,9 @@ require("mini.clue").setup({
     { mode = "n", keys = "<leader>c", desc = "+Code" },
     { mode = "n", keys = "<leader>f", desc = "+Find" },
     { mode = "n", keys = "<leader>g", desc = "+Git" },
+    { mode = "x", keys = "<leader>g", desc = "+Git" },
     { mode = "n", keys = "<leader>b", desc = "+Buffer" },
+    { mode = "n", keys = "<leader>u", desc = "+UI" },
     require("mini.clue").gen_clues.builtin_completion(),
     require("mini.clue").gen_clues.g(),
     require("mini.clue").gen_clues.marks(),
@@ -88,3 +111,4 @@ vim.keymap.set("n", "<leader>e", "<cmd>lua MiniFiles.open()<cr>", { desc = "Expl
 vim.keymap.set("n", "<leader>n", function() MiniNotify.show_history() end, { desc = "Notification History" })
 vim.keymap.set("n", "<leader>bd", "<cmd>lua MiniBufremove.delete()<cr>", { desc = "Delete buffer" })
 vim.keymap.set("n", "<leader>bb", "<cmd>b#<cr>", { desc = "Previous buffer" })
+vim.keymap.set("n", "<leader>uw", "<cmd>set wrap!<cr>", { desc = "Toggle wrap" })

@@ -10,7 +10,7 @@ require("catppuccin").setup({
       FloatBorder = { bg = "NONE" },
       FloatTitle = { bg = "NONE" },
       MsgArea = { bg = "NONE" },
-      MiniStatuslineFilename = { bg = "NONE" },
+      MiniStatuslineFilename = { fg = theme.fg, bg = theme.surface0 },
       MiniPickMatchCurrent = { fg = theme.pink },
     }
   end,

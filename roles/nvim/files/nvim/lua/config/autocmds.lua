@@ -8,3 +8,8 @@ autocmd("TermOpen", {
 
 vim.keymap.set("t", "<A-\\>", "<C-\\><C-n>", { desc = "Exit terminal mode" })
 
+autocmd("TextYankPost", {
+  group = augroup("highlight_yank", { clear = true }),
+  callback = function() vim.highlight.on_yank({ higroup = "Visual", timeout = 200 }) end,
+})
+
