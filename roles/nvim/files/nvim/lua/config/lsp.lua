@@ -8,6 +8,7 @@ require("mason").setup({
     "shellcheck",
     "lua-language-server",
     "bash-language-server",
+    "fish-lsp",
     "vtsls",
     "gopls",
     "gofumpt",
@@ -68,7 +69,7 @@ vim.lsp.config("*", {
 })
 
 vim.lsp.config("bashls", {
-  filetypes = { "sh", "zsh", "bash", "fish" },
+  filetypes = { "sh", "zsh", "bash" },
 })
 
 vim.lsp.config("vtsls", {
@@ -103,6 +104,7 @@ vim.lsp.config("lua_ls", {
 
 vim.lsp.enable({
   "bashls",
+  "fish_lsp",
   "vtsls",
   "gopls",
   "pyright",

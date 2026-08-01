@@ -8,7 +8,7 @@ opt.signcolumn = "number"
 opt.statuscolumn = "%s%=%{v:relnum ? v:relnum : v:lnum} "
 opt.fillchars = {
   eob = " ",
-  fold = " ",
+  fold = "·",
   foldsep = " ",
 }
 opt.conceallevel = 2
