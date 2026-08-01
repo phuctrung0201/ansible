@@ -17,3 +17,5 @@
       tags: ['ghostty']
     - role: tmux
       tags: ['tmux']
+    - role: obsidian
+      tags: ['obsidian']

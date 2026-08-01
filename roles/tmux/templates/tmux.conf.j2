@@ -25,6 +25,10 @@ setw -g mode-keys vi
 bind -T copy-mode-vi v send -X begin-selection
 bind -T copy-mode-vi y send -X copy-pipe-and-cancel "pbcopy"
 
+# Copy mode selection highlight — match nvim's Visual color instead of
+# tmux's default yellow/black.
+set -g mode-style "bg={{ theme.selection }},fg={{ theme.fg }}"
+
 # fzf / LastPass — inherited by palette popup and lpass.sh in tmux panes.
 # bg:-1 keeps the terminal's translucent background.
 set-environment -g FZF_DEFAULT_OPTS "--color=fg:{{ theme.fg }},bg:-1,hl:{{ theme.orange }} --color=fg+:{{ theme.fg }}:bold,bg+:{{ theme.selection }},hl+:{{ theme.red }} --color=info:{{ theme.cyan }},prompt:{{ theme.pink }},pointer:{{ theme.yellow }} --color=marker:{{ theme.green }},spinner:{{ theme.purple }},header:{{ theme.red }}"

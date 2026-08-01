@@ -1,30 +1,31 @@
-# Theme — Catppuccin mix: Mocha bases (darkest bg) + Macchiato surfaces/overlays (more contrast separation)
-# Mocha:     https://github.com/catppuccin/catppuccin?tab=readme-ov-file#-palette  flavour=mocha
-# Macchiato: https://github.com/catppuccin/catppuccin?tab=readme-ov-file#-palette  flavour=macchiato
+# Theme — Oxocarbon (dark), IBM Carbon-inspired
+# Source: https://github.com/nyoom-engineering/oxocarbon.nvim  lua/oxocarbon/init.lua (dark variant)
+# Oxocarbon has no native yellow/orange; those two roles reuse its two otherwise-unused
+# accents (magenta base10, pink base12) rather than borrowing hues from elsewhere.
 theme:
-  bg: "#11111b"             # Mocha Crust       (darkest bg = best text contrast)
-  fg: "#cdd6f4"             # Mocha Text
-  selection: "#363a4f"      # Macchiato Surface0 (lighter than Mocha's #313244, more visible selection)
-  surface0: "#313244"       # Mocha Surface0     (lualine_b/y background)
-  comment: "#8087a2"        # Macchiato Overlay1 (brighter than Mocha Overlay0, readable dimmed text)
-  red: "#f38ba8"            # Mocha Red          (more vivid than Macchiato #ed8796)
-  orange: "#fab387"         # Mocha Peach        (warmer/more orange than Macchiato #f5a97f)
-  yellow: "#f9e2af"         # Mocha Yellow       (brighter than Macchiato #eed49f)
-  green: "#a6e3a1"          # Mocha Green        (brighter than Macchiato #a6da95)
-  purple: "#cba6f7"         # Mocha Mauve        (slightly more vibrant)
-  cyan: "#94e2d5"           # Mocha Teal         (more vivid than Macchiato #8bd5ca)
-  pink: "#f5c2e7"           # Mocha Pink
-  blue: "#89b4fa"           # Mocha Blue
-  dark: "#494d64"           # Macchiato Surface1 (ANSI black; lighter than Mocha #45475a for terminal visibility)
-  white: "#bac2de"          # Mocha Subtext1
-  bright_red: "#eba0ac"     # Mocha Maroon
-  bright_green: "#a6e3a1"   # Mocha Green
-  bright_yellow: "#f9e2af"  # Mocha Yellow
-  bright_purple: "#74c7ec"  # Mocha Sapphire     (ANSI bright blue)
-  bright_pink: "#cba6f7"    # Mocha Mauve        (ANSI bright magenta)
-  bright_cyan: "#89dceb"    # Mocha Sky
-  bright_white: "#cdd6f4"   # Mocha Text
-  comment_bright: "#5b6078" # Macchiato Surface2 (ANSI bright black; aerospace inactive border)
-  black: "#11111b"          # Mocha Crust
-  gutter_fg: "#6e738d"      # Macchiato Overlay0 (more visible line numbers than Mocha surface2)
-  nontext: "#363a4f"        # Macchiato Surface0 (slightly lighter than Mocha surface0, visible but subtle)
+  bg: "#161616"             # base00
+  fg: "#d5d5d5"             # base04 (Normal fg)
+  selection: "#404040"      # base02 (Visual bg)
+  surface0: "#2a2a2a"       # base01 (Pmenu/StatusLineNC bg)
+  comment: "#5c5c5c"        # base03 (Comment fg)
+  red: "#33b1ff"            # base11 (ANSI red slot)
+  orange: "#ee5396"         # base10 (unused accent, magenta — stands in for orange)
+  yellow: "#42be65"         # base13 (ANSI yellow slot)
+  green: "#be95ff"          # base14 (ANSI green slot)
+  purple: "#ff7eb6"         # base12 (unused accent, pink — stands in for purple)
+  cyan: "#3ddbd9"           # base08 (ANSI cyan slot)
+  pink: "#82cfff"           # base15 (ANSI magenta slot)
+  blue: "#78a9ff"           # base09 (ANSI blue slot)
+  dark: "#2a2a2a"           # base01 (ANSI black slot; terminal visibility)
+  white: "#f3f3f3"          # base05 (ANSI white slot)
+  bright_red: "#33b1ff"     # base11 (ANSI bright red slot)
+  bright_green: "#be95ff"   # base14 (ANSI bright green slot)
+  bright_yellow: "#42be65"  # base13 (ANSI bright yellow slot)
+  bright_purple: "#78a9ff"  # base09 (ANSI bright blue slot)
+  bright_pink: "#82cfff"    # base15 (ANSI bright magenta slot)
+  bright_cyan: "#08bdba"    # base07 (ANSI bright cyan slot)
+  bright_white: "#ffffff"   # base06 (ANSI bright white slot)
+  comment_bright: "#5c5c5c" # base03 (ANSI bright black slot; oxocarbon reuses base03 here too)
+  black: "#161616"          # base00
+  gutter_fg: "#5c5c5c"      # base03 (LineNr fg)
+  nontext: "#404040"        # base02 (NonText fg)
