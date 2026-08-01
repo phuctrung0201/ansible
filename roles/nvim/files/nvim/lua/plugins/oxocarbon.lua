@@ -4,6 +4,7 @@ vim.o.background = "dark"
 vim.cmd.colorscheme("oxocarbon")
 
 local function custom_highlights()
+  vim.api.nvim_set_hl(0, "FloatBorder", { fg = theme.comment, bg = theme.bg })
   vim.api.nvim_set_hl(0, "MiniStatuslineFilename", { fg = theme.fg, bg = theme.bg })
   vim.api.nvim_set_hl(0, "MiniPickMatchCurrent", { fg = theme.purple })
   -- Match tmux's status bar (bg=default -> theme.bg), so the tabline fill isn't a lighter panel color.

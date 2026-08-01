@@ -12,9 +12,8 @@ opt.fillchars = {
   foldsep = " ",
 }
 opt.conceallevel = 2
+opt.ignorecase = true
 
-opt.foldlevel = 99
-opt.foldlevelstart = 99
 opt.foldenable = true
 opt.foldmethod = "expr"
 opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
