@@ -30,8 +30,26 @@ function flpass
     $HOME/.config/tmux/lpass.sh
 end
 
-# Syntax highlighting — Catppuccin Mocha dark (built into fish 4.4+)
-fish_config theme choose catppuccin-mocha --color-theme=dark
+# Syntax highlighting — Oxocarbon (no built-in fish theme; hand-set from share.yml)
+set -g fish_color_normal "{{ theme.fg }}"
+set -g fish_color_command "{{ theme.blue }}"
+set -g fish_color_keyword "{{ theme.blue }}"
+set -g fish_color_quote "{{ theme.purple }}"
+set -g fish_color_redirection "{{ theme.pink }}"
+set -g fish_color_end "{{ theme.orange }}"
+set -g fish_color_error "{{ theme.orange }}"
+set -g fish_color_param "{{ theme.fg }}"
+set -g fish_color_comment "{{ theme.comment }}"
+set -g fish_color_selection --background="{{ theme.selection }}"
+set -g fish_color_search_match --background="{{ theme.selection }}"
+set -g fish_color_operator "{{ theme.cyan }}"
+set -g fish_color_escape "{{ theme.yellow }}"
+set -g fish_color_autosuggestion "{{ theme.comment }}"
+set -g fish_color_cancel "{{ theme.orange }}"
+set -g fish_pager_color_prefix "{{ theme.purple }}" --bold
+set -g fish_pager_color_completion "{{ theme.fg }}"
+set -g fish_pager_color_description "{{ theme.comment }}"
+set -g fish_pager_color_selected_background --background="{{ theme.selection }}"
 
 # Prompt colors from share.yml (mauve, not ANSI purple which maps to pink)
 # Keep last 4 path segments full (D=2 left Documents/integration as D/i on deep repos)

@@ -1,16 +1,25 @@
 require("mini.icons").setup()
+require("mini.git").setup()
 require("mini.statusline").setup({
   content = {
     active = function()
-      local mode, mode_hl = MiniStatusline.section_mode({ trunc_width = 9999 })
-      local filename = MiniStatusline.section_filename({ trunc_width = 9999 })
-      local location = MiniStatusline.section_location({ trunc_width = 9999 })
+      local mode, mode_hl = MiniStatusline.section_mode({ trunc_width = 120 })
+      local git = MiniStatusline.section_git({ trunc_width = 40 })
+      local diff = MiniStatusline.section_diff({ trunc_width = 75 })
+      local diagnostics = MiniStatusline.section_diagnostics({ trunc_width = 75 })
+      local lsp = MiniStatusline.section_lsp({ trunc_width = 75 })
+      local filename = MiniStatusline.section_filename({ trunc_width = 140 })
+      local fileinfo = MiniStatusline.section_fileinfo({ trunc_width = 120 })
+      local search = MiniStatusline.section_searchcount({ trunc_width = 75 })
+
       return MiniStatusline.combine_groups({
         { hl = mode_hl, strings = { mode } },
+        { hl = "MiniStatuslineDevinfo", strings = { git, diff, diagnostics, lsp } },
         "%<",
         { hl = "MiniStatuslineFilename", strings = { filename } },
         "%=",
-        { hl = mode_hl, strings = { location } },
+        { hl = "MiniStatuslineFileinfo", strings = { fileinfo } },
+        { hl = mode_hl, strings = { search } },
       })
     end,
   },
@@ -18,7 +27,17 @@ require("mini.statusline").setup({
 require("mini.notify").setup()
 vim.o.laststatus = 0
 vim.o.showtabline = 2
+vim.o.showmode = false
 vim.o.tabline = "%!v:lua.MiniStatusline.active()"
+
+vim.api.nvim_create_autocmd(
+  { "ModeChanged", "DiagnosticChanged", "LspAttach", "LspDetach", "BufModifiedSet" },
+  { callback = function() vim.cmd("redrawtabline") end }
+)
+vim.api.nvim_create_autocmd(
+  "User",
+  { pattern = { "MiniGitUpdated", "MiniDiffUpdated" }, callback = function() vim.cmd("redrawtabline") end }
+)
 
 require("mini.ai").setup()
 require("mini.surround").setup()
@@ -49,7 +68,8 @@ require("mini.starter").setup({
     { name = "Find File", action = function() MiniPick.builtin.files() end, section = "Actions" },
     { name = "Recent Files", action = function() MiniExtra.pickers.oldfiles() end, section = "Actions" },
     { name = "Explorer", action = "lua MiniFiles.open()", section = "Actions" },
-    { name = "Journal", action = "Obsidian today", section = "Actions" },
+    { name = "Today Journal", action = "Obsidian today", section = "Actions" },
+    { name = "Yesterday Journal", action = "Obsidian yesterday", section = "Actions" },
     { name = "Git", action = "LazyGit", section = "Actions" },
     { name = "Quit", action = "qa", section = "Actions" },
   },

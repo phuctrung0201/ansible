@@ -8,7 +8,7 @@ require("config.lsp")
 require("config.format")
 require("config.autocmds")
 
-require("plugins.catppuccin")
+require("plugins.oxocarbon")
 require("plugins.treesitter")
 require("plugins.obsidian")
 require("plugins.sql")

@@ -7,7 +7,7 @@ vim.pack.add({
   gh("folke/flash.nvim"),
   gh("kdheepak/lazygit.nvim"),
   gh("lewis6991/gitsigns.nvim"),
-  gh("catppuccin/nvim", { name = "catppuccin" }),
+  gh("nyoom-engineering/oxocarbon.nvim", { name = "oxocarbon" }),
   gh("nvim-treesitter/nvim-treesitter", { version = "main" }),
   gh("mason-org/mason.nvim"),
   gh("neovim/nvim-lspconfig"),

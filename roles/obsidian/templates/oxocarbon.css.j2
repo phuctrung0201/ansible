@@ -1,0 +1,45 @@
+{# Recolors the Catppuccin Obsidian theme to Oxocarbon by overriding its base CSS variables. #}
+{# Source palette: share.yml (Oxocarbon dark, see roles/nvim's oxocarbon.lua for the nvim side). #}
+{% macro rgb(hex) -%}
+{{ hex[1:3] | int(0, 16) }}, {{ hex[3:5] | int(0, 16) }}, {{ hex[5:7] | int(0, 16) }}
+{%- endmacro %}
+.theme-dark,
+.theme-dark.ctp-mocha {
+  --ctp-rosewater: {{ rgb(theme.orange) }};
+  --ctp-flamingo: {{ rgb(theme.orange) }};
+  --ctp-pink: {{ rgb(theme.purple) }};
+  --ctp-mauve: {{ rgb(theme.purple) }};
+  --ctp-red: {{ rgb(theme.red) }};
+  --ctp-maroon: {{ rgb(theme.red) }};
+  --ctp-peach: {{ rgb(theme.orange) }};
+  --ctp-yellow: {{ rgb(theme.yellow) }};
+  --ctp-green: {{ rgb(theme.green) }};
+  --ctp-teal: {{ rgb(theme.cyan) }};
+  --ctp-sky: {{ rgb(theme.bright_cyan) }};
+  --ctp-sapphire: {{ rgb(theme.blue) }};
+  --ctp-blue: {{ rgb(theme.blue) }};
+  --ctp-lavender: {{ rgb(theme.blue) }};
+  --ctp-text: {{ rgb(theme.fg) }};
+  --ctp-subtext1: {{ rgb(theme.fg) }};
+  --ctp-subtext0: {{ rgb(theme.comment) }};
+  --ctp-overlay2: {{ rgb(theme.comment) }};
+  --ctp-overlay1: {{ rgb(theme.selection) }};
+  --ctp-overlay0: {{ rgb(theme.selection) }};
+  --ctp-surface2: {{ rgb(theme.selection) }};
+  --ctp-surface1: {{ rgb(theme.surface0) }};
+  --ctp-surface0: {{ rgb(theme.surface0) }};
+  --ctp-base: {{ rgb(theme.bg) }};
+  --ctp-mantle: {{ rgb(theme.bg) }};
+  --ctp-crust: {{ rgb(theme.bg) }};
+  --hex-pink: {{ theme.purple }};
+  --hex-mauve: {{ theme.purple }};
+  --hex-red: {{ theme.red }};
+  --hex-peach: {{ theme.orange }};
+  --hex-yellow: {{ theme.yellow }};
+  --hex-green: {{ theme.green }};
+  --hex-teal: {{ theme.cyan }};
+  --hex-sky: {{ theme.bright_cyan }};
+  --hex-sapphire: {{ theme.blue }};
+  --hex-blue: {{ theme.blue }};
+  --hex-lavender: {{ theme.blue }};
+}
