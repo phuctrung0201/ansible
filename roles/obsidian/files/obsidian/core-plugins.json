@@ -18,7 +18,6 @@
   "editor-status": true,
   "bookmarks": true,
   "markdown-importer": false,
-  "zk-prefixer": false,
   "random-note": false,
   "outline": true,
   "word-count": true,
@@ -29,5 +28,6 @@
   "publish": false,
   "sync": true,
   "bases": true,
-  "webviewer": false
+  "webviewer": false,
+  "zk-prefixer": false
 }

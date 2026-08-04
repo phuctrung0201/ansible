@@ -123,7 +123,7 @@ require("mini.clue").setup({
 })
 
 vim.keymap.set("n", "<leader>ff", function() MiniPick.builtin.files() end, { desc = "Find File" })
-vim.keymap.set("n", "<leader>fg", function() MiniPick.builtin.grep_live() end, { desc = "Find Text" })
+vim.keymap.set("n", "<leader>ft", function() MiniPick.builtin.grep_live() end, { desc = "Find Text" })
 vim.keymap.set("n", "<leader>fb", function() MiniPick.builtin.buffers() end, { desc = "Find Buffer" })
 vim.keymap.set("n", "<leader>fr", function() MiniExtra.pickers.oldfiles() end, { desc = "Recent Files" })
 vim.keymap.set("n", "<leader>fh", function() MiniPick.builtin.help() end, { desc = "Help" })

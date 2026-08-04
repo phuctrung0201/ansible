@@ -1,5 +1,8 @@
 [
   "mermaid-view",
   "d2-obsidian",
-  "obsidian-style-settings"
+  "obsidian-style-settings",
+  "obsidian-hider",
+  "hide-traffic-lights",
+  "obsidian-excalidraw-plugin"
 ]

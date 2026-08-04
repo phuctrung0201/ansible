@@ -8,5 +8,7 @@
     "_assets/",
     ".claude/"
   ],
-  "vimMode": true
+  "vimMode": false,
+  "showIndentGuide": true,
+  "readableLineLength": true
 }
