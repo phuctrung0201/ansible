@@ -90,6 +90,7 @@ require("mini.clue").setup({
     { mode = "o", keys = "i" },
     { mode = "x", keys = "i" },
     { mode = "i", keys = "<C-x>" },
+    { mode = "n", keys = "<C-w>" },
     { mode = "n", keys = "[" },
     { mode = "n", keys = "]" },
     { mode = "n", keys = "'" },
