@@ -19,8 +19,13 @@
     dest: "{{ obsidian_vault_dir }}/.obsidian/appearance.json"
     backup: yes
 
-- name: Deploy Oxocarbon color snippet
+- name: Remove stale Oxocarbon color snippet
+  file:
+    path: "{{ obsidian_vault_dir }}/.obsidian/snippets/oxocarbon.css"
+    state: absent
+
+- name: Deploy One Dark color snippet
   template:
-    src: oxocarbon.css.j2
-    dest: "{{ obsidian_vault_dir }}/.obsidian/snippets/oxocarbon.css"
+    src: onedark.css.j2
+    dest: "{{ obsidian_vault_dir }}/.obsidian/snippets/onedark.css"
     backup: yes

@@ -1,31 +1,33 @@
-# Theme — Oxocarbon (dark), IBM Carbon-inspired
-# Source: https://github.com/nyoom-engineering/oxocarbon.nvim  lua/oxocarbon/init.lua (dark variant)
-# Oxocarbon has no native yellow/orange; those two roles reuse its two otherwise-unused
-# accents (magenta base10, pink base12) rather than borrowing hues from elsewhere.
+# Theme — One Dark (onedarkpro.nvim, "onedark_dark" variant), Atom-inspired
+# Source: https://github.com/olimorris/onedarkpro.nvim  lua/onedarkpro/themes/onedark_dark.lua
+# onedark_dark uses a true black bg and slightly more saturated red/green/cyan/purple
+# than the base "onedark" variant. onedarkpro has no native "pink" role (only purple);
+# pink below is Atom One Dark's well-known extra accent (#ff7eb6, used for regex/JSX-
+# attribute tokens in the One Dark family) rather than a value onedarkpro ships directly.
 theme:
-  bg: "#161616"             # base00
-  fg: "#d5d5d5"             # base04 (Normal fg)
-  selection: "#404040"      # base02 (Visual bg)
-  surface0: "#2a2a2a"       # base01 (Pmenu/StatusLineNC bg)
-  comment: "#5c5c5c"        # base03 (Comment fg)
-  red: "#33b1ff"            # base11 (ANSI red slot)
-  orange: "#ee5396"         # base10 (unused accent, magenta — stands in for orange)
-  yellow: "#42be65"         # base13 (ANSI yellow slot)
-  green: "#be95ff"          # base14 (ANSI green slot)
-  purple: "#ff7eb6"         # base12 (unused accent, pink — stands in for purple)
-  cyan: "#3ddbd9"           # base08 (ANSI cyan slot)
-  pink: "#82cfff"           # base15 (ANSI magenta slot)
-  blue: "#78a9ff"           # base09 (ANSI blue slot)
-  dark: "#2a2a2a"           # base01 (ANSI black slot; terminal visibility)
-  white: "#f3f3f3"          # base05 (ANSI white slot)
-  bright_red: "#33b1ff"     # base11 (ANSI bright red slot)
-  bright_green: "#be95ff"   # base14 (ANSI bright green slot)
-  bright_yellow: "#42be65"  # base13 (ANSI bright yellow slot)
-  bright_purple: "#78a9ff"  # base09 (ANSI bright blue slot)
-  bright_pink: "#82cfff"    # base15 (ANSI bright magenta slot)
-  bright_cyan: "#08bdba"    # base07 (ANSI bright cyan slot)
-  bright_white: "#ffffff"   # base06 (ANSI bright white slot)
-  comment_bright: "#5c5c5c" # base03 (ANSI bright black slot; oxocarbon reuses base03 here too)
-  black: "#161616"          # base00
-  gutter_fg: "#5c5c5c"      # base03 (LineNr fg)
-  nontext: "#404040"        # base02 (NonText fg)
+  bg: "#000000"
+  fg: "#abb2bf"
+  selection: "#212121"       # lighten(bg, 13) — onedark_dark's generated Visual bg
+  surface0: "#171717"        # lighten(bg, 9) — onedark_dark's generated cursorline bg
+  comment: "#7f848e"
+  red: "#ef596f"
+  orange: "#d19a66"
+  yellow: "#e5c07b"
+  green: "#89ca78"
+  purple: "#d55fde"
+  cyan: "#2bbac5"
+  pink: "#ff7eb6"            # Atom One Dark accent, not in onedarkpro's own palette
+  blue: "#61afef"
+  dark: "#434852"            # onedark_dark's own "gray" — ANSI black slot (bg is pure black, needs contrast)
+  white: "#dcdfe4"           # One Dark terminal ANSI white slot (brighter than editor fg)
+  bright_red: "#ef596f"
+  bright_green: "#89ca78"
+  bright_yellow: "#e5c07b"
+  bright_purple: "#61afef"   # mirrors blue, matching the previous theme's ANSI slot reuse
+  bright_pink: "#ff7eb6"
+  bright_cyan: "#56b6c2"     # base onedark's (lighter, less saturated) cyan, used as the bright variant here
+  bright_white: "#ffffff"
+  comment_bright: "#7f848e"
+  black: "#000000"
+  gutter_fg: "#7f848e"
+  nontext: "#212121"
