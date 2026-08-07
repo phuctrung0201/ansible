@@ -8,45 +8,24 @@
   "collapse-color-groups": false,
   "colorGroups": [
     {
-      "query": " [\"backlog\":true]",
+      "query": "path:permanents  ",
       "color": {
         "a": 1,
-        "rgb": 16736609
+        "rgb": 14724178
       }
     },
     {
-      "query": "[\"archived\":true]",
+      "query": "path:literals [\"finished\":\"false\"]",
       "color": {
         "a": 1,
-        "rgb": 6892031
-      }
-    },
-    {
-      "query": "path:projects",
-      "color": {
-        "a": 1,
-        "rgb": 3080006
-      }
-    },
-    {
-      "query": "path:areas  ",
-      "color": {
-        "a": 1,
-        "rgb": 15303471
-      }
-    },
-    {
-      "query": "path:notes  ",
-      "color": {
-        "a": 1,
-        "rgb": 4700671
+        "rgb": 5431406
       }
     },
     {
       "query": "path:journals  ",
       "color": {
         "a": 1,
-        "rgb": 13408767
+        "rgb": 7237230
       }
     }
   ],
@@ -60,6 +39,6 @@
   "repelStrength": 10,
   "linkStrength": 1,
   "linkDistance": 250,
-  "scale": 0.7245000074959782,
+  "scale": 1.1446892463918217,
   "close": true
 }
