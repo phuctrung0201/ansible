@@ -5,9 +5,6 @@ return {
       "tpope/vim-dadbod",
       "kristijanhusak/vim-dadbod-completion",
     },
-    keys = {
-      { "<leader>dd", "<cmd>DBUIToggle<CR>", desc = "Toggle DB UI" },
-    },
     init = function()
       vim.g.db_ui_use_nvim_notify = true
       vim.g.db_ui_disable_mappings = 1
