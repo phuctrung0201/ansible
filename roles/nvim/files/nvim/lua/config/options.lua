@@ -13,6 +13,7 @@ opt.fillchars = {
 }
 opt.conceallevel = 2
 opt.ignorecase = true
+opt.spell = false
 
 opt.foldenable = true
 opt.foldmethod = "expr"

@@ -21,7 +21,7 @@ return {
       return {
         legacy_commands = false,
         link = {
-          style = "markdown",
+          style = "wiki",
           format = "shortest",
         },
         workspaces = {
