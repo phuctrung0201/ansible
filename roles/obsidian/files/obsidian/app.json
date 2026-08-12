@@ -3,7 +3,6 @@
   "defaultViewMode": "preview",
   "spellcheck": false,
   "userIgnoreFilters": [
-    "_meta/",
     "_templates/",
     "_assets/",
     ".claude/"

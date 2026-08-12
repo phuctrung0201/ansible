@@ -1,6 +1,4 @@
 ---
-tags: []
+finished: false
 ---
-
 # {{title}}
-
