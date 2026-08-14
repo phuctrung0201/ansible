@@ -1,0 +1,8 @@
+/* Hide macOS traffic-light window controls */
+.titlebar-buttonbox-container {
+  display: none !important;
+}
+
+#TabsToolbar {
+  padding-left: 0 !important;
+}

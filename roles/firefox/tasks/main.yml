@@ -1,0 +1,51 @@
+- name: Check if Firefox is installed
+  stat:
+    path: /Applications/Firefox.app
+  register: firefox_app
+
+- name: Install Firefox
+  community.general.homebrew:
+    name: firefox
+    state: present
+    install_options: cask
+  when: not firefox_app.stat.exists
+
+- name: Locate the default Firefox profile directory
+  shell: |
+    set -euo pipefail
+    ini="$HOME/Library/Application Support/Firefox/profiles.ini"
+    # Prefer the profile marked Default in the [Install...] section, then fall back
+    # to the [Profile] entry flagged Default=1.
+    path="$(awk -F= '/^\[Install/{f=1} f&&/^Default=/{print $2; exit}' "$ini")"
+    if [ -z "$path" ]; then
+      path="$(awk -F= '
+        /^\[Profile/{p=0; d=0; path=""}
+        /^Path=/{path=$2}
+        /^Default=1/{d=1}
+        d&&path{print path; exit}' "$ini")"
+    fi
+    echo "$path"
+  register: firefox_profile_path
+  changed_when: false
+
+- name: Set the resolved profile directory fact
+  set_fact:
+    firefox_profile_dir: "~/Library/Application Support/Firefox/{{ firefox_profile_path.stdout | trim }}"
+
+- name: Ensure Firefox chrome directory exists
+  file:
+    path: "{{ firefox_profile_dir }}/chrome"
+    state: directory
+
+- name: Deploy userChrome.css (hide macOS traffic-light buttons)
+  copy:
+    src: userChrome.css
+    dest: "{{ firefox_profile_dir }}/chrome/userChrome.css"
+    backup: true
+
+- name: Enable legacy userChrome.css customizations
+  lineinfile:
+    path: "{{ firefox_profile_dir }}/user.js"
+    line: 'user_pref("toolkit.legacyUserProfileCustomizations.stylesheets", true);'
+    create: true
+    state: present
