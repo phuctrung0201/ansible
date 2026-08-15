@@ -6,29 +6,11 @@ Personal wiki at `~/wiki`. Single source of truth for conventions — read befor
 
 ```
 ~/wiki/
-├── _templates/   # journal, literal, permanent (hidden)
+├── _templates/   # literal, permanent (hidden)
 ├── _assets/      # diagrams, logs (hidden)
-├── journals/     # YYYY-MM-DD.md — fleeting, dated
 ├── literals/     # process records — runbooks, designs, recaps
 ├── permanents/   # Title.md — templates, handbooks, guidelines, one idea, densely linked
 └── home.md       # this file
-```
-
-## Journals
-
-No frontmatter, two sections only:
-
-- **Todo** — checklist (`- [ ]`/`- [x]`), terse **verb + link** to a `literals/` note, no trailing notes.
-- **Fleet** — plain bullets, no checklist, no linking discipline; short fragments, optionally promoted later. When promoted, log it the same day: `Move [[note]] to literal` or `Move [[note]] to permanent`.
-
-Journals link out to `literals/`/`permanents/`, never the reverse.
-
-```markdown
-## Todo
-- [ ] Merge traffic/deployment alerts PR for RMS-125898 IBR submission alert implementation
-
-## Fleet
-- Idea: cache invalidation race might explain the writer failover flakiness
 ```
 
 ## Literals
@@ -45,4 +27,4 @@ Flat folder, one idea per note, no ID prefix (filename is the title), no frontma
 
 ## Obsidian settings
 
-Daily notes folder: `journals/` (template `_templates/journal`). Excluded from explorer: `_templates/`, `_assets/`.
+Excluded from explorer: `_templates/`, `_assets/`.

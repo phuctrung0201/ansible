@@ -20,13 +20,6 @@
         "a": 1,
         "rgb": 5431406
       }
-    },
-    {
-      "query": "path:journals  ",
-      "color": {
-        "a": 1,
-        "rgb": 7237230
-      }
     }
   ],
   "collapse-display": false,

@@ -46,11 +46,6 @@
     state: directory
     mode: "0755"
 
-- name: Install journal template into vault
-  copy:
-    src: templates/journal.md
-    dest: "~/wiki/_templates/journal.md"
-
 - name: Install note template into vault
   copy:
     src: templates/note.md
