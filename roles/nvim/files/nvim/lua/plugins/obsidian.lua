@@ -27,16 +27,6 @@ return {
         workspaces = {
           { name = "wiki", path = "~/wiki" },
         },
-        notes_subdir = "notes",
-        new_notes_location = "notes_subdir",
-        note_id_func = require("obsidian.builtin").title_id,
-        note = { template = "note.md" },
-        daily_notes = {
-          folder = "journals",
-          date_format = "%Y-%m-%d",
-          alias_format = "%A, %B %-d %Y",
-          template = "journal.md",
-        },
         templates = {
           folder = "_templates",
           date_format = "%A, %B %-d %Y",

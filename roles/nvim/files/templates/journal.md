@@ -1,6 +1,0 @@
-# {{date}}
-
-## Projects
-
-## Areas
-

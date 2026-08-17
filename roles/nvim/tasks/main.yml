@@ -30,23 +30,3 @@
     path: "~/wiki"
     state: directory
     mode: "0755"
-
-- name: Ensure wiki home exists (empty installs only)
-  copy:
-    dest: "~/wiki/home.md"
-    content: |
-      # Wiki
-
-      → [[.meta/index|Vault guide]]
-    force: false
-
-- name: Ensure obsidian templates directory exists in vault
-  file:
-    path: "~/wiki/_templates"
-    state: directory
-    mode: "0755"
-
-- name: Install note template into vault
-  copy:
-    src: templates/note.md
-    dest: "~/wiki/_templates/note.md"
