@@ -24,6 +24,9 @@ return {
           style = "wiki",
           format = "shortest",
         },
+        note_id_func = function(title)
+          return title
+        end,
         workspaces = {
           { name = "wiki", path = "~/wiki" },
         },
