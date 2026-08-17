@@ -37,62 +37,61 @@ outer.bottom = 4
 outer.top = 4
 outer.right = 4
 
-# Window management: AeroSpace's `ctrl-` prefix is the Control key.
+# Window management: Option (⌥) + key. On macOS, AeroSpace's `alt-` prefix is the Option key.
 # No separate binding mode — chords run directly from main mode.
 # Workspaces: 1=terminal+obsidian 2=browser 3=fallback F1=screen 1 F2=screen 2
 [mode.main.binding]
 
-# tab/backslash in the old action mode → Control+key
-ctrl-backslash = 'focus-monitor --wrap-around next'
-ctrl-shift-backslash = 'move-workspace-to-monitor --wrap-around next'
-ctrl-tab = 'workspace next --wrap-around'
-ctrl-shift-tab = 'workspace prev --wrap-around'
-ctrl-backtick = 'workspace-back-and-forth'
+# tab/backslash in the old action mode → Option+key
+alt-backslash = 'focus-monitor --wrap-around next'
+alt-shift-backslash = 'move-workspace-to-monitor --wrap-around next'
+alt-tab = 'workspace next --wrap-around'
+alt-shift-tab = 'workspace prev --wrap-around'
+alt-backtick = 'workspace-back-and-forth'
 
 # Window focus (brackets)
-ctrl-leftSquareBracket = 'focus dfs-prev --boundaries workspace --boundaries-action wrap-around-the-workspace'
-ctrl-rightSquareBracket = 'focus dfs-next --boundaries workspace --boundaries-action wrap-around-the-workspace'
+alt-leftSquareBracket = 'focus dfs-prev --boundaries workspace --boundaries-action wrap-around-the-workspace'
+alt-rightSquareBracket = 'focus dfs-next --boundaries workspace --boundaries-action wrap-around-the-workspace'
 
-# Focus (Control+arrows — avoids clashing with hjkl in nvim/terminals)
-ctrl-left = 'focus left'
-ctrl-down = 'focus down'
-ctrl-up = 'focus up'
-ctrl-right = 'focus right'
+# Focus (Option+arrows — avoids clashing with hjkl in nvim/terminals)
+alt-left = 'focus left'
+alt-down = 'focus down'
+alt-up = 'focus up'
+alt-right = 'focus right'
 
-# Move windows (Control+Shift+arrows)
-ctrl-shift-left = 'move left'
-ctrl-shift-down = 'move down'
-ctrl-shift-up = 'move up'
-ctrl-shift-right = 'move right'
+# Move windows (Option+Shift+arrows)
+alt-shift-left = 'move left'
+alt-shift-down = 'move down'
+alt-shift-up = 'move up'
+alt-shift-right = 'move right'
 
 # Workspaces
-ctrl-1 = 'workspace 1'
-ctrl-2 = 'workspace 2'
-ctrl-3 = 'workspace 3'
-ctrl-4 = 'workspace 4'
-ctrl-f1 = 'summon-workspace 1'
-ctrl-f2 = 'summon-workspace 2'
-ctrl-f3 = 'summon-workspace 3'
-ctrl-f4 = 'summon-workspace 4'
-ctrl-shift-1 = 'move-node-to-workspace --focus-follows-window 1'
-ctrl-shift-2 = 'move-node-to-workspace --focus-follows-window 2'
-ctrl-shift-3 = 'move-node-to-workspace --focus-follows-window 3'
-ctrl-shift-4 = 'move-node-to-workspace --focus-follows-window 4'
-
+alt-1 = 'workspace 1'
+alt-2 = 'workspace 2'
+alt-3 = 'workspace 3'
+alt-4 = 'workspace 4'
+alt-f1 = 'summon-workspace 1'
+alt-f2 = 'summon-workspace 2'
+alt-f3 = 'summon-workspace 3'
+alt-f4 = 'summon-workspace 4'
+alt-shift-1 = 'move-node-to-workspace --focus-follows-window 1'
+alt-shift-2 = 'move-node-to-workspace --focus-follows-window 2'
+alt-shift-3 = 'move-node-to-workspace --focus-follows-window 3'
+alt-shift-4 = 'move-node-to-workspace --focus-follows-window 4'
 
 # Layout
-ctrl-t = 'layout accordion tiles'
-ctrl-f = 'layout floating tiling'
+alt-t = 'layout accordion tiles'
+alt-f = 'layout floating tiling'
 
 # Resize
-ctrl-minus = 'resize smart -100'
-ctrl-equal = 'resize smart +100'
-ctrl-0 = 'balance-sizes'
+alt-minus = 'resize smart -100'
+alt-equal = 'resize smart +100'
+alt-0 = 'balance-sizes'
 
 # Service
-ctrl-r = 'reload-config'
-ctrl-w = 'close'
-ctrl-shift-w = 'close-all-windows-but-current'
+alt-r = 'reload-config'
+alt-w = 'close'
+alt-shift-w = 'close-all-windows-but-current'
 
 # List current opening apps
 # aerospace list-apps
