@@ -37,7 +37,7 @@
     path: "{{ firefox_profile_dir }}/chrome"
     state: directory
 
-- name: Deploy userChrome.css (hide macOS traffic-light buttons)
+- name: Deploy userChrome.css (hide traffic-lights, autohide nav toolbar, hide status popup)
   copy:
     src: userChrome.css
     dest: "{{ firefox_profile_dir }}/chrome/userChrome.css"
