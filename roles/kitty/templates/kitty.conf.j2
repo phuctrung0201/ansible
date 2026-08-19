@@ -1,0 +1,51 @@
+# Ansible — One Dark (from share.yml).
+
+# Font
+font_family      FiraCode Nerd Font Mono
+font_size        16
+
+# Colors
+background            {{ theme.bg }}
+foreground           {{ theme.fg }}
+selection_background {{ theme.selection }}
+selection_foreground {{ theme.fg }}
+cursor               {{ theme.cyan }}
+cursor_text_color    {{ theme.bg }}
+
+# ANSI palette (0-7)
+color0  {{ theme.dark }}
+color1  {{ theme.red }}
+color2  {{ theme.green }}
+color3  {{ theme.yellow }}
+color4  {{ theme.blue }}
+color5  {{ theme.pink }}
+color6  {{ theme.cyan }}
+color7  {{ theme.white }}
+# Bright (8-15)
+color8  {{ theme.comment_bright }}
+color9  {{ theme.bright_red }}
+color10 {{ theme.bright_green }}
+color11 {{ theme.bright_yellow }}
+color12 {{ theme.bright_purple }}
+color13 {{ theme.bright_pink }}
+color14 {{ theme.bright_cyan }}
+color15 {{ theme.bright_white }}
+
+# Cursor
+cursor_shape beam
+
+# macOS: Option sends Alt (tmux command palette Alt+Space, Neovim <a-h> / <a-i>)
+macos_option_as_alt yes
+
+# tmux integration — Kitty copy-on-select fights tmux copy mode
+copy_on_select no
+
+# Shell integration — auto-detect (fish is the default login shell)
+shell_integration enabled
+
+# Close/quit without confirmation (Cmd+Q, window close, tab close)
+confirm_os_window_close 0
+
+# Window — hidden titlebar
+hide_window_decorations titlebar-only
+window_padding_width 4

@@ -1,9 +1,9 @@
 # tmux config — managed by ansible
 # Theme colors come from share.yml (One Dark / onedarkpro)
 
-# Terminal / colors — truecolor (RGB) for Ghostty and other modern terminals
+# Terminal / colors — truecolor (RGB) for Kitty and other modern terminals
 set -g default-terminal "tmux-256color"
-set -as terminal-features ",xterm-256color:RGB,xterm-ghostty:RGB"
+set -as terminal-features ",xterm-256color:RGB,xterm-kitty:RGB"
 set -g allow-passthrough on
 
 # Prefix: Alt+p
@@ -37,7 +37,7 @@ set-environment -g LPASS_AGENT_TIMEOUT "0"
 # Command palette — fzf picker over useful tmux commands (Alt + Space)
 bind -n M-Space display-popup -E -w 50% -h 25% "~/.config/tmux/palette.sh"
 
-# Status bar — powerline style (requires a Nerd Font; Ghostty is configured with one)
+# Status bar — powerline style (requires a Nerd Font; Kitty is configured with one)
 set -g status-style "bg=default,fg={{ theme.fg }}"
 set -g status-left-length 100
 set -g status-right-length 100

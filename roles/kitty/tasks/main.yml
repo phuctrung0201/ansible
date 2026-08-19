@@ -1,6 +1,6 @@
-- name: Install Ghostty
+- name: Install Kitty
   community.general.homebrew:
-    name: ghostty
+    name: kitty
     state: present
     install_options: cask
 
@@ -16,13 +16,13 @@
     install_options: cask
   when: not firacode_font.stat.exists
 
-- name: Ensure Ghostty config directory exists
+- name: Ensure Kitty config directory exists
   file:
-    path: "~/.config/ghostty"
+    path: "~/.config/kitty"
     state: directory
 
-- name: Deploy Ghostty config
+- name: Deploy Kitty config
   template:
-    src: config.ghostty.j2
-    dest: "~/.config/ghostty/config"
+    src: kitty.conf.j2
+    dest: "~/.config/kitty/kitty.conf"
     backup: true
