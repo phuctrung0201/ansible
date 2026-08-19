@@ -7,11 +7,6 @@
   padding-left: 0 !important;
 }
 
-/* Hide the status/link-preview popup (bottom-left) */
-#statuspanel {
-  display: none !important;
-}
-
 /* Keep the whole top toolbar permanently hidden (out of flow, no gap) */
 #navigator-toolbox {
   position: fixed !important;
