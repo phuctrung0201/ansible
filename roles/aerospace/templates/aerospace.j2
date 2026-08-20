@@ -37,10 +37,24 @@ outer.bottom = 4
 outer.top = 4
 outer.right = 4
 
-# Window management: Option (⌥) + key. On macOS, AeroSpace's `alt-` prefix is the Option key.
-# No separate binding mode — chords run directly from main mode.
 # Workspaces: 1=terminal+obsidian 2=browser 3=fallback F1=screen 1 F2=screen 2
+[mode.move.binding]
+alt-m = 'mode main'
+
+# Focus (Option+arrows — avoids clashing with hjkl in nvim/terminals)
+alt-h = 'focus left'
+alt-j = 'focus down'
+alt-k = 'focus up'
+alt-l = 'focus right'
+
+# Move windows (Option+Shift+arrows)
+alt-shift-h = 'move left'
+alt-shift-j = 'move down'
+alt-shift-k = 'move up'
+alt-shift-l = 'move right'
+
 [mode.main.binding]
+alt-m = 'mode move'
 
 # tab/backslash in the old action mode → Option+key
 alt-backslash = 'focus-monitor --wrap-around next'
@@ -53,17 +67,6 @@ alt-backtick = 'workspace-back-and-forth'
 alt-leftSquareBracket = 'focus dfs-prev --boundaries workspace --boundaries-action wrap-around-the-workspace'
 alt-rightSquareBracket = 'focus dfs-next --boundaries workspace --boundaries-action wrap-around-the-workspace'
 
-# Focus (Option+arrows — avoids clashing with hjkl in nvim/terminals)
-alt-left = 'focus left'
-alt-down = 'focus down'
-alt-up = 'focus up'
-alt-right = 'focus right'
-
-# Move windows (Option+Shift+arrows)
-alt-shift-left = 'move left'
-alt-shift-down = 'move down'
-alt-shift-up = 'move up'
-alt-shift-right = 'move right'
 
 # Workspaces
 alt-1 = 'workspace 1'
@@ -90,8 +93,8 @@ alt-0 = 'balance-sizes'
 
 # Service
 alt-r = 'reload-config'
-alt-w = 'close'
-alt-shift-w = 'close-all-windows-but-current'
+alt-d = 'close'
+alt-o = 'close-all-windows-but-current'
 
 # List current opening apps
 # aerospace list-apps
