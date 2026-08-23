@@ -6,7 +6,7 @@ Personal **macOS** machine setup for:
 - [mise](https://mise.jdx.dev/)
 - [Neovim](https://neovim.io/)
 - [AeroSpace](https://github.com/nikitabobko/AeroSpace)
-- [Kitty](https://sw.kovidgoyal.net/kitty/) (terminal emulator, integrated with tmux)
+- [Ghostty](https://ghostty.org/) (terminal emulator, integrated with tmux)
 - [tmux](https://github.com/tmux/tmux) (command palette via Alt+Space, [fzf](https://github.com/junegunn/fzf), [LastPass CLI](https://github.com/lastpass/lastpass-cli))
 
 Fish config is deployed to `~/.config/fish/`.

@@ -15,8 +15,8 @@
       tags: ['aerospace']
     - role: firefox
       tags: ['firefox']
-    - role: kitty
-      tags: ['kitty']
+    - role: ghostty
+      tags: ['ghostty']
     - role: tmux
       tags: ['tmux']
     - role: obsidian
