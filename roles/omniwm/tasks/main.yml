@@ -1,0 +1,76 @@
+- name: Add the OmniWM tap
+  community.general.homebrew_tap:
+    name: BarutSRB/tap
+    state: present
+
+# Homebrew refuses to load casks from non-official taps until they are trusted.
+# Scoped to the single cask rather than the whole tap. Trust lives in
+# ~/.homebrew/trust.json (or $XDG_CONFIG_HOME/homebrew/trust.json).
+- name: Read Homebrew's trusted entries
+  command: brew trust --json v1
+  register: omniwm_brew_trust
+  changed_when: false
+
+- name: Trust the OmniWM cask
+  command: brew trust --cask BarutSRB/tap/omniwm
+  when: "'barutsrb/tap/omniwm' not in (omniwm_brew_trust.stdout | lower)"
+
+- name: Install omniwm (cask; also links omniwmctl)
+  community.general.homebrew:
+    name: omniwm
+    state: present
+    install_options: cask
+
+- name: Ensure omniwm config directory exists
+  file:
+    path: "~/.config/omniwm"
+    state: directory
+
+# OmniWM owns this file at runtime and re-serialises the whole thing on every
+# GUI change, so the template is a full snapshot rather than a partial overlay.
+# Deployed with `copy`, not `template`: the file contains no Jinja, and it is dense
+# with TOML inline/array tables that a templating pass would only put at risk.
+- name: Deploy omniwm config
+  copy:
+    src: config.toml
+    dest: "~/.config/omniwm/settings.toml"
+    backup: yes
+
+- name: Activate omniwm if not already running
+  shell: "pgrep -x OmniWM || open -a OmniWM.app"
+  changed_when: false
+
+# OmniWM's built-in [borders] is disabled in favour of JankyBorders, which runs as
+# its own brew service and so survives OmniWM restarts.
+- name: Add the JankyBorders tap
+  community.general.homebrew_tap:
+    name: felixkratz/formulae
+    state: present
+
+# Homebrew refuses formulae from non-official taps until trusted, scoped to the
+# single formula rather than the whole tap.
+- name: Trust the borders formula
+  command: brew trust --formula felixkratz/formulae/borders
+  when: "'felixkratz/formulae/borders' not in (omniwm_brew_trust.stdout | lower)"
+
+- name: Install borders (JankyBorders)
+  community.general.homebrew:
+    name: felixkratz/formulae/borders
+    state: present
+
+- name: Ensure borders config directory exists
+  file:
+    path: "~/.config/borders"
+    state: directory
+
+- name: Deploy borders config
+  template:
+    src: bordersrc.j2
+    dest: "~/.config/borders/bordersrc"
+    mode: "0755"
+    backup: true
+
+- name: Start the borders service
+  command: brew services start felixkratz/formulae/borders
+  register: omniwm_borders_service
+  changed_when: "'already started' not in omniwm_borders_service.stdout"

@@ -1,0 +1,310 @@
+# OmniWM settings — managed by ansible (roles/omniwm/files/config.toml).
+#
+# This file holds only DEVIATIONS from OmniWM's own defaults. Anything omitted
+# falls back to the default, which also means ansible no longer pins it: change
+# it in the GUI and the change sticks. To re-pin a setting, add it back here.
+#
+# OmniWM rewrites this file on GUI changes. If it cannot PARSE the file it
+# silently falls back to defaults and overwrites it — so validate the TOML and
+# stop OmniWM before deploying.
+#
+# Gotcha: monitorRoutingOverrides is written as `= []` when empty. Appending
+# [[monitorRoutingOverrides]] tables without removing that line is a duplicate
+# key and invalidates the whole file.
+
+# Currently the default too, but pinned deliberately: borders are handled by
+# JankyBorders (see ../templates/bordersrc.j2), and the two must not both draw.
+[borders]
+enabled = false
+
+[clipboard]
+historyEnabled = true
+
+[focus]
+# Focus follows a window when it is sent to another monitor; with it off you stay
+# in the source workspace.
+followsWindowToMonitor = true
+
+[general]
+# Required for omniwmctl; without it the CLI fails with ENOENT on the socket.
+# Not a default despite appearing in OmniWM's serialised state - it was already
+# switched on when that snapshot was taken.
+ipcEnabled = true
+
+# How a lone window is sized. Only three values exist: "fill" (full work area,
+# and it deliberately ignores the outer gaps), "custom" (fixed width/height), and
+# "containerPrimarySpan" (keeps the configured span). There is no full-screen-
+# with-gaps option; "fill" is why a single window sits flush to the edges.
+[dwindle]
+singleWindowFit = "fill"
+
+# Pinned at OmniWM's defaults so the values are visible and survive GUI drift.
+# size is the inner gap between tiled windows; outer is the margin to the screen
+# edges. Gaps only scope globally or per monitor (monitorGapOverrides) - not per
+# layout and not per workspace.
+[gaps]
+size = 8.0
+
+[gaps.outer]
+bottom = 8.0
+left = 8.0
+right = 8.0
+top = 8.0
+
+[niri]
+singleWindowFit = "fill"
+
+# The workspace bar is hidden, so surface the active workspace beside the menu
+# bar icon instead. useWorkspaceId would show the number rather than the name;
+# the workspaces are named "1".."4" so it makes no difference here.
+[statusBar]
+showWorkspaceName = true
+
+[workspaceBar]
+enabled = false
+
+# The keymap is pinned in full, not trimmed to deviations: it is the part of the
+# config worth reading, and pinning it means a GUI rebind gets reverted on the
+# next run. Workspaces 5-9 do not exist here, so their Option+5..9 defaults are
+# explicitly Unassigned to free those keys up.
+[[hotkeys]]
+binding = "Option+1"
+id = "switchWorkspace.0"
+
+[[hotkeys]]
+binding = "Option+Shift+1"
+id = "moveToWorkspace.0"
+
+[[hotkeys]]
+binding = "Option+2"
+id = "switchWorkspace.1"
+
+[[hotkeys]]
+binding = "Option+Shift+2"
+id = "moveToWorkspace.1"
+
+[[hotkeys]]
+binding = "Option+3"
+id = "switchWorkspace.2"
+
+[[hotkeys]]
+binding = "Option+Shift+3"
+id = "moveToWorkspace.2"
+
+[[hotkeys]]
+binding = "Option+4"
+id = "switchWorkspace.3"
+
+[[hotkeys]]
+binding = "Option+Shift+4"
+id = "moveToWorkspace.3"
+
+[[hotkeys]]
+binding = "Unassigned"
+id = "switchWorkspace.4"
+
+[[hotkeys]]
+binding = "Unassigned"
+id = "moveToWorkspace.4"
+
+[[hotkeys]]
+binding = "Unassigned"
+id = "switchWorkspace.5"
+
+[[hotkeys]]
+binding = "Unassigned"
+id = "moveToWorkspace.5"
+
+[[hotkeys]]
+binding = "Unassigned"
+id = "switchWorkspace.6"
+
+[[hotkeys]]
+binding = "Unassigned"
+id = "moveToWorkspace.6"
+
+[[hotkeys]]
+binding = "Unassigned"
+id = "switchWorkspace.7"
+
+[[hotkeys]]
+binding = "Unassigned"
+id = "moveToWorkspace.7"
+
+[[hotkeys]]
+binding = "Unassigned"
+id = "switchWorkspace.8"
+
+[[hotkeys]]
+binding = "Unassigned"
+id = "moveToWorkspace.8"
+
+# Option+Tab is OmniWM's default for focusPrevious; pinned Unassigned here to
+# free the chord for workspaceBackAndForth, which gets used far more.
+[[hotkeys]]
+binding = "Unassigned"
+id = "focusPrevious"
+
+[[hotkeys]]
+binding = "Option+Tab"
+id = "workspaceBackAndForth"
+
+[[hotkeys]]
+binding = "Option+Left Arrow"
+id = "focus.left"
+
+[[hotkeys]]
+binding = "Option+Down Arrow"
+id = "focus.down"
+
+[[hotkeys]]
+binding = "Option+Up Arrow"
+id = "focus.up"
+
+[[hotkeys]]
+binding = "Option+Right Arrow"
+id = "focus.right"
+
+[[hotkeys]]
+binding = "Option+Left Bracket"
+id = "focusDownOrLeft"
+
+[[hotkeys]]
+binding = "Option+Right Bracket"
+id = "focusUpOrRight"
+
+[[hotkeys]]
+binding = "Control+Option+Shift+Up Arrow"
+id = "moveWindowToWorkspaceUp"
+
+[[hotkeys]]
+binding = "Control+Option+Shift+Down Arrow"
+id = "moveWindowToWorkspaceDown"
+
+[[hotkeys]]
+binding = "Option+Shift+Left Arrow"
+id = "move.left"
+
+[[hotkeys]]
+binding = "Option+Shift+Down Arrow"
+id = "move.down"
+
+[[hotkeys]]
+binding = "Option+Shift+Up Arrow"
+id = "move.up"
+
+[[hotkeys]]
+binding = "Option+Shift+Right Arrow"
+id = "move.right"
+
+[[hotkeys]]
+binding = "Control+Command+Tab"
+id = "focusMonitorNext"
+
+[[hotkeys]]
+binding = "Control+Command+Grave"
+id = "focusMonitorLast"
+
+[[hotkeys]]
+binding = "Option+Return"
+id = "toggleFullscreen"
+
+[[hotkeys]]
+binding = "Option+B"
+id = "toggleColumnTabbed"
+
+[[hotkeys]]
+binding = "Option+Backslash"
+id = "cycleSizeForward"
+
+[[hotkeys]]
+binding = "Option+Shift+Backslash"
+id = "cycleSizeBackward"
+
+[[hotkeys]]
+binding = "Option+F"
+id = "toggleContainerFullPrimarySpan"
+
+[[hotkeys]]
+binding = "Control+Option+F"
+id = "expandContainerToAvailablePrimarySpan"
+
+[[hotkeys]]
+binding = "Control+Option+R"
+id = "resetWindowSecondarySpan"
+
+[[hotkeys]]
+binding = "Option+Minus"
+id = "setContainerPrimarySpan.decrease10Percent"
+
+[[hotkeys]]
+binding = "Option+Equal"
+id = "setContainerPrimarySpan.increase10Percent"
+
+[[hotkeys]]
+binding = "Option+Shift+Minus"
+id = "setWindowSecondarySpan.decrease10Percent"
+
+[[hotkeys]]
+binding = "Option+Shift+Equal"
+id = "setWindowSecondarySpan.increase10Percent"
+
+# Sits with the Option+1..4 workspace row rather than on a mnemonic letter.
+[[hotkeys]]
+binding = "Option+0"
+id = "balanceSizes"
+
+[[hotkeys]]
+binding = "Option+Shift+Grave"
+id = "openCommandPalette"
+
+[[hotkeys]]
+binding = "Option+R"
+id = "raiseAllFloatingWindows"
+
+[[hotkeys]]
+binding = "Option+M"
+id = "openMenuAnywhere"
+
+[[hotkeys]]
+binding = "Option+Q"
+id = "toggleQuakeTerminal"
+
+[[hotkeys]]
+binding = "Option+Grave"
+id = "toggleOverview"
+
+# Not defaults: the workspace set itself. Omitting these lets OmniWM invent its
+# own, with fresh UUIDs. monitorAssignment.type "secondary" gives the second
+# display somewhere to put windows.
+[[workspaces]]
+id = "32930B19-4FEE-4CCF-ABB1-E757A5B741EE"
+layoutType = "niri"
+name = "1"
+
+[workspaces.monitorAssignment]
+type = "main"
+
+[[workspaces]]
+id = "3C003DFA-F079-41AA-B3FD-00320DAAF371"
+layoutType = "dwindle"
+name = "2"
+
+[workspaces.monitorAssignment]
+type = "main"
+
+[[workspaces]]
+id = "81E39816-EABA-4032-BE22-AFA3AB0773C8"
+layoutType = "niri"
+name = "3"
+
+[workspaces.monitorAssignment]
+type = "secondary"
+
+[[workspaces]]
+id = "E7EF4823-5AD4-4344-8CAB-53A79269FFB3"
+layoutType = "dwindle"
+name = "4"
+
+[workspaces.monitorAssignment]
+type = "secondary"
