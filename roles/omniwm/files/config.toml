@@ -211,7 +211,7 @@ binding = "Option+Shift+Backslash"
 id = "cycleSizeBackward"
 
 [[hotkeys]]
-binding = "Option+F"
+binding = "Option+Shift+Return"
 id = "toggleContainerFullPrimarySpan"
 
 [[hotkeys]]
