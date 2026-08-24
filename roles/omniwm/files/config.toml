@@ -239,8 +239,11 @@ id = "setWindowSecondarySpan.increase10Percent"
 binding = "Option+0"
 id = "balanceSizes"
 
+# OmniWM has no setting to disable the command palette or Menu Anywhere outright,
+# so both are freed the same way as the unused workspaces above: pinned Unassigned,
+# which also stops a GUI rebind from quietly handing the keys back.
 [[hotkeys]]
-binding = "Option+Period"
+binding = "Unassigned"
 id = "openCommandPalette"
 
 [[hotkeys]]
@@ -248,7 +251,7 @@ binding = "Option+R"
 id = "raiseAllFloatingWindows"
 
 [[hotkeys]]
-binding = "Option+M"
+binding = "Unassigned"
 id = "openMenuAnywhere"
 
 [[hotkeys]]
