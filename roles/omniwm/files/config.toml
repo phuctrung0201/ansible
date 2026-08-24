@@ -13,7 +13,7 @@
 enabled = false
 
 [clipboard]
-historyEnabled = true
+historyEnabled = false
 
 [focus]
 # Focus follows a window when it is sent to another monitor.
@@ -132,7 +132,7 @@ binding = "Unassigned"
 id = "focusPrevious"
 
 [[hotkeys]]
-binding = "Option+Tab"
+binding = "Option+Grave"
 id = "workspaceBackAndForth"
 
 [[hotkeys]]
@@ -184,15 +184,15 @@ binding = "Option+Shift+Right Arrow"
 id = "move.right"
 
 [[hotkeys]]
-binding = "Control+Command+Tab"
+binding = "Unassigned"
 id = "focusMonitorNext"
 
 [[hotkeys]]
-binding = "Control+Command+Grave"
+binding = "Option+Shift+Tab"
 id = "focusMonitorLast"
 
 [[hotkeys]]
-binding = "Option+Return"
+binding = "Unassigned"
 id = "toggleFullscreen"
 
 [[hotkeys]]
@@ -255,11 +255,11 @@ binding = "Unassigned"
 id = "openMenuAnywhere"
 
 [[hotkeys]]
-binding = "Option+Grave"
+binding = "Option+Shift+Grave"
 id = "toggleQuakeTerminal"
 
 [[hotkeys]]
-binding = "Option+Shift+Grave"
+binding = "Option+Tab"
 id = "toggleOverview"
 
 # Omitting these lets OmniWM invent its own workspaces, with fresh UUIDs.
