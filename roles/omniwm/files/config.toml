@@ -1,19 +1,14 @@
 # OmniWM settings — managed by ansible (roles/omniwm/files/config.toml).
 #
-# This file holds only DEVIATIONS from OmniWM's own defaults. Anything omitted
-# falls back to the default, which also means ansible no longer pins it: change
-# it in the GUI and the change sticks. To re-pin a setting, add it back here.
+# Deviations from OmniWM's defaults only; anything omitted is unpinned and a GUI
+# change to it will stick. OmniWM rewrites this file on GUI changes, and silently
+# replaces it with defaults if it cannot parse it — validate the TOML and stop
+# OmniWM before deploying.
 #
-# OmniWM rewrites this file on GUI changes. If it cannot PARSE the file it
-# silently falls back to defaults and overwrites it — so validate the TOML and
-# stop OmniWM before deploying.
-#
-# Gotcha: monitorRoutingOverrides is written as `= []` when empty. Appending
-# [[monitorRoutingOverrides]] tables without removing that line is a duplicate
-# key and invalidates the whole file.
+# Gotcha: monitorRoutingOverrides is written as `= []` when empty; appending
+# [[monitorRoutingOverrides]] tables without removing that line is a duplicate key.
 
-# Currently the default too, but pinned deliberately: borders are handled by
-# JankyBorders (see ../templates/bordersrc.j2), and the two must not both draw.
+# JankyBorders draws these instead (../templates/bordersrc.j2); never both.
 [borders]
 enabled = false
 
@@ -21,27 +16,20 @@ enabled = false
 historyEnabled = true
 
 [focus]
-# Focus follows a window when it is sent to another monitor; with it off you stay
-# in the source workspace.
+# Focus follows a window when it is sent to another monitor.
 followsWindowToMonitor = true
 
 [general]
-# Required for omniwmctl; without it the CLI fails with ENOENT on the socket.
-# Not a default despite appearing in OmniWM's serialised state - it was already
-# switched on when that snapshot was taken.
+# Required for omniwmctl. Not a default, despite appearing in the snapshot.
 ipcEnabled = true
 
-# How a lone window is sized. Only three values exist: "fill" (full work area,
-# and it deliberately ignores the outer gaps), "custom" (fixed width/height), and
-# "containerPrimarySpan" (keeps the configured span). There is no full-screen-
-# with-gaps option; "fill" is why a single window sits flush to the edges.
+# singleWindowFit: how a lone window is sized. Raw values are snake_case:
+# fill | custom | container_primary_span.
 [dwindle]
-singleWindowFit = "fill"
+singleWindowFit = "container_primary_span"
 
-# Pinned at OmniWM's defaults so the values are visible and survive GUI drift.
-# size is the inner gap between tiled windows; outer is the margin to the screen
-# edges. Gaps only scope globally or per monitor (monitorGapOverrides) - not per
-# layout and not per workspace.
+# Gaps scope globally or per monitor (monitorGapOverrides) — never per layout or
+# per workspace. size is between windows, outer is the screen margin.
 [gaps]
 size = 8.0
 
@@ -52,21 +40,20 @@ right = 8.0
 top = 8.0
 
 [niri]
-singleWindowFit = "fill"
+alwaysCenterSingleColumn = true
+# Steps for cycleSizeForward/Backward (Option+Backslash).
+containerPrimarySpanPresets = [0.25, 0.5, 0.75, 1.0]
+singleWindowFit = "container_primary_span"
 
-# The workspace bar is hidden, so surface the active workspace beside the menu
-# bar icon instead. useWorkspaceId would show the number rather than the name;
-# the workspaces are named "1".."4" so it makes no difference here.
+# The workspace bar is hidden, so show the workspace beside the menu bar icon.
 [statusBar]
 showWorkspaceName = true
 
 [workspaceBar]
 enabled = false
 
-# The keymap is pinned in full, not trimmed to deviations: it is the part of the
-# config worth reading, and pinning it means a GUI rebind gets reverted on the
-# next run. Workspaces 5-9 do not exist here, so their Option+5..9 defaults are
-# explicitly Unassigned to free those keys up.
+# Pinned in full, not trimmed to deviations, so a GUI rebind gets reverted.
+# Workspaces 5-9 do not exist, so Option+5..9 are freed by pinning Unassigned.
 [[hotkeys]]
 binding = "Option+1"
 id = "switchWorkspace.0"
@@ -139,8 +126,7 @@ id = "switchWorkspace.8"
 binding = "Unassigned"
 id = "moveToWorkspace.8"
 
-# Option+Tab is OmniWM's default for focusPrevious; pinned Unassigned here to
-# free the chord for workspaceBackAndForth, which gets used far more.
+# Freed from focusPrevious for workspaceBackAndForth.
 [[hotkeys]]
 binding = "Unassigned"
 id = "focusPrevious"
@@ -249,7 +235,6 @@ id = "setWindowSecondarySpan.decrease10Percent"
 binding = "Option+Shift+Equal"
 id = "setWindowSecondarySpan.increase10Percent"
 
-# Sits with the Option+1..4 workspace row rather than on a mnemonic letter.
 [[hotkeys]]
 binding = "Option+0"
 id = "balanceSizes"
@@ -274,9 +259,7 @@ id = "toggleQuakeTerminal"
 binding = "Option+Grave"
 id = "toggleOverview"
 
-# Not defaults: the workspace set itself. Omitting these lets OmniWM invent its
-# own, with fresh UUIDs. monitorAssignment.type "secondary" gives the second
-# display somewhere to put windows.
+# Omitting these lets OmniWM invent its own workspaces, with fresh UUIDs.
 [[workspaces]]
 id = "32930B19-4FEE-4CCF-ABB1-E757A5B741EE"
 layoutType = "niri"
