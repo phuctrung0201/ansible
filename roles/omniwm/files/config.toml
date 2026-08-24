@@ -240,7 +240,7 @@ binding = "Option+0"
 id = "balanceSizes"
 
 [[hotkeys]]
-binding = "Option+Shift+Grave"
+binding = "Option+Period"
 id = "openCommandPalette"
 
 [[hotkeys]]
@@ -252,11 +252,11 @@ binding = "Option+M"
 id = "openMenuAnywhere"
 
 [[hotkeys]]
-binding = "Option+Q"
+binding = "Option+Grave"
 id = "toggleQuakeTerminal"
 
 [[hotkeys]]
-binding = "Option+Grave"
+binding = "Option+Shift+Grave"
 id = "toggleOverview"
 
 # Omitting these lets OmniWM invent its own workspaces, with fresh UUIDs.
