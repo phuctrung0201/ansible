@@ -5,7 +5,7 @@ Personal **macOS** machine setup for:
 - [Fish](https://fishshell.com/) (default login shell — [Carapace](https://carapace.sh/) completions, [zoxide](https://github.com/ajeetdsouza/zoxide), vi mode, mise integration)
 - [mise](https://mise.jdx.dev/)
 - [Neovim](https://neovim.io/)
-- [OmniWM](https://github.com/BarutSRB/OmniWM) (niri-style scrolling-column tiling WM, with built-in focus borders)
+- [Rift](https://github.com/acsandmann/rift) (tiling WM — scrolling, stack, master-stack and bsp layouts, with [JankyBorders](https://github.com/FelixKratz/JankyBorders) for focus borders)
 - [Ghostty](https://ghostty.org/) (terminal emulator, integrated with tmux)
 - [tmux](https://github.com/tmux/tmux) (command palette via Alt+Space, [fzf](https://github.com/junegunn/fzf), [LastPass CLI](https://github.com/lastpass/lastpass-cli))
 

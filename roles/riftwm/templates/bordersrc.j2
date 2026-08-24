@@ -1,8 +1,9 @@
 #!/bin/bash
-# JankyBorders config — managed by ansible (roles/omniwm/templates/bordersrc.j2).
-# OmniWM has its own [borders] section, but it is deliberately disabled in
-# files/config.toml in favour of this. Colours come from share.yml so the focus
-# border matches the One Dark palette used across nvim/tmux/ghostty/fish.
+# JankyBorders config — managed by ansible (roles/riftwm/templates/bordersrc.j2).
+# Rift draws no focus border of its own (only the experimental stack line), so
+# JankyBorders is the only source. Colours come from share.yml so the focus border
+# matches the One Dark palette used across nvim/tmux/ghostty/fish.
+
 #
 # Note: bordersrc has no hot reload. After changing it, run
 #   brew services restart borders
