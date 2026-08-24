@@ -16,8 +16,9 @@ enabled = false
 historyEnabled = false
 
 [focus]
-# Focus follows a window when it is sent to another monitor.
-followsWindowToMonitor = true
+# Sending a window elsewhere leaves focus put. Pinned rather than omitted so a GUI
+# toggle cannot hand the follow behaviour back.
+followsWindowToMonitor = false
 
 [general]
 # Required for omniwmctl. Not a default, despite appearing in the snapshot.
@@ -126,13 +127,14 @@ id = "switchWorkspace.8"
 binding = "Unassigned"
 id = "moveToWorkspace.8"
 
-# Freed from focusPrevious for workspaceBackAndForth.
+# Option+Tab is last-workspace. focusPrevious (last window) is niri-only, so it is
+# left unbound rather than dead on the dwindle workspaces (2 and 4).
 [[hotkeys]]
 binding = "Unassigned"
 id = "focusPrevious"
 
 [[hotkeys]]
-binding = "Option+Grave"
+binding = "Option+Tab"
 id = "workspaceBackAndForth"
 
 [[hotkeys]]
@@ -151,20 +153,21 @@ id = "focus.up"
 binding = "Option+Right Arrow"
 id = "focus.right"
 
+# Freed for the dwindle resize pair below.
 [[hotkeys]]
-binding = "Option+Left Bracket"
+binding = "Unassigned"
 id = "focusDownOrLeft"
 
 [[hotkeys]]
-binding = "Option+Right Bracket"
+binding = "Unassigned"
 id = "focusUpOrRight"
 
 [[hotkeys]]
-binding = "Control+Option+Shift+Up Arrow"
+binding = "Unassigned"
 id = "moveWindowToWorkspaceUp"
 
 [[hotkeys]]
-binding = "Control+Option+Shift+Down Arrow"
+binding = "Unassigned"
 id = "moveWindowToWorkspaceDown"
 
 [[hotkeys]]
@@ -188,7 +191,7 @@ binding = "Unassigned"
 id = "focusMonitorNext"
 
 [[hotkeys]]
-binding = "Option+Shift+Tab"
+binding = "Unassigned"
 id = "focusMonitorLast"
 
 [[hotkeys]]
@@ -212,11 +215,11 @@ binding = "Option+F"
 id = "toggleContainerFullPrimarySpan"
 
 [[hotkeys]]
-binding = "Control+Option+F"
+binding = "Unassigned"
 id = "expandContainerToAvailablePrimarySpan"
 
 [[hotkeys]]
-binding = "Control+Option+R"
+binding = "Option+Shift+0"
 id = "resetWindowSecondarySpan"
 
 [[hotkeys]]
@@ -239,6 +242,21 @@ id = "setWindowSecondarySpan.increase10Percent"
 binding = "Option+0"
 id = "balanceSizes"
 
+# Dwindle-only: promote the focused window to the root split (half the screen).
+[[hotkeys]]
+binding = "Option+Return"
+id = "moveToRoot"
+
+# Dwindle-only: grow/shrink the focused tile along its parent split's axis, which
+# is the root split's ratio right after moveToRoot.
+[[hotkeys]]
+binding = "Option+Left Bracket"
+id = "resizeFocusedWindow.shrink"
+
+[[hotkeys]]
+binding = "Option+Right Bracket"
+id = "resizeFocusedWindow.grow"
+
 # OmniWM has no setting to disable the command palette or Menu Anywhere outright,
 # so both are freed the same way as the unused workspaces above: pinned Unassigned,
 # which also stops a GUI rebind from quietly handing the keys back.
@@ -259,7 +277,7 @@ binding = "Option+Shift+Grave"
 id = "toggleQuakeTerminal"
 
 [[hotkeys]]
-binding = "Option+Tab"
+binding = "Option+Grave"
 id = "toggleOverview"
 
 # Omitting these lets OmniWM invent its own workspaces, with fresh UUIDs.
