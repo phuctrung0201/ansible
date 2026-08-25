@@ -1,0 +1,314 @@
+# OmniWM settings — managed by ansible (roles/omniwm/files/config.toml).
+#
+# Deviations from OmniWM's defaults only; anything omitted is unpinned and a GUI
+# change to it will stick. OmniWM rewrites this file on GUI changes, and silently
+# replaces it with defaults if it cannot parse it — validate the TOML and stop
+# OmniWM before deploying.
+#
+# Gotcha: monitorRoutingOverrides is written as `= []` when empty; appending
+# [[monitorRoutingOverrides]] tables without removing that line is a duplicate key.
+
+# JankyBorders draws these instead (../templates/bordersrc.j2); never both.
+[borders]
+enabled = false
+
+[clipboard]
+historyEnabled = false
+
+[focus]
+# Sending a window elsewhere leaves focus put. Pinned rather than omitted so a GUI
+# toggle cannot hand the follow behaviour back.
+followsWindowToMonitor = false
+
+[general]
+# Required for omniwmctl. Not a default, despite appearing in the snapshot.
+ipcEnabled = true
+
+# singleWindowFit: how a lone window is sized. Raw values are snake_case:
+# fill | custom | container_primary_span.
+[dwindle]
+singleWindowFit = "container_primary_span"
+
+# Gaps scope globally or per monitor (monitorGapOverrides) — never per layout or
+# per workspace. size is between windows, outer is the screen margin.
+[gaps]
+size = 8.0
+
+[gaps.outer]
+bottom = 8.0
+left = 8.0
+right = 8.0
+top = 8.0
+
+[niri]
+alwaysCenterSingleColumn = true
+# Steps for cycleSizeForward/Backward (Option+Backslash).
+containerPrimarySpanPresets = [0.25, 0.5, 0.75, 1.0]
+singleWindowFit = "container_primary_span"
+
+# The workspace bar is hidden, so show the workspace beside the menu bar icon.
+[statusBar]
+showWorkspaceName = true
+
+[workspaceBar]
+enabled = false
+
+# Pinned in full, not trimmed to deviations, so a GUI rebind gets reverted.
+# Workspaces 5-9 do not exist, so Option+5..9 are freed by pinning Unassigned.
+[[hotkeys]]
+binding = "Option+1"
+id = "switchWorkspace.0"
+
+[[hotkeys]]
+binding = "Option+Shift+1"
+id = "moveToWorkspace.0"
+
+[[hotkeys]]
+binding = "Option+2"
+id = "switchWorkspace.1"
+
+[[hotkeys]]
+binding = "Option+Shift+2"
+id = "moveToWorkspace.1"
+
+[[hotkeys]]
+binding = "Option+3"
+id = "switchWorkspace.2"
+
+[[hotkeys]]
+binding = "Option+Shift+3"
+id = "moveToWorkspace.2"
+
+[[hotkeys]]
+binding = "Option+4"
+id = "switchWorkspace.3"
+
+[[hotkeys]]
+binding = "Option+Shift+4"
+id = "moveToWorkspace.3"
+
+[[hotkeys]]
+binding = "Unassigned"
+id = "switchWorkspace.4"
+
+[[hotkeys]]
+binding = "Unassigned"
+id = "moveToWorkspace.4"
+
+[[hotkeys]]
+binding = "Unassigned"
+id = "switchWorkspace.5"
+
+[[hotkeys]]
+binding = "Unassigned"
+id = "moveToWorkspace.5"
+
+[[hotkeys]]
+binding = "Unassigned"
+id = "switchWorkspace.6"
+
+[[hotkeys]]
+binding = "Unassigned"
+id = "moveToWorkspace.6"
+
+[[hotkeys]]
+binding = "Unassigned"
+id = "switchWorkspace.7"
+
+[[hotkeys]]
+binding = "Unassigned"
+id = "moveToWorkspace.7"
+
+[[hotkeys]]
+binding = "Unassigned"
+id = "switchWorkspace.8"
+
+[[hotkeys]]
+binding = "Unassigned"
+id = "moveToWorkspace.8"
+
+# Option+Tab is last-window. focusPrevious is niri-only, so it does nothing on the
+# dwindle workspaces (2 and 4).
+[[hotkeys]]
+binding = "Option+Tab"
+id = "focusPrevious"
+
+[[hotkeys]]
+binding = "Unassigned"
+id = "workspaceBackAndForth"
+
+[[hotkeys]]
+binding = "Option+Left Arrow"
+id = "focus.left"
+
+[[hotkeys]]
+binding = "Option+Down Arrow"
+id = "focus.down"
+
+[[hotkeys]]
+binding = "Option+Up Arrow"
+id = "focus.up"
+
+[[hotkeys]]
+binding = "Option+Right Arrow"
+id = "focus.right"
+
+# Freed for the dwindle resize pair below.
+[[hotkeys]]
+binding = "Unassigned"
+id = "focusDownOrLeft"
+
+[[hotkeys]]
+binding = "Unassigned"
+id = "focusUpOrRight"
+
+[[hotkeys]]
+binding = "Unassigned"
+id = "moveWindowToWorkspaceUp"
+
+[[hotkeys]]
+binding = "Unassigned"
+id = "moveWindowToWorkspaceDown"
+
+[[hotkeys]]
+binding = "Option+Shift+Left Arrow"
+id = "move.left"
+
+[[hotkeys]]
+binding = "Option+Shift+Down Arrow"
+id = "move.down"
+
+[[hotkeys]]
+binding = "Option+Shift+Up Arrow"
+id = "move.up"
+
+[[hotkeys]]
+binding = "Option+Shift+Right Arrow"
+id = "move.right"
+
+[[hotkeys]]
+binding = "Unassigned"
+id = "focusMonitorNext"
+
+[[hotkeys]]
+binding = "Unassigned"
+id = "focusMonitorLast"
+
+[[hotkeys]]
+binding = "Unassigned"
+id = "toggleFullscreen"
+
+[[hotkeys]]
+binding = "Option+B"
+id = "toggleColumnTabbed"
+
+[[hotkeys]]
+binding = "Option+Backslash"
+id = "cycleSizeForward"
+
+[[hotkeys]]
+binding = "Option+Shift+Backslash"
+id = "cycleSizeBackward"
+
+[[hotkeys]]
+binding = "Option+Shift+Grave"
+id = "toggleContainerFullPrimarySpan"
+
+[[hotkeys]]
+binding = "Unassigned"
+id = "expandContainerToAvailablePrimarySpan"
+
+[[hotkeys]]
+binding = "Option+Shift+0"
+id = "resetWindowSecondarySpan"
+
+[[hotkeys]]
+binding = "Option+Minus"
+id = "setContainerPrimarySpan.decrease10Percent"
+
+[[hotkeys]]
+binding = "Option+Equal"
+id = "setContainerPrimarySpan.increase10Percent"
+
+[[hotkeys]]
+binding = "Option+Shift+Minus"
+id = "setWindowSecondarySpan.decrease10Percent"
+
+[[hotkeys]]
+binding = "Option+Shift+Equal"
+id = "setWindowSecondarySpan.increase10Percent"
+
+[[hotkeys]]
+binding = "Option+0"
+id = "balanceSizes"
+
+# Dwindle-only: promote the focused window to the root split (half the screen).
+[[hotkeys]]
+binding = "Option+Return"
+id = "moveToRoot"
+
+# Dwindle-only: grow/shrink the focused tile along its parent split's axis, which
+# is the root split's ratio right after moveToRoot.
+[[hotkeys]]
+binding = "Option+Left Bracket"
+id = "resizeFocusedWindow.shrink"
+
+[[hotkeys]]
+binding = "Option+Right Bracket"
+id = "resizeFocusedWindow.grow"
+
+# OmniWM has no setting to disable the command palette or Menu Anywhere outright,
+# so both are freed the same way as the unused workspaces above: pinned Unassigned,
+# which also stops a GUI rebind from quietly handing the keys back.
+[[hotkeys]]
+binding = "Unassigned"
+id = "openCommandPalette"
+
+[[hotkeys]]
+binding = "Option+Shift+Return"
+id = "raiseAllFloatingWindows"
+
+[[hotkeys]]
+binding = "Unassigned"
+id = "openMenuAnywhere"
+
+[[hotkeys]]
+binding = "Option+Grave"
+id = "toggleQuakeTerminal"
+
+[[hotkeys]]
+binding = "Option+Shift+Tab"
+id = "toggleOverview"
+
+# Omitting these lets OmniWM invent its own workspaces, with fresh UUIDs.
+[[workspaces]]
+id = "32930B19-4FEE-4CCF-ABB1-E757A5B741EE"
+layoutType = "niri"
+name = "1"
+
+[workspaces.monitorAssignment]
+type = "main"
+
+[[workspaces]]
+id = "3C003DFA-F079-41AA-B3FD-00320DAAF371"
+layoutType = "dwindle"
+name = "2"
+
+[workspaces.monitorAssignment]
+type = "main"
+
+[[workspaces]]
+id = "81E39816-EABA-4032-BE22-AFA3AB0773C8"
+layoutType = "niri"
+name = "3"
+
+[workspaces.monitorAssignment]
+type = "secondary"
+
+[[workspaces]]
+id = "E7EF4823-5AD4-4344-8CAB-53A79269FFB3"
+layoutType = "dwindle"
+name = "4"
+
+[workspaces.monitorAssignment]
+type = "secondary"
