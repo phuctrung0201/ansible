@@ -1,0 +1,143 @@
+# Rift is the window manager for this machine; it replaced the omniwm role, which
+# was removed once the migration settled.
+
+# OmniWM was tried in between and is a cask app that relaunches itself, so it keeps
+# tiling against rift until it is quit and removed.
+- name: Check whether OmniWM is installed
+  command: brew list --cask --versions omniwm
+  register: riftwm_omniwm_installed
+  failed_when: false
+  changed_when: false
+
+- name: Quit OmniWM
+  command: osascript -e 'quit app "OmniWM"'
+  when: riftwm_omniwm_installed.rc == 0
+  failed_when: false
+  changed_when: false
+
+- name: Uninstall omniwm
+  community.general.homebrew_cask:
+    name: omniwm
+    state: absent
+  when: riftwm_omniwm_installed.rc == 0
+
+- name: Add the rift tap
+  community.general.homebrew_tap:
+    name: acsandmann/tap
+    state: present
+
+# Homebrew refuses to load formulae from non-official taps until they are trusted.
+# Scoped to the single formula rather than the whole tap. Trust lives in
+# ~/.homebrew/trust.json (or $XDG_CONFIG_HOME/homebrew/trust.json).
+- name: Read Homebrew's trusted entries
+  command: brew trust --json v1
+  register: riftwm_brew_trust
+  changed_when: false
+
+- name: Trust the rift formula
+  command: brew trust --formula acsandmann/tap/rift
+  when: "'acsandmann/tap/rift' not in (riftwm_brew_trust.stdout | lower)"
+
+# A formula, not a cask: it installs the rift daemon and the rift-cli client.
+- name: Install rift
+  community.general.homebrew:
+    name: acsandmann/tap/rift
+    state: present
+
+# Drives the focus-change input-source reset wired up in files/config.toml.
+- name: Add the im-select tap
+  community.general.homebrew_tap:
+    name: daipeihust/tap
+    state: present
+
+- name: Trust the im-select formula
+  command: brew trust --formula daipeihust/tap/im-select
+  when: "'daipeihust/tap/im-select' not in (riftwm_brew_trust.stdout | lower)"
+
+- name: Install im-select
+  community.general.homebrew:
+    name: daipeihust/tap/im-select
+    state: present
+
+- name: Ensure rift config directory exists
+  file:
+    path: "~/.config/rift"
+    state: directory
+
+# Deployed with `copy`, not `template`: the file contains no Jinja, and it is dense
+# with TOML inline tables that a templating pass would only put at risk. Nothing
+# writes to it at runtime, so `backup` is only insurance against a bad deploy.
+- name: Deploy rift config
+  copy:
+    src: config.toml
+    dest: "~/.config/rift/config.toml"
+    backup: yes
+  register: riftwm_config
+
+# `brew services` is how the formula expects to be run (keep_alive, login item,
+# logs in /tmp/rift_$USER.{out,err}.log). Rift also has its own `rift service
+# install`, which writes a competing launchd job — deliberately not used here.
+- name: Read the rift service status
+  command: brew services info acsandmann/tap/rift --json
+  register: riftwm_service_info
+  changed_when: false
+
+# `restart` rather than `start` in every case: a rift that crashed on startup (a
+# config it could not parse, say) leaves the launchd job loaded but dead, and
+# `brew services start` on a loaded job fails with "Bootstrap failed: 5".
+#
+# hot_reload = true means a *running* rift picks up a changed config on its own, so
+# a config-only change normally needs nothing here. The restart is still wired to
+# riftwm_config so that a deploy which fixes a parse error also revives the daemon.
+- name: Start the rift service
+  command: brew services restart acsandmann/tap/rift
+  when: >-
+    riftwm_config.changed
+    or not ((riftwm_service_info.stdout | from_json)[0].running | default(false))
+
+# Rift needs Accessibility permission and cannot grant it to itself. Surfaced as a
+# debug message rather than a failure: the grant is a one-time manual step.
+- name: Remind about Accessibility permission
+  debug:
+    msg: >-
+      If windows are not being tiled, grant rift Accessibility permission in
+      System Settings > Privacy & Security > Accessibility, then run
+      `brew services restart acsandmann/tap/rift`.
+
+# Rift draws no focus border of its own, so JankyBorders provides them, running as
+# its own brew service.
+- name: Add the JankyBorders tap
+  community.general.homebrew_tap:
+    name: felixkratz/formulae
+    state: present
+
+- name: Trust the borders formula
+  command: brew trust --formula felixkratz/formulae/borders
+  when: "'felixkratz/formulae/borders' not in (riftwm_brew_trust.stdout | lower)"
+
+- name: Install borders (JankyBorders)
+  community.general.homebrew:
+    name: felixkratz/formulae/borders
+    state: present
+
+- name: Ensure borders config directory exists
+  file:
+    path: "~/.config/borders"
+    state: directory
+
+- name: Deploy borders config
+  template:
+    src: bordersrc.j2
+    dest: "~/.config/borders/bordersrc"
+    mode: "0755"
+    backup: true
+  register: riftwm_bordersrc
+
+# bordersrc has no hot reload, so a changed config needs the service bounced.
+# `restart` also covers the not-yet-running case.
+- name: Start the borders service
+  command: >-
+    brew services {{ 'restart' if riftwm_bordersrc.changed else 'start' }}
+    felixkratz/formulae/borders
+  register: riftwm_borders_service
+  changed_when: "'already started' not in riftwm_borders_service.stdout"

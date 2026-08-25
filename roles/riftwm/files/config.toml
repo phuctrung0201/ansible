@@ -1,0 +1,167 @@
+# Rift settings — managed by ansible (roles/riftwm/files/config.toml).
+#
+# Deployed to ~/.config/rift/config.toml. Rift never rewrites this file (there is
+# no GUI for settings), so it is the single source of truth. hot_reload is on, so a
+# deploy takes effect without a restart.
+#
+# Deliberately minimal: navigation, window movement, animation. Everything else is
+# left at rift's own defaults rather than pinned, so this file stays short enough to
+# read in one go. rift.default.toml in the tap's share dir is the full reference.
+
+[settings]
+animate = true
+animation_duration = 0.2
+animation_fps = 120.0
+
+# Required, not cosmetic: this defaults to *true*, which starts every space
+# unmanaged and waits for a toggle_space_activated keypress. With no such key bound
+# below, omitting this line leaves rift running but tiling nothing, with no way in.
+default_disable = false
+
+# All three default to true in rift (serde default = "yes"), so they have to be
+# pinned rather than omitted: leaving them out hands focus to the pointer and hides
+# the cursor after every focus change, neither of which is wanted.
+focus_follows_mouse = false
+mouse_follows_focus = false
+mouse_hides_on_focus = false
+
+# Force the keyboard back to English (ABC) whenever focus moves to another window,
+# so a window left in Vietnamese IM does not follow you to the next one.
+#
+# CLI subscriptions live only in rift's memory (src/ipc/subscriptions.rs), so they
+# have to be re-registered every start — which is what run_on_start is for. Absolute
+# paths are required: rift runs from launchd, without a login shell's PATH.
+#
+# Commands are split into argv and spawned directly, with no shell, so no pipes or
+# globs here. rift appends the event payload as a trailing JSON argument; im-select
+# ignores the extra argument, so no wrapper script is needed.
+run_on_start = [
+	"/opt/homebrew/bin/rift-cli subscribe cli --event focused_window_changed --command /opt/homebrew/bin/im-select --args com.apple.keylayout.ABC",
+]
+
+# Fallback for any workspace without a rule below. "scrolling" is niri-style,
+# "bsp" is dwindle-style, "traditional" is i3-style.
+[settings.layout]
+mode = "bsp"
+
+# Always stack horizontally. The default is "perpendicular", which picks whichever
+# axis is perpendicular to the parent layout, so stacks flip orientation depending
+# on where they are built; "same" follows the parent instead. Pinning "horizontal"
+# takes the choice away entirely.
+[settings.layout.stack]
+default_orientation = "horizontal"
+
+[settings.layout.gaps.outer]
+top = 8
+left = 8
+bottom = 8
+right = 8
+
+[settings.layout.gaps.inner]
+horizontal = 8
+vertical = 8
+
+# Workspace indicator in the menu bar. Also rift's only mouse-driven way to switch
+# workspaces, which matters while no workspace keys are bound below.
+# show_empty, mode, active_label and display_style are left at their defaults.
+[settings.ui.menu_bar]
+enabled = true
+
+# Two workspaces: scrolling for the niri-style column flow, master_stack for a
+# focused main window with the rest stacked beside it. Indices are 0-based and line
+# up with the Alt+1..2 bindings below; the names are what the menu bar and
+# `rift-cli query workspaces` report.
+#
+# Each engine's own tuning is left at rift's defaults — master_ratio 0.6,
+# stack_offset 40, column_width 0.7.
+[virtual_workspaces]
+default_workspace_count = 2
+workspace_names = ["scroll", "master"]
+workspace_rules = [
+	{ workspace = 0, layout = "scrolling" },
+	{ workspace = 1, layout = "master_stack" },
+]
+
+# Rift's own Mission Control, not macOS's. Off by default (serde default = "no"),
+# and marked experimental upstream. Required for the Alt+Tab bindings below.
+[settings.ui.mission_control]
+enabled = true
+
+[modifier_combinations]
+mod2 = "Alt + Shift"
+
+# [keys] replaces rift's default table wholesale rather than merging into it, so
+# anything absent here is unbound — including the default's Alt+Enter, which opens
+# Terminal.app.
+[keys]
+
+# Navigate windows — Alt + arrows. Directions map straight through.
+#
+# Known rift bug, accepted here rather than worked around: when a vertical move
+# leaves the current display, rift resolves the direction with directional_delta
+# (layout_engine/engine.rs), which treats a larger y as "up" while the display
+# frames it reads are Quartz coordinates with y growing downward. So its up/down is
+# inverted against the physical monitor arrangement, and because the Up/Down arms of
+# next_space_for_direction have no wrap fallback, one direction hops to the wrong
+# display and the other does nothing at all.
+#
+# Crossing these bindings cancels that out, but only by inverting vertical movement
+# *within* a workspace too, since one Direction drives both paths. Straight-through
+# is the better trade: in-workspace movement is the common case, and rift's own
+# focus_display / move_window_to_display resolve direction correctly if explicit
+# cross-display keys are ever wanted.
+#
+# Left/right were never affected — x has the same sign in both coordinate systems.
+"Alt + Left" = { move_focus = "left" }
+"Alt + Right" = { move_focus = "right" }
+"Alt + Up" = { move_focus = "up" }
+"Alt + Down" = { move_focus = "down" }
+
+# Move windows — Alt + Shift + arrows.
+"mod2 + Left" = { move_node = "left" }
+"mod2 + Right" = { move_node = "right" }
+"mod2 + Up" = { move_node = "up" }
+"mod2 + Down" = { move_node = "down" }
+
+# Reach the two workspaces above. Without these, the menu bar icon is the only way
+# in.
+"Alt + 1" = { switch_to_workspace = 0 }
+"Alt + 2" = { switch_to_workspace = 1 }
+
+# Send the focused window to a workspace. Focus stays put rather than following it —
+# move_window_to_workspace takes an optional `follow`, which defaults to false.
+"mod2 + 1" = { move_window_to_workspace = 0 }
+"mod2 + 2" = { move_window_to_workspace = 1 }
+
+# Fill the workspace but keep the gaps. toggle_fullscreen (the gapless, edge-to-edge
+# variant) and toggle_orientation are both deliberately unbound.
+"Alt + Backslash" = "toggle_fullscreen_within_gaps"
+
+# Overview: the active workspace exploded, or every window across all workspaces.
+# dismiss_mission_control is left unbound — Escape and re-pressing the key both
+# close it.
+"Alt + Tab" = "show_mission_control_current"
+"mod2 + Tab" = "show_mission_control_all"
+
+# Cycle focus through the current workspace's windows, wrapping at the end. With two
+# windows this is the back-and-forth you want; with three or more it walks the list
+# in order rather than returning to whichever window you came from. Rift has no
+# last-focused-window command at all.
+"Alt + Grave" = "next_window"
+"mod2 + Grave" = "prev_window"
+
+# Close the focused window. No confirmation and no undo — it asks the app to close,
+# so anything with unsaved work will put up its own save dialog.
+"Alt + D" = "close_window"
+
+# Shift focus between the tiled windows and the floating ones. This moves *focus*;
+# it does not change whether a window floats — that is toggle_window_floating, which
+# is unbound.
+"Alt + Return" = "toggle_focus_floating"
+
+# Resize horizontally, then vertically. Spelled BracketLeft/BracketRight rather than
+# "Left Bracket": rift's key normaliser rewrites a standalone "Left" to "ArrowLeft"
+# before parsing, which would turn the binding into a nonexistent key and take the
+# whole config down with it.
+"Alt + BracketLeft" = { resize_window_shrink = "horizontal" }
+"Alt + BracketRight" = { resize_window_grow = "horizontal" }

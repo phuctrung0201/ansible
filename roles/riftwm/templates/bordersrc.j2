@@ -1,0 +1,18 @@
+#!/bin/bash
+# JankyBorders config — managed by ansible (roles/riftwm/templates/bordersrc.j2).
+# Rift draws no focus border of its own (only the experimental stack line), so
+# JankyBorders is the only source. Colours come from share.yml so the focus border
+# matches the One Dark palette used across nvim/tmux/ghostty/fish.
+
+#
+# Note: bordersrc has no hot reload. After changing it, run
+#   brew services restart borders
+options=(
+	style=round
+	width=4.0
+	hidpi=off
+	active_color=0xff{{ theme.purple | replace("#", "") | lower }}
+	inactive_color=0x30{{ theme.comment_bright | replace("#", "") | lower }}
+)
+
+borders "${options[@]}"
