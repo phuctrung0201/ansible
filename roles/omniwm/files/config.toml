@@ -267,19 +267,19 @@ binding = "Unassigned"
 id = "switchWorkspace.previous"
 
 [[hotkeys]]
-binding = "Option+Left Bracket"
+binding = "Option+Left Arrow"
 id = "focus.left"
 
 [[hotkeys]]
-binding = "Option+Semicolon"
+binding = "Option+Down Arrow"
 id = "focus.down"
 
 [[hotkeys]]
-binding = "Option+Quote"
+binding = "Option+Up Arrow"
 id = "focus.up"
 
 [[hotkeys]]
-binding = "Option+Right Bracket"
+binding = "Option+Right Arrow"
 id = "focus.right"
 
 [[hotkeys]]
@@ -379,19 +379,19 @@ binding = "Unassigned"
 id = "moveColumnToWorkspace.8"
 
 [[hotkeys]]
-binding = "Option+Shift+Left Bracket"
+binding = "Option+Shift+Left Arrow"
 id = "move.left"
 
 [[hotkeys]]
-binding = "Option+Shift+Semicolon"
+binding = "Option+Shift+Down Arrow"
 id = "move.down"
 
 [[hotkeys]]
-binding = "Option+Shift+Quote"
+binding = "Option+Shift+Up Arrow"
 id = "move.up"
 
 [[hotkeys]]
-binding = "Option+Shift+Right Bracket"
+binding = "Option+Shift+Right Arrow"
 id = "move.right"
 
 [[hotkeys]]
@@ -471,11 +471,11 @@ binding = "Unassigned"
 id = "toggleNativeFullscreen"
 
 [[hotkeys]]
-binding = "Option+Shift+Slash"
+binding = "Option+Shift+Return"
 id = "moveColumn.left"
 
 [[hotkeys]]
-binding = "Option+Slash"
+binding = "Option+Return"
 id = "moveColumn.right"
 
 [[hotkeys]]
@@ -615,11 +615,11 @@ binding = "Unassigned"
 id = "moveColumnToIndex.9"
 
 [[hotkeys]]
-binding = "Option+Backslash"
+binding = "Option+Slash"
 id = "cycleSizeForward"
 
 [[hotkeys]]
-binding = "Option+Shift+Backslash"
+binding = "Option+Shift+Slash"
 id = "cycleSizeBackward"
 
 [[hotkeys]]
@@ -739,7 +739,7 @@ binding = "Unassigned"
 id = "openCommandPalette"
 
 [[hotkeys]]
-binding = "Option+Return"
+binding = "Option+Backslash"
 id = "raiseAllFloatingWindows"
 
 [[hotkeys]]
