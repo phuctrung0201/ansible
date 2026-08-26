@@ -11,8 +11,8 @@
       tags: ['fish']
     - role: nvim
       tags: ['nvim']
-    - role: riftwm
-      tags: ['riftwm']
+    - role: omniwm
+      tags: ['omniwm']
     - role: firefox
       tags: ['firefox']
     - role: ghostty
