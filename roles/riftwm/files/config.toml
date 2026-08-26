@@ -18,11 +18,11 @@ animation_fps = 120.0
 # below, omitting this line leaves rift running but tiling nothing, with no way in.
 default_disable = false
 
-# All three default to true in rift (serde default = "yes"), so they have to be
-# pinned rather than omitted: leaving them out hands focus to the pointer and hides
-# the cursor after every focus change, neither of which is wanted.
+# focus_follows_mouse and mouse_hides_on_focus default to true in rift (serde
+# default = "yes"), so they are pinned off rather than omitted. mouse_follows_focus
+# is on so the pointer jumps to the focused window when focus changes by keyboard.
 focus_follows_mouse = false
-mouse_follows_focus = false
+mouse_follows_focus = true
 mouse_hides_on_focus = false
 
 # Force the keyboard back to English (ABC) whenever focus moves to another window,
