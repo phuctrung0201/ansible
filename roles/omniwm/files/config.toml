@@ -788,32 +788,36 @@ id = "toggleSystemStats"
 
 [[workspaces]]
 id = "32930B19-4FEE-4CCF-ABB1-E757A5B741EE"
+displayName = "Main"
 layoutType = "niri"
-name = "Main"
+name = "1"
 
 [workspaces.monitorAssignment]
 type = "main"
 
 [[workspaces]]
 id = "3C003DFA-F079-41AA-B3FD-00320DAAF371"
+displayName = "Secondary"
 layoutType = "niri"
-name = "Secondary"
+name = "2"
 
 [workspaces.monitorAssignment]
 type = "secondary"
 
 [[workspaces]]
 id = "81E39816-EABA-4032-BE22-AFA3AB0773C8"
+displayName = "Focus"
 layoutType = "niri"
-name = "Focus"
+name = "3"
 
 [workspaces.monitorAssignment]
 type = "main"
 
 [[workspaces]]
 id = "E7EF4823-5AD4-4344-8CAB-53A79269FFB3"
+displayName = "Background"
 layoutType = "niri"
-name = "Background"
+name = "4"
 
 [workspaces.monitorAssignment]
 type = "secondary"
