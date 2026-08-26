@@ -67,19 +67,24 @@ vertical = 8
 [settings.ui.menu_bar]
 enabled = true
 
-# Two workspaces: scrolling for the niri-style column flow, master_stack for a
-# focused main window with the rest stacked beside it. Indices are 0-based and line
-# up with the Alt+1..2 bindings below; the names are what the menu bar and
-# `rift-cli query workspaces` report.
+# Three workspaces: master_stack for a focused main window with the rest stacked
+# beside it, scrolling for the niri-style column flow, stack for a single stacked
+# column. Indices are 0-based and line up with the Alt+1..3 bindings below; the
+# names are what the menu bar and `rift-cli query workspaces` report.
+#
+# preserve_focus_per_workspace restores whichever window was last focused when you
+# return to a workspace, instead of always picking the same default.
 #
 # Each engine's own tuning is left at rift's defaults — master_ratio 0.6,
 # stack_offset 40, column_width 0.7.
 [virtual_workspaces]
-default_workspace_count = 2
-workspace_names = ["scroll", "master"]
+default_workspace_count = 3
+preserve_focus_per_workspace = true
+workspace_names = ["master", "scroll", "stack"]
 workspace_rules = [
-	{ workspace = 0, layout = "scrolling" },
-	{ workspace = 1, layout = "master_stack" },
+	{ workspace = 0, layout = "master_stack" },
+	{ workspace = 1, layout = "scrolling" },
+	{ workspace = 2, layout = "stack" },
 ]
 
 # Rift's own Mission Control, not macOS's. Off by default (serde default = "no"),
@@ -123,15 +128,17 @@ mod2 = "Alt + Shift"
 "mod2 + Up" = { move_node = "up" }
 "mod2 + Down" = { move_node = "down" }
 
-# Reach the two workspaces above. Without these, the menu bar icon is the only way
+# Reach the three workspaces above. Without these, the menu bar icon is the only way
 # in.
 "Alt + 1" = { switch_to_workspace = 0 }
 "Alt + 2" = { switch_to_workspace = 1 }
+"Alt + 3" = { switch_to_workspace = 2 }
 
 # Send the focused window to a workspace. Focus stays put rather than following it —
 # move_window_to_workspace takes an optional `follow`, which defaults to false.
 "mod2 + 1" = { move_window_to_workspace = 0 }
 "mod2 + 2" = { move_window_to_workspace = 1 }
+"mod2 + 3" = { move_window_to_workspace = 2 }
 
 # Fill the workspace but keep the gaps. toggle_fullscreen (the gapless, edge-to-edge
 # variant) and toggle_orientation are both deliberately unbound.
