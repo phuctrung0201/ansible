@@ -283,7 +283,7 @@ binding = "Option+Right Arrow"
 id = "focus.right"
 
 [[hotkeys]]
-binding = "Option+Shift+Tab"
+binding = "Option+Return"
 id = "focusPrevious"
 
 [[hotkeys]]
@@ -615,11 +615,11 @@ binding = "Unassigned"
 id = "moveColumnToIndex.9"
 
 [[hotkeys]]
-binding = "Unassigned"
+binding = "Option+Tab"
 id = "cycleSizeForward"
 
 [[hotkeys]]
-binding = "Option+Return"
+binding = "Option+Shift+Tab"
 id = "cycleSizeBackward"
 
 [[hotkeys]]
@@ -639,7 +639,7 @@ binding = "Unassigned"
 id = "cycleWindowSecondarySpanBackward"
 
 [[hotkeys]]
-binding = "Option+Grave"
+binding = "Unassigned"
 id = "toggleContainerFullPrimarySpan"
 
 [[hotkeys]]
@@ -779,7 +779,7 @@ binding = "Option+Shift+L"
 id = "toggleWorkspaceLayout"
 
 [[hotkeys]]
-binding = "Option+Tab"
+binding = "Option+Grave"
 id = "toggleOverview"
 
 [[hotkeys]]
@@ -797,21 +797,21 @@ type = "main"
 
 [[workspaces]]
 id = "3C003DFA-F079-41AA-B3FD-00320DAAF371"
-displayName = "Secondary"
+displayName = "Focus"
 layoutType = "niri"
 name = "2"
 
 [workspaces.monitorAssignment]
-type = "secondary"
+type = "main"
 
 [[workspaces]]
 id = "81E39816-EABA-4032-BE22-AFA3AB0773C8"
-displayName = "Focus"
+displayName = "Secondary"
 layoutType = "niri"
 name = "3"
 
 [workspaces.monitorAssignment]
-type = "main"
+type = "secondary"
 
 [[workspaces]]
 id = "E7EF4823-5AD4-4344-8CAB-53A79269FFB3"
