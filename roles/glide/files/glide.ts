@@ -1,7 +1,5 @@
 glide.o.native_tabs = "hide";
 
-glide.prefs.set("accessibility.browsewithcaret", false);
-
 type BookmarkFolder = {
   path: string;
   id: string;
@@ -81,9 +79,9 @@ const showBookmarkFolderPicker = async (
   });
 };
 
-const bookmark = glide.excmds.create(
+const bookmark_add = glide.excmds.create(
   {
-    name: "bookmark",
+    name: "bookmark_add",
     description: "Bookmark the current page",
     args_schema: {
       path: {
@@ -116,7 +114,7 @@ const bookmark = glide.excmds.create(
 
 declare global {
   interface ExcmdRegistry {
-    bookmark: typeof bookmark;
+    bookmark_add: typeof bookmark_add;
   }
 }
 

@@ -6,6 +6,7 @@ Personal **macOS** machine setup for:
 - [mise](https://mise.jdx.dev/)
 - [Neovim](https://neovim.io/)
 - [OmniWM](https://github.com/BarutSRB/omniwm) (tiling WM — scrolling layout, with [JankyBorders](https://github.com/FelixKratz/JankyBorders) for focus borders)
+- [Glide](https://glide-browser.app/) (Vim-inspired browser)
 - [Ghostty](https://ghostty.org/) (terminal emulator, integrated with tmux)
 - [tmux](https://github.com/tmux/tmux) (command palette via Alt+Space, [fzf](https://github.com/junegunn/fzf), [LastPass CLI](https://github.com/lastpass/lastpass-cli))
 
@@ -33,6 +34,7 @@ Run a specific role:
 
 ```sh
 mise run install -- --tags "fish"
+mise run install -- --tags "glide"
 ```
 
 # Default login shell
