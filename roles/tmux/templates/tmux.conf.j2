@@ -35,7 +35,7 @@ set-environment -g FZF_DEFAULT_OPTS "--color=fg:{{ theme.fg }},bg:-1,hl:{{ theme
 set-environment -g LPASS_AGENT_TIMEOUT "0"
 
 # Command palette — fzf picker over useful tmux commands (Alt + Space)
-bind -n M-Space display-popup -E -w 40 -h 11 "~/.config/tmux/palette.sh"
+bind -n M-Space display-popup -E -w 40 -h 14 "~/.config/tmux/palette.sh"
 
 # Status bar — powerline style (requires a Nerd Font; Ghostty is configured with one)
 set -g status-style "bg=default,fg={{ theme.fg }}"

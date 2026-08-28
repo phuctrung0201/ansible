@@ -7,7 +7,7 @@ set -euo pipefail
 # Nerd-font glyph (nf-fa-terminal) — printf'd to keep the source pure ASCII
 ICON=$(printf '\xef\x84\xa0')
 
-# Catppuccin Mocha overlay0 — comment-like dim grey for the hint column.
+# Catppuccin Mocha overlay0 — comment-like dim grey for the hint line.
 HINT=$'\e[38;2;108;112;134m'
 RESET=$'\e[0m'
 
@@ -17,43 +17,45 @@ FZF_OPTS=(--height=100% --layout=reverse --border=rounded)
 # Default: <command> is a tmux subcommand (we run `tmux <cmd>`).
 # Lines starting with `!` run as raw shell — external scripts or $(...) substitution.
 static=$(cat <<'EOF'
-Session: rename to current folder	tmux	!tmux rename-session "$(basename "$(tmux display-message -p '#{pane_current_path}')")"
-Window: kill current	tmux	kill-window
-Pane: kill current	tmux	kill-pane
-Pane: break out to new window	tmux	break-pane
-Pane: swap left	tmux	swap-pane -s '{left-of}'
-Pane: swap down	tmux	swap-pane -s '{down-of}'
-Pane: swap up	tmux	swap-pane -s '{up-of}'
-Pane: swap right	tmux	swap-pane -s '{right-of}'
-Layout: even-horizontal	tmux	select-layout even-horizontal
-Layout: even-vertical	tmux	select-layout even-vertical
-Layout: main-horizontal	tmux	select-layout main-horizontal
-Layout: main-vertical	tmux	select-layout main-vertical
-Layout: tiled	tmux	select-layout tiled
-Credential: copy password	lpass	!~/.config/tmux/lpass.sh password
-Credential: copy username	lpass	!~/.config/tmux/lpass.sh username
-Credential: add new	lpass	!~/.config/tmux/lpass.sh add
-Credential: generate password	lpass	!~/.config/tmux/lpass.sh generate
+Rename session (folder)	tmux	!tmux rename-session "$(basename "$(tmux display-message -p '#{pane_current_path}')")"
+Kill window	tmux	kill-window
+Kill pane	tmux	kill-pane
+Break to new window	tmux	break-pane
+Swap pane left	tmux	swap-pane -s '{left-of}'
+Swap pane down	tmux	swap-pane -s '{down-of}'
+Swap pane up	tmux	swap-pane -s '{up-of}'
+Swap pane right	tmux	swap-pane -s '{right-of}'
+Even horizontal	tmux	select-layout even-horizontal
+Even vertical	tmux	select-layout even-vertical
+Main horizontal	tmux	select-layout main-horizontal
+Main vertical	tmux	select-layout main-vertical
+Tiled	tmux	select-layout tiled
+Copy password	lpass	!~/.config/tmux/lpass.sh password
+Copy username	lpass	!~/.config/tmux/lpass.sh username
+Add credential	lpass	!~/.config/tmux/lpass.sh add
+Generate password	lpass	!~/.config/tmux/lpass.sh generate
 EOF
 )
 
 # Dynamic: one entry per existing session.
 sessions=$(tmux list-sessions -F '#{session_name}' 2>/dev/null \
-  | awk -v OFS='\t' '{print "Session: switch to " $0, "tmux", "switch-client -t \"" $0 "\""}')
+  | awk -v OFS='\t' '{print "Switch to " $0, "tmux", "switch-client -t \"" $0 "\""}')
 
-# Render <label>  <colored-hint>\t<cmd> so fzf shows the hint as a tight
-# inline suffix instead of a tab-stop-wide gap. `sort -f` alphabetizes.
+# Render <label>\n<colored-hint>\t<cmd> per entry (NUL-separated) so fzf shows the
+# hint on a line below the label. `sort -f` alphabetizes before formatting.
 selection=$(printf '%s\n%s\n' "$static" "$sessions" \
-  | awk -F'\t' -v D="$HINT" -v R="$RESET" 'NF { printf "%s  %s%s%s\t%s\n", $1, D, $2, R, $3 }' \
   | sort -f \
-  | fzf "${FZF_OPTS[@]}" --ansi --with-nth=1 --delimiter=$'\t' --no-multi \
+  | while IFS=$'\t' read -r label hint cmd; do
+      [ -z "$label" ] && continue
+      printf '%s\n%s%s%s\t%s\0' "$label" "$HINT" "$hint" "$RESET" "$cmd"
+    done \
+  | fzf "${FZF_OPTS[@]}" --read0 --ansi --with-nth=1 --accept-nth=2 --delimiter=$'\t' --no-multi \
       --prompt="❯ " --border-label=" $ICON tmux palette " --border-label-pos=3) || exit 0
 
-cmd=$(printf '%s' "$selection" | cut -f2-)
-[ -z "$cmd" ] && exit 0
+[ -z "$selection" ] && exit 0
 
-if [[ "$cmd" == !* ]]; then
-  eval "${cmd#!}"
+if [[ "$selection" == !* ]]; then
+  eval "${selection#!}"
 else
-  eval "tmux $cmd"
+  eval "tmux $selection"
 fi
