@@ -283,7 +283,7 @@ binding = "Option+Right Arrow"
 id = "focus.right"
 
 [[hotkeys]]
-binding = "Option+Return"
+binding = "Option+Shift+Grave"
 id = "focusPrevious"
 
 [[hotkeys]]
@@ -463,7 +463,7 @@ binding = "Unassigned"
 id = "moveWindowToMonitor.down"
 
 [[hotkeys]]
-binding = "Option+Shift+Grave"
+binding = "Option+Return"
 id = "toggleContainerFullPrimarySpan"
 
 [[hotkeys]]
