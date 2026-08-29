@@ -28,5 +28,6 @@
   "sync": true,
   "bases": true,
   "webviewer": false,
-  "zk-prefixer": false
+  "zk-prefixer": false,
+  "daily-notes": true
 }

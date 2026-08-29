@@ -7,7 +7,6 @@ return {
       { "<leader>ot", "<cmd>Obsidian today<cr>", desc = "Obsidian: today" },
       { "<leader>oy", "<cmd>Obsidian yesterday<cr>", desc = "Obsidian: yesterday" },
       { "<leader>on", "<cmd>Obsidian new<cr>", desc = "Obsidian: new note" },
-      { "<leader>oN", "<cmd>Obsidian new_from_template<cr>", desc = "Obsidian: new from template" },
       { "<leader>op", "<cmd>Obsidian quick_switch<cr>", desc = "Obsidian: pick note" },
       { "<leader>os", "<cmd>Obsidian search<cr>", desc = "Obsidian: search" },
       { "<leader>ob", "<cmd>Obsidian backlinks<cr>", desc = "Obsidian: backlinks" },
@@ -15,7 +14,6 @@ return {
       { "<leader>or", "<cmd>Obsidian rename<cr>", desc = "Obsidian: rename note" },
       { "<leader>oT", "<cmd>Obsidian tags<cr>", desc = "Obsidian: tags" },
       { "<leader>of", "<cmd>Obsidian follow_link<cr>", desc = "Obsidian: follow link" },
-      { "<leader>oe", "<cmd>Obsidian template<cr>", desc = "Obsidian: insert template" },
     },
     opts = function()
       return {
@@ -29,11 +27,6 @@ return {
         end,
         workspaces = {
           { name = "wiki", path = "~/wiki" },
-        },
-        templates = {
-          folder = "_templates",
-          date_format = "%A, %B %-d %Y",
-          time_format = "%H:%M",
         },
         picker = { name = "snacks.pick" },
         frontmatter = { enabled = false },

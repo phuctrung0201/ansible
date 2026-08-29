@@ -8,7 +8,7 @@
     path: "{{ obsidian_vault_dir }}/.obsidian/snippets"
     state: directory
 
-- name: Sync vendored .obsidian config, themes, and plugins
+- name: Sync vendored .obsidian config and plugins
   copy:
     src: "obsidian/"
     dest: "{{ obsidian_vault_dir }}/.obsidian/"
@@ -19,26 +19,11 @@
     dest: "{{ obsidian_vault_dir }}/.obsidian/appearance.json"
     backup: yes
 
-- name: Remove stale Oxocarbon color snippet
-  file:
-    path: "{{ obsidian_vault_dir }}/.obsidian/snippets/oxocarbon.css"
-    state: absent
-
 - name: Deploy One Dark color snippet
   template:
     src: onedark.css.j2
     dest: "{{ obsidian_vault_dir }}/.obsidian/snippets/onedark.css"
     backup: yes
-
-- name: Ensure _templates directory exists
-  file:
-    path: "{{ obsidian_vault_dir }}/_templates"
-    state: directory
-
-- name: Sync vault note templates
-  copy:
-    src: "wiki/_templates/"
-    dest: "{{ obsidian_vault_dir }}/_templates/"
 
 - name: Seed vault index (home.md) if missing
   copy:
