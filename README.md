@@ -14,27 +14,29 @@ Fish config is deployed to `~/.config/fish/`.
 
 # Prerequisites
 
-[mise](https://mise.jdx.dev/getting-started.html) is the only prerequisite.
+- Python 3
+- `pip`
 
 # Runbook
 
-Install tools and bootstrap Ansible:
+Bootstrap Ansible and Galaxy collections:
 
 ```sh
-mise install
+pip install ansible ansible-lint
+ansible-galaxy collection install -r requirements.yml
 ```
 
 Run the full setup:
 
 ```sh
-mise run install
+ansible-playbook main.yml
 ```
 
 Run a specific role:
 
 ```sh
-mise run install -- --tags "fish"
-mise run install -- --tags "firefox"
+ansible-playbook main.yml --tags fish
+ansible-playbook main.yml --tags firefox
 ```
 
 # Default login shell
