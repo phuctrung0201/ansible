@@ -283,7 +283,7 @@ binding = "Option+Right Arrow"
 id = "focus.right"
 
 [[hotkeys]]
-binding = "Option+Shift+Grave"
+binding = "Option+Return"
 id = "focusPrevious"
 
 [[hotkeys]]
@@ -463,7 +463,7 @@ binding = "Unassigned"
 id = "moveWindowToMonitor.down"
 
 [[hotkeys]]
-binding = "Option+Return"
+binding = "Option+Shift+Grave"
 id = "toggleContainerFullPrimarySpan"
 
 [[hotkeys]]
@@ -475,11 +475,11 @@ binding = "Unassigned"
 id = "toggleNativeFullscreen"
 
 [[hotkeys]]
-binding = "Unassigned"
+binding = "Option+Shift+LeftBracket"
 id = "moveColumn.left"
 
 [[hotkeys]]
-binding = "Unassigned"
+binding = "Option+Shift+RightBracket"
 id = "moveColumn.right"
 
 [[hotkeys]]
@@ -619,11 +619,11 @@ binding = "Unassigned"
 id = "moveColumnToIndex.9"
 
 [[hotkeys]]
-binding = "Option+Tab"
+binding = "Option+Backslash"
 id = "cycleSizeForward"
 
 [[hotkeys]]
-binding = "Option+Shift+Tab"
+binding = "Option+Shift+Backslash"
 id = "cycleSizeBackward"
 
 [[hotkeys]]
@@ -771,7 +771,7 @@ binding = "Unassigned"
 id = "toggleHiddenBarPanel"
 
 [[hotkeys]]
-binding = "Option+Backslash"
+binding = "Option+Grave"
 id = "toggleQuakeTerminal"
 
 [[hotkeys]]
@@ -779,7 +779,7 @@ binding = "Option+Shift+L"
 id = "toggleWorkspaceLayout"
 
 [[hotkeys]]
-binding = "Option+Grave"
+binding = "Option+Tab"
 id = "toggleOverview"
 
 [[hotkeys]]
