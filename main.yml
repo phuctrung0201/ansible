@@ -13,8 +13,8 @@
       tags: ['nvim']
     - role: omniwm
       tags: ['omniwm']
-    - role: glide
-      tags: ['glide']
+    - role: firefox
+      tags: ['firefox']
     - role: ghostty
       tags: ['ghostty']
     - role: tmux
