@@ -8,8 +8,6 @@ set -gx CARAPACE_BRIDGES "zsh,fish,bash,inshellisense"
 
 fish_add_path -gp "$HOME/.local/bin" "$HOME/.config/carapace/bin" "{{ fish_brew_prefix.stdout | trim }}/bin"
 
-set -g history_size 50000
-
 fish_vi_key_bindings
 source (path dirname (status filename))/conf.d/clipboard.fish
 

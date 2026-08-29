@@ -22,6 +22,7 @@ monitorGapOverrides = []
 monitorNiriOverrides = []
 monitorOrientationOverrides = []
 monitorRoutingOverrides = []
+schemaVersion = 1
 
 [appearance]
 mode = "dark"
@@ -155,6 +156,10 @@ widthPercent = 50.0
 [routing]
 mode = "macOS"
 
+[scratchpads]
+
+[scratchpads.labels]
+
 [statusBar]
 showAppNames = false
 showWorkspaceName = true
@@ -166,7 +171,8 @@ deduplicateAppIcons = false
 enabled = false
 excludedBundleIDs = []
 height = 24.0
-hideEmptyWorkspaces = false
+hideEmptyWorkspaces = true
+hideInNativeFullscreen = false
 notchActiveZoneWidth = 180.0
 notchMode = "moveBelowMenuBar"
 position = "overlappingMenuBar"
@@ -182,6 +188,88 @@ yOffset = 0.0
 
 [workspaceBar.iconOverrides]
 
+# Main=1, Present=2, Secondary=3, Background=4
+
+[[hotkeys]]
+binding = "Unassigned"
+id = "toggleScratchpad.1"
+
+[[hotkeys]]
+binding = "Unassigned"
+id = "assignFocusedWindowToScratchpad.1"
+
+[[hotkeys]]
+binding = "Unassigned"
+id = "toggleScratchpad.2"
+
+[[hotkeys]]
+binding = "Unassigned"
+id = "assignFocusedWindowToScratchpad.2"
+
+[[hotkeys]]
+binding = "Unassigned"
+id = "toggleScratchpad.3"
+
+[[hotkeys]]
+binding = "Unassigned"
+id = "assignFocusedWindowToScratchpad.3"
+
+[[hotkeys]]
+binding = "Unassigned"
+id = "toggleScratchpad.4"
+
+[[hotkeys]]
+binding = "Unassigned"
+id = "assignFocusedWindowToScratchpad.4"
+
+[[hotkeys]]
+binding = "Unassigned"
+id = "toggleScratchpad.5"
+
+[[hotkeys]]
+binding = "Unassigned"
+id = "assignFocusedWindowToScratchpad.5"
+
+[[hotkeys]]
+binding = "Unassigned"
+id = "toggleScratchpad.6"
+
+[[hotkeys]]
+binding = "Unassigned"
+id = "assignFocusedWindowToScratchpad.6"
+
+[[hotkeys]]
+binding = "Unassigned"
+id = "toggleScratchpad.7"
+
+[[hotkeys]]
+binding = "Unassigned"
+id = "assignFocusedWindowToScratchpad.7"
+
+[[hotkeys]]
+binding = "Unassigned"
+id = "toggleScratchpad.8"
+
+[[hotkeys]]
+binding = "Unassigned"
+id = "assignFocusedWindowToScratchpad.8"
+
+[[hotkeys]]
+binding = "Unassigned"
+id = "toggleScratchpad.9"
+
+[[hotkeys]]
+binding = "Unassigned"
+id = "assignFocusedWindowToScratchpad.9"
+
+[[hotkeys]]
+binding = "Unassigned"
+id = "toggleScratchpad.10"
+
+[[hotkeys]]
+binding = "Unassigned"
+id = "assignFocusedWindowToScratchpad.10"
+
 [[hotkeys]]
 binding = "Option+1"
 id = "switchWorkspace.0"
@@ -191,27 +279,27 @@ binding = "Option+Shift+1"
 id = "moveToWorkspace.0"
 
 [[hotkeys]]
-binding = "Option+F1"
+binding = "Option+2"
 id = "switchWorkspace.1"
 
 [[hotkeys]]
-binding = "Option+Shift+F1"
+binding = "Option+Shift+2"
 id = "moveToWorkspace.1"
 
 [[hotkeys]]
-binding = "Option+2"
+binding = "Option+3"
 id = "switchWorkspace.2"
 
 [[hotkeys]]
-binding = "Option+Shift+2"
+binding = "Option+Shift+3"
 id = "moveToWorkspace.2"
 
 [[hotkeys]]
-binding = "Option+F2"
+binding = "Option+4"
 id = "switchWorkspace.3"
 
 [[hotkeys]]
-binding = "Option+Shift+F2"
+binding = "Option+Shift+4"
 id = "moveToWorkspace.3"
 
 [[hotkeys]]
@@ -463,10 +551,6 @@ binding = "Unassigned"
 id = "moveWindowToMonitor.down"
 
 [[hotkeys]]
-binding = "Option+Shift+Grave"
-id = "toggleContainerFullPrimarySpan"
-
-[[hotkeys]]
 binding = "Unassigned"
 id = "toggleFullscreen"
 
@@ -511,39 +595,39 @@ binding = "Option+Quote"
 id = "focusColumnLast"
 
 [[hotkeys]]
-binding = "Control+Option+1"
+binding = "Unassigned"
 id = "focusColumn.0"
 
 [[hotkeys]]
-binding = "Control+Option+2"
+binding = "Unassigned"
 id = "focusColumn.1"
 
 [[hotkeys]]
-binding = "Control+Option+3"
+binding = "Unassigned"
 id = "focusColumn.2"
 
 [[hotkeys]]
-binding = "Control+Option+4"
+binding = "Unassigned"
 id = "focusColumn.3"
 
 [[hotkeys]]
-binding = "Control+Option+5"
+binding = "Unassigned"
 id = "focusColumn.4"
 
 [[hotkeys]]
-binding = "Control+Option+6"
+binding = "Unassigned"
 id = "focusColumn.5"
 
 [[hotkeys]]
-binding = "Control+Option+7"
+binding = "Unassigned"
 id = "focusColumn.6"
 
 [[hotkeys]]
-binding = "Control+Option+8"
+binding = "Unassigned"
 id = "focusColumn.7"
 
 [[hotkeys]]
-binding = "Control+Option+9"
+binding = "Unassigned"
 id = "focusColumn.8"
 
 [[hotkeys]]
@@ -644,6 +728,10 @@ id = "cycleWindowSecondarySpanBackward"
 
 [[hotkeys]]
 binding = "Unassigned"
+id = "toggleContainerFullPrimarySpan"
+
+[[hotkeys]]
+binding = "Unassigned"
 id = "expandContainerToAvailablePrimarySpan"
 
 [[hotkeys]]
@@ -739,7 +827,7 @@ binding = "Unassigned"
 id = "openCommandPalette"
 
 [[hotkeys]]
-binding = "Option+Shift+Return"
+binding = "Option+Slash"
 id = "raiseAllFloatingWindows"
 
 [[hotkeys]]
@@ -747,16 +835,8 @@ binding = "Unassigned"
 id = "rescueOffscreenWindows"
 
 [[hotkeys]]
-binding = "Unassigned"
+binding = "Option+Shift+Slash"
 id = "toggleFocusedWindowFloating"
-
-[[hotkeys]]
-binding = "Unassigned"
-id = "assignFocusedWindowToScratchpad"
-
-[[hotkeys]]
-binding = "Unassigned"
-id = "toggleScratchpadWindow"
 
 [[hotkeys]]
 binding = "Unassigned"
