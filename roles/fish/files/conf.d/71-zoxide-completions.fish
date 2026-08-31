@@ -1,4 +1,5 @@
 # Tab-complete z with zoxide matches (paths like ./ or ~/ still use cd-style completion).
+# Must load after 70-zoxide.fish (zoxide init) so the --erase has defaults to remove.
 
 function __zoxide_z_complete
     set -l args (commandline --current-process --tokenize)[2..-1]

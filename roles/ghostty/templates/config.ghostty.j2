@@ -55,3 +55,8 @@ window-padding-balance = true
 
 # Tab bar styling — keep native, just hide the new-tab button area visually
 window-theme = ghostty
+
+# Dump the visible screen to a temp file and copy that file's path to the
+# clipboard. write_screen_file captures the visible screen (always has content);
+# the scrollback variant is empty on a fresh terminal.
+keybind = opt+shift+enter=write_screen_file:copy

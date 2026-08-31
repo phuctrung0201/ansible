@@ -371,7 +371,7 @@ binding = "Option+Right Arrow"
 id = "focus.right"
 
 [[hotkeys]]
-binding = "Option+Return"
+binding = "Option+Shift+Tab"
 id = "focusPrevious"
 
 [[hotkeys]]

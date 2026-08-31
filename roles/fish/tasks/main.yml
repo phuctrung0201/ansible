@@ -3,61 +3,83 @@
     name: "{{ fish_brew_packages }}"
     state: present
 
+- name: Add zmx Homebrew tap
+  community.general.homebrew_tap:
+    name: neurosnap/tap
+    state: present
+
+- name: Install zmx
+  community.general.homebrew:
+    name: neurosnap/tap/zmx
+    state: present
+
+- name: Install mise
+  homebrew:
+    name: mise
+    state: present
+
+- name: Ensure mise config directory exists
+  file:
+    path: "~/.config/mise"
+    state: directory
+
+- name: Copy the mise config file
+  copy:
+    src: mise-config.toml
+    dest: "~/.config/mise/config.toml"
+    backup: yes
+
+- name: Ensure global tools installed
+  shell: "mise install"
+  changed_when: false
+
 - name: Get Homebrew prefix
   command: brew --prefix
   register: fish_brew_prefix
   changed_when: false
 
-- name: Ensure fish config directory exists
+- name: Ensure fish config directories exist
   file:
-    path: "{{ fish_config_dir }}"
+    path: "{{ item }}"
     state: directory
+  loop:
+    - "{{ fish_config_dir }}"
+    - "{{ fish_config_dir }}/conf.d"
+    - "{{ lookup('env', 'HOME') }}/.config/carapace/bin"
 
-- name: Ensure fish conf.d directory exists
-  file:
-    path: "{{ fish_config_dir }}/conf.d"
-    state: directory
-
-- name: Ensure carapace bin directory exists
-  file:
-    path: "{{ lookup('env', 'HOME') }}/.config/carapace/bin"
-    state: directory
-
-- name: Deploy config.fish
-  template:
-    src: config.fish.j2
-    dest: "{{ fish_config_dir }}/config.fish"
+- name: Deploy static fish modules
+  copy:
+    src: "conf.d/{{ item }}"
+    dest: "{{ fish_config_dir }}/conf.d/{{ item }}"
     backup: yes
+  loop:
+    - 00-fish.fish
+    - 20-prompt.fish
+    - 30-clipboard.fish
+    - 40-eza.fish
+    - 50-lastpass.fish
+    - 71-zoxide-completions.fish
 
-- name: Deploy clipboard integration
+- name: Deploy themed fish module
   template:
-    src: clipboard.fish.j2
-    dest: "{{ fish_config_dir }}/conf.d/clipboard.fish"
+    src: conf.d/10-theme.fish.j2
+    dest: "{{ fish_config_dir }}/conf.d/10-theme.fish"
     backup: yes
 
 - name: Generate carapace completions
-  shell: >-
-    carapace _carapace fish > "{{ fish_config_dir }}/conf.d/carapace.fish"
+  shell: carapace _carapace fish > "{{ fish_config_dir }}/conf.d/60-carapace.fish"
   changed_when: false
 
 - name: Generate zoxide init
-  shell: zoxide init fish > "{{ fish_config_dir }}/conf.d/zoxide.fish"
+  shell: zoxide init fish > "{{ fish_config_dir }}/conf.d/70-zoxide.fish"
   changed_when: false
 
-- name: Deploy zoxide completion fix
-  template:
-    src: zoxide-completions.fish.j2
-    dest: "{{ fish_config_dir }}/conf.d/zoxide-completions.fish"
-    backup: yes
-
-- name: Check for mise
-  stat:
-    path: "{{ fish_brew_prefix.stdout | trim }}/bin/mise"
-  register: fish_mise
-
 - name: Generate mise activation
-  shell: "{{ fish_brew_prefix.stdout | trim }}/bin/mise activate fish > \"{{ fish_config_dir }}/conf.d/mise.fish\""
-  when: fish_mise.stat.exists
+  shell: "{{ fish_brew_prefix.stdout | trim }}/bin/mise activate fish > \"{{ fish_config_dir }}/conf.d/80-mise.fish\""
+  changed_when: false
+
+- name: Generate zmx completions
+  shell: "{{ fish_brew_prefix.stdout | trim }}/bin/zmx completions fish > \"{{ fish_config_dir }}/conf.d/90-zmx.fish\""
   changed_when: false
 
 - name: Remove stale nushell config directories

@@ -1,0 +1,32 @@
+# One Dark colors — managed by Ansible (values from share.yml)
+
+set -g fish_color_normal "{{ theme.fg }}"
+set -g fish_color_command "{{ theme.blue }}"
+set -g fish_color_keyword "{{ theme.blue }}"
+set -g fish_color_quote "{{ theme.purple }}"
+set -g fish_color_redirection "{{ theme.pink }}"
+set -g fish_color_end "{{ theme.orange }}"
+set -g fish_color_error "{{ theme.orange }}"
+set -g fish_color_param "{{ theme.fg }}"
+set -g fish_color_comment "{{ theme.comment }}"
+set -g fish_color_selection --background="{{ theme.selection }}"
+set -g fish_color_search_match --background="{{ theme.selection }}"
+set -g fish_color_operator "{{ theme.cyan }}"
+set -g fish_color_escape "{{ theme.yellow }}"
+set -g fish_color_autosuggestion "{{ theme.comment }}"
+set -g fish_color_cancel "{{ theme.orange }}"
+set -g fish_pager_color_prefix "{{ theme.purple }}" --bold
+set -g fish_pager_color_completion "{{ theme.fg }}"
+set -g fish_pager_color_description "{{ theme.comment }}"
+set -g fish_pager_color_selected_background --background="{{ theme.selection }}"
+
+# Prompt colors (mauve, not ANSI purple which maps to pink)
+set -g fish_color_cwd "{{ theme.blue }}"
+set -g fish_color_vcs "{{ theme.purple }}"
+set -g fish_color_zmx "{{ theme.cyan }}"
+
+# vi-mode indicator colors (referenced by 20-prompt.fish)
+set -g fish_mode_color_insert  "{{ theme.green }}"
+set -g fish_mode_color_default "{{ theme.yellow }}"
+set -g fish_mode_color_replace "{{ theme.cyan }}"
+set -g fish_mode_color_visual  "{{ theme.purple }}"

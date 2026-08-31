@@ -4,5 +4,7 @@ fish_brew_packages:
   - zoxide
   - bat
   - eza
+  - fzf
+  - lastpass-cli
 
 fish_config_dir: "{{ lookup('env', 'HOME') }}/.config/fish"

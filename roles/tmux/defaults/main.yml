@@ -1,4 +1,0 @@
-tmux_brew_packages:
-  - tmux
-  - fzf
-  - lastpass-cli
