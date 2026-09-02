@@ -6,6 +6,27 @@
     - neovim
     - lazygit
     - ripgrep
+    - fd
+    - fzf
+    - node
+    - go
+    - rustup
+
+- name: Install tree-sitter CLI (required to build parsers on nvim-treesitter main branch)
+  community.general.npm:
+    name: tree-sitter-cli
+    global: true
+    state: present
+
+- name: Install .NET SDK (required to run the roslyn C# language server)
+  community.general.homebrew_cask:
+    name: dotnet-sdk
+    state: present
+
+- name: Install stable Rust toolchain (provides rustfmt for conform)
+  command: rustup default stable
+  args:
+    creates: "{{ lookup('env', 'HOME') }}/.rustup/toolchains"
 
 - name: Ensure nvim config directory exists
   file:
