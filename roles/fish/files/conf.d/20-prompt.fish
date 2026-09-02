@@ -1,4 +1,4 @@
-# Two-line prompt: cwd + git, then vi indicator — managed by Ansible.
+# Two-line prompt: [mode] cwd + zmx + git, then vi indicator — managed by Ansible.
 # Colors come from 10-theme.fish.
 
 # Keep last 4 path segments full (D=2 collapses Documents/integration to D/i).
@@ -12,12 +12,45 @@ end
 function __fish_prompt_git --description 'Git branch with icon, no brackets'
     set -l branch (fish_git_prompt '%s')
     test -n "$branch"; or return
-    printf '%s %s %s' ' ' \uf418 $branch
+    printf ' %s %s' \uf418 $branch
 end
 
-function fish_prompt --description 'Two-line prompt: zmx + cwd + git, then vi indicator'
+function __fish_prompt_mode --description 'vi-mode indicator: a colored icon'
+    set -l label
+    set -l bg
+    # Nerd Font icon + text per mode, mirroring the git segment style.
+    set -l icon
+    switch $fish_bind_mode
+        case insert
+            set icon (printf \uf040)  # pencil
+            set label insert
+            set bg $fish_mode_color_insert
+        case default
+            set icon (printf \uf111)  # filled circle
+            set label normal
+            set bg $fish_mode_color_default
+        case replace_one replace
+            set icon (printf \uf0ec)  # exchange
+            set label replace
+            set bg $fish_mode_color_replace
+        case visual
+            set icon (printf \uf06e)  # eye
+            set label visual
+            set bg $fish_mode_color_visual
+        case '*'
+            set icon (printf \uf059)  # question circle
+            set label (string lower $fish_bind_mode)
+            set bg $fish_mode_color_default
+    end
+    set_color $bg
+    printf '%s %s' $icon $label
+    set_color normal
+end
+
+function fish_prompt --description 'Two-line prompt: [mode] cwd + zmx + git, then arrow'
     set_color $fish_color_cwd
     echo -n (prompt_pwd)
+    echo -n ' '(__fish_prompt_mode)
     if set -q ZMX_SESSION
         set_color $fish_color_zmx
         printf ' %s %s' \uf1e6 $ZMX_SESSION
@@ -28,19 +61,7 @@ function fish_prompt --description 'Two-line prompt: zmx + cwd + git, then vi in
     set_color normal
     echo
 
-    switch $fish_bind_mode
-        case insert
-            set_color --bold $fish_mode_color_insert
-            echo -n '❯ '
-        case default
-            set_color --bold $fish_mode_color_default
-            echo -n '❮ '
-        case replace_one replace
-            set_color --bold $fish_mode_color_replace
-            echo -n '▼ '
-        case visual
-            set_color --bold $fish_mode_color_visual
-            echo -n '◆ '
-    end
+    set_color --bold $fish_color_cwd
+    echo -n '❯ '
     set_color normal
 end

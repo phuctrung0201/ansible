@@ -26,7 +26,10 @@ set -g fish_color_vcs "{{ theme.purple }}"
 set -g fish_color_zmx "{{ theme.cyan }}"
 
 # vi-mode indicator colors (referenced by 20-prompt.fish)
+# normal=blue, insert=green, replace=orange, visual=purple.
 set -g fish_mode_color_insert  "{{ theme.green }}"
-set -g fish_mode_color_default "{{ theme.yellow }}"
-set -g fish_mode_color_replace "{{ theme.cyan }}"
+set -g fish_mode_color_default "{{ theme.blue }}"
+set -g fish_mode_color_replace "{{ theme.orange }}"
 set -g fish_mode_color_visual  "{{ theme.purple }}"
+# Foreground for the mini.nvim-style mode block (dark text on colored bg).
+set -g fish_mode_fg "{{ theme.bg }}"
