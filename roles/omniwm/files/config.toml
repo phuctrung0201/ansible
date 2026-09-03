@@ -727,7 +727,7 @@ binding = "Unassigned"
 id = "cycleWindowSecondarySpanBackward"
 
 [[hotkeys]]
-binding = "Unassigned"
+binding = "Option+Shift+Grave"
 id = "toggleContainerFullPrimarySpan"
 
 [[hotkeys]]
