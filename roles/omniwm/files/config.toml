@@ -188,7 +188,7 @@ yOffset = 0.0
 
 [workspaceBar.iconOverrides]
 
-# Main=1, Present=2, Secondary=3, Background=4
+# Main=1, Secondary=2, Present=3, Background=4
 
 [[hotkeys]]
 binding = "Unassigned"
@@ -876,22 +876,22 @@ name = "1"
 type = "main"
 
 [[workspaces]]
-id = "3C003DFA-F079-41AA-B3FD-00320DAAF371"
-displayName = "Present"
+id = "81E39816-EABA-4032-BE22-AFA3AB0773C8"
+displayName = "Secondary"
 layoutType = "niri"
 name = "2"
 
 [workspaces.monitorAssignment]
-type = "main"
+type = "secondary"
 
 [[workspaces]]
-id = "81E39816-EABA-4032-BE22-AFA3AB0773C8"
-displayName = "Secondary"
+id = "3C003DFA-F079-41AA-B3FD-00320DAAF371"
+displayName = "Present"
 layoutType = "niri"
 name = "3"
 
 [workspaces.monitorAssignment]
-type = "secondary"
+type = "main"
 
 [[workspaces]]
 id = "E7EF4823-5AD4-4344-8CAB-53A79269FFB3"
