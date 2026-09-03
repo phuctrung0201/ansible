@@ -6,8 +6,14 @@
 # freshly generated defaults. A deviations-only file therefore silently loses
 # every setting below, borders included.
 #
+# schemaVersion = 2 (OmniWM >= 0.6.5). As of schema 2, enum-backed settings are
+# strict: an unknown enum value or a missing/duplicated hotkey ID rejects the whole
+# file. Every schema-2 hotkey ID must appear exactly once.
+#
 # To refresh after an OmniWM upgrade: quit OmniWM, let it write a clean
-# settings.toml, then re-apply the deviations marked "# pinned:" below.
+# settings.toml, then re-apply the deviations below (borders, workspaces, hotkeys).
+# On a schema bump OmniWM migrates in place and saves the old file as
+# settings.toml.pre-vN before rewriting; diff that against this file.
 #
 # OmniWM rewrites this file on GUI changes and on quit, so stop OmniWM before
 # deploying or the deploy is raced.
@@ -22,20 +28,22 @@ monitorGapOverrides = []
 monitorNiriOverrides = []
 monitorOrientationOverrides = []
 monitorRoutingOverrides = []
-schemaVersion = 1
+schemaVersion = 2
 
 [appearance]
 mode = "dark"
 
+# pinned: OmniWM's built-in focus border, enabled in favour of JankyBorders.
+# Colour is One Dark purple (#d55fde) from share.yml.
 [borders]
-enabled = false
-width = 5.0
+enabled = true
+width = 4.0
 
 [borders.color]
 alpha = 1.0
-blue = 0.979300037944676
-green = 1.0
-red = 0.08458520228437894
+blue = 0.8705882352941176
+green = 0.37254901960784315
+red = 0.8352941176470589
 
 [clipboard]
 historyEnabled = false
@@ -188,8 +196,6 @@ yOffset = 0.0
 
 [workspaceBar.iconOverrides]
 
-# Main=1, Secondary=2, Present=3, Background=4
-
 [[hotkeys]]
 binding = "Unassigned"
 id = "toggleScratchpad.1"
@@ -270,6 +276,7 @@ id = "toggleScratchpad.10"
 binding = "Unassigned"
 id = "assignFocusedWindowToScratchpad.10"
 
+# Main=1, Secondary=2, Present=3, Background=4
 [[hotkeys]]
 binding = "Option+1"
 id = "switchWorkspace.0"
@@ -344,6 +351,78 @@ id = "moveToWorkspace.8"
 
 [[hotkeys]]
 binding = "Unassigned"
+id = "switchWorkspaceSlot.1"
+
+[[hotkeys]]
+binding = "Unassigned"
+id = "moveToWorkspaceSlot.1"
+
+[[hotkeys]]
+binding = "Unassigned"
+id = "switchWorkspaceSlot.2"
+
+[[hotkeys]]
+binding = "Unassigned"
+id = "moveToWorkspaceSlot.2"
+
+[[hotkeys]]
+binding = "Unassigned"
+id = "switchWorkspaceSlot.3"
+
+[[hotkeys]]
+binding = "Unassigned"
+id = "moveToWorkspaceSlot.3"
+
+[[hotkeys]]
+binding = "Unassigned"
+id = "switchWorkspaceSlot.4"
+
+[[hotkeys]]
+binding = "Unassigned"
+id = "moveToWorkspaceSlot.4"
+
+[[hotkeys]]
+binding = "Unassigned"
+id = "switchWorkspaceSlot.5"
+
+[[hotkeys]]
+binding = "Unassigned"
+id = "moveToWorkspaceSlot.5"
+
+[[hotkeys]]
+binding = "Unassigned"
+id = "switchWorkspaceSlot.6"
+
+[[hotkeys]]
+binding = "Unassigned"
+id = "moveToWorkspaceSlot.6"
+
+[[hotkeys]]
+binding = "Unassigned"
+id = "switchWorkspaceSlot.7"
+
+[[hotkeys]]
+binding = "Unassigned"
+id = "moveToWorkspaceSlot.7"
+
+[[hotkeys]]
+binding = "Unassigned"
+id = "switchWorkspaceSlot.8"
+
+[[hotkeys]]
+binding = "Unassigned"
+id = "moveToWorkspaceSlot.8"
+
+[[hotkeys]]
+binding = "Unassigned"
+id = "switchWorkspaceSlot.9"
+
+[[hotkeys]]
+binding = "Unassigned"
+id = "moveToWorkspaceSlot.9"
+
+[[hotkeys]]
+binding = "Unassigned"
 id = "workspaceBackAndForth"
 
 [[hotkeys]]
@@ -355,19 +434,19 @@ binding = "Unassigned"
 id = "switchWorkspace.previous"
 
 [[hotkeys]]
-binding = "Option+Left Arrow"
+binding = "Option+Left Bracket"
 id = "focus.left"
 
 [[hotkeys]]
-binding = "Option+Down Arrow"
+binding = "Option+Semicolon"
 id = "focus.down"
 
 [[hotkeys]]
-binding = "Option+Up Arrow"
+binding = "Option+Quote"
 id = "focus.up"
 
 [[hotkeys]]
-binding = "Option+Right Arrow"
+binding = "Option+Right Bracket"
 id = "focus.right"
 
 [[hotkeys]]
@@ -375,11 +454,11 @@ binding = "Option+Shift+Tab"
 id = "focusPrevious"
 
 [[hotkeys]]
-binding = "Option+LeftBracket"
+binding = "Unassigned"
 id = "focusDownOrLeft"
 
 [[hotkeys]]
-binding = "Option+RightBracket"
+binding = "Unassigned"
 id = "focusUpOrRight"
 
 [[hotkeys]]
@@ -467,19 +546,19 @@ binding = "Unassigned"
 id = "moveColumnToWorkspace.8"
 
 [[hotkeys]]
-binding = "Option+Shift+Left Arrow"
+binding = "Option+Shift+Left Bracket"
 id = "move.left"
 
 [[hotkeys]]
-binding = "Option+Shift+Down Arrow"
+binding = "Option+Shift+Semicolon"
 id = "move.down"
 
 [[hotkeys]]
-binding = "Option+Shift+Up Arrow"
+binding = "Option+Shift+Quote"
 id = "move.up"
 
 [[hotkeys]]
-binding = "Option+Shift+Right Arrow"
+binding = "Option+Shift+Right Bracket"
 id = "move.right"
 
 [[hotkeys]]
@@ -559,11 +638,11 @@ binding = "Unassigned"
 id = "toggleNativeFullscreen"
 
 [[hotkeys]]
-binding = "Option+Shift+LeftBracket"
+binding = "Unassigned"
 id = "moveColumn.left"
 
 [[hotkeys]]
-binding = "Option+Shift+RightBracket"
+binding = "Unassigned"
 id = "moveColumn.right"
 
 [[hotkeys]]
@@ -575,11 +654,11 @@ binding = "Unassigned"
 id = "moveColumn.down"
 
 [[hotkeys]]
-binding = "Option+Shift+Semicolon"
+binding = "Option+Shift+Comma"
 id = "moveColumnToFirst"
 
 [[hotkeys]]
-binding = "Option+Shift+Quote"
+binding = "Option+Shift+Period"
 id = "moveColumnToLast"
 
 [[hotkeys]]
@@ -587,11 +666,11 @@ binding = "Option+B"
 id = "toggleColumnTabbed"
 
 [[hotkeys]]
-binding = "Option+Semicolon"
+binding = "Option+Comma"
 id = "focusColumnFirst"
 
 [[hotkeys]]
-binding = "Option+Quote"
+binding = "Option+Period"
 id = "focusColumnLast"
 
 [[hotkeys]]
@@ -840,6 +919,10 @@ id = "toggleFocusedWindowFloating"
 
 [[hotkeys]]
 binding = "Unassigned"
+id = "closeFocusedWindow"
+
+[[hotkeys]]
+binding = "Unassigned"
 id = "openMenuAnywhere"
 
 [[hotkeys]]
@@ -867,8 +950,8 @@ binding = "Unassigned"
 id = "toggleSystemStats"
 
 [[workspaces]]
-id = "32930B19-4FEE-4CCF-ABB1-E757A5B741EE"
 displayName = "Main"
+id = "32930B19-4FEE-4CCF-ABB1-E757A5B741EE"
 layoutType = "niri"
 name = "1"
 
@@ -876,8 +959,8 @@ name = "1"
 type = "main"
 
 [[workspaces]]
-id = "81E39816-EABA-4032-BE22-AFA3AB0773C8"
 displayName = "Secondary"
+id = "81E39816-EABA-4032-BE22-AFA3AB0773C8"
 layoutType = "niri"
 name = "2"
 
@@ -885,8 +968,8 @@ name = "2"
 type = "secondary"
 
 [[workspaces]]
-id = "3C003DFA-F079-41AA-B3FD-00320DAAF371"
 displayName = "Present"
+id = "3C003DFA-F079-41AA-B3FD-00320DAAF371"
 layoutType = "niri"
 name = "3"
 
@@ -894,8 +977,8 @@ name = "3"
 type = "main"
 
 [[workspaces]]
-id = "E7EF4823-5AD4-4344-8CAB-53A79269FFB3"
 displayName = "Background"
+id = "E7EF4823-5AD4-4344-8CAB-53A79269FFB3"
 layoutType = "niri"
 name = "4"
 
