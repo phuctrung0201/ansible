@@ -127,6 +127,7 @@ return {
         { mode = "n", keys = "<Leader>d", desc = "+Database" },
         { mode = "n", keys = "<Leader>g", desc = "+Git" },
         { mode = "n", keys = "<Leader>t", desc = "+Toggle" },
+        { mode = "n", keys = "<Leader>b", desc = "+Buffer" },
       },
       window = { delay = 0 },
     })

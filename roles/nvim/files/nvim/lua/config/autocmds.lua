@@ -17,3 +17,27 @@ autocmd("FileType", {
   pattern = { "text", "plaintex", "typst", "gitcommit", "markdown" },
   callback = function() vim.opt_local.spell = false end,
 })
+
+-- Markdown-only keymaps, grouped under `<leader>m`. The mini.clue group label
+-- is registered buffer-locally so it only appears in Markdown buffers.
+autocmd("FileType", {
+  group = augroup("markdown_keymaps", { clear = true }),
+  pattern = { "markdown", "markdown.mdx" },
+  callback = function(args)
+    local buf = args.buf
+    -- Follow the link under the cursor (handles file links with spaces that
+    -- markview's opener mishandles; defers headings/URLs to markview).
+    vim.keymap.set("n", "<CR>", require("config.util").follow_markdown_link,
+      { buffer = buf, desc = "Follow link" })
+    vim.keymap.set("n", "<leader>mp", "<cmd>MarkdownPreviewToggle<cr>",
+      { buffer = buf, desc = "Browser preview toggle" })
+    vim.keymap.set("n", "<leader>mr", "<cmd>Markview toggle<cr>",
+      { buffer = buf, desc = "Render toggle" })
+
+    vim.b[buf].miniclue_config = {
+      clues = {
+        { mode = "n", keys = "<Leader>m", desc = "+Markdown" },
+      },
+    }
+  end,
+})

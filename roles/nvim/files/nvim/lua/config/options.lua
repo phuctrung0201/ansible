@@ -21,6 +21,7 @@ opt.showmode = false -- mode is shown in mini.statusline
 opt.smartcase = true
 opt.breakindent = true
 opt.undofile = true
+opt.swapfile = false
 opt.updatetime = 250
 opt.timeoutlen = 300
 opt.splitright = true
