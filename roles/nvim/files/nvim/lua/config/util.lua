@@ -33,134 +33,101 @@ local function vault_root(from)
   return marker and vim.fs.dirname(marker) or dir
 end
 
--- Jump to a resolved file, recording the jumplist and optional heading.
-local function open_file(path, fragment)
-  vim.cmd("normal! m'")
-  vim.cmd.edit(vim.fn.fnameescape(path))
-  if fragment then
-    pcall(function() require("markview.links").__to_fragment(0, fragment) end)
-  end
-end
-
--- Resolve an Obsidian note name to a file: try relative to the current file and
--- the vault root, then fall back to a recursive search by basename.
-local function resolve_note(name)
-  if not name:match("%.%w+$") then
-    name = name .. ".md"
-  end
-  local base = vim.api.nvim_buf_get_name(0)
-  local root = vault_root(base)
-  for _, cand in ipairs({
-    vim.fs.dirname(base) .. "/" .. name,
-    root .. "/" .. name,
-  }) do
-    cand = vim.fs.normalize(cand)
-    if vim.fn.filereadable(cand) ~= 0 then
-      return cand
-    end
-  end
-  return vim.fs.find(vim.fs.basename(name), { path = root, type = "file" })[1]
-end
-
--- If the cursor sits inside a `[[wikilink]]` on the current line, return its
--- target and optional `#heading`, stripping any `|alias`.
-local function wikilink_under_cursor()
+-- The link target under the cursor: the inside of an Obsidian `[[wikilink]]`
+-- (minus any `|alias`) or the destination of an inline `[text](dest)`. Returns
+-- nil when the cursor is not on a link.
+local function link_target()
+  -- Wikilink on the current line.
   local line = vim.api.nvim_get_current_line()
   local col = vim.api.nvim_win_get_cursor(0)[2] + 1
   local init = 1
   while true do
     local s, e, inner = line:find("%[%[(.-)%]%]", init)
     if not s then
-      return nil
+      break
     end
     if col >= s and col <= e then
-      local target = vim.trim((inner:match("^([^|]+)") or inner))
-      local name, frag = target:match("^(.-)#(.+)$")
-      if name then
-        return vim.trim(name), vim.trim(frag)
-      end
-      return target, nil
+      return vim.trim((inner:match("^([^|]+)") or inner))
     end
     init = e + 1
   end
-end
 
--- Follow the Markdown link under the cursor.
---
--- markview's built-in opener mishandles targets with spaces: it keeps `<...>`
--- angle brackets, doesn't decode `%20`, passes raw paths to `:edit` (so spaces
--- split into args), and resolves relative to cwd. This resolver handles Obsidian
--- `[[wikilinks]]` and local `[](...)` file links (unwrapping `<>`, decoding
--- `%20`, resolving within the vault / relative to the current file), and defers
--- headings, URLs, and everything else to markview.
-function M.follow_markdown_link()
-  local function markview_open()
-    local ok, links = pcall(require, "markview.links")
-    if ok then links.open() end
-  end
-
-  -- 1) Obsidian wikilink.
-  local wl_name, wl_frag = wikilink_under_cursor()
-  if wl_name then
-    local resolved = resolve_note(wl_name)
-    if resolved then
-      open_file(resolved, wl_frag)
-    else
-      vim.notify("note not found: " .. wl_name, vim.log.levels.INFO)
-    end
-    return
-  end
-
-  -- 2) Inline link `[text](dest)`.
+  -- Inline `[text](dest)` via tree-sitter.
   local node = vim.treesitter.get_node({ ignore_injections = false })
   while node and node:type() ~= "inline_link" do
     node = node:parent()
   end
-  if node == nil then
-    return markview_open()
+  if not node then
+    return nil
   end
-
-  local dest
   for i = 0, node:child_count() - 1 do
     local child = node:child(i)
     if child:type() == "link_destination" then
-      dest = vim.treesitter.get_node_text(child, 0)
-      break
+      return vim.treesitter.get_node_text(child, 0)
     end
   end
-  if dest == nil then
+end
+
+-- Resolve a link path to an existing file, relative to the current file and the
+-- vault root, appending `.md` when the path has no extension.
+local function resolve(path)
+  local base = vim.api.nvim_buf_get_name(0)
+  local root = vault_root(base)
+  local variants = { path }
+  if not path:match("%.%w+$") then
+    variants[#variants + 1] = path .. ".md"
+  end
+  for _, dir in ipairs({ vim.fs.dirname(base), root }) do
+    for _, name in ipairs(variants) do
+      local cand = vim.fs.normalize(dir .. "/" .. name)
+      if vim.fn.filereadable(cand) ~= 0 or vim.fn.isdirectory(cand) ~= 0 then
+        return cand
+      end
+    end
+  end
+  return vim.fs.find(vim.fs.basename(variants[#variants]), { path = root, type = "file" })[1]
+end
+
+-- Follow the Markdown link under the cursor: open remote links (and in-file
+-- headings) natively via markview; resolve everything else to a local file
+-- (decoding `%20`, appending `.md`, honoring a `#heading` fragment).
+function M.follow_markdown_link()
+  local function markview_open()
+    local ok, links = pcall(require, "markview.links")
+    if ok then
+      links.open()
+    end
+  end
+
+  local dest = link_target()
+  if not dest then
     return markview_open()
   end
 
-  local path = dest:match("^<(.*)>$") or dest
-  -- Headings, URLs, and autolinks: let markview handle them.
-  if path:match("^#") or path:match("^%a[%w+.-]*://") or path:match("^www%.") then
+  -- Remote links and in-file headings.
+  if dest:match("^#") or dest:match("^%a[%w+.-]*://") or dest:match("^www%.") then
     return markview_open()
   end
 
-  path = path:gsub("%%(%x%x)", function(h)
+  -- Local file link: decode `%20` and split off any `#heading`.
+  dest = dest:gsub("%%(%x%x)", function(h)
     return string.char(tonumber(h, 16))
   end)
+  local path, fragment = dest:match("^(.-)#(.+)$")
+  path = path or dest
 
-  local fragment
-  local file, frag = path:match("^(.-%.md)#(.+)$")
-  if file then
-    path, fragment = file, frag
+  local resolved = resolve(path)
+  if not resolved then
+    vim.notify("not found: " .. path, vim.log.levels.INFO)
+    return
   end
 
-  local base = vim.api.nvim_buf_get_name(0)
-  local resolved
-  if vim.startswith(path, "/") then
-    resolved = vim.fn.getcwd() .. path
-  else
-    resolved = vim.fs.dirname(base) .. "/" .. path
-  end
-  resolved = vim.fs.normalize(resolved)
-
-  if vim.fn.filereadable(resolved) ~= 0 or vim.fn.isdirectory(resolved) ~= 0 then
-    open_file(resolved, fragment)
-  else
-    vim.notify("path not found: " .. resolved, vim.log.levels.INFO)
+  vim.cmd("normal! m'")
+  vim.cmd.edit(vim.fn.fnameescape(resolved))
+  if fragment then
+    pcall(function()
+      require("markview.links").__to_fragment(0, fragment)
+    end)
   end
 end
 

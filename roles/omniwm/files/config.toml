@@ -434,7 +434,7 @@ binding = "Unassigned"
 id = "switchWorkspace.previous"
 
 [[hotkeys]]
-binding = "Unassigned"
+binding = "Option+Left Bracket"
 id = "focus.left"
 
 [[hotkeys]]
@@ -446,7 +446,7 @@ binding = "Option+Quote"
 id = "focus.up"
 
 [[hotkeys]]
-binding = "Unassigned"
+binding = "Option+Right Bracket"
 id = "focus.right"
 
 [[hotkeys]]
@@ -454,11 +454,11 @@ binding = "Option+Shift+Tab"
 id = "focusPrevious"
 
 [[hotkeys]]
-binding = "Option+Left Bracket"
+binding = "Unassigned"
 id = "focusDownOrLeft"
 
 [[hotkeys]]
-binding = "Option+Right Bracket"
+binding = "Unassigned"
 id = "focusUpOrRight"
 
 [[hotkeys]]

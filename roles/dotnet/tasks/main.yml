@@ -1,0 +1,4 @@
+- name: Install .NET SDK (required to run the roslyn C# language server)
+  community.general.homebrew_cask:
+    name: dotnet-sdk
+    state: present
