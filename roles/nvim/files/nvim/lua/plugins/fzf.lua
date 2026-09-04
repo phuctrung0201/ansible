@@ -24,6 +24,7 @@ return {
     map("n", "<leader>sw", fzf.grep_cword, { desc = "Search current word" })
     map("n", "<leader>sg", fzf.live_grep, { desc = "Search by grep" })
     map("n", "<leader>sd", fzf.diagnostics_workspace, { desc = "Search diagnostics" })
+    map("n", "<leader>sq", fzf.quickfix, { desc = "Search quickfix" })
     map("n", "<leader>sr", fzf.resume, { desc = "Search resume" })
     map("n", "<leader>s.", fzf.oldfiles, { desc = "Search recent files" })
     map("n", "<leader><leader>", fzf.files, { desc = "Search files" })

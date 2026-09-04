@@ -34,16 +34,16 @@ schemaVersion = 2
 mode = "dark"
 
 # pinned: OmniWM's built-in focus border, enabled in favour of JankyBorders.
-# Colour is One Dark purple (#d55fde) from share.yml.
+# Colour is Catppuccin Mocha peach (#fab387) from share.yml.
 [borders]
 enabled = true
 width = 4.0
 
 [borders.color]
 alpha = 1.0
-blue = 0.8705882352941176
-green = 0.37254901960784315
-red = 0.8352941176470589
+blue = 0.5294117647058824
+green = 0.7019607843137254
+red = 0.9803921568627451
 
 [clipboard]
 historyEnabled = false

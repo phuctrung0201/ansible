@@ -19,7 +19,7 @@ require("lazy").setup({
   spec = {
     { import = "plugins" },
   },
-  install = { colorscheme = { "onedark_dark", "habamax" } },
+  install = { colorscheme = { "catppuccin-mocha", "habamax" } },
   checker = { enabled = true, notify = false },
   rocks = { enabled = false }, -- no plugin here needs luarocks; avoids hererocks setup
   performance = {

@@ -10,7 +10,9 @@ opt.fillchars = { eob = " ", fold = "·", foldsep = " " }
 opt.conceallevel = 2
 opt.ignorecase = true
 opt.spell = false
+opt.wrap = false -- don't soft-wrap long lines by default
 opt.foldenable = true
+opt.foldlevelstart = 99 -- start with all folds open ("unfolded") by default
 opt.foldmethod = "expr"
 opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
 opt.foldtext = ""

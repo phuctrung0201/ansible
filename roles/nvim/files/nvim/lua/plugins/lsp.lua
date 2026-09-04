@@ -26,8 +26,6 @@ return {
         lmap("gri", fzf.lsp_implementations, "Goto implementation")
         lmap("grd", fzf.lsp_definitions, "Goto definition")
         lmap("grt", fzf.lsp_typedefs, "Goto type definition")
-        lmap("gO", fzf.lsp_document_symbols, "Open document symbols")
-        lmap("gW", fzf.lsp_live_workspace_symbols, "Open workspace symbols")
 
         local client = vim.lsp.get_client_by_id(event.data.client_id)
         if client and client:supports_method("textDocument/documentHighlight", buf) then

@@ -1,33 +1,35 @@
-# Theme — One Dark (onedarkpro.nvim, "onedark_dark" variant), Atom-inspired
-# Source: https://github.com/olimorris/onedarkpro.nvim  lua/onedarkpro/themes/onedark_dark.lua
-# onedark_dark uses a true black bg and slightly more saturated red/green/cyan/purple
-# than the base "onedark" variant. onedarkpro has no native "pink" role (only purple);
-# pink below is Atom One Dark's well-known extra accent (#ff7eb6, used for regex/JSX-
-# attribute tokens in the One Dark family) rather than a value onedarkpro ships directly.
+# Theme — Catppuccin Mocha (catppuccin/nvim, "mocha" flavour)
+# Source: https://github.com/catppuccin/catppuccin  (palette: Mocha)
+# The base/surface scale and accent hues below come straight from the official
+# Catppuccin Mocha palette. ANSI slots follow catppuccin/ghostty: black=Surface1,
+# bright black=Surface2, white=Subtext1, bright white=Subtext0, and the bright
+# accents mirror their normal counterparts (Catppuccin does not brighten them).
+# NOTE: bg is dropped to Crust (darker than stock Base #1e1e2e); nvim mirrors this
+# via color_overrides in roles/nvim/.../colorscheme.lua.
 theme:
-  bg: "#000000"
-  fg: "#abb2bf"
-  selection: "#212121"       # lighten(bg, 13) — onedark_dark's generated Visual bg
-  surface0: "#171717"        # lighten(bg, 9) — onedark_dark's generated cursorline bg
-  comment: "#7f848e"
-  red: "#ef596f"
-  orange: "#d19a66"
-  yellow: "#e5c07b"
-  green: "#89ca78"
-  purple: "#d55fde"
-  cyan: "#2bbac5"
-  pink: "#ff7eb6"            # Atom One Dark accent, not in onedarkpro's own palette
-  blue: "#61afef"
-  dark: "#434852"            # onedark_dark's own "gray" — ANSI black slot (bg is pure black, needs contrast)
-  white: "#dcdfe4"           # One Dark terminal ANSI white slot (brighter than editor fg)
-  bright_red: "#ef596f"
-  bright_green: "#89ca78"
-  bright_yellow: "#e5c07b"
-  bright_purple: "#61afef"   # mirrors blue, matching the previous theme's ANSI slot reuse
-  bright_pink: "#ff7eb6"
-  bright_cyan: "#56b6c2"     # base onedark's (lighter, less saturated) cyan, used as the bright variant here
-  bright_white: "#ffffff"
-  comment_bright: "#7f848e"
-  black: "#000000"
-  gutter_fg: "#7f848e"
-  nontext: "#212121"
+  bg: "#11111b"              # Crust — darker than stock Mocha Base (#1e1e2e)
+  fg: "#cdd6f4"              # Text
+  selection: "#45475a"       # Surface1 — Visual selection bg
+  surface0: "#313244"        # Surface0 — cursorline / statusline bg
+  comment: "#6c7086"         # Overlay0
+  red: "#f38ba8"
+  orange: "#fab387"          # Peach
+  yellow: "#f9e2af"
+  green: "#a6e3a1"
+  purple: "#cba6f7"          # Mauve
+  cyan: "#94e2d5"            # Teal
+  pink: "#f5c2e7"            # Pink
+  blue: "#89b4fa"
+  dark: "#45475a"            # Surface1 — ANSI black slot (palette 0)
+  white: "#bac2de"           # Subtext1 — ANSI white slot (palette 7)
+  bright_red: "#f38ba8"
+  bright_green: "#a6e3a1"
+  bright_yellow: "#f9e2af"
+  bright_purple: "#89b4fa"   # bright blue slot (palette 12) mirrors blue
+  bright_pink: "#f5c2e7"
+  bright_cyan: "#94e2d5"     # Teal — Catppuccin does not ship a brighter cyan
+  bright_white: "#a6adc8"    # Subtext0
+  comment_bright: "#585b70"  # Surface2 — ANSI bright black slot (palette 8)
+  black: "#0b0b13"           # darker crust (matches nvim color_overrides)
+  gutter_fg: "#6c7086"       # Overlay0 (matches comment)
+  nontext: "#313244"         # Surface0
