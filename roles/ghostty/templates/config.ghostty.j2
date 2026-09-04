@@ -4,32 +4,32 @@
 font-family = FiraCode Nerd Font Mono
 font-size = 16
 
-# Colors
-background = {{ theme.bg }}
-foreground = {{ theme.fg }}
-selection-background = {{ theme.selection }}
-selection-foreground = {{ theme.fg }}
-cursor-color = {{ theme.cyan }}
-cursor-text = {{ theme.bg }}
+# Colors — official Catppuccin Mocha mapping (background dropped to Crust)
+background = {{ theme.crust }}
+foreground = {{ theme.text }}
+selection-background = {{ theme.surface2 }}
+selection-foreground = {{ theme.text }}
+cursor-color = {{ theme.rosewater }}
+cursor-text = {{ theme.base }}
 
-# ANSI palette (0-7)
-palette = 0={{ theme.dark }}
+# ANSI palette (0-7): black=Surface1, white=Subtext1
+palette = 0={{ theme.surface1 }}
 palette = 1={{ theme.red }}
 palette = 2={{ theme.green }}
 palette = 3={{ theme.yellow }}
 palette = 4={{ theme.blue }}
 palette = 5={{ theme.pink }}
-palette = 6={{ theme.cyan }}
-palette = 7={{ theme.white }}
-# Bright (8-15)
-palette = 8={{ theme.comment_bright }}
-palette = 9={{ theme.bright_red }}
-palette = 10={{ theme.bright_green }}
-palette = 11={{ theme.bright_yellow }}
-palette = 12={{ theme.bright_purple }}
-palette = 13={{ theme.bright_pink }}
-palette = 14={{ theme.bright_cyan }}
-palette = 15={{ theme.bright_white }}
+palette = 6={{ theme.teal }}
+palette = 7={{ theme.subtext1 }}
+# Bright (8-15): bright black=Surface2, bright white=Subtext0, accents unchanged
+palette = 8={{ theme.surface2 }}
+palette = 9={{ theme.red }}
+palette = 10={{ theme.green }}
+palette = 11={{ theme.yellow }}
+palette = 12={{ theme.blue }}
+palette = 13={{ theme.pink }}
+palette = 14={{ theme.teal }}
+palette = 15={{ theme.subtext0 }}
 
 # Cursor
 cursor-style = bar

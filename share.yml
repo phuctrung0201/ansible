@@ -1,35 +1,40 @@
 # Theme — Catppuccin Mocha (catppuccin/nvim, "mocha" flavour)
 # Source: https://github.com/catppuccin/catppuccin  (palette: Mocha)
-# The base/surface scale and accent hues below come straight from the official
-# Catppuccin Mocha palette. ANSI slots follow catppuccin/ghostty: black=Surface1,
-# bright black=Surface2, white=Subtext1, bright white=Subtext0, and the bright
-# accents mirror their normal counterparts (Catppuccin does not brighten them).
-# NOTE: bg is dropped to Crust (darker than stock Base #1e1e2e); nvim mirrors this
-# via color_overrides in roles/nvim/.../colorscheme.lua.
+#
+# This is the FULL official Catppuccin Mocha palette — all 26 named colors —
+# exposed by their canonical names. Consumers (nvim statusline, ghostty, fish)
+# reference these names directly and follow Catppuccin's official per-app themes.
+#
+# NOTE: the editor/terminal background is intentionally dropped to Crust (darker
+# than stock Base #1e1e2e). nvim mirrors this via color_overrides in
+# roles/nvim/.../colorscheme.lua; ghostty uses `crust` for its background.
 theme:
-  bg: "#11111b"              # Crust — darker than stock Mocha Base (#1e1e2e)
-  fg: "#cdd6f4"              # Text
-  selection: "#45475a"       # Surface1 — Visual selection bg
-  surface0: "#313244"        # Surface0 — cursorline / statusline bg
-  comment: "#6c7086"         # Overlay0
-  red: "#f38ba8"
-  orange: "#fab387"          # Peach
-  yellow: "#f9e2af"
-  green: "#a6e3a1"
-  purple: "#cba6f7"          # Mauve
-  cyan: "#94e2d5"            # Teal
-  pink: "#f5c2e7"            # Pink
-  blue: "#89b4fa"
-  dark: "#45475a"            # Surface1 — ANSI black slot (palette 0)
-  white: "#bac2de"           # Subtext1 — ANSI white slot (palette 7)
-  bright_red: "#f38ba8"
-  bright_green: "#a6e3a1"
-  bright_yellow: "#f9e2af"
-  bright_purple: "#89b4fa"   # bright blue slot (palette 12) mirrors blue
-  bright_pink: "#f5c2e7"
-  bright_cyan: "#94e2d5"     # Teal — Catppuccin does not ship a brighter cyan
-  bright_white: "#a6adc8"    # Subtext0
-  comment_bright: "#585b70"  # Surface2 — ANSI bright black slot (palette 8)
-  black: "#0b0b13"           # darker crust (matches nvim color_overrides)
-  gutter_fg: "#6c7086"       # Overlay0 (matches comment)
-  nontext: "#313244"         # Surface0
+  # ── Accents ──────────────────────────────────────────────────────────
+  rosewater: "#f5e0dc"
+  flamingo:  "#f2cdcd"
+  pink:      "#f5c2e7"
+  mauve:     "#cba6f7"
+  red:       "#f38ba8"
+  maroon:    "#eba0ac"
+  peach:     "#fab387"
+  yellow:    "#f9e2af"
+  green:     "#a6e3a1"
+  teal:      "#94e2d5"
+  sky:       "#89dceb"
+  sapphire:  "#74c7ec"
+  blue:      "#89b4fa"
+  lavender:  "#b4befe"
+  # ── Text / overlays / surfaces ───────────────────────────────────────
+  text:      "#cdd6f4"
+  subtext1:  "#bac2de"
+  subtext0:  "#a6adc8"
+  overlay2:  "#9399b2"
+  overlay1:  "#7f849c"
+  overlay0:  "#6c7086"
+  surface2:  "#585b70"
+  surface1:  "#45475a"
+  surface0:  "#313244"
+  # ── Base scale ───────────────────────────────────────────────────────
+  base:      "#1e1e2e"
+  mantle:    "#181825"
+  crust:     "#11111b"

@@ -1,26 +1,29 @@
--- Theme highlights that mirror the tmux status bar.
--- Colors come from lua/config/env.lua (ansible-templated).
+-- Theme highlights for the tabline + mini.statusline.
+-- Colors come from lua/config/env.lua (ansible-templated Catppuccin Mocha palette).
+-- The editor background is Crust (see colorscheme.lua color_overrides), so the
+-- tabline/statusline backgrounds use `crust` to match, and mode blocks use `crust`
+-- as their (dark) foreground against the colored accent backgrounds.
 local theme = require("config.env")
 
 local M = {}
 
 function M.apply()
   local set = vim.api.nvim_set_hl
-  -- Tabline matches tmux's status bar background
-  set(0, "TabLine", { fg = theme.comment, bg = theme.bg })
-  set(0, "TabLineFill", { bg = theme.bg })
-  set(0, "TabLineSel", { fg = theme.fg, bg = theme.bg })
-  -- mini.statusline mode colors mirror the tmux mode-color mapping
-  set(0, "MiniStatuslineModeNormal", { fg = theme.bg, bg = theme.green })
-  set(0, "MiniStatuslineModeInsert", { fg = theme.bg, bg = theme.cyan })
-  set(0, "MiniStatuslineModeVisual", { fg = theme.bg, bg = theme.purple })
-  set(0, "MiniStatuslineModeReplace", { fg = theme.bg, bg = theme.pink })
-  set(0, "MiniStatuslineModeCommand", { fg = theme.bg, bg = theme.orange })
-  set(0, "MiniStatuslineModeOther", { fg = theme.bg, bg = theme.comment })
-  set(0, "MiniStatuslineDevinfo", { fg = theme.fg, bg = theme.surface0 })
-  set(0, "MiniStatuslineFileinfo", { fg = theme.fg, bg = theme.surface0 })
-  set(0, "MiniStatuslineFilename", { fg = theme.fg, bg = "NONE" })
-  set(0, "MiniStatuslineInactive", { fg = theme.comment, bg = theme.surface0 })
+  -- Tabline matches the editor background (Crust)
+  set(0, "TabLine", { fg = theme.overlay0, bg = theme.crust })
+  set(0, "TabLineFill", { bg = theme.crust })
+  set(0, "TabLineSel", { fg = theme.text, bg = theme.crust })
+  -- mini.statusline mode colors (Catppuccin accents; dark Crust text on top)
+  set(0, "MiniStatuslineModeNormal", { fg = theme.crust, bg = theme.green })
+  set(0, "MiniStatuslineModeInsert", { fg = theme.crust, bg = theme.teal })
+  set(0, "MiniStatuslineModeVisual", { fg = theme.crust, bg = theme.mauve })
+  set(0, "MiniStatuslineModeReplace", { fg = theme.crust, bg = theme.pink })
+  set(0, "MiniStatuslineModeCommand", { fg = theme.crust, bg = theme.peach })
+  set(0, "MiniStatuslineModeOther", { fg = theme.crust, bg = theme.overlay1 })
+  set(0, "MiniStatuslineDevinfo", { fg = theme.text, bg = theme.surface0 })
+  set(0, "MiniStatuslineFileinfo", { fg = theme.text, bg = theme.surface0 })
+  set(0, "MiniStatuslineFilename", { fg = theme.text, bg = "NONE" })
+  set(0, "MiniStatuslineInactive", { fg = theme.overlay0, bg = theme.surface0 })
 end
 
 return M
