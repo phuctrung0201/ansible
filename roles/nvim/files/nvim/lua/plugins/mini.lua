@@ -89,9 +89,10 @@ return {
           local filename = MiniStatusline.section_filename({ trunc_width = 140 })
           return MiniStatusline.combine_groups({
             { hl = mode_hl, strings = { mode } },
-            { hl = "MiniStatuslineDevinfo", strings = { git, diff, diagnostics, lsp } },
             "%<",
             { hl = "MiniStatuslineFilename", strings = { filename } },
+            "%=",
+            { hl = "MiniStatuslineDevinfo", strings = { diff, diagnostics, lsp, git } },
           })
         end,
       },
@@ -99,6 +100,9 @@ return {
 
     require("mini.notify").setup({ lsp_progress = { enable = true } })
     vim.notify = require("mini.notify").make_notify()
+    vim.keymap.set("n", "<leader>n", function()
+      require("mini.notify").show_history()
+    end, { desc = "Notification history" })
 
     local clue = require("mini.clue")
     clue.setup({
@@ -126,7 +130,6 @@ return {
         { mode = "n", keys = "<Leader>s", desc = "+Search" },
         { mode = "n", keys = "<Leader>d", desc = "+Database" },
         { mode = "n", keys = "<Leader>g", desc = "+Git" },
-        { mode = "n", keys = "<Leader>t", desc = "+Toggle" },
         { mode = "n", keys = "<Leader>b", desc = "+Buffer" },
       },
       window = { delay = 0 },

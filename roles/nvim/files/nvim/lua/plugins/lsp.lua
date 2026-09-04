@@ -50,7 +50,7 @@ return {
         end
 
         if client and client:supports_method("textDocument/inlayHint", buf) then
-          lmap("<leader>th", function()
+          lmap("grh", function()
             vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = buf }))
           end, "Toggle inlay hints")
         end
