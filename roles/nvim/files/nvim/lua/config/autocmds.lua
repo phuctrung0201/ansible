@@ -25,9 +25,10 @@ autocmd("FileType", {
   pattern = { "markdown", "markdown.mdx" },
   callback = function(args)
     local buf = args.buf
-    -- Follow the link under the cursor (handles file links with spaces that
-    -- markview's opener mishandles; defers headings/URLs to markview).
-    vim.keymap.set("n", "<CR>", require("config.util").follow_markdown_link,
+    -- Follow wiki links / headings via the markdown-oxide LSP (go-to-definition
+    -- resolves `[[links]]` and `#headings`). External URLs are handled by
+    -- markview's `gx`.
+    vim.keymap.set("n", "<CR>", vim.lsp.buf.definition,
       { buffer = buf, desc = "Follow link" })
     vim.keymap.set("n", "<leader>mp", "<cmd>MarkdownPreviewToggle<cr>",
       { buffer = buf, desc = "Browser preview toggle" })
