@@ -13,7 +13,5 @@
       tags: ['dotnet']
     - role: omniwm
       tags: ['omniwm']
-    - role: firefox
-      tags: ['firefox']
     - role: ghostty
       tags: ['ghostty']
