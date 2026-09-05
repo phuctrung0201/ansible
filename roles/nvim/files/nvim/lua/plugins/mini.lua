@@ -129,7 +129,8 @@ return {
         clue.gen_clues.registers(),
         clue.gen_clues.windows({ submode_move = true, submode_navigate = true, submode_resize = true }),
         clue.gen_clues.z(),
-        -- Leader groups
+        -- Global leader groups are centralized here (mini.clue sets clues once
+        -- at setup); buffer-local groups live with their ftplugin/plugin.
         { mode = "n", keys = "<Leader>s", desc = "+Search" },
         { mode = "n", keys = "<Leader>d", desc = "+Database" },
         { mode = "n", keys = "<Leader>g", desc = "+Git" },
