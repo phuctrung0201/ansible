@@ -638,11 +638,11 @@ binding = "Unassigned"
 id = "toggleNativeFullscreen"
 
 [[hotkeys]]
-binding = "Unassigned"
+binding = "Control+Option+Left Bracket"
 id = "moveColumn.left"
 
 [[hotkeys]]
-binding = "Unassigned"
+binding = "Control+Option+Right Bracket"
 id = "moveColumn.right"
 
 [[hotkeys]]
