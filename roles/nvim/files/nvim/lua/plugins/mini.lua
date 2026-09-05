@@ -10,6 +10,19 @@ return {
     require("mini.ai").setup({ n_lines = 500 })
     require("mini.pairs").setup()
 
+    -- Surround under `gs` prefix (keeps `s` free for flash.nvim)
+    require("mini.surround").setup({
+      mappings = {
+        add = "gsa",
+        delete = "gsd",
+        find = "gsf",
+        find_left = "gsF",
+        highlight = "gsh",
+        replace = "gsr",
+        update_n_lines = "gsn",
+      },
+    })
+
     require("mini.indentscope").setup()
 
     require("mini.git").setup()
@@ -46,32 +59,22 @@ return {
     end, { desc = "Reset buffer" })
     vim.keymap.set("n", "<leader>gu", "<cmd>Git reset --quiet -- %<cr>", { desc = "Unstage file" })
 
-    require("mini.files").setup({
-      windows = { preview = true, width_preview = 40 },
-    })
-    local function minifiles_path()
-      local name = vim.api.nvim_buf_get_name(0)
-      if name ~= "" and vim.uv.fs_stat(name) then
-        return name
-      end
-      return vim.fn.getcwd()
-    end
-    vim.keymap.set("n", "<leader>e", function()
-      if not require("mini.files").close() then
-        require("mini.files").open(minifiles_path())
-      end
-    end, { desc = "File explorer" })
-    vim.keymap.set("n", "-", function()
-      require("mini.files").open(minifiles_path())
-    end, { desc = "Open parent directory" })
-
     local starter = require("mini.starter")
     starter.setup({
       footer = "",
       items = {
+        {
+          name = "Explore",
+          action = function()
+            local name = vim.api.nvim_buf_get_name(0)
+            local reveal = name ~= "" and vim.uv.fs_stat(name) ~= nil
+            require("neo-tree.command").execute({ toggle = true, reveal = reveal })
+          end,
+          section = "Actions",
+        },
         { name = "Recent files", action = "FzfLua oldfiles", section = "Actions" },
         { name = "Find files", action = "FzfLua files", section = "Actions" },
-        { name = "Live grep", action = "FzfLua live_grep", section = "Actions" },
+        { name = "Grep", action = "FzfLua live_grep", section = "Actions" },
         { name = "Lazygit", action = require("config.util").lazygit, section = "Actions" },
         { name = "Quit", action = "qall", section = "Actions" },
       },
@@ -131,6 +134,9 @@ return {
         { mode = "n", keys = "<Leader>d", desc = "+Database" },
         { mode = "n", keys = "<Leader>g", desc = "+Git" },
         { mode = "n", keys = "<Leader>b", desc = "+Buffer" },
+        -- Other groups
+        { mode = "n", keys = "gs", desc = "+Surround" },
+        { mode = "x", keys = "gs", desc = "+Surround" },
       },
       window = { delay = 0 },
     })

@@ -24,6 +24,15 @@ function M.apply()
   set(0, "MiniStatuslineFileinfo", { fg = theme.text, bg = theme.surface0 })
   set(0, "MiniStatuslineFilename", { fg = theme.text, bg = "NONE" })
   set(0, "MiniStatuslineInactive", { fg = theme.overlay0, bg = theme.surface0 })
+  -- Floating windows: match the editor background (Crust) so there's no
+  -- contrasting/black frame around floats. Border glyphs keep the colorscheme's
+  -- color (only their background is set). neo-tree's float groups link to these.
+  set(0, "NormalFloat", { fg = theme.text, bg = theme.crust })
+  for _, name in ipairs({ "FloatBorder", "FloatTitle" }) do
+    local hl = vim.api.nvim_get_hl(0, { name = name, link = false })
+    hl.bg = theme.crust
+    set(0, name, hl)
+  end
 end
 
 return M

@@ -13,6 +13,10 @@ map("n", "<C-k>", "<C-w><C-k>", { desc = "Move focus to the upper window" })
 -- Diagnostics
 map("n", "<leader>q", vim.diagnostic.setloclist, { desc = "Open diagnostic quickfix list" })
 
+-- Keep selection when indenting in visual mode
+map("x", "<", "<gv", { desc = "Indent left and reselect" })
+map("x", ">", ">gv", { desc = "Indent right and reselect" })
+
 -- Toggle wrap
 map("n", "<leader>w", function()
   vim.wo.wrap = not vim.wo.wrap
