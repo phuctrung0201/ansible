@@ -7,7 +7,6 @@
     - lazygit
     - ripgrep
     - fd
-    - fzf
     - node
     - go
     - rustup

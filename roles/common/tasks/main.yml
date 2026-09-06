@@ -9,16 +9,11 @@
     msg: "Xcode Command Line Tools not found. Run: xcode-select --install, then re-run this playbook."
   when: xcode_check.rc != 0
 
-- name: Check for Homebrew (Apple Silicon)
+- name: Check for Homebrew
   stat:
     path: /opt/homebrew/bin/brew
-  register: brew_arm
-
-- name: Check for Homebrew (Intel)
-  stat:
-    path: /usr/local/bin/brew
-  register: brew_intel
+  register: brew_check
 
 - name: Install Homebrew if not present
   shell: /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-  when: not brew_arm.stat.exists and not brew_intel.stat.exists
+  when: not brew_check.stat.exists
