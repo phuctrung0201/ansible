@@ -9,6 +9,8 @@
       tags: ['fish']
     - role: nvim
       tags: ['nvim']
+    - role: obsidian
+      tags: ['obsidian']
     - role: dotnet
       tags: ['dotnet']
     - role: omniwm

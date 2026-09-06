@@ -1,0 +1,135 @@
+- name: Check for Obsidian application
+  ansible.builtin.stat:
+    path: /Applications/Obsidian.app
+  register: obsidian_application
+
+- name: Install Obsidian
+  community.general.homebrew:
+    name: obsidian
+    state: present
+    install_options: cask
+  when: not obsidian_application.stat.exists
+
+- name: Ensure Obsidian snippets directory exists
+  ansible.builtin.file:
+    path: "{{ obsidian_vault_path }}/.obsidian/snippets"
+    state: directory
+    mode: "0755"
+
+- name: Deploy Catppuccin Mocha CSS snippet
+  ansible.builtin.copy:
+    src: catppuccin-mocha.css
+    dest: "{{ obsidian_vault_path }}/.obsidian/snippets/{{ obsidian_snippet_name }}.css"
+    mode: "0644"
+    backup: true
+
+- name: Check for existing Obsidian appearance settings
+  ansible.builtin.stat:
+    path: "{{ obsidian_vault_path }}/.obsidian/appearance.json"
+  register: obsidian_appearance_file
+
+- name: Read existing Obsidian appearance settings
+  ansible.builtin.slurp:
+    path: "{{ obsidian_vault_path }}/.obsidian/appearance.json"
+  register: obsidian_appearance_raw
+  when: obsidian_appearance_file.stat.exists
+
+- name: Parse existing Obsidian appearance settings
+  ansible.builtin.set_fact:
+    obsidian_appearance: >-
+      {{
+        (obsidian_appearance_raw.content | b64decode | from_json)
+        if obsidian_appearance_file.stat.exists
+        else {}
+      }}
+
+- name: Build enabled Obsidian CSS snippet list
+  ansible.builtin.set_fact:
+    obsidian_enabled_css_snippets: >-
+      {{
+        (
+          (obsidian_appearance.enabledCssSnippets | default([]))
+          + [obsidian_snippet_name]
+        )
+        | unique
+        | list
+      }}
+
+- name: Enable Catppuccin Mocha CSS snippet
+  ansible.builtin.copy:
+    content: |
+      {{
+        obsidian_appearance
+        | combine(
+            {
+              'theme': 'obsidian',
+              'cssTheme': '',
+              'accentColor': theme.peach,
+              'enabledCssSnippets': obsidian_enabled_css_snippets
+            },
+            recursive=true
+          )
+        | to_nice_json
+      }}
+    dest: "{{ obsidian_vault_path }}/.obsidian/appearance.json"
+    mode: "0644"
+    backup: true
+
+- name: Ensure always-hidden traffic lights plugin directory exists
+  ansible.builtin.file:
+    path: "{{ obsidian_vault_path }}/.obsidian/plugins/{{ obsidian_traffic_lights_plugin }}"
+    state: directory
+    mode: "0755"
+
+- name: Deploy always-hidden traffic lights plugin
+  ansible.builtin.copy:
+    src: "hide-traffic-lights-always/{{ item }}"
+    dest: "{{ obsidian_vault_path }}/.obsidian/plugins/{{ obsidian_traffic_lights_plugin }}/{{ item }}"
+    mode: "0644"
+  loop:
+    - main.js
+    - manifest.json
+
+- name: Remove hover-reveal traffic lights plugin
+  ansible.builtin.file:
+    path: "{{ obsidian_vault_path }}/.obsidian/plugins/hide-traffic-lights"
+    state: absent
+
+- name: Check for enabled Obsidian community plugins
+  ansible.builtin.stat:
+    path: "{{ obsidian_vault_path }}/.obsidian/community-plugins.json"
+  register: obsidian_community_plugins_file
+
+- name: Read enabled Obsidian community plugins
+  ansible.builtin.slurp:
+    path: "{{ obsidian_vault_path }}/.obsidian/community-plugins.json"
+  register: obsidian_community_plugins_raw
+  when: obsidian_community_plugins_file.stat.exists
+
+- name: Parse enabled Obsidian community plugins
+  ansible.builtin.set_fact:
+    obsidian_community_plugins: >-
+      {{
+        (obsidian_community_plugins_raw.content | b64decode | from_json)
+        if obsidian_community_plugins_file.stat.exists
+        else []
+      }}
+
+- name: Enable always-hidden traffic lights plugin
+  ansible.builtin.copy:
+    content: |
+      {{
+        (
+          (
+            obsidian_community_plugins
+            | reject('equalto', 'hide-traffic-lights')
+            | reject('equalto', obsidian_traffic_lights_plugin)
+            | list
+          )
+          + [obsidian_traffic_lights_plugin]
+        )
+        | to_nice_json
+      }}
+    dest: "{{ obsidian_vault_path }}/.obsidian/community-plugins.json"
+    mode: "0644"
+    backup: true

@@ -87,7 +87,6 @@ return {
         "shellcheck",
         "shfmt",
         "markdownlint",
-        "markdown-oxide",
       },
     })
 
@@ -107,7 +106,6 @@ return {
       rust_analyzer = {},
       zls = {},
       jsonls = {},
-      markdown_oxide = {},
       lua_ls = {
         settings = {
           Lua = {

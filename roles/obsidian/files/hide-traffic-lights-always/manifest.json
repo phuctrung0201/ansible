@@ -1,0 +1,9 @@
+{
+  "id": "hide-traffic-lights-always",
+  "name": "Hide Traffic Lights Always",
+  "version": "1.0.0",
+  "minAppVersion": "0.15.0",
+  "description": "Keeps the native macOS traffic-light buttons hidden without revealing them on hover.",
+  "author": "Local",
+  "isDesktopOnly": true
+}

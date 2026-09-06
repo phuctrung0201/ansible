@@ -1,0 +1,3 @@
+obsidian_vault_path: "{{ lookup('env', 'HOME') }}/wiki"
+obsidian_snippet_name: catppuccin-mocha
+obsidian_traffic_lights_plugin: hide-traffic-lights-always

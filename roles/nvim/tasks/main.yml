@@ -40,8 +40,10 @@
     dest: "~/.config/nvim/lua/config/env.lua"
     backup: yes
 
-- name: Ensure wiki directory exists
+- name: Remove obsolete markdown-oxide installation
   file:
-    path: "~/wiki"
-    state: directory
-    mode: "0755"
+    path: "{{ item }}"
+    state: absent
+  loop:
+    - "{{ lookup('env', 'HOME') }}/.local/share/nvim/mason/packages/markdown-oxide"
+    - "{{ lookup('env', 'HOME') }}/.local/share/nvim/mason/bin/markdown-oxide"

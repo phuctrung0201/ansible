@@ -1,0 +1,539 @@
+/* Managed by the Ansible obsidian role. */
+body.theme-dark {
+  color-scheme: dark;
+
+  /* Catppuccin Mocha — complete palette from share.yml. */
+  --ctp-rosewater: 245, 224, 220;
+  --ctp-flamingo: 242, 205, 205;
+  --ctp-pink: 245, 194, 231;
+  --ctp-mauve: 203, 166, 247;
+  --ctp-red: 243, 139, 168;
+  --ctp-maroon: 235, 160, 172;
+  --ctp-peach: 250, 179, 135;
+  --ctp-yellow: 249, 226, 175;
+  --ctp-green: 166, 227, 161;
+  --ctp-teal: 148, 226, 213;
+  --ctp-sky: 137, 220, 235;
+  --ctp-sapphire: 116, 199, 236;
+  --ctp-blue: 137, 180, 250;
+  --ctp-lavender: 180, 190, 254;
+  --ctp-text: 205, 214, 244;
+  --ctp-subtext1: 186, 194, 222;
+  --ctp-subtext0: 166, 173, 200;
+  --ctp-overlay2: 147, 153, 178;
+  --ctp-overlay1: 127, 132, 156;
+  --ctp-overlay0: 108, 112, 134;
+  --ctp-surface2: 88, 91, 112;
+  --ctp-surface1: 69, 71, 90;
+  --ctp-surface0: 49, 50, 68;
+  --ctp-base: 30, 30, 46;
+  --ctp-mantle: 24, 24, 37;
+  --ctp-crust: 17, 17, 27;
+  --ctp-accent: var(--ctp-peach);
+
+  --hex-rosewater: #f5e0dc;
+  --hex-flamingo: #f2cdcd;
+  --hex-pink: #f5c2e7;
+  --hex-mauve: #cba6f7;
+  --hex-red: #f38ba8;
+  --hex-maroon: #eba0ac;
+  --hex-peach: #fab387;
+  --hex-yellow: #f9e2af;
+  --hex-green: #a6e3a1;
+  --hex-teal: #94e2d5;
+  --hex-sky: #89dceb;
+  --hex-sapphire: #74c7ec;
+  --hex-blue: #89b4fa;
+  --hex-lavender: #b4befe;
+  --hex-text: #cdd6f4;
+  --hex-subtext1: #bac2de;
+  --hex-subtext0: #a6adc8;
+  --hex-overlay2: #9399b2;
+  --hex-overlay1: #7f849c;
+  --hex-overlay0: #6c7086;
+  --hex-surface2: #585b70;
+  --hex-surface1: #45475a;
+  --hex-surface0: #313244;
+  --hex-base: #1e1e2e;
+  --hex-mantle: #181825;
+  --hex-crust: #11111b;
+
+  /* Obsidian palette primitives. */
+  --mono-0: rgb(var(--ctp-crust));
+  --mono-100: rgb(var(--ctp-text));
+  --mono-rgb-0: var(--ctp-crust);
+  --mono-rgb-100: var(--ctp-text);
+
+  --color-red-rgb: var(--ctp-red);
+  --color-red: var(--hex-red);
+  --color-orange-rgb: var(--ctp-peach);
+  --color-orange: var(--hex-peach);
+  --color-yellow-rgb: var(--ctp-yellow);
+  --color-yellow: var(--hex-yellow);
+  --color-green-rgb: var(--ctp-green);
+  --color-green: var(--hex-green);
+  --color-cyan-rgb: var(--ctp-teal);
+  --color-cyan: var(--hex-teal);
+  --color-blue-rgb: var(--ctp-blue);
+  --color-blue: var(--hex-blue);
+  --color-purple-rgb: var(--ctp-mauve);
+  --color-purple: var(--hex-mauve);
+  --color-pink-rgb: var(--ctp-pink);
+  --color-pink: var(--hex-pink);
+
+  /* Keep primary content on Crust, matching the rest of this setup. */
+  --color-base-00: var(--hex-crust);
+  --color-base-05: var(--hex-crust);
+  --color-base-10: var(--hex-mantle);
+  --color-base-20: var(--hex-base);
+  --color-base-25: var(--hex-surface0);
+  --color-base-30: var(--hex-surface1);
+  --color-base-35: var(--hex-surface2);
+  --color-base-40: var(--hex-overlay0);
+  --color-base-50: var(--hex-overlay1);
+  --color-base-60: var(--hex-overlay2);
+  --color-base-70: var(--hex-subtext0);
+  --color-base-100: var(--hex-text);
+
+  --accent-h: 23;
+  --accent-s: 92%;
+  --accent-l: 75%;
+  --color-accent-hsl: var(--accent-h), var(--accent-s), var(--accent-l);
+  --color-accent: rgb(var(--ctp-accent));
+  --color-accent-1: rgb(var(--ctp-peach));
+  --color-accent-2: rgb(var(--ctp-yellow));
+
+  /* Backgrounds, elevation, borders, and shadows. */
+  --background-primary: rgb(var(--ctp-crust));
+  --background-primary-rgb: var(--ctp-crust);
+  --background-primary-alt: rgb(var(--ctp-mantle));
+  --background-secondary: rgb(var(--ctp-mantle));
+  --background-secondary-alt: rgb(var(--ctp-base));
+  --background-modifier-hover: rgb(var(--ctp-text) / 0.067);
+  --background-modifier-active-hover: rgb(var(--ctp-accent) / 0.2);
+  --background-modifier-border: rgb(var(--ctp-surface0));
+  --background-modifier-border-hover: rgb(var(--ctp-surface1));
+  --background-modifier-border-focus: rgb(var(--ctp-surface2));
+  --background-modifier-form-field: rgb(var(--ctp-surface0) / 0.7);
+  --background-modifier-form-field-hover: rgb(var(--ctp-surface1) / 0.7);
+  --background-modifier-form-field-highlighted: rgb(var(--ctp-surface1) / 0.75);
+  --background-modifier-box-shadow: rgb(var(--ctp-crust) / 0.5);
+  --background-modifier-cover: rgb(var(--ctp-crust) / 0.9);
+  --background-modifier-message: rgb(var(--ctp-crust) / 0.95);
+  --background-modifier-error-rgb: var(--ctp-red);
+  --background-modifier-error: rgb(var(--ctp-red) / 0.9);
+  --background-modifier-error-hover: rgb(var(--ctp-red));
+  --background-modifier-warning: rgb(var(--ctp-peach) / 0.9);
+  --background-modifier-warning-hover: rgb(var(--ctp-peach));
+  --background-modifier-success-rgb: var(--ctp-green);
+  --background-modifier-success: rgb(var(--ctp-green) / 0.9);
+  --workspace-background-translucent: rgb(var(--ctp-crust) / 0.6);
+  --blur-background: rgb(var(--ctp-surface0) / var(--blur-opacity-s));
+  --raised-background: var(--background-primary);
+  --raised-mask-background: rgb(var(--ctp-crust) / 0.6);
+  --shadow-edges: inset 0 0 0 0.5px rgb(var(--ctp-text) / 0.065);
+  --shadow-xs:
+    0 1px 6px rgb(var(--ctp-crust) / 0.15),
+    0 4px 24px rgb(var(--ctp-crust) / 0.35), var(--shadow-edges);
+  --shadow-s:
+    0 1px 2px rgb(var(--ctp-crust) / 0.25),
+    0 4px 8px rgb(var(--ctp-crust) / 0.3),
+    0 15px 30px rgb(var(--ctp-crust) / 0.4);
+  --shadow-l:
+    0 2px 8px rgb(var(--ctp-crust) / 0.3),
+    0 8px 28px rgb(var(--ctp-crust) / 0.4),
+    0 30px 90px rgb(var(--ctp-crust) / 0.5);
+  --shadow-stationary: 0 1px 2px rgb(var(--ctp-crust) / 0.3);
+
+  /* Text and interaction states. */
+  --text-normal: rgb(var(--ctp-text));
+  --text-muted: rgb(var(--ctp-subtext0));
+  --text-muted-rgb: var(--ctp-subtext0);
+  --text-faint: rgb(var(--ctp-overlay1));
+  --text-on-accent: rgb(var(--ctp-crust));
+  --text-on-accent-inverted: rgb(var(--ctp-text));
+  --text-error: rgb(var(--ctp-red));
+  --text-error-hover: rgb(var(--ctp-maroon));
+  --text-warning: rgb(var(--ctp-peach));
+  --text-success: rgb(var(--ctp-green));
+  --text-accent: rgb(var(--ctp-accent));
+  --text-accent-hover: rgb(var(--ctp-yellow));
+  --text-selection: color-mix(
+    in srgb,
+    rgb(var(--ctp-accent)) 42%,
+    rgb(var(--ctp-crust))
+  );
+  --text-highlight-bg-rgb: var(--ctp-yellow);
+  --text-highlight-bg: rgb(var(--ctp-yellow) / 0.35);
+  --text-highlight-bg-active: rgb(var(--ctp-peach) / 0.35);
+  --input-placeholder-color: rgb(var(--ctp-overlay0));
+  --caret-color: rgb(var(--ctp-rosewater));
+
+  --interactive-normal: rgb(var(--ctp-surface0));
+  --interactive-hover: rgb(var(--ctp-surface1));
+  --interactive-accent-hsl: var(--color-accent-hsl);
+  --interactive-accent: rgb(var(--ctp-accent));
+  --interactive-accent-rgb: var(--ctp-accent);
+  --interactive-accent-hover: rgb(var(--ctp-yellow));
+  --interactive-success: rgb(var(--ctp-green));
+  --input-shadow:
+    inset 0 0 0 1px rgb(var(--ctp-surface1)),
+    0 2px 4px rgb(var(--ctp-crust) / 0.3);
+  --input-shadow-hover:
+    inset 0 0 0 1px rgb(var(--ctp-surface2)),
+    0 2px 4px rgb(var(--ctp-crust) / 0.4);
+
+  /* Links, headings, emphasis, and syntax. */
+  --link-color: rgb(var(--ctp-blue));
+  --link-color-hover: rgb(var(--ctp-sapphire));
+  --link-external-color: rgb(var(--ctp-teal));
+  --link-external-color-hover: rgb(var(--ctp-sky));
+  --link-unresolved-color: rgb(var(--ctp-maroon));
+  --link-unresolved-decoration-color: rgb(var(--ctp-red) / 0.6);
+  --heading-formatting: rgb(var(--ctp-overlay0));
+  --h1-color: rgb(var(--ctp-red));
+  --h2-color: rgb(var(--ctp-peach));
+  --h3-color: rgb(var(--ctp-yellow));
+  --h4-color: rgb(var(--ctp-green));
+  --h5-color: rgb(var(--ctp-teal));
+  --h6-color: rgb(var(--ctp-mauve));
+  --inline-title-color: rgb(var(--ctp-text));
+  --bold-color: rgb(var(--ctp-rosewater));
+  --italic-color: rgb(var(--ctp-flamingo));
+
+  --code-background: rgb(var(--ctp-mantle));
+  --code-border-color: rgb(var(--ctp-surface0));
+  --code-bracket-background: rgb(var(--ctp-surface0) / 0.7);
+  --code-normal: rgb(var(--ctp-subtext1));
+  --code-comment: rgb(var(--ctp-overlay0));
+  --code-function: rgb(var(--ctp-yellow));
+  --code-important: rgb(var(--ctp-peach));
+  --code-keyword: rgb(var(--ctp-mauve));
+  --code-operator: rgb(var(--ctp-red));
+  --code-property: rgb(var(--ctp-teal));
+  --code-punctuation: rgb(var(--ctp-overlay2));
+  --code-string: rgb(var(--ctp-green));
+  --code-tag: rgb(var(--ctp-red));
+  --code-value: rgb(var(--ctp-lavender));
+
+  /* Prose components. */
+  --list-marker-color: rgb(var(--ctp-accent));
+  --list-marker-color-hover: rgb(var(--ctp-yellow));
+  --list-marker-color-collapsed: rgb(var(--ctp-lavender));
+  --blockquote-border-color: rgb(var(--ctp-rosewater));
+  --blockquote-color: rgb(var(--ctp-subtext1));
+  --blockquote-background-color: rgb(var(--ctp-mantle) / 0.5);
+  --hr-color: rgb(var(--ctp-surface1));
+  --checkbox-color: rgb(var(--ctp-accent));
+  --checkbox-color-hover: rgb(var(--ctp-yellow));
+  --checkbox-border-color: rgb(var(--ctp-overlay0));
+  --checkbox-border-color-hover: rgb(var(--ctp-overlay2));
+  --checkbox-marker-color: rgb(var(--ctp-crust));
+  --checklist-done-color: rgb(var(--ctp-overlay1));
+  --tag-color: rgb(var(--ctp-mauve));
+  --tag-color-hover: rgb(var(--ctp-pink));
+  --tag-background: rgb(var(--ctp-mauve) / 0.12);
+  --tag-background-hover: rgb(var(--ctp-pink) / 0.18);
+  --tag-border-color: rgb(var(--ctp-mauve) / 0.25);
+  --tag-border-color-hover: rgb(var(--ctp-pink) / 0.35);
+  --pill-color: var(--tag-color);
+  --pill-color-hover: var(--tag-color-hover);
+  --pill-color-remove: rgb(var(--ctp-red));
+  --pill-color-remove-hover: rgb(var(--ctp-maroon));
+  --pill-background: var(--tag-background);
+  --pill-background-hover: var(--tag-background-hover);
+  --pill-border-color: var(--tag-border-color);
+  --pill-border-color-hover: var(--tag-border-color-hover);
+
+  /* Callouts. */
+  --callout-color: var(--callout-quote);
+  --callout-bug: var(--ctp-red);
+  --callout-default: var(--ctp-blue);
+  --callout-error: var(--ctp-red);
+  --callout-example: var(--ctp-mauve);
+  --callout-fail: var(--ctp-red);
+  --callout-important: var(--ctp-teal);
+  --callout-info: var(--ctp-blue);
+  --callout-question: var(--ctp-yellow);
+  --callout-quote: var(--ctp-overlay1);
+  --callout-success: var(--ctp-green);
+  --callout-summary: var(--ctp-sky);
+  --callout-tip: var(--ctp-teal);
+  --callout-todo: var(--ctp-blue);
+  --callout-warning: var(--ctp-peach);
+  --callout-title-color: inherit;
+  --callout-content-background: transparent;
+
+  /* Canvas, graph, and Bases. */
+  --canvas-background: var(--background-primary);
+  --canvas-dot-pattern: rgb(var(--ctp-surface1));
+  --canvas-card-label-color: rgb(var(--ctp-overlay1));
+  --canvas-color: rgb(var(--ctp-lavender));
+  --canvas-color-1: rgb(var(--ctp-red));
+  --canvas-color-2: rgb(var(--ctp-peach));
+  --canvas-color-3: rgb(var(--ctp-yellow));
+  --canvas-color-4: rgb(var(--ctp-green));
+  --canvas-color-5: rgb(var(--ctp-teal));
+  --canvas-color-6: rgb(var(--ctp-mauve));
+  --graph-text: rgb(var(--ctp-text));
+  --graph-node: rgb(var(--ctp-subtext0));
+  --graph-node-unresolved: rgb(var(--ctp-overlay0));
+  --graph-node-focused: rgb(var(--ctp-accent));
+  --graph-node-tag: rgb(var(--ctp-green));
+  --graph-node-attachment: rgb(var(--ctp-yellow));
+  --graph-line: rgb(var(--ctp-surface2));
+
+  --bases-cards-background: var(--background-primary);
+  --bases-cards-container-background: rgb(var(--ctp-mantle));
+  --bases-cards-cover-background: var(--background-primary-alt);
+  --bases-cards-shadow: 0 0 0 1px var(--background-modifier-border);
+  --bases-cards-shadow-hover: 0 0 0 1px var(--background-modifier-border-hover);
+  --bases-filter-input-background: var(--background-modifier-form-field);
+  --bases-group-heading-property-color: var(--text-muted);
+  --bases-table-border-color: var(--background-modifier-border);
+  --bases-table-cell-background-active: var(--background-primary);
+  --bases-table-cell-background-disabled: var(--background-primary-alt);
+  --bases-table-cell-background-selected: var(--table-selection);
+  --bases-table-cell-shadow-active: 0 0 0 2px
+    var(--background-modifier-border-focus);
+  --bases-table-cell-shadow-focus: 0 0 0 2px var(--interactive-accent);
+  --bases-table-group-background: var(--background-primary-alt);
+  --bases-table-header-background: var(--background-secondary);
+  --bases-table-header-background-hover: rgb(var(--ctp-accent) / 0.1);
+  --bases-table-header-color: var(--text-muted);
+  --bases-table-row-background-hover: var(--background-modifier-hover);
+  --bases-table-summary-background: var(--background-primary);
+  --bases-table-summary-background-hover: var(--background-modifier-hover);
+
+  /* Navigation, tabs, and application chrome. */
+  --nav-item-color: rgb(var(--ctp-subtext0));
+  --nav-item-color-hover: rgb(var(--ctp-text));
+  --nav-item-color-active: rgb(var(--ctp-text));
+  --nav-item-color-selected: rgb(var(--ctp-text));
+  --nav-item-color-highlighted: rgb(var(--ctp-accent));
+  --nav-item-background-active: rgb(var(--ctp-surface0));
+  --nav-item-background-hover: rgb(var(--ctp-surface0) / 0.7);
+  --nav-item-background-selected: rgb(var(--ctp-accent) / 0.22);
+  --nav-heading-color: rgb(var(--ctp-subtext0));
+  --nav-heading-color-hover: rgb(var(--ctp-text));
+  --nav-heading-color-collapsed: rgb(var(--ctp-overlay1));
+  --nav-heading-color-collapsed-hover: rgb(var(--ctp-subtext0));
+  --nav-collapse-icon-color: rgb(var(--ctp-overlay1));
+  --nav-collapse-icon-color-collapsed: rgb(var(--ctp-accent));
+  --nav-indentation-guide-color: rgb(var(--ctp-surface1));
+  --nav-tag-color: rgb(var(--ctp-overlay1));
+  --nav-tag-color-hover: rgb(var(--ctp-subtext0));
+  --nav-tag-color-active: rgb(var(--ctp-subtext0));
+  --nav-tag-background: transparent;
+
+  --tab-text-color: rgb(var(--ctp-overlay1));
+  --tab-text-color-active: rgb(var(--ctp-subtext0));
+  --tab-text-color-focused: rgb(var(--ctp-subtext0));
+  --tab-text-color-focused-active: rgb(var(--ctp-subtext1));
+  --tab-text-color-focused-active-current: rgb(var(--ctp-text));
+  --tab-text-color-focused-highlighted: rgb(var(--ctp-accent));
+  --tab-background-active: var(--background-primary);
+  --tab-container-background: var(--background-secondary);
+  --tab-divider-color: var(--background-modifier-border);
+  --tab-outline-color: var(--background-modifier-border);
+  --tab-stacked-shadow: -8px 0 8px rgb(var(--ctp-crust) / 0.35);
+  --tab-switcher-background: var(--background-secondary);
+  --tab-switcher-menubar-background: linear-gradient(
+    to top,
+    var(--background-secondary),
+    transparent
+  );
+  --tab-switcher-preview-background-shadow: 0 4px 30px 2px
+    rgb(var(--ctp-crust) / 0.5);
+  --tab-switcher-preview-shadow: 0 0 0 1px rgb(var(--ctp-text) / 0.08);
+  --tab-switcher-preview-shadow-active: 0 0 0 2px rgb(var(--ctp-accent));
+
+  --titlebar-background: var(--background-secondary);
+  --titlebar-background-focused: var(--background-secondary-alt);
+  --titlebar-text-color: rgb(var(--ctp-subtext0));
+  --titlebar-text-color-focused: rgb(var(--ctp-text));
+  --titlebar-text-color-highlighted: rgb(var(--ctp-accent));
+  --titlebar-border-color: var(--background-modifier-border);
+  --ribbon-background: var(--background-secondary);
+  --ribbon-background-collapsed: var(--background-primary);
+  --status-bar-background: var(--background-secondary);
+  --status-bar-text-color: rgb(var(--ctp-subtext0));
+  --status-bar-border-color: var(--background-modifier-border);
+  --system-status-background: var(--titlebar-background);
+  --mobile-sidebar-background: var(--background-secondary);
+
+  /* Icons, controls, dividers, and scrollbars. */
+  --icon-color: rgb(var(--ctp-subtext0));
+  --icon-color-hover: rgb(var(--ctp-text));
+  --icon-color-active: rgb(var(--ctp-accent));
+  --icon-color-focus: rgb(var(--ctp-text));
+  --icon-color-focused: rgb(var(--ctp-text));
+  --scrollbar-bg: rgb(var(--ctp-text) / 0.05);
+  --scrollbar-thumb-bg: rgb(var(--ctp-text) / 0.1);
+  --scrollbar-active-thumb-bg: rgb(var(--ctp-text) / 0.2);
+  --divider-color: var(--background-modifier-border);
+  --divider-color-hover: rgb(var(--ctp-accent));
+  --collapse-icon-color: rgb(var(--ctp-overlay1));
+  --collapse-icon-color-collapsed: rgb(var(--ctp-accent));
+  --indentation-guide-color: rgb(var(--ctp-surface1));
+  --indentation-guide-color-active: rgb(var(--ctp-accent) / 0.7);
+  --slider-track-background: var(--background-modifier-border);
+  --slider-fill-background: rgb(var(--ctp-accent));
+  --slider-thumb-background: rgb(var(--ctp-text));
+  --slider-thumb-background-hover: rgb(var(--ctp-rosewater));
+  --slider-thumb-border-color: var(--background-modifier-border-hover);
+  --slider-thumb-shadow: 0 2px 6px rgb(var(--ctp-crust) / 0.5);
+  --toggle-thumb-color: rgb(var(--ctp-text));
+  --swatch-shadow: inset 0 0 0 1px rgb(var(--ctp-text) / 0.15);
+
+  /* Dialogs, menus, inputs, and search. */
+  --modal-background: var(--background-primary);
+  --modal-border-color: var(--background-modifier-border);
+  --modal-sidebar-background: var(--background-secondary);
+  --modal-shadow: var(--shadow-l);
+  --prompt-background: var(--background-primary);
+  --prompt-border-color: var(--background-modifier-border-focus);
+  --menu-background: var(--background-secondary);
+  --menu-border-color: var(--background-modifier-border-hover);
+  --menu-divider-color: var(--background-modifier-border-hover);
+  --menu-shadow: var(--shadow-s);
+  --suggestion-background: var(--background-primary);
+  --search-result-background: var(--background-primary);
+  --search-icon-color: rgb(var(--ctp-overlay1));
+  --search-clear-button-color: rgb(var(--ctp-overlay1));
+  --dropdown-background: var(--interactive-normal);
+  --dropdown-background-hover: var(--interactive-hover);
+  --dropdown-icon-background: var(--interactive-normal);
+  --keyboard-background: var(--background-primary);
+  --flair-background: var(--background-modifier-hover);
+  --flair-color: var(--text-muted);
+
+  /* Properties, footnotes, and tables. */
+  --metadata-background: transparent;
+  --metadata-border-color: var(--background-modifier-border);
+  --metadata-divider-color: var(--background-modifier-border);
+  --metadata-divider-color-focus: rgb(var(--ctp-accent));
+  --metadata-divider-color-hover: var(--background-modifier-border-hover);
+  --metadata-label-text-color: rgb(var(--ctp-subtext0));
+  --metadata-label-text-color-hover: rgb(var(--ctp-text));
+  --metadata-label-background: transparent;
+  --metadata-label-background-active: var(--background-modifier-hover);
+  --metadata-label-background-hover: rgb(var(--ctp-surface0) / 0.5);
+  --metadata-input-text-color: rgb(var(--ctp-text));
+  --metadata-input-background: transparent;
+  --metadata-input-background-active: rgb(var(--ctp-surface0) / 0.5);
+  --metadata-input-background-hover: rgb(var(--ctp-surface0) / 0.35);
+  --metadata-property-background: var(--interactive-normal);
+  --metadata-property-background-active: var(--background-modifier-hover);
+  --metadata-property-background-hover: rgb(var(--ctp-surface1) / 0.5);
+  --metadata-property-box-shadow: none;
+  --metadata-property-box-shadow-focus: 0 0 0 2px rgb(var(--ctp-accent));
+  --metadata-property-box-shadow-hover: 0 0 0 1px
+    var(--background-modifier-border-hover);
+  --footnote-divider-color: var(--metadata-divider-color);
+  --footnote-divider-color-active: var(--metadata-divider-color-focus);
+  --footnote-id-color: var(--text-muted);
+  --footnote-id-color-no-occurrences: var(--text-faint);
+  --footnote-input-background: var(--metadata-input-background);
+  --footnote-input-background-active: var(--metadata-input-background-active);
+
+  --table-background: transparent;
+  --table-border-color: var(--background-modifier-border);
+  --table-header-background: rgb(var(--ctp-mantle));
+  --table-header-background-hover: rgb(var(--ctp-surface0));
+  --table-header-border-color: var(--table-border-color);
+  --table-header-color: rgb(var(--ctp-text));
+  --table-text-color: rgb(var(--ctp-subtext1));
+  --table-column-alt-background: rgb(var(--ctp-mantle) / 0.5);
+  --table-row-background-hover: rgb(var(--ctp-surface0) / 0.5);
+  --table-row-alt-background: rgb(var(--ctp-mantle) / 0.5);
+  --table-row-alt-background-hover: rgb(var(--ctp-surface0) / 0.65);
+  --table-selection: rgb(var(--ctp-accent) / 0.3);
+  --table-selection-blend-mode: normal;
+  --table-selection-border-color: rgb(var(--ctp-accent));
+  --table-drag-handle-background: transparent;
+  --table-drag-handle-background-active: rgb(var(--ctp-accent));
+  --table-drag-handle-color: rgb(var(--ctp-overlay1));
+  --table-drag-handle-color-active: rgb(var(--ctp-crust));
+  --table-add-button-background: transparent;
+  --table-add-button-border-color: var(--background-modifier-border);
+
+  /* Embeds, files, settings, and PDF. */
+  --embed-background: inherit;
+  --embed-action-color: var(--text-normal);
+  --embed-actions-background: rgb(var(--ctp-crust) / 0.8);
+  --embed-block-shadow-hover:
+    0 0 0 1px var(--background-modifier-border),
+    inset 0 0 0 1px var(--background-modifier-border);
+  --embed-border-start: 2px solid rgb(var(--ctp-accent));
+  --file-header-background: var(--background-primary);
+  --file-header-background-focused: var(--background-primary);
+  --file-header-border: 1px solid transparent;
+  --settings-background: var(--background-primary-alt);
+  --settings-home-background: var(--background-primary);
+  --setting-group-heading-color: rgb(var(--ctp-text));
+  --setting-items-background: var(--background-primary-alt);
+  --setting-items-border-color: var(--background-modifier-border);
+  --vault-profile-color: rgb(var(--ctp-text));
+  --vault-profile-color-hover: rgb(var(--ctp-rosewater));
+  --pdf-background: var(--background-primary);
+  --pdf-page-background: rgb(var(--ctp-base));
+  --pdf-sidebar-background: var(--background-primary);
+  --pdf-shadow: 0 0 0 1px var(--background-modifier-border);
+  --pdf-spread-shadow: 0 0 0 1px rgb(var(--ctp-crust) / 0.5);
+  --pdf-thumbnail-shadow: 0 0 0 1px var(--background-modifier-border);
+
+  /* Sync avatar sequence uses the complete accent range. */
+  --sync-avatar-color-1: rgb(var(--ctp-red));
+  --sync-avatar-color-2: rgb(var(--ctp-peach));
+  --sync-avatar-color-3: rgb(var(--ctp-yellow));
+  --sync-avatar-color-4: rgb(var(--ctp-green));
+  --sync-avatar-color-5: rgb(var(--ctp-teal));
+  --sync-avatar-color-6: rgb(var(--ctp-blue));
+  --sync-avatar-color-7: rgb(var(--ctp-mauve));
+  --sync-avatar-color-8: rgb(var(--ctp-pink));
+  --sync-avatar-color-current-user: rgb(var(--ctp-lavender));
+}
+
+/* Hide editor tab strips while keeping the left and right sidebar tabs. */
+body:not(.is-mobile)
+  .workspace-split.mod-root
+  .workspace-tabs
+  > .workspace-tab-header-container {
+  display: none;
+}
+
+/* Fit Mermaid diagrams to the note instead of creating a horizontal scroller. */
+.markdown-rendered .mermaid,
+.markdown-source-view.mod-cm6 .cm-embed-block > .mermaid {
+  max-width: 100%;
+  overflow-x: clip !important;
+}
+
+.mermaid > svg {
+  display: block;
+  width: auto !important;
+  max-width: 100% !important;
+  height: auto !important;
+  margin-inline: auto;
+}
+
+/* Keep the active command-palette result distinct from the prompt surface. */
+.prompt-results .suggestion-item.is-selected {
+  color: rgb(var(--ctp-text));
+  background-color: color-mix(
+    in srgb,
+    rgb(var(--ctp-accent)) 42%,
+    rgb(var(--ctp-crust))
+  ) !important;
+  box-shadow: inset 3px 0 rgb(var(--ctp-accent));
+}
+
+.prompt-results .suggestion-item.is-selected .suggestion-note,
+.prompt-results .suggestion-item.is-selected .suggestion-flair {
+  color: rgb(var(--ctp-subtext1));
+}
+
+.prompt-results .suggestion-item.is-selected .suggestion-highlight {
+  color: rgb(var(--ctp-lavender));
+}
