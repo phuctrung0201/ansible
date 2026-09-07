@@ -19,7 +19,7 @@ opt.foldtext = ""
 
 -- kickstart defaults
 opt.mouse = "a"
-opt.showmode = false -- mode is shown in mini.statusline
+opt.showmode = false -- mode is shown in lualine
 opt.smartcase = true
 opt.breakindent = true
 opt.undofile = true

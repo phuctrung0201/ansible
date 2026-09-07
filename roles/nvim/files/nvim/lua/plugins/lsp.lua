@@ -9,6 +9,8 @@ return {
   config = function()
     local autocmd = vim.api.nvim_create_autocmd
     local augroup = vim.api.nvim_create_augroup
+    local lsp_highlight_group = augroup("lsp_highlight", { clear = true })
+    local lsp_detach_group = augroup("lsp_detach", { clear = true })
 
     autocmd("LspAttach", {
       group = augroup("lsp_attach", { clear = true }),
@@ -29,22 +31,29 @@ return {
 
         local client = vim.lsp.get_client_by_id(event.data.client_id)
         if client and client:supports_method("textDocument/documentHighlight", buf) then
-          local hl_group = augroup("lsp_highlight", { clear = false })
+          vim.api.nvim_clear_autocmds({ group = lsp_highlight_group, buffer = buf })
+          vim.api.nvim_clear_autocmds({ group = lsp_detach_group, buffer = buf })
           autocmd({ "CursorHold", "CursorHoldI" }, {
             buffer = buf,
-            group = hl_group,
+            group = lsp_highlight_group,
             callback = vim.lsp.buf.document_highlight,
           })
           autocmd({ "CursorMoved", "CursorMovedI" }, {
             buffer = buf,
-            group = hl_group,
+            group = lsp_highlight_group,
             callback = vim.lsp.buf.clear_references,
           })
           autocmd("LspDetach", {
-            group = augroup("lsp_detach", { clear = true }),
+            buffer = buf,
+            group = lsp_detach_group,
             callback = function(ev2)
-              vim.lsp.buf.clear_references()
-              vim.api.nvim_clear_autocmds({ group = "lsp_highlight", buffer = ev2.buf })
+              local has_highlight_client = vim.iter(vim.lsp.get_clients({ bufnr = ev2.buf })):any(function(other)
+                return other:supports_method("textDocument/documentHighlight", ev2.buf)
+              end)
+              if not has_highlight_client then
+                vim.api.nvim_buf_call(ev2.buf, vim.lsp.buf.clear_references)
+                vim.api.nvim_clear_autocmds({ group = lsp_highlight_group, buffer = ev2.buf })
+              end
             end,
           })
         end

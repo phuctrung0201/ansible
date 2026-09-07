@@ -33,6 +33,8 @@
     dest: "~/.config/nvim/"
     delete: yes
     recursive: yes
+    rsync_opts:
+      - "--exclude=lua/config/env.lua"
 
 - name: Template env.lua with shared theme colors
   template:

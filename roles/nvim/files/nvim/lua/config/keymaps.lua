@@ -18,11 +18,11 @@ map("x", "<", "<gv", { desc = "Indent left and reselect" })
 map("x", ">", ">gv", { desc = "Indent right and reselect" })
 
 -- Toggle wrap
-map("n", "<leader>w", function()
+map("n", "<leader>tw", function()
   vim.wo.wrap = not vim.wo.wrap
 end, { desc = "Toggle wrap" })
 
--- Buffers (group registered in mini.clue as "+Buffer")
+-- Buffers
 map("n", "<leader>bs", "<cmd>FzfLua buffers<cr>", { desc = "Search buffers" })
 map("n", "<leader>bb", "<cmd>buffer #<cr>", { desc = "Last buffer" })
 
@@ -42,6 +42,3 @@ local function bufdelete()
 end
 map("n", "<leader>bd", bufdelete, { desc = "Delete buffer" })
 map("n", "<leader>bo", "<cmd>%bdelete|edit#|bdelete#<cr>", { desc = "Delete other buffers" })
-
--- Git: lazygit in a scratch terminal tab (other git maps live in mini/gitlinker)
-map("n", "<leader>gg", require("config.util").lazygit, { desc = "Lazygit" })

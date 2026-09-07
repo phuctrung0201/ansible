@@ -53,12 +53,6 @@ return {
           map("n", "<leader>ob", "<cmd>Obsidian backlinks<cr>", "Backlinks")
           map("n", "<leader>ol", "<cmd>Obsidian links<cr>", "Links")
           map("n", "<leader>oo", "<cmd>Obsidian open<cr>", "Open in Obsidian")
-
-          vim.b.miniclue_config = {
-            clues = {
-              { mode = "n", keys = "<Leader>o", desc = "+Obsidian" },
-            },
-          }
         end,
       },
     }

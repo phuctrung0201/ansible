@@ -6,6 +6,19 @@ return {
   config = function()
     require("catppuccin").setup({
       flavour = "mocha",
+      auto_integrations = false,
+      integrations = {
+        blink_cmp = { style = "bordered" },
+        dadbod_ui = true,
+        flash = true,
+        fzf = true,
+        gitsigns = true,
+        mason = true,
+        neotree = true,
+        nvim_surround = true,
+        snacks = true,
+        which_key = true,
+      },
       -- Darker background than stock Mocha: drop base to Crust and shift the
       -- mantle/crust layers darker so surfaces still read distinct from the editor.
       color_overrides = {

@@ -22,7 +22,7 @@ return {
         vim.schedule(function()
           if vim.b.dbui_db_key_name then
             for _, win in ipairs(vim.api.nvim_list_wins()) do
-              if vim.bo[vim.api.nvim_win_get_buf(win)].filetype == "ministarter" then
+              if vim.bo[vim.api.nvim_win_get_buf(win)].filetype == "snacks_dashboard" then
                 vim.api.nvim_win_close(win, false)
                 break
               end

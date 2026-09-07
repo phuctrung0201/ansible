@@ -7,7 +7,8 @@ return {
   config = function()
     local parsers = {
       "bash", "c", "diff", "lua", "luadoc", "markdown", "markdown_inline",
-      "query", "vim", "vimdoc", "c_sharp", "fish", "sql", "go", "gomod",
+      "query",
+      "regex", "vim", "vimdoc", "c_sharp", "fish", "sql", "go", "gomod",
       "gosum", "python", "typescript", "tsx", "javascript", "rust", "zig",
       "json",
     }
