@@ -26,7 +26,7 @@ return {
           { icon = " ", key = "f", desc = "Find files", action = ":FzfLua files" },
           { icon = " ", key = "g", desc = "Grep", action = ":FzfLua live_grep" },
           {
-            icon = " ",
+            icon = " ",
             key = "l",
             desc = "Lazygit",
             action = function()
