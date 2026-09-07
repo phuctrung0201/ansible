@@ -1,3 +1,5 @@
+local colors = require("config.env")
+
 return {
   "folke/snacks.nvim",
   priority = 1000,
@@ -38,7 +40,26 @@ return {
     git = {},
     gitbrowse = {},
     indent = {},
-    lazygit = {},
+    lazygit = {
+      config = {
+        gui = {
+          theme = {
+            activeBorderColor = { colors.peach, "bold" },
+            inactiveBorderColor = { colors.subtext0 },
+            searchingActiveBorderColor = { colors.yellow },
+            optionsTextColor = { colors.blue },
+            selectedLineBgColor = { colors.surface0 },
+            inactiveViewSelectedLineBgColor = { colors.overlay0 },
+            cherryPickedCommitFgColor = { colors.blue },
+            cherryPickedCommitBgColor = { colors.surface1 },
+            markedBaseCommitFgColor = { colors.blue },
+            markedBaseCommitBgColor = { colors.yellow },
+            unstagedChangesColor = { colors.red },
+            defaultFgColor = { colors.text },
+          },
+        },
+      },
+    },
     notifier = {},
     picker = {
       ui_select = false,

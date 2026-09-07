@@ -22,9 +22,20 @@
   args:
     creates: "{{ lookup('env', 'HOME') }}/.rustup/toolchains"
 
+- name: Ensure lazygit config directory exists
+  file:
+    path: "~/Library/Application Support/lazygit"
+    state: directory
+
+- name: Configure lazygit with shared theme colors
+  template:
+    src: lazygit.yml.j2
+    dest: "~/Library/Application Support/lazygit/config.yml"
+    backup: yes
+
 - name: Ensure nvim config directory exists
   file:
-    path: "~/.config/nvim" 
+    path: "~/.config/nvim"
     state: directory
 
 - name: Sync nvim config (remove files not in source)
