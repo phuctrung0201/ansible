@@ -7,7 +7,10 @@ return {
   opts = {
     dashboard = {
       preset = {
-        header = "",
+        header = [[
+█░░ █▀▀▀ ▀█▀ █▀▄▀█
+█░░ █░▀█ ░█░ █░▀░█
+█▄▄ █▄▄█ ░█░ █░░░█]],
         keys = {
           {
             icon = " ",
@@ -34,6 +37,7 @@ return {
         },
       },
       sections = {
+        { section = "header" },
         { section = "keys", gap = 1, padding = 1 },
       },
     },
