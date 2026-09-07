@@ -6,9 +6,9 @@
 # freshly generated defaults. A deviations-only file therefore silently loses
 # every setting below, borders included.
 #
-# schemaVersion = 2 (OmniWM >= 0.6.5). As of schema 2, enum-backed settings are
+# schemaVersion = 3 (OmniWM >= 0.6.8). Enum-backed settings are
 # strict: an unknown enum value or a missing/duplicated hotkey ID rejects the whole
-# file. Every schema-2 hotkey ID must appear exactly once.
+# file. Every schema-3 hotkey ID must appear exactly once.
 #
 # To refresh after an OmniWM upgrade: quit OmniWM, let it write a clean
 # settings.toml, then re-apply the deviations below (borders, workspaces, hotkeys).
@@ -18,17 +18,13 @@
 # OmniWM rewrites this file on GUI changes and on quit, so stop OmniWM before
 # deploying or the deploy is raced.
 #
-# Gotcha: monitorRoutingOverrides is written as `= []` when empty; appending
-# [[monitorRoutingOverrides]] tables without removing that line is a duplicate key.
-
 appRules = []
 monitorBarOverrides = []
 monitorDwindleOverrides = []
 monitorGapOverrides = []
 monitorNiriOverrides = []
 monitorOrientationOverrides = []
-monitorRoutingOverrides = []
-schemaVersion = 2
+schemaVersion = 3
 
 [appearance]
 mode = "dark"
@@ -65,7 +61,7 @@ followsMouse = false
 followsWindowToMonitor = false
 lockModifier = "off"
 moveCrossesMonitorAtEdge = false
-moveMouseToFocusedWindow = false
+moveMouseToFocusedWindow = true
 raiseOnMouseFocus = false
 
 [gaps]
@@ -162,6 +158,7 @@ position = "center"
 widthPercent = 50.0
 
 [routing]
+arrangements = []
 mode = "macOS"
 
 [scratchpads]
@@ -434,19 +431,19 @@ binding = "Unassigned"
 id = "switchWorkspace.previous"
 
 [[hotkeys]]
-binding = "Option+Left Bracket"
+binding = "Option+H"
 id = "focus.left"
 
 [[hotkeys]]
-binding = "Option+Semicolon"
+binding = "Option+J"
 id = "focus.down"
 
 [[hotkeys]]
-binding = "Option+Quote"
+binding = "Option+K"
 id = "focus.up"
 
 [[hotkeys]]
-binding = "Option+Right Bracket"
+binding = "Option+L"
 id = "focus.right"
 
 [[hotkeys]]
@@ -546,19 +543,19 @@ binding = "Unassigned"
 id = "moveColumnToWorkspace.8"
 
 [[hotkeys]]
-binding = "Option+Shift+Left Bracket"
+binding = "Option+Shift+H"
 id = "move.left"
 
 [[hotkeys]]
-binding = "Option+Shift+Semicolon"
+binding = "Option+Shift+J"
 id = "move.down"
 
 [[hotkeys]]
-binding = "Option+Shift+Quote"
+binding = "Option+Shift+K"
 id = "move.up"
 
 [[hotkeys]]
-binding = "Option+Shift+Right Bracket"
+binding = "Option+Shift+L"
 id = "move.right"
 
 [[hotkeys]]
@@ -638,11 +635,11 @@ binding = "Unassigned"
 id = "toggleNativeFullscreen"
 
 [[hotkeys]]
-binding = "Control+Option+Left Bracket"
+binding = "Option+Shift+Semicolon"
 id = "moveColumn.left"
 
 [[hotkeys]]
-binding = "Control+Option+Right Bracket"
+binding = "Option+Semicolon"
 id = "moveColumn.right"
 
 [[hotkeys]]
@@ -782,11 +779,11 @@ binding = "Unassigned"
 id = "moveColumnToIndex.9"
 
 [[hotkeys]]
-binding = "Option+Backslash"
+binding = "Option+Quote"
 id = "cycleSizeForward"
 
 [[hotkeys]]
-binding = "Option+Shift+Backslash"
+binding = "Option+Shift+Quote"
 id = "cycleSizeBackward"
 
 [[hotkeys]]
@@ -914,7 +911,7 @@ binding = "Unassigned"
 id = "rescueOffscreenWindows"
 
 [[hotkeys]]
-binding = "Option+Shift+Slash"
+binding = "Unassigned"
 id = "toggleFocusedWindowFloating"
 
 [[hotkeys]]
@@ -922,7 +919,7 @@ binding = "Unassigned"
 id = "closeFocusedWindow"
 
 [[hotkeys]]
-binding = "Unassigned"
+binding = "Option+Shift+Slash"
 id = "openMenuAnywhere"
 
 [[hotkeys]]
@@ -938,7 +935,7 @@ binding = "Option+Grave"
 id = "toggleQuakeTerminal"
 
 [[hotkeys]]
-binding = "Option+Shift+L"
+binding = "Unassigned"
 id = "toggleWorkspaceLayout"
 
 [[hotkeys]]

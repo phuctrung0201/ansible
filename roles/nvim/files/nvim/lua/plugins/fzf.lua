@@ -1,13 +1,32 @@
 -- Fuzzy finder (fzf-lua)
--- Default toggles inside a picker: <A-h> hidden dotfiles, <A-i> gitignored files.
+-- Picker toggles: <C-g> gitignored files, <C-h> hidden files, <C-S-g> grep mode.
 return {
   "ibhagwan/fzf-lua",
   cmd = "FzfLua",
   event = "VimEnter",
   config = function()
     local fzf = require("fzf-lua")
+    local actions = require("fzf-lua.actions")
 
     fzf.setup({
+      winopts = {
+        on_create = function()
+          vim.keymap.set("t", "<C-S-g>", "<M-g>", { buffer = true })
+        end,
+      },
+      actions = {
+        files = {
+          ["ctrl-g"] = actions.toggle_ignore,
+          ["ctrl-h"] = actions.toggle_hidden,
+        },
+      },
+      grep = {
+        actions = {
+          ["ctrl-g"] = actions.toggle_ignore,
+          ["ctrl-h"] = actions.toggle_hidden,
+          ["alt-g"] = actions.grep_lgrep,
+        },
+      },
       files = { cwd_prompt = false }, -- don't show cwd path in the files prompt
       oldfiles = { cwd_only = true }, -- scope recent files to cwd
     })
