@@ -635,11 +635,11 @@ binding = "Unassigned"
 id = "toggleNativeFullscreen"
 
 [[hotkeys]]
-binding = "Option+Shift+Semicolon"
+binding = "Option+Shift+Comma"
 id = "moveColumn.left"
 
 [[hotkeys]]
-binding = "Option+Semicolon"
+binding = "Option+Shift+Period"
 id = "moveColumn.right"
 
 [[hotkeys]]
@@ -651,11 +651,11 @@ binding = "Unassigned"
 id = "moveColumn.down"
 
 [[hotkeys]]
-binding = "Option+Shift+Comma"
+binding = "Option+Shift+Semicolon"
 id = "moveColumnToFirst"
 
 [[hotkeys]]
-binding = "Option+Shift+Period"
+binding = "Option+Shift+Quote"
 id = "moveColumnToLast"
 
 [[hotkeys]]
@@ -663,11 +663,11 @@ binding = "Option+B"
 id = "toggleColumnTabbed"
 
 [[hotkeys]]
-binding = "Option+Comma"
+binding = "Option+Semicolon"
 id = "focusColumnFirst"
 
 [[hotkeys]]
-binding = "Option+Period"
+binding = "Option+Quote"
 id = "focusColumnLast"
 
 [[hotkeys]]
@@ -779,11 +779,11 @@ binding = "Unassigned"
 id = "moveColumnToIndex.9"
 
 [[hotkeys]]
-binding = "Option+Quote"
+binding = "Option+Period"
 id = "cycleSizeForward"
 
 [[hotkeys]]
-binding = "Option+Shift+Quote"
+binding = "Option+Comma"
 id = "cycleSizeBackward"
 
 [[hotkeys]]
