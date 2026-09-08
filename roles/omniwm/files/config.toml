@@ -273,7 +273,7 @@ id = "toggleScratchpad.10"
 binding = "Unassigned"
 id = "assignFocusedWindowToScratchpad.10"
 
-# Main=1, Secondary=2, Present=3, Background=4
+# Main=1, Secondary=2
 [[hotkeys]]
 binding = "Option+1"
 id = "switchWorkspace.0"
@@ -291,19 +291,19 @@ binding = "Option+Shift+2"
 id = "moveToWorkspace.1"
 
 [[hotkeys]]
-binding = "Option+3"
+binding = "Unassigned"
 id = "switchWorkspace.2"
 
 [[hotkeys]]
-binding = "Option+Shift+3"
+binding = "Unassigned"
 id = "moveToWorkspace.2"
 
 [[hotkeys]]
-binding = "Option+4"
+binding = "Unassigned"
 id = "switchWorkspace.3"
 
 [[hotkeys]]
-binding = "Option+Shift+4"
+binding = "Unassigned"
 id = "moveToWorkspace.3"
 
 [[hotkeys]]
@@ -960,24 +960,6 @@ displayName = "Secondary"
 id = "81E39816-EABA-4032-BE22-AFA3AB0773C8"
 layoutType = "niri"
 name = "2"
-
-[workspaces.monitorAssignment]
-type = "secondary"
-
-[[workspaces]]
-displayName = "Present"
-id = "3C003DFA-F079-41AA-B3FD-00320DAAF371"
-layoutType = "niri"
-name = "3"
-
-[workspaces.monitorAssignment]
-type = "main"
-
-[[workspaces]]
-displayName = "Background"
-id = "E7EF4823-5AD4-4344-8CAB-53A79269FFB3"
-layoutType = "niri"
-name = "4"
 
 [workspaces.monitorAssignment]
 type = "secondary"
