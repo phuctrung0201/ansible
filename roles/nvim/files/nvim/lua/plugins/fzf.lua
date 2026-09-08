@@ -23,7 +23,8 @@ return {
       },
       grep = {
         actions = {
-          true, -- inherit default file actions (enter/ctrl-s/ctrl-v/ctrl-t/...)
+          -- default file actions (enter/ctrl-s/ctrl-v/ctrl-t/...) are inherited
+          -- automatically; do NOT add `true` here (breaks the `hide` profile).
           ["ctrl-g"] = actions.toggle_ignore,
           ["ctrl-h"] = actions.toggle_hidden,
           ["alt-g"] = actions.grep_lgrep,
