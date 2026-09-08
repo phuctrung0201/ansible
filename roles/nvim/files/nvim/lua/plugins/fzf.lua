@@ -16,12 +16,14 @@ return {
       },
       actions = {
         files = {
+          true, -- inherit default file actions (enter/ctrl-s/ctrl-v/ctrl-t/...)
           ["ctrl-g"] = actions.toggle_ignore,
           ["ctrl-h"] = actions.toggle_hidden,
         },
       },
       grep = {
         actions = {
+          true, -- inherit default file actions (enter/ctrl-s/ctrl-v/ctrl-t/...)
           ["ctrl-g"] = actions.toggle_ignore,
           ["ctrl-h"] = actions.toggle_hidden,
           ["alt-g"] = actions.grep_lgrep,
