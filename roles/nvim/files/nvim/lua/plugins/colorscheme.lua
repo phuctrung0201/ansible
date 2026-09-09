@@ -14,7 +14,7 @@ return {
         fzf = true,
         gitsigns = true,
         mason = true,
-        neotree = true,
+        nvimtree = true,
         nvim_surround = true,
         snacks = true,
         which_key = true,

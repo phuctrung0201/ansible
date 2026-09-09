@@ -14,7 +14,7 @@ function M.apply()
   set(0, "TabLineSel", { fg = theme.text, bg = theme.crust })
   -- Floating windows: match the editor background (Crust) so there's no
   -- contrasting/black frame around floats. Border glyphs keep the colorscheme's
-  -- color (only their background is set). neo-tree's float groups link to these.
+  -- color (only their background is set). nvim-tree's float window links to these.
   set(0, "NormalFloat", { fg = theme.text, bg = theme.crust })
   for _, name in ipairs({ "FloatBorder", "FloatTitle" }) do
     local hl = vim.api.nvim_get_hl(0, { name = name, link = false })

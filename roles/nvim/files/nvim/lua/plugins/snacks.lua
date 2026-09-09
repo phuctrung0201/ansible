@@ -12,6 +12,7 @@ return {
 █░░ █░▀█ ░█░ █░▀░█
 █▄▄ █▄▄█ ░█░ █░░░█]],
         keys = {
+          { icon = " ", key = "r", desc = "Recent files", action = ":FzfLua oldfiles" },
           {
             icon = " ",
             key = "e",
@@ -19,10 +20,9 @@ return {
             action = function()
               local name = vim.api.nvim_buf_get_name(0)
               local reveal = name ~= "" and vim.uv.fs_stat(name) ~= nil
-              require("neo-tree.command").execute({ toggle = true, reveal = reveal })
+              require("nvim-tree.api").tree.toggle({ find_file = reveal })
             end,
           },
-          { icon = " ", key = "r", desc = "Recent files", action = ":FzfLua oldfiles" },
           { icon = " ", key = "f", desc = "Find files", action = ":FzfLua files" },
           { icon = " ", key = "g", desc = "Grep", action = ":FzfLua live_grep" },
           {
