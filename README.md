@@ -8,7 +8,7 @@ Personal **macOS** machine setup for:
   [obsidian.nvim](https://github.com/obsidian-nvim/obsidian.nvim) integration
 - [Obsidian](https://obsidian.md/) (default theme with a managed Catppuccin Mocha CSS override)
 - [OmniWM](https://github.com/BarutSRB/omniwm) (tiling WM — scrolling layout, with its built-in focus borders)
-- [Ghostty](https://ghostty.org/) (terminal emulator, integrated with tmux)
+- [Kitty](https://sw.kovidgoyal.net/kitty/) (terminal emulator, integrated with tmux)
 - [tmux](https://github.com/tmux/tmux) (command palette via Alt+Space, [fzf](https://github.com/junegunn/fzf), [LastPass CLI](https://github.com/lastpass/lastpass-cli))
 
 Fish config is deployed to `~/.config/fish/`.
