@@ -17,3 +17,5 @@
       tags: ['omniwm']
     - role: ghostty
       tags: ['ghostty']
+    - role: kitty
+      tags: ['kitty']

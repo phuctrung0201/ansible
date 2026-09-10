@@ -4,7 +4,11 @@ set -g fish_greeting
 
 set -gx EDITOR nvim
 set -gx PAGER bat
+set -gx GIT_PAGER bat
 set -gx CARAPACE_BRIDGES "zsh,fish,bash,inshellisense"
+
+# Keep the LastPass agent session from expiring (0 = never time out)
+set -gx LPASS_AGENT_TIMEOUT 0
 
 fish_add_path -gp "$HOME/.local/bin" "$HOME/.config/carapace/bin" (brew --prefix)/bin
 

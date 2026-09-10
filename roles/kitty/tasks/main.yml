@@ -1,0 +1,16 @@
+- name: Install Kitty
+  community.general.homebrew:
+    name: kitty
+    state: present
+    install_options: cask
+
+- name: Ensure Kitty config directory exists
+  file:
+    path: "~/.config/kitty"
+    state: directory
+
+- name: Deploy Kitty config
+  template:
+    src: kitty.conf.j2
+    dest: "~/.config/kitty/kitty.conf"
+    backup: true
