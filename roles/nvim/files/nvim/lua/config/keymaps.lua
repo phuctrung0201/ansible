@@ -4,6 +4,14 @@ local map = vim.keymap.set
 map("n", "<Esc>", "<cmd>nohlsearch<cr>")
 map("t", "<Esc><Esc>", "<C-\\><C-n>", { desc = "Exit terminal mode" })
 
+-- Toggle between terminal (insert) and normal mode with Option+Space
+map("t", "<M-Space>", "<C-\\><C-n>", { desc = "Terminal -> normal mode" })
+map("n", "<M-Space>", function()
+  if vim.bo.buftype == "terminal" then
+    vim.cmd("startinsert")
+  end
+end, { desc = "Normal -> terminal mode" })
+
 -- Window navigation
 map("n", "<C-h>", "<C-w><C-h>", { desc = "Move focus to the left window" })
 map("n", "<C-l>", "<C-w><C-l>", { desc = "Move focus to the right window" })
