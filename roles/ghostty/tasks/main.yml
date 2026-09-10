@@ -1,0 +1,30 @@
+- name: Install Ghostty
+  community.general.homebrew:
+    name: ghostty
+    state: present
+    install_options: cask
+
+# Skip if the font is already present (e.g. installed manually or by a prior
+# cask run) — Homebrew's cask aborts with a file-collision error otherwise.
+- name: Check for an existing FiraCode Nerd Font install
+  stat:
+    path: "~/Library/Fonts/FiraCodeNerdFont-Regular.ttf"
+  register: ghostty_firacode_font
+
+- name: Install FiraCode Nerd Font
+  community.general.homebrew:
+    name: font-fira-code-nerd-font
+    state: present
+    install_options: cask
+  when: not ghostty_firacode_font.stat.exists
+
+- name: Ensure Ghostty config directory exists
+  file:
+    path: "~/.config/ghostty"
+    state: directory
+
+- name: Deploy Ghostty config
+  template:
+    src: config.ghostty.j2
+    dest: "~/.config/ghostty/config"
+    backup: true
