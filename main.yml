@@ -15,5 +15,5 @@
       tags: ['dotnet']
     - role: omniwm
       tags: ['omniwm']
-    - role: kitty
-      tags: ['kitty']
+    - role: ghostty
+      tags: ['ghostty']

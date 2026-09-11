@@ -1,6 +1,6 @@
-- name: Install kitty
+- name: Install ghostty
   community.general.homebrew:
-    name: kitty
+    name: ghostty
     state: present
     install_options: cask
 
@@ -9,22 +9,22 @@
 - name: Check for an existing FiraCode Nerd Font install
   stat:
     path: "~/Library/Fonts/FiraCodeNerdFont-Regular.ttf"
-  register: kitty_firacode_font
+  register: ghostty_firacode_font
 
 - name: Install FiraCode Nerd Font
   community.general.homebrew:
     name: font-fira-code-nerd-font
     state: present
     install_options: cask
-  when: not kitty_firacode_font.stat.exists
+  when: not ghostty_firacode_font.stat.exists
 
-- name: Ensure kitty config directory exists
+- name: Ensure ghostty config directory exists
   file:
-    path: "~/.config/kitty"
+    path: "~/.config/ghostty"
     state: directory
 
-- name: Deploy kitty config
+- name: Deploy ghostty config
   template:
-    src: kitty.conf.j2
-    dest: "~/.config/kitty/kitty.conf"
+    src: config.j2
+    dest: "~/.config/ghostty/config"
     backup: true
