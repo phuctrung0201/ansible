@@ -273,21 +273,21 @@ id = "toggleScratchpad.10"
 binding = "Unassigned"
 id = "assignFocusedWindowToScratchpad.10"
 
-# Main=1, Secondary=2
+# Main=[, Secondary=]
 [[hotkeys]]
-binding = "Option+1"
+binding = "Option+Left Bracket"
 id = "switchWorkspace.0"
 
 [[hotkeys]]
-binding = "Option+Shift+1"
+binding = "Option+Shift+Left Bracket"
 id = "moveToWorkspace.0"
 
 [[hotkeys]]
-binding = "Option+2"
+binding = "Option+Right Bracket"
 id = "switchWorkspace.1"
 
 [[hotkeys]]
-binding = "Option+Shift+2"
+binding = "Option+Shift+Right Bracket"
 id = "moveToWorkspace.1"
 
 [[hotkeys]]
@@ -803,7 +803,7 @@ binding = "Unassigned"
 id = "cycleWindowSecondarySpanBackward"
 
 [[hotkeys]]
-binding = "Option+Shift+Grave"
+binding = "Option+Shift+Backslash"
 id = "toggleContainerFullPrimarySpan"
 
 [[hotkeys]]
@@ -931,7 +931,7 @@ binding = "Unassigned"
 id = "toggleHiddenBarPanel"
 
 [[hotkeys]]
-binding = "Option+Grave"
+binding = "Option+Backslash"
 id = "toggleQuakeTerminal"
 
 [[hotkeys]]
