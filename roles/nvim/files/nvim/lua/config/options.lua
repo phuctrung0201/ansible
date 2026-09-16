@@ -33,6 +33,11 @@ opt.scrolloff = 10
 opt.confirm = true
 opt.list = true
 opt.listchars = { tab = "  ", trail = "·", nbsp = "␣" }
+opt.expandtab = true
+opt.tabstop = 2
+opt.softtabstop = 2
+opt.shiftwidth = 2
+opt.shiftround = true
 
 vim.schedule(function() vim.o.clipboard = "unnamedplus" end)
 
