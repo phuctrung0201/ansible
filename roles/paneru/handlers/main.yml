@@ -1,0 +1,2 @@
+- name: Restart paneru
+  command: paneru restart

@@ -1,0 +1,24 @@
+- name: Install paneru
+  community.general.homebrew:
+    name: paneru
+    state: present
+
+- name: Ensure paneru config directory exists
+  file:
+    path: "~/.config/paneru"
+    state: directory
+
+- name: Deploy paneru config
+  copy:
+    src: paneru.toml
+    dest: "~/.config/paneru/paneru.toml"
+  notify: Restart paneru
+
+- name: Install paneru launch agent
+  command: paneru install
+  args:
+    creates: "~/Library/LaunchAgents/com.github.karinushka.paneru.plist"
+
+- name: Start paneru service
+  command: paneru start
+  changed_when: false
