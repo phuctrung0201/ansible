@@ -8,9 +8,8 @@ Personal **macOS** machine setup for:
   [obsidian.nvim](https://github.com/obsidian-nvim/obsidian.nvim) integration
 - [Obsidian](https://obsidian.md/) (default theme with a managed Catppuccin Mocha CSS override)
 - [Paneru](https://github.com/karinushka/paneru) (sliding tiling WM — Niri-like horizontal strip)
-- [Ghostty](https://ghostty.org/) (terminal emulator, integrated with tmux)
-- [Kitty](https://sw.kovidgoyal.net/kitty/) (terminal emulator, configured with Catppuccin Mocha and tmux-friendly defaults)
-- [tmux](https://github.com/tmux/tmux) (command palette via Alt+Space, [fzf](https://github.com/junegunn/fzf), [LastPass CLI](https://github.com/lastpass/lastpass-cli))
+- [Kitty](https://sw.kovidgoyal.net/kitty/) (terminal emulator, Catppuccin Mocha, centred quick access panel)
+- [LastPass CLI](https://github.com/lastpass/lastpass-cli) (`flpass` fuzzy picker via [fzf](https://github.com/junegunn/fzf))
 
 Fish config is deployed to `~/.config/fish/`.
 
@@ -49,10 +48,10 @@ independently with:
 ansible-playbook main.yml --tags obsidian
 ```
 
-The Kitty role installs `~/.local/bin/kitty-quick-access-terminal`, a launcher
-for Kitty's built-in quick-access terminal (`kitten quick-access-terminal`).
-After running the role, execute it once and then bind **Quick access to kitty**
-in macOS Keyboard Shortcuts -> Services.
+The Kitty role deploys `quick-access-terminal.conf`, which centres Kitty's
+built-in quick access panel. To bind it to a hotkey, run
+`kitten quick-access-terminal` once, close it with Ctrl+D, then set a shortcut
+for **Quick access to kitty** in macOS Keyboard Shortcuts -> Services.
 
 # Default login shell
 

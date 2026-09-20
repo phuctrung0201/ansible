@@ -1,0 +1,54 @@
+# Ansible — Catppuccin Mocha (from share.yml).
+
+# Font
+font_family FiraCode Nerd Font Mono
+font_size 16.0
+
+# Colors — Catppuccin Mocha mapping (background dropped to Crust)
+background {{ theme.crust }}
+foreground {{ theme.text }}
+selection_background {{ theme.surface2 }}
+selection_foreground {{ theme.text }}
+cursor {{ theme.rosewater }}
+cursor_text_color {{ theme.base }}
+
+# ANSI palette (0-7): black=Surface1, white=Subtext1
+color0 {{ theme.surface1 }}
+color1 {{ theme.red }}
+color2 {{ theme.green }}
+color3 {{ theme.yellow }}
+color4 {{ theme.blue }}
+color5 {{ theme.pink }}
+color6 {{ theme.teal }}
+color7 {{ theme.subtext1 }}
+# Bright (8-15): bright black=Surface2, bright white=Subtext0, accents unchanged
+color8 {{ theme.surface2 }}
+color9 {{ theme.red }}
+color10 {{ theme.green }}
+color11 {{ theme.yellow }}
+color12 {{ theme.blue }}
+color13 {{ theme.pink }}
+color14 {{ theme.teal }}
+color15 {{ theme.subtext0 }}
+
+# Cursor
+cursor_shape beam
+
+# macOS: Option sends Alt (Neovim <a-h> / <a-i>, terminal-mode toggle <a-\>)
+macos_option_as_alt yes
+
+# Scrollback in nvim
+scrollback_pager nvim --cmd 'set eventignore=FileType' +'nnoremap q ZQ' +'call nvim_open_term(0, {})' +'set nomodified nolist' +'$' -
+map opt+shift+enter show_scrollback
+
+# Close/quit without confirmation
+confirm_os_window_close 0
+
+# Window — hidden titlebar (keeps rounded corners/borders). Traffic-light
+# buttons are always hidden with this style; native resize is via option+click.
+hide_window_decorations titlebar-only
+# macOS draws a contrast hairline where the titlebar was, which reads as a white
+# line above the dark background under a light system appearance. Tinting the
+# titlebar with the background colour hides it without giving up resize.
+macos_titlebar_color background
+window_padding_width 4

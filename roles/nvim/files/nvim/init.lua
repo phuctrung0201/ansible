@@ -2,7 +2,7 @@
 -- Modular layout:
 --   lua/config/*  -> core settings (options, keymaps, autocmds, theme, lazy bootstrap)
 --   lua/plugins/* -> one file per plugin spec (auto-imported by lazy.nvim)
--- Theme colors come from lua/config/env.lua (ansible-templated to match tmux).
+-- Theme colors come from lua/config/env.lua (ansible-templated from share.yml).
 
 vim.g.mapleader = " "
 vim.g.maplocalleader = "\\"

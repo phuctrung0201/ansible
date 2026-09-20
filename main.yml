@@ -13,7 +13,7 @@
       tags: ['obsidian']
     - role: dotnet
       tags: ['dotnet']
-    - role: omniwm
-      tags: ['omniwm']
-    - role: ghostty
-      tags: ['ghostty']
+    - role: paneru
+      tags: ['paneru']
+    - role: kitty
+      tags: ['kitty']
