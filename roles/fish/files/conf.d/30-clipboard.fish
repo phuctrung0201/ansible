@@ -35,9 +35,7 @@ function fish_user_key_bindings --description 'Clipboard vi yank/paste + word-by
     bind -M insert \eh history-search-backward
     bind -M default \eh history-search-backward
 
-    # Edit current command line in $EDITOR: Opt+Return (\e\r; \e\n fallback).
+    # Edit current command line in $EDITOR: Opt+Return only (\e\r).
     bind -M insert \e\r edit_command_buffer
     bind -M default \e\r edit_command_buffer
-    bind -M insert \e\n edit_command_buffer
-    bind -M default \e\n edit_command_buffer
 end
