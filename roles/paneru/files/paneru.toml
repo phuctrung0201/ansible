@@ -13,7 +13,7 @@
 [options]
 focus_follows_mouse = false
 mouse_follows_focus = false
-animation_speed = 15.0
+animation_speed = 20.0
 preset_column_widths = [0.25, 0.5, 0.75, 1.0]
 create_virtual_workspace_automatically = false
 reap_empty_workspaces = true
