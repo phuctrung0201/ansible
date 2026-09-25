@@ -50,9 +50,9 @@ return {
           end
 
           map("n", "<CR>", "<cmd>Obsidian follow_link<cr>", "Follow Obsidian link")
-          map("n", "<leader>ob", "<cmd>Obsidian backlinks<cr>", "Backlinks")
-          map("n", "<leader>ol", "<cmd>Obsidian links<cr>", "Links")
-          map("n", "<leader>oo", "<cmd>Obsidian open<cr>", "Open in Obsidian")
+          map("n", "<leader>wb", "<cmd>Obsidian backlinks<cr>", "Backlinks")
+          map("n", "<leader>wl", "<cmd>Obsidian links<cr>", "Links")
+          map("n", "<leader>wo", "<cmd>Obsidian open<cr>", "Open in Obsidian")
         end,
       },
     }

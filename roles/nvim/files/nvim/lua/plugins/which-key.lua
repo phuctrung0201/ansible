@@ -4,12 +4,13 @@ return {
   opts = {
     delay = 0,
     spec = {
-      { "<leader>s", group = "Search" },
+      { "<leader>f", group = "Files" },
+      { "<leader>c", group = "Code" },
       { "<leader>d", group = "Database" },
       { "<leader>g", group = "Git" },
-      { "<leader>b", group = "Buffer" },
-      { "<leader>t", group = "Toggle" },
-      { "<leader>o", group = "Obsidian", icon = { icon = "󰎚", color = "purple" } },
+      { "<leader>b", group = "Buffers" },
+      { "<leader>u", group = "UI" },
+      { "<leader>w", group = "Wiki", icon = { icon = "󰎚", color = "purple" } },
     },
   },
   keys = {

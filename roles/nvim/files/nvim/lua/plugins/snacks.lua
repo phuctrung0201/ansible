@@ -111,11 +111,11 @@ return {
       set = function(state)
         vim.b.autoformat = state
       end,
-    }):map("<leader>tf")
+    }):map("<leader>uf")
   end,
   keys = {
     {
-      "<leader>n",
+      "<leader>un",
       function()
         Snacks.notifier.show_history()
       end,
@@ -130,6 +130,13 @@ return {
     },
     {
       "<leader>gl",
+      function()
+        Snacks.lazygit()
+      end,
+      desc = "Lazygit",
+    },
+    {
+      "<leader>gb",
       function()
         Snacks.git.blame_line()
       end,
