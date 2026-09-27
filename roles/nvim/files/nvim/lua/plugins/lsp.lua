@@ -28,11 +28,6 @@ return {
         lmap("gri", fzf.lsp_implementations, "Goto implementation")
         lmap("grd", fzf.lsp_definitions, "Goto definition")
         lmap("grt", fzf.lsp_typedefs, "Goto type definition")
-        lmap("<leader>ca", vim.lsp.buf.code_action, "Code action", { "n", "x" })
-        lmap("<leader>cr", vim.lsp.buf.rename, "Rename")
-        lmap("<leader>cD", vim.lsp.buf.declaration, "Goto declaration")
-        lmap("<leader>ci", fzf.lsp_implementations, "Goto implementation")
-        lmap("<leader>ct", fzf.lsp_typedefs, "Goto type definition")
 
         local client = vim.lsp.get_client_by_id(event.data.client_id)
         if client and client:supports_method("textDocument/documentHighlight", buf) then
@@ -64,7 +59,7 @@ return {
         end
 
         if client and client:supports_method("textDocument/inlayHint", buf) then
-          lmap("<leader>uh", function()
+          lmap("<leader>sh", function()
             vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = buf }))
           end, "Toggle inlay hints")
         end

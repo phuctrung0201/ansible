@@ -6,10 +6,11 @@ return {
     spec = {
       { "<leader>f", group = "Files" },
       { "<leader>c", group = "Code" },
+      { "<leader>cf", desc = "Format" },
       { "<leader>d", group = "Database" },
       { "<leader>g", group = "Git" },
       { "<leader>b", group = "Buffers" },
-      { "<leader>u", group = "UI" },
+      { "<leader>s", group = "Setting" },
       { "<leader>w", group = "Wiki", icon = { icon = "󰎚", color = "purple" } },
     },
   },

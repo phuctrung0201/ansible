@@ -111,11 +111,11 @@ return {
       set = function(state)
         vim.b.autoformat = state
       end,
-    }):map("<leader>uf")
+    }):map("<leader>sf")
   end,
   keys = {
     {
-      "<leader>un",
+      "<leader>n",
       function()
         Snacks.notifier.show_history()
       end,

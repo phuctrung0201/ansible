@@ -26,7 +26,7 @@ map("x", "<", "<gv", { desc = "Indent left and reselect" })
 map("x", ">", ">gv", { desc = "Indent right and reselect" })
 
 -- Toggle wrap
-map("n", "<leader>uw", function()
+map("n", "<leader>sw", function()
   vim.wo.wrap = not vim.wo.wrap
 end, { desc = "Toggle wrap" })
 
