@@ -17,7 +17,7 @@ return {
       callback = function(event)
         local buf = event.buf
         local lmap = function(keys, func, desc, mode)
-          vim.keymap.set(mode or "n", keys, func, { buffer = buf, desc = "LSP: " .. desc })
+          vim.keymap.set(mode or "n", keys, func, { buffer = buf, desc = desc })
         end
 
         local fzf = require("fzf-lua")

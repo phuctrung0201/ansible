@@ -7,7 +7,7 @@ return {
   cmd = { "NvimTreeToggle", "NvimTreeFindFileToggle" },
   keys = {
     {
-      "<leader>fe",
+      "<leader>e",
       function()
         -- Only reveal when the current buffer is a real file on disk.
         local name = vim.api.nvim_buf_get_name(0)
