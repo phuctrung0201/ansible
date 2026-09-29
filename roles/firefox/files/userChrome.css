@@ -1,0 +1,13 @@
+@namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");
+
+/* Hide the macOS traffic light buttons and reclaim the space they reserved. */
+.titlebar-buttonbox-container,
+#titlebar-buttonbox,
+.titlebar-button {
+  display: none !important;
+}
+
+#TabsToolbar .titlebar-spacer[type="pre-tabs"],
+#nav-bar .titlebar-spacer[type="pre-tabs"] {
+  display: none !important;
+}

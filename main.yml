@@ -17,3 +17,5 @@
       tags: ['paneru']
     - role: kitty
       tags: ['kitty']
+    - role: firefox
+      tags: ['firefox']

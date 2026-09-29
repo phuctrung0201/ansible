@@ -1,0 +1,74 @@
+- name: Check for an existing Firefox installation
+  stat:
+    path: /Applications/Firefox.app
+  register: firefox_app
+
+- name: Resolve the current user's home directory
+  set_fact:
+    firefox_home: "{{ lookup('ansible.builtin.env', 'HOME') }}"
+
+- name: Install Firefox
+  community.general.homebrew:
+    name: firefox
+    state: present
+    install_options: cask
+  when: not firefox_app.stat.exists
+
+- name: Check for existing Firefox profiles
+  stat:
+    path: "{{ firefox_home }}/Library/Application Support/Firefox/profiles.ini"
+  register: firefox_profiles_ini
+
+- name: Create the initial Firefox profile
+  command:
+    argv:
+      - /Applications/Firefox.app/Contents/MacOS/firefox
+      - -CreateProfile
+      - default-release
+  when: not firefox_profiles_ini.stat.exists
+
+- name: Find Firefox default profiles
+  find:
+    paths: "{{ firefox_home }}/Library/Application Support/Firefox/Profiles"
+    file_type: directory
+    recurse: false
+    patterns:
+      - "*.default"
+      - "*.default-release*"
+  register: firefox_profiles
+
+- name: Ensure Firefox has a default profile
+  assert:
+    that: firefox_profiles.files | length > 0
+    fail_msg: "Firefox is installed, but no default profile could be found."
+
+- name: Ensure Firefox chrome directories exist
+  file:
+    path: "{{ item.path }}/chrome"
+    state: directory
+    mode: "0755"
+  loop: "{{ firefox_profiles.files }}"
+  loop_control:
+    label: "{{ item.path | basename }}"
+
+- name: Deploy Firefox user chrome CSS
+  copy:
+    src: userChrome.css
+    dest: "{{ item.path }}/chrome/userChrome.css"
+    mode: "0644"
+    backup: true
+  loop: "{{ firefox_profiles.files }}"
+  loop_control:
+    label: "{{ item.path | basename }}"
+
+- name: Enable Firefox user chrome CSS
+  lineinfile:
+    path: "{{ item.path }}/user.js"
+    regexp: '^\s*user_pref\("toolkit\.legacyUserProfileCustomizations\.stylesheets"'
+    line: 'user_pref("toolkit.legacyUserProfileCustomizations.stylesheets", true);'
+    create: true
+    mode: "0644"
+    backup: true
+  loop: "{{ firefox_profiles.files }}"
+  loop_control:
+    label: "{{ item.path | basename }}"
