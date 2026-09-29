@@ -45,6 +45,9 @@ return {
     gitbrowse = {},
     indent = {},
     lazygit = {
+      win = {
+        backdrop = false,
+      },
       config = {
         gui = {
           theme = {

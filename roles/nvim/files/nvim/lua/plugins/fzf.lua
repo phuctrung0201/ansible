@@ -10,6 +10,7 @@ return {
 
     fzf.setup({
       winopts = {
+        backdrop = false,
         on_create = function()
           vim.keymap.set("t", "<C-S-g>", "<M-g>", { buffer = true })
         end,

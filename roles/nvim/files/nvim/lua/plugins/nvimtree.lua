@@ -36,6 +36,7 @@ return {
       },
     },
     view = {
+      signcolumn = "no",
       float = {
         enable = true,
         open_win_config = function()

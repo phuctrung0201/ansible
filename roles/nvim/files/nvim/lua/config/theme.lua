@@ -21,6 +21,27 @@ function M.apply()
     hl.bg = theme.crust
     set(0, name, hl)
   end
+  -- Keep nvim-tree's body, gutter, and surrounding chrome on the same
+  -- background. Catppuccin otherwise assigns its darker mantle/crust layers,
+  -- which show up as rectangular blocks in the floating explorer.
+  for _, name in ipairs({
+    "NvimTreeNormal",
+    "NvimTreeNormalNC",
+    "NvimTreeNormalFloat",
+    "NvimTreeNormalFloatBorder",
+    "NvimTreeEndOfBuffer",
+    "NvimTreeSignColumn",
+    "NvimTreeLineNr",
+    "NvimTreeStatusLine",
+    "NvimTreeStatusLineNC",
+    "NvimTreeWinSeparator",
+  }) do
+    local hl = vim.api.nvim_get_hl(0, { name = name, link = false })
+    hl.bg = theme.crust
+    set(0, name, hl)
+  end
+  -- Match the explorer's rounded border to the blue picker border.
+  set(0, "NvimTreeNormalFloatBorder", { fg = theme.blue, bg = theme.crust })
 end
 
 return M
