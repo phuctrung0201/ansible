@@ -13,9 +13,9 @@
       tags: ['obsidian']
     - role: dotnet
       tags: ['dotnet']
-    - role: paneru
-      tags: ['paneru']
-    - role: kitty
-      tags: ['kitty']
+    - role: omniwm
+      tags: ['omniwm']
+    - role: ghostty
+      tags: ['ghostty']
     - role: firefox
       tags: ['firefox']

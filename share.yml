@@ -2,12 +2,12 @@
 # Source: https://github.com/catppuccin/catppuccin  (palette: Mocha)
 #
 # This is the FULL official Catppuccin Mocha palette — all 26 named colors —
-# exposed by their canonical names. Consumers (nvim statusline, kitty, fish)
+# exposed by their canonical names. Consumers (nvim statusline, ghostty, fish)
 # reference these names directly and follow Catppuccin's official per-app themes.
 #
 # NOTE: the editor/terminal background is intentionally dropped to Crust (darker
 # than stock Base #1e1e2e). nvim mirrors this via color_overrides in
-# roles/nvim/.../colorscheme.lua; kitty uses `crust` for its background.
+# roles/nvim/.../colorscheme.lua; ghostty uses `crust` for its background.
 theme:
   # ── Accents ──────────────────────────────────────────────────────────
   rosewater: "#f5e0dc"
