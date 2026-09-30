@@ -72,11 +72,11 @@ splitWidthMultiplier = 1.0
 useGlobalGaps = true
 
 [focus]
-crossesMonitorAtEdge = false
+crossesMonitorAtEdge = true
 followsMouse = false
 followsWindowToMonitor = false
 lockModifier = "off"
-moveCrossesMonitorAtEdge = false
+moveCrossesMonitorAtEdge = true
 moveMouseToFocusedWindow = true
 raiseOnMouseFocus = false
 
@@ -439,11 +439,11 @@ binding = "Unassigned"
 id = "workspaceBackAndForth"
 
 [[hotkeys]]
-binding = "Unassigned"
+binding = "Option+Tab"
 id = "switchWorkspace.next"
 
 [[hotkeys]]
-binding = "Unassigned"
+binding = "Option+Shift+Tab"
 id = "switchWorkspace.previous"
 
 [[hotkeys]]
@@ -451,11 +451,11 @@ binding = "Option+H"
 id = "focus.left"
 
 [[hotkeys]]
-binding = "Unassigned"
+binding = "Option+J"
 id = "focus.down"
 
 [[hotkeys]]
-binding = "Unassigned"
+binding = "Option+K"
 id = "focus.up"
 
 [[hotkeys]]
@@ -491,11 +491,11 @@ binding = "Unassigned"
 id = "focusWindowUpOrBottom"
 
 [[hotkeys]]
-binding = "Option+J"
+binding = "Unassigned"
 id = "focusWindowOrWorkspaceDown"
 
 [[hotkeys]]
-binding = "Option+K"
+binding = "Unassigned"
 id = "focusWindowOrWorkspaceUp"
 
 [[hotkeys]]
@@ -563,11 +563,11 @@ binding = "Option+Shift+H"
 id = "move.left"
 
 [[hotkeys]]
-binding = "Unassigned"
+binding = "Option+Shift+J"
 id = "move.down"
 
 [[hotkeys]]
-binding = "Unassigned"
+binding = "Option+Shift+K"
 id = "move.up"
 
 [[hotkeys]]
@@ -583,11 +583,11 @@ binding = "Unassigned"
 id = "moveWindowUp"
 
 [[hotkeys]]
-binding = "Option+Shift+J"
+binding = "Unassigned"
 id = "moveWindowDownOrToWorkspaceDown"
 
 [[hotkeys]]
-binding = "Option+Shift+K"
+binding = "Unassigned"
 id = "moveWindowUpOrToWorkspaceUp"
 
 [[hotkeys]]
