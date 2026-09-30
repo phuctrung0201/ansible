@@ -55,4 +55,12 @@ return {
       },
     },
   },
+  config = function(_, opts)
+    require("nvim-tree").setup(opts)
+
+    local api = require("nvim-tree.api")
+    api.events.subscribe(api.events.Event.TreeOpen, function()
+      vim.wo[api.tree.winid()].statuscolumn = "%="
+    end)
+  end,
 }
