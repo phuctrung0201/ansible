@@ -651,11 +651,11 @@ binding = "Unassigned"
 id = "toggleNativeFullscreen"
 
 [[hotkeys]]
-binding = "Option+Semicolon"
+binding = "Option+Shift+Semicolon"
 id = "moveColumn.left"
 
 [[hotkeys]]
-binding = "Option+Shift+Semicolon"
+binding = "Option+Semicolon"
 id = "moveColumn.right"
 
 [[hotkeys]]
