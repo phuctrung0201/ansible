@@ -289,21 +289,21 @@ id = "toggleScratchpad.10"
 binding = "Unassigned"
 id = "assignFocusedWindowToScratchpad.10"
 
-# Native macOS Spaces own the workspace shortcuts.
+# Direct workspace bindings work across displays.
 [[hotkeys]]
-binding = "Unassigned"
+binding = "Option+Left Bracket"
 id = "switchWorkspace.0"
 
 [[hotkeys]]
-binding = "Unassigned"
+binding = "Option+Shift+Left Bracket"
 id = "moveToWorkspace.0"
 
 [[hotkeys]]
-binding = "Unassigned"
+binding = "Option+Right Bracket"
 id = "switchWorkspace.1"
 
 [[hotkeys]]
-binding = "Unassigned"
+binding = "Option+Shift+Right Bracket"
 id = "moveToWorkspace.1"
 
 [[hotkeys]]
@@ -439,11 +439,11 @@ binding = "Unassigned"
 id = "workspaceBackAndForth"
 
 [[hotkeys]]
-binding = "Option+Tab"
+binding = "Unassigned"
 id = "switchWorkspace.next"
 
 [[hotkeys]]
-binding = "Option+Shift+Tab"
+binding = "Unassigned"
 id = "switchWorkspace.previous"
 
 [[hotkeys]]
