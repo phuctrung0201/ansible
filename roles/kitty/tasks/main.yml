@@ -1,0 +1,40 @@
+- name: Install kitty
+  community.general.homebrew:
+    name: kitty
+    state: present
+    install_options: cask
+
+# Skip if the font is already present to avoid Homebrew cask file collisions.
+- name: Check for an existing FiraCode Nerd Font install
+  stat:
+    path: "~/Library/Fonts/FiraCodeNerdFont-Regular.ttf"
+  register: kitty_firacode_font
+
+- name: Install FiraCode Nerd Font
+  community.general.homebrew:
+    name: font-fira-code-nerd-font
+    state: present
+    install_options: cask
+  when: not kitty_firacode_font.stat.exists
+
+- name: Ensure kitty config directory exists
+  file:
+    path: "~/.config/kitty"
+    state: directory
+
+- name: Deploy kitty config
+  template:
+    src: kitty.conf.j2
+    dest: "~/.config/kitty/kitty.conf"
+    backup: true
+
+- name: Remove ghostty after migrating to kitty
+  community.general.homebrew:
+    name: ghostty
+    state: absent
+    install_options: cask
+
+- name: Remove legacy ghostty config directory
+  file:
+    path: "{{ lookup('env', 'HOME') }}/.config/ghostty"
+    state: absent

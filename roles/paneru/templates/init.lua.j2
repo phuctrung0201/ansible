@@ -1,0 +1,77 @@
+-- Paneru settings — managed by Ansible (roles/paneru/templates/init.lua.j2).
+-- This Lua file replaces paneru.toml completely when present.
+
+paneru.setup({
+  options = {
+    focus_follows_mouse = false,
+    mouse_follows_focus = false,
+    animation_speed = 15.0,
+    preset_column_widths = { 0.25, 0.5, 0.75, 1.0 },
+    create_virtual_workspace_automatically = false,
+    reap_empty_workspaces = true,
+    sliver_width = 0,
+  },
+  decorations = {
+    workspace_menu_status = false,
+    workspace_popup_status = false,
+    active = {
+      border = {
+        enabled = true,
+        color = "{{ theme.peach }}",
+        width = 4.0,
+      },
+    },
+  },
+  swipe = {
+    gesture = {
+      vertical = false,
+    },
+  },
+  restore = {
+    enabled = false,
+  },
+  padding = {
+    top = 0,
+    bottom = 0,
+    left = 0,
+    right = 0,
+  },
+  windows = {
+    all = {
+      title = ".*",
+      horizontal_padding = 4,
+      vertical_padding = 4,
+    },
+  },
+  bindings = {
+    ["window focus west"] = "alt - h",
+    ["window focus east"] = "alt - l",
+    ["window focus north"] = "alt - k",
+    ["window focus south"] = "alt - j",
+
+    ["window swap west"] = "alt + shift - h",
+    ["window swap east"] = "alt + shift - l",
+    ["window swap north"] = "alt + shift - k",
+    ["window swap south"] = "alt + shift - j",
+
+    ["window focus first"] = "alt - leftbracket",
+    ["window focus last"] = "alt - rightbracket",
+    ["window swap first"] = "alt + shift - leftbracket",
+    ["window swap last"] = "alt + shift - rightbracket",
+    ["window stack"] = "alt - semicolon",
+    ["window unstack"] = "alt + shift - semicolon",
+
+    ["window shrink"] = "alt - comma",
+    ["window grow"] = "alt - period",
+    ["window vertical shrink"] = "alt + shift - comma",
+    ["window vertical grow"] = "alt + shift - period",
+    ["window balance"] = "alt - slash",
+    ["window equalize"] = "alt + shift - slash",
+
+    ["window fullwidth"] = "alt - quote",
+    ["window manage"] = "alt + shift - quote",
+
+    ["quit"] = "alt - q",
+    ["restart"] = "alt - r",
+  },
+})

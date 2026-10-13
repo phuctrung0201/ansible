@@ -1,0 +1,3 @@
+- name: Restart paneru
+  command: paneru restart
+  changed_when: false

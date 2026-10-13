@@ -1,0 +1,109 @@
+# Prevent competing window managers from arranging windows at the same time.
+- name: Check whether OmniWM is installed
+  command: brew list --cask --versions omniwm
+  register: paneru_omniwm_installed
+  failed_when: false
+  changed_when: false
+
+- name: Quit OmniWM
+  command: osascript -e 'quit app "OmniWM"'
+  when: paneru_omniwm_installed.rc == 0
+  failed_when: false
+  changed_when: false
+
+- name: Uninstall OmniWM
+  community.general.homebrew_cask:
+    name: omniwm
+    state: absent
+  when: paneru_omniwm_installed.rc == 0
+
+- name: Check whether Rift is installed
+  command: brew list --versions rift
+  register: paneru_rift_installed
+  failed_when: false
+  changed_when: false
+
+- name: Stop Rift service
+  command: rift service stop
+  when: paneru_rift_installed.rc == 0
+  failed_when: false
+  changed_when: false
+
+- name: Uninstall Rift service
+  command: rift service uninstall
+  when: paneru_rift_installed.rc == 0
+  failed_when: false
+  changed_when: false
+
+- name: Remove Rift launch agent
+  file:
+    path: "~/Library/LaunchAgents/git.acsandmann.rift.plist"
+    state: absent
+
+- name: Uninstall Rift
+  community.general.homebrew:
+    name: rift
+    state: absent
+  when: paneru_rift_installed.rc == 0
+
+- name: Check whether JankyBorders is installed
+  command: brew list --versions borders
+  register: paneru_borders_installed
+  failed_when: false
+  changed_when: false
+
+- name: Stop JankyBorders service
+  command: brew services stop borders
+  when: paneru_borders_installed.rc == 0
+  failed_when: false
+  changed_when: false
+
+- name: Uninstall JankyBorders
+  community.general.homebrew:
+    name: borders
+    state: absent
+  when: paneru_borders_installed.rc == 0
+
+- name: Remove legacy window manager config directories
+  file:
+    path: "{{ item }}"
+    state: absent
+  loop:
+    - "{{ lookup('env', 'HOME') }}/.config/rift"
+    - "{{ lookup('env', 'HOME') }}/.config/omniwm"
+    - "{{ lookup('env', 'HOME') }}/.config/borders"
+
+- name: Remove temporary Paneru local-check backup file
+  file:
+    path: "{{ lookup('env', 'HOME') }}/.config/paneru/init.lua.pre-opt1-check"
+    state: absent
+
+- name: Install Paneru
+  community.general.homebrew:
+    name: paneru
+    state: present
+
+- name: Ensure Paneru config directory exists
+  file:
+    path: "~/.config/paneru"
+    state: directory
+
+- name: Remove Paneru TOML config when migrating to Lua
+  file:
+    path: "~/.config/paneru/paneru.toml"
+    state: absent
+
+- name: Deploy Paneru Lua config
+  template:
+    src: init.lua.j2
+    dest: "~/.config/paneru/init.lua"
+  notify: Restart paneru
+
+- name: Install Paneru launch agent
+  command: paneru install
+  args:
+    creates: "~/Library/LaunchAgents/com.github.karinushka.paneru.plist"
+
+- name: Start Paneru service
+  command: paneru start
+  changed_when: false
