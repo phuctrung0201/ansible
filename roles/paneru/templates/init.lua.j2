@@ -75,3 +75,8 @@ paneru.setup({
     ["restart"] = "alt - r",
   },
 })
+
+-- Launch Kitty quick access terminal with Option+Space.
+paneru.bind("alt - space", function()
+  os.execute("/opt/homebrew/bin/kitten quick-access-terminal >/dev/null 2>&1 &")
+end)
