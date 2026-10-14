@@ -10,7 +10,7 @@ set -gx CARAPACE_BRIDGES "zsh,fish,bash,inshellisense"
 # Keep the LastPass agent session from expiring (0 = never time out)
 set -gx LPASS_AGENT_TIMEOUT 0
 
-fish_add_path -gp "$HOME/.local/bin" "$HOME/.config/carapace/bin" (brew --prefix)/bin
+fish_add_path -gp "$HOME/.local/bin" "$HOME/.config/carapace/bin" "/opt/homebrew/bin/"
 
 # Custom binds live in fish_user_key_bindings (see 30-clipboard.fish),
 # which fish invokes automatically after loading vi bindings.
