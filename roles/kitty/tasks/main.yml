@@ -36,5 +36,5 @@
 
 - name: Remove legacy ghostty config directory
   file:
-    path: "{{ lookup('env', 'HOME') }}/.config/ghostty"
+    path: "~/.config/ghostty"
     state: absent

@@ -71,7 +71,7 @@ To use fish as your default login shell, register the Homebrew binary in
 `/etc/shells` and run `chsh` (requires sudo):
 
 ```sh
-FISH="$(brew --prefix)/bin/fish"
+FISH="/opt/homebrew/bin/fish"
 grep -qxF "$FISH" /etc/shells || echo "$FISH" | sudo tee -a /etc/shells
 chsh -s "$FISH"
 ```

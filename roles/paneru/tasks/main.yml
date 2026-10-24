@@ -1,40 +1,11 @@
-- name: Check whether Rift is installed
-  command: brew list --versions rift
-  register: paneru_rift_installed
-  failed_when: false
-  changed_when: false
-
-- name: Stop Rift service
-  command: rift service stop
-  when: paneru_rift_installed.rc == 0
-  failed_when: false
-  changed_when: false
-
-- name: Uninstall Rift service
-  command: rift service uninstall
-  when: paneru_rift_installed.rc == 0
-  failed_when: false
-  changed_when: false
-
-- name: Remove Rift launch agent
-  file:
-    path: "~/Library/LaunchAgents/git.acsandmann.rift.plist"
-    state: absent
-
-- name: Uninstall Rift
-  community.general.homebrew:
-    name: rift
-    state: absent
-  when: paneru_rift_installed.rc == 0
-
 - name: Check whether JankyBorders is installed
-  command: brew list --versions borders
+  command: /opt/homebrew/bin/brew list --versions borders
   register: paneru_borders_installed
   failed_when: false
   changed_when: false
 
 - name: Stop JankyBorders service
-  command: brew services stop borders
+  command: /opt/homebrew/bin/brew services stop borders
   when: paneru_borders_installed.rc == 0
   failed_when: false
   changed_when: false
@@ -50,12 +21,11 @@
     path: "{{ item }}"
     state: absent
   loop:
-    - "{{ lookup('env', 'HOME') }}/.config/rift"
-    - "{{ lookup('env', 'HOME') }}/.config/borders"
+    - "~/.config/borders"
 
 - name: Remove temporary Paneru local-check backup file
   file:
-    path: "{{ lookup('env', 'HOME') }}/.config/paneru/init.lua.pre-opt1-check"
+    path: "~/.config/paneru/init.lua.pre-opt1-check"
     state: absent
 
 - name: Install Paneru
@@ -80,10 +50,10 @@
   notify: Restart paneru
 
 - name: Install Paneru launch agent
-  command: paneru install
+  command: /opt/homebrew/bin/paneru install
   args:
     creates: "~/Library/LaunchAgents/com.github.karinushka.paneru.plist"
 
 - name: Start Paneru service
-  command: paneru start
+  command: /opt/homebrew/bin/paneru start
   changed_when: false

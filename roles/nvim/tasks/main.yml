@@ -20,7 +20,7 @@
 - name: Install stable Rust toolchain (provides rustfmt for conform)
   command: rustup default stable
   args:
-    creates: "{{ lookup('env', 'HOME') }}/.rustup/toolchains"
+    creates: "~/.rustup/toolchains"
 
 - name: Ensure lazygit config directory exists
   file:
@@ -58,5 +58,5 @@
     path: "{{ item }}"
     state: absent
   loop:
-    - "{{ lookup('env', 'HOME') }}/.local/share/nvim/mason/packages/markdown-oxide"
-    - "{{ lookup('env', 'HOME') }}/.local/share/nvim/mason/bin/markdown-oxide"
+    - "~/.local/share/nvim/mason/packages/markdown-oxide"
+    - "~/.local/share/nvim/mason/bin/markdown-oxide"

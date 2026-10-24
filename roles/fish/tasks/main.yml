@@ -40,7 +40,7 @@
   loop:
     - "{{ fish_config_dir }}"
     - "{{ fish_config_dir }}/conf.d"
-    - "{{ lookup('env', 'HOME') }}/.config/carapace/bin"
+    - "~/.config/carapace/bin"
 
 - name: Deploy static fish modules
   copy:

@@ -7,7 +7,7 @@ fish_brew_packages:
   - fzf
   - lastpass-cli
 
-fish_config_dir: "{{ lookup('env', 'HOME') }}/.config/fish"
+fish_config_dir: "~/.config/fish"
 
 # Apple Silicon Homebrew prefix (fixed across all machines).
 homebrew_prefix: /opt/homebrew
