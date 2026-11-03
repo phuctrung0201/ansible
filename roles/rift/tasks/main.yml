@@ -1,0 +1,86 @@
+- name: Remove legacy Paneru config directory
+  file:
+    path: "~/.config/paneru"
+    state: absent
+
+- name: Check whether Paneru is installed
+  command: /opt/homebrew/bin/brew list --versions paneru
+  register: rift_paneru_installed
+  failed_when: false
+  changed_when: false
+
+- name: Stop and uninstall Paneru launch agent
+  shell: /opt/homebrew/bin/paneru stop; /opt/homebrew/bin/paneru uninstall
+  when: rift_paneru_installed.rc == 0
+  failed_when: false
+  changed_when: false
+
+- name: Uninstall Paneru
+  community.general.homebrew:
+    name: paneru
+    state: absent
+  when: rift_paneru_installed.rc == 0
+
+- name: Remove Paneru launch agent plist
+  file:
+    path: "~/Library/LaunchAgents/com.github.karinushka.paneru.plist"
+    state: absent
+
+- name: Tap acsandmann/tap
+  community.general.homebrew_tap:
+    name: acsandmann/tap
+    state: present
+
+- name: Install Rift
+  community.general.homebrew:
+    name: acsandmann/tap/rift
+    state: present
+
+- name: Ensure Rift config directory exists
+  file:
+    path: "~/.config/rift"
+    state: directory
+
+- name: Deploy Rift config
+  template:
+    src: config.toml.j2
+    dest: "~/.config/rift/config.toml"
+  notify: Restart rift
+
+- name: Start Rift service
+  command: /opt/homebrew/bin/brew services start acsandmann/tap/rift
+  register: rift_start_rift
+  failed_when: "rift_start_rift.rc != 0 and 'Bootstrap failed: 5' not in rift_start_rift.stderr"
+  changed_when: false
+
+- name: Tap FelixKratz/formulae
+  community.general.homebrew_tap:
+    name: FelixKratz/formulae
+    state: present
+
+- name: Trust JankyBorders formula
+  command: /opt/homebrew/bin/brew trust --formula felixkratz/formulae/borders
+  changed_when: false
+
+- name: Install JankyBorders
+  community.general.homebrew:
+    name: borders
+    state: present
+
+- name: Ensure JankyBorders config directory exists
+  file:
+    path: "~/.config/borders"
+    state: directory
+
+- name: Deploy JankyBorders config
+  template:
+    src: bordersrc.j2
+    dest: "~/.config/borders/bordersrc"
+    mode: "0755"
+  notify: Restart borders
+
+- name: Start JankyBorders service
+  command: /opt/homebrew/bin/brew services start borders
+  register: rift_start_borders
+  failed_when: "rift_start_borders.rc != 0 and 'Bootstrap failed: 5' not in rift_start_borders.stderr"
+  changed_when: false

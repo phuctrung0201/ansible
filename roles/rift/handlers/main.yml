@@ -1,0 +1,7 @@
+- name: Restart rift
+  command: /opt/homebrew/bin/brew services restart acsandmann/tap/rift
+  changed_when: false
+
+- name: Restart borders
+  command: /opt/homebrew/bin/brew services restart borders
+  changed_when: false

@@ -13,8 +13,8 @@
       tags: ['obsidian']
     - role: dotnet
       tags: ['dotnet']
-    - role: paneru
-      tags: ['paneru']
+    - role: rift
+      tags: ['rift']
     - role: kitty
       tags: ['kitty']
     - role: firefox

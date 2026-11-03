@@ -7,7 +7,8 @@ Personal **macOS** machine setup for:
 - [Neovim](https://neovim.io/) with
   [obsidian.nvim](https://github.com/obsidian-nvim/obsidian.nvim) integration
 - [Obsidian](https://obsidian.md/) (default theme with a managed Catppuccin Mocha CSS override)
-- [Paneru](https://github.com/karinushka/paneru) (Niri-style scrolling tiling WM with Lua-managed config)
+- [Rift](https://github.com/acsandmann/rift) (tiling WM, configured with the niri-style scrolling layout)
+- [JankyBorders](https://github.com/FelixKratz/JankyBorders) (active-window border in the theme peach color)
 - [Kitty](https://sw.kovidgoyal.net/kitty/) (terminal emulator with Catppuccin Mocha and Fish integration)
 - [LastPass CLI](https://github.com/lastpass/lastpass-cli) (`flpass` fuzzy picker via [fzf](https://github.com/junegunn/fzf))
 
@@ -49,21 +50,20 @@ ansible-playbook main.yml --tags obsidian
 ```
 
 Kitty uses Option as Alt and shares the same Catppuccin palette as Neovim/Fish.
-Paneru provides:
+Rift (scrolling layout) provides:
 
 - Option+H/J/K/L to focus windows and Option+Shift+H/J/K/L to move them
-- Option+LeftBracket/Option+RightBracket to jump to first/last column
-- Option+Shift+LeftBracket/Option+Shift+RightBracket to move a column to first/last
-- Option+Semicolon to stack and Option+Shift+Semicolon to unstack
-- Option+Quote to toggle full width and Option+Shift+Quote to toggle floating
-- Option+Slash to balance columns
-- Option+Shift+Slash to equalize the focused stack
-- Option+,/Option+. to cycle column width
-- Option+Shift+,/Option+Shift+. to cycle window height
-- Option+Q to quit and Option+R to restart Paneru
+- Option+Tab/Option+Shift+Tab to focus the next/previous window
+- Option+Semicolon to consume or expel the window to the right and Option+Shift+Semicolon to the left
+- Option+Quote to show Rift's mission control for the current workspace and Option+Shift+Quote for all
+- Option+Backslash to toggle full width (within gaps) and Option+Shift+Backslash to toggle floating
+- Option+[/Option+] to cycle column width presets backward/forward
+- Option+Shift+[/Option+Shift+] to shrink/grow window height
+- Option+R to reload config and Option+Q to save layout and quit Rift
+- Option+Space to open the Kitty quick access terminal
 
 Run either migrated role independently with `--tags kitty` or
-`--tags paneru`.
+`--tags rift`.
 
 # Default login shell
 

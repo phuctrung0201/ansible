@@ -1,3 +1,0 @@
-- name: Restart paneru
-  command: /opt/homebrew/bin/paneru restart
-  changed_when: false
